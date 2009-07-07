@@ -7,17 +7,11 @@
 
 
 export SVN_EDITOR=mvim
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
 export HISTCONTROL=ignoreboth
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-#shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
@@ -51,22 +45,3 @@ fi
 
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-
-PROJECT_PARENT_DIRS[0]="$HOME/Development/Finalist"
-PROJECT_PARENT_DIRS[1]="$HOME/Development/Ruby"
-PROJECT_PARENT_DIRS[2]="$HOME/Development"
-. ~/src/etc/bash/bash_vcs.sh
-. ~/src/etc/bash/aliases.sh
-. ~/src/etc/bash/git.sh
-. ~/src/etc/bash/git_autocompletion.sh
-. ~/src/etc/bash/project_aliases.sh
-. ~/src/etc/bash/rails.sh
-. ~/src/etc/bash/ruby.sh
-. ~/src/etc/bash/ssh_autocompletion.sh
-
-# MacPorts Installer addition on 2009-05-14_at_18:43:39: adding an appropria    te PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
-# MacPorts Installer addition on 2009-05-14_at_18:43:39: adding an appropria    te MANPATH variable for use with MacPorts.
-export MANPATH=/opt/local/share/man:$MANPATH
-# Finished adapting your MANPATH environment variable for use with MacPorts.

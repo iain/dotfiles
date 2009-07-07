@@ -1,0 +1,41 @@
+= OSX Settings
+
+This is where I put my bash settings for OSX. This includes:
+
+* Nicely colored and tiny prompt
+* Yellow = clean, red = dirty in prompt for SVN and Git
+* Automatic project aliases
+* Ruby on Rails specific aliases
+* ... and much more!
+
+== Installation
+
+* Check out this repository
+* Add these lines your /etc/bashrc, depending on where you cloned this repo:
+
+  . /Users/iain/.osx_settings/.general.sh
+  . /Users/iain/.osx_settings/.aliases.sh
+  . /Users/iain/.osx_settings/.git.sh
+  . /Users/iain/.osx_settings/.git_autocompletion.sh
+  . /Users/iain/.osx_settings/.project_aliases.sh
+  . /Users/iain/.osx_settings/.rails.sh
+  . /Users/iain/.osx_settings/.ruby.sh
+  . /Users/iain/.osx_settings/.ssh_autocompletion.sh
+  . /Users/iain/.osx_settings/.vcs.sh
+
+* Symlink any other files that you want to use, in your home directory.
+* Add your development directories to make their subdirectories symlinks, to your
+  bashrc or bash_profile:
+
+  PROJECT_PARENT_DIRS[1]="$HOME/Development/Ruby"
+  PROJECT_PARENT_DIRS[2]="$HOME/Development/Other"
+
+== Credits
+
+I can't remember exactly where I got all stuff, but mostly from relevance/etc.
+
+Heavily modified some stuff to fit my own needs of course.
+
+Thanks everybody who contributed!
+
+Feel free to use this, fork this or whatever.
