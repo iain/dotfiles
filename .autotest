@@ -1,2 +1,11 @@
 require 'autotest/fsevent'
 require 'autotest/growl'
+class Autotest
+  def tainted
+    false
+  end
+end
+
+module Autotest::Growl
+  @@clear_terminal = false
+end

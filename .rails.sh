@@ -16,7 +16,7 @@ alias rtu='rake test:units --trace'
 alias rrcov='rake coverage:all:test'
 alias rrrcovall='rake test:coverage:all:test'
 
-alias rdm='rake db:migrate && rdtp &'
+alias rdm='rake db:migrate db:test:prepare'
 alias rdtp='rake db:test:prepare'
 alias rdfl='rake db:fixtures:load'
 alias rdr='rake db:rollback'
