@@ -27,7 +27,7 @@ alias smate='svn diff | mate && svn ci'
 alias sadd="sst | grep '?' | cut -c5- | xargs svn add"
 
 # editing shortcuts
-alias m='mate'
+alias m='mvim --remote-silent'
 alias e='emacs'
 alias erc='e /etc/bashrc'
 alias newrc='. /etc/bashrc'

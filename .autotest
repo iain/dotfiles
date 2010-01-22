@@ -1,5 +1,7 @@
+require 'active_support'
 require 'autotest/fsevent'
 require 'autotest/growl'
+
 class Autotest
   def tainted
     false
