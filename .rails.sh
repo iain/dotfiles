@@ -28,3 +28,4 @@ alias csd='cap staging deploy'
 
 alias rake='rake --silent'
 alias rr='touch tmp/restart.txt'
+alias af='AUTOFEATURE=true autospec'
