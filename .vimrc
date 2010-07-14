@@ -1,132 +1,24 @@
 set nocompatible
-
-" Manage filetypes
-" =============================================================================
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby,perl,tex set shiftwidth=2
-
-augroup filetypedetect
-  au! BufNewFile,BufRead *.ch setf cheat
-  au BufNewFile,BufRead *.liquid setf liquid
-  au! BufRead,BufNewFile *.haml setfiletype haml
-  autocmd BufNewFile,BufRead *.yml setf eruby
-augroup END
-
-augroup myfiletypes
-  " Clear old autocmds in group
-  autocmd!
-  " autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,eruby,yaml set ai sw=2 sts=2 et
-augroup END
-
-
-" Syntax
-" =============================================================================
 syntax on
-colorscheme ir_black
-
-set nobackup
-set nowritebackup
+set background=dark
 
 
-" Tabs and stuff
-" =============================================================================
-set ts=2
-set bs=2
-set sw=2
-set nocp incsearch
-set cinoptions=:0,p0,t0
-set cinwords=if,else,while,do,for,switch,case
-set formatoptions=tcqr
-set cindent
-set autoindent
-set smarttab
-set expandtab
+" Turn on automatic plugin loading
+filetype plugin indent on
 
+" Make tab represent 2 spaces
+set tabstop=2
 
-
-" Concerning the width
-" =============================================================================
-set nowrap
-set textwidth=80
-
-" NOT put a carriage return at the end of the last line! if you are programming
-" for the web the default will cause http headers to be sent. that's bad.
-" =============================================================================
-set binary noeol
-
-" make that backspace key work the way it should
+" Backspace normally
 set backspace=indent,eol,start
 
-" GUI stuff
-" =============================================================================
-if has("gui_running")
+" Set shiftwidth (>>) to 2 spaces
+set shiftwidth=2
 
-	set anti
-  set go-=T " No Toolbar
-  set guioptions-=m " No Menubar
-  set number
+" Set softtabstop to 2 spaces
+set softtabstop=2
 
-	set hlsearch
-
-	filetype plugin indent on
-
-	if has("gui_macvim")
-		set fuoptions=maxvert,maxhorz " fullscreen options (MacVim only), resized window when changed to fullscreen
-	end
-
-end
-
-" Control-B shows the bufexplorer
-" =============================================================================
-nnoremap <C-B> :BufExplorer<cr>
-
-" Mark whitespace at the end of lines as errors
-" =============================================================================
-hi link localWhitespaceError Error
-au Syntax * syn match localWhitespaceError /\(\zs\%#\|\s\)\+$/ display
-au Syntax * syn match localWhitespaceError / \+\ze\t/ display
-
-" Color the statusline red when in insert mode, green in normal mode
-" =============================================================================
-" first, enable status line always
-set laststatus=2
-" now set it up to change the status line based on mode
-if version >= 700
-  au InsertEnter * hi StatusLine ctermfg=0 ctermbg=1 guibg=#000000 guifg=#990000
-  au InsertLeave * hi StatusLine ctermfg=0 ctermbg=2 guibg=#000000 guifg=#009900
-endif
-
-
-" Search options
-" =============================================================================
-" visual search mappings
-function! s:VSetSearch()
-    let temp = @@
-    norm! gvy
-    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-    let @@ = temp
-endfunction
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
-
-" Control P clears search highlighting and redraw
-nnoremap <C-P> :nohls<CR><C-P>
-inoremap <C-P> <C-O>:nohls<CR>
-
-
-
-" Windows
-" =============================================================================
-set equalalways " Multiple windows, when created, are equal in size
-set splitbelow splitright
+set expandtab
 
 " Directly switch between open splitted windows
 map <C-J> <C-W>j
@@ -134,25 +26,74 @@ map <C-H> <C-W>h
 map <C-L> <C-W>l
 map <C-K> <C-W>k
 
-set vb t_vb= " Turn off bell
+" Backup and swap files
+set backupdir=~/.vim/tmp/
+set directory=~/.vim/tmp/
 
-" Make tab in v mode work like I think it should (keep highlighting):
-vmap <tab> >gv
-vmap <s-tab> <gv
+if has("gui_running") && has("gui_macvim")
+  colorscheme ir_black
+	set fuoptions=maxvert,maxhorz " fullscreen options (MacVim only), resized window when changed to fullscreen
+	set anti
+  set go-=T " No Toolbar
+  set guioptions-=m " No Menubar
+  set number
+	set hlsearch
+
+	" Make Cmd+W delete buffer, not the window
+	macmenu File.Close key=<nop>
+	macmenu Tools.Make key=<nop>
+	no <silent> <D-w> :bd<cr>
+	ino <silent> <D-w> <C-o>:bd<cr>
+
+	" create equally sized splits
+	set equalalways
+	set splitbelow splitright
+end
+
+" Buffer Explorer opens with Ctrl+B
+nnoremap <C-B> :BufExplorer<cr>
+
+" Always show statusbar
+set laststatus=2
+
+" Set the status line
+set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%c\ Buf:%n\ [%b][0x%B]
 
 
-" Configure a giant status line
-" =============================================================================
-" set statusline=%<%f\ %h%m%r%=%-20.(line=%l,col=%c%V,totlin=%L%)\%h%m%r%=%-40(,%n%Y%)\%P
-set statusline=
-set statusline+=%3.3n\ " buffer number
-set statusline+=%f\ " file name
-set statusline+=%h%1*%m%r%w%0* " flags
-set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
-set statusline+=%{strlen(&fenc)?&fenc:&enc}%{&bomb?'/bom':''}, " encoding
-set statusline+=%{&fileformat}] " file format
-set statusline+=%{exists('loaded_VCSCommand')?VCSCommandGetStatusLine():''} " show vcs status
-set statusline+=%{exists('loaded_scmbag')?SCMbag_Info():''} " show vcs status
-set statusline+=%= " right align
-set statusline+=0x%-8B\ " current char
-set statusline+=%-14.(%l,%c%V%)\ %<%P " offset
+set encoding=utf-8
+" nicer looking tabs and whitespace
+if (&termencoding == "utf-8") || has("gui_running")
+    if v:version >= 700
+        set listchars=tab:»·,trail:·,extends:…,eol:¶
+"let &showbreak=nr2char(8618).' '
+        let &showbreak='-> '
+    else
+        set listchars=tab:»·,trail:·,extends:…,eol:¶
+    endif
+endif
+set cpoptions+=n
+
+" Don't redraw during macro execution
+set lazyredraw
+
+" Don't scroll near the edge
+set scrolloff=8
+
+" Turn off beep
+set vb t_vb=
+
+" Show the current command in the lower right corner
+set showcmd
+
+" Show the current mode
+set showmode
+
+" Make the 'cw' and like commands put a $ at the end instead of just deleting
+" the text and replacing it
+set cpoptions=ces$
+
+" Keep some stuff in the history
+set history=100
+
+" Syntax coloring lines that are too long just slows down the world
+set synmaxcol=2048

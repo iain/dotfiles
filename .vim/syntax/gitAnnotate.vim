@@ -28,7 +28,7 @@ if exists("b:current_syntax")
 endif
 
 syn region gitName start="(\@<=" end="\( \d\d\d\d-\)\@=" contained
-syn match gitCommit /^\x\+/ contained
+syn match gitCommit /^\^\?\x\+/ contained
 syn match gitDate /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [+-]\d\d\d\d/ contained
 syn match gitLineNumber /\d\+)\@=/ contained
 syn region gitAnnotation start="^" end=") " oneline keepend contains=gitCommit,gitLineNumber,gitDate,gitName

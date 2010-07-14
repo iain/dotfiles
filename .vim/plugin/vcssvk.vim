@@ -60,12 +60,19 @@ let s:svkFunctions = {}
 
 " Section: Utility functions {{{1
 
+" Function: s:Executable() {{{2
+" Returns the executable used to invoke SVK suitable for use in a shell
+" command.
+function! s:Executable()
+	return shellescape(VCSCommandGetOption('VCSCommandSVKExec', 'svk'))
+endfunction
+
 " Function: s:DoCommand(cmd, cmdName, statusText, options) {{{2
 " Wrapper to VCSCommandDoCommand to add the name of the SVK executable to the
 " command argument.
 function! s:DoCommand(cmd, cmdName, statusText, options)
 	if VCSCommandGetVCSType(expand('%')) == 'SVK'
-		let fullCmd = VCSCommandGetOption('VCSCommandSVKExec', 'svk') . ' ' . a:cmd
+		let fullCmd = s:Executable() . ' ' . a:cmd
 		return VCSCommandDoCommand(fullCmd, a:cmdName, a:statusText, a:options)
 	else
 		throw 'SVK VCSCommand plugin called on non-SVK item.'
@@ -82,7 +89,7 @@ function! s:svkFunctions.Identify(buffer)
 	else
 		let directoryName = fnamemodify(fileName, ':p:h')
 	endif
-	let statusText = system(VCSCommandGetOption('VCSCommandSVKExec', 'svk') . ' info "' . directoryName . '"')
+	let statusText = s:VCSCommandUtility.system(s:Executable() . ' info -- "' . directoryName . '"', "no")
 	if(v:shell_error)
 		return 0
 	else
@@ -98,7 +105,7 @@ endfunction
 " Function: s:svkFunctions.Annotate(argList) {{{2
 function! s:svkFunctions.Annotate(argList)
 	if len(a:argList) == 0
-		if &filetype == 'SVKAnnotate'
+		if &filetype == 'SVKannotate'
 			" Perform annotation of the version indicated by the current line.
 			let caption = matchstr(getline('.'),'\v^\s+\zs\d+')
 			let options = ' -r' . caption
@@ -117,7 +124,6 @@ function! s:svkFunctions.Annotate(argList)
 	let resultBuffer = s:DoCommand('blame' . options, 'annotate', caption, {})
 	if resultBuffer > 0
 		normal 1G2dd
-		set filetype=SVKAnnotate
 	endif
 	return resultBuffer
 endfunction
@@ -138,7 +144,7 @@ endfunction
 " Function: s:svkFunctions.Diff(argList) {{{2
 function! s:svkFunctions.Diff(argList)
 	if len(a:argList) == 0
-		let revOptions = [] 
+		let revOptions = []
 		let caption = ''
 	elseif len(a:argList) <= 2 && match(a:argList, '^-') == -1
 		let revOptions = ['-r' . join(a:argList, ':')]
@@ -149,13 +155,7 @@ function! s:svkFunctions.Diff(argList)
 		let revOptions = a:argList
 	endif
 
-	let resultBuffer = s:DoCommand(join(['diff'] + revOptions), 'diff', caption, {})
-	if resultBuffer > 0
-		set filetype=diff
-	else
-		echomsg 'No differences found'
-	endif
-	return resultBuffer
+	return s:DoCommand(join(['diff'] + revOptions), 'diff', caption, {})
 endfunction
 
 " Function: s:svkFunctions.GetBufferInfo() {{{2
@@ -167,7 +167,7 @@ endfunction
 function! s:svkFunctions.GetBufferInfo()
 	let originalBuffer = VCSCommandGetOriginalBuffer(bufnr('%'))
 	let fileName = resolve(bufname(originalBuffer))
-	let statusText = system(VCSCommandGetOption('VCSCommandSVKExec', 'svk') . ' status -v "' . fileName . '"')
+	let statusText = s:VCSCommandUtility.system(s:Executable() . ' status -v -- "' . fileName . '"')
 	if(v:shell_error)
 		return []
 	endif
@@ -231,11 +231,7 @@ function! s:svkFunctions.Review(argList)
 		let versionOption = ' -r ' . versiontag . ' '
 	endif
 
-	let resultBuffer = s:DoCommand('cat' . versionOption, 'review', versiontag, {})
-	if resultBuffer > 0
-		let &filetype=getbufvar(b:VCSCommandOriginalBuffer, '&filetype')
-	endif
-	return resultBuffer
+	return s:DoCommand('cat' . versionOption, 'review', versiontag, {})
 endfunction
 
 " Function: s:svkFunctions.Status(argList) {{{2
@@ -257,6 +253,6 @@ function! s:svkFunctions.Update(argList)
 endfunction
 
 " Section: Plugin Registration {{{1
-call VCSCommandRegisterModule('SVK', expand('<sfile>'), s:svkFunctions, [])
+let s:VCSCommandUtility = VCSCommandRegisterModule('SVK', expand('<sfile>'), s:svkFunctions, [])
 
 let &cpo = s:save_cpo

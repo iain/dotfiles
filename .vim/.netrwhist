@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/Users/iain/Projects/avb/gadgets'
+let g:netrw_dirhist_2='/Users/iain/Projects/page/app/models'
+let g:netrw_dirhist_3='/Users/iain/Projects/sail2/app/concerns'
+let g:netrw_dirhist_4='/Users/iain/Projects/stad-van-nederland/lib/core_ext'
+let g:netrw_dirhist_5='/Users/iain/Projects/stad-van-nederland/app/helpers'
+let g:netrw_dirhist_6='/Users/iain/Projects/stad-van-nederland/app/helpers/public'
+let g:netrw_dirhist_7='/Users/iain/Projects/stad-van-nederland/app/helpers'
+let g:netrw_dirhist_8='/Users/iain/Projects/stad-van-nederland/app/views/public/projects'
+let g:netrw_dirhist_9='/Users/iain/Projects/stad-van-nederland/app/helpers/backend'
