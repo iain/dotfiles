@@ -1,0 +1,21 @@
+[user]
+  email = iain@iain.nl
+  name = Iain Hecker
+[core]
+  excludesfile = /Users/iain/.gitignore
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[alias]
+  co = checkout
+  st = status
+  ci = commit
+  up = pull
+  br = branch
+  df = diff
+  lg = log -p
+[color]
+  ui = true
+  diff = auto
+  status = auto
+  branch = auto
+[diff "ruby"]
+  funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
