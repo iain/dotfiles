@@ -123,5 +123,14 @@ extend_console 'pm', true, false do
   end
 end
 
+# better autocompletion with bond
+extend_console 'bond' do
+  Bond.start
+end
+
+extend_console 'interactive_editor' do
+  # we're done already
+end
+
 # Show results of all extension-loading
 puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"

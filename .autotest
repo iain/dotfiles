@@ -4,11 +4,11 @@ rescue LoadError
   puts "\e[31mMissing active_support\e[0m"
 end
 
-class Autotest
-  def tainted
-    false
-  end
-end
+# class Autotest
+#   def tainted
+#     false
+#   end
+# end
 
 begin
   require 'autotest/fsevent'
@@ -20,7 +20,7 @@ begin
   require 'autotest/growl'
   Autotest::Growl::clear_terminal = false
   Autotest::Growl::image_dir = 'ampelmaennchen'
-  Autotest::Growl::show_modified_files = true
+  # Autotest::Growl::show_modified_files = true
 rescue LoadError
   puts "\e[31mMissing autotest-growl\e[0m"
 end
