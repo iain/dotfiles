@@ -60,8 +60,7 @@ end
 
 # Hirb makes tables easy.
 extend_console 'hirb' do
-  # command out the following options to get tables for everything
-  Hirb.enable # :output=>{'Object'=>{:class=>:auto_table, :ancestor=>true}}
+  Hirb.enable
   extend Hirb::Console
 end
 
@@ -79,12 +78,13 @@ end
 # When you're using Rails 3 console, show queries in the console
 extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
   $odd_or_even_queries = false
-  ActiveSupport::Notifications.subscribe('active_record.sql') do |*args|
+  ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
     $odd_or_even_queries = !$odd_or_even_queries
     color = $odd_or_even_queries ? ANSI[:CYAN] : ANSI[:MAGENTA]
-    time  = "%.1fms" % ((args[2] - args[1]) * 1000)
-    name  = args.last[:name]
-    sql   = args.last[:sql].gsub("\n", " ").squeeze(" ")
+    event = ActiveSupport::Notifications::Event.new(*args)
+    time  = "%.1fms" % event.duration
+    name  = event.payload[:name]
+    sql   = event.payload[:sql].gsub("\n", " ").squeeze(" ")
     puts "  #{ANSI[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI[:RESET]}  #{sql}"
   end
 end
@@ -95,7 +95,7 @@ extend_console 'pm', true, false do
   def pm(obj, *options) # Print methods
     methods = obj.methods
     methods -= Object.methods unless options.include? :more
-    filter = options.select {|opt| opt.kind_of? Regexp}.first
+    filter  = options.select {|opt| opt.kind_of? Regexp}.first
     methods = methods.select {|name| name =~ filter} if filter
 
     data = methods.sort.collect do |name|
@@ -123,13 +123,8 @@ extend_console 'pm', true, false do
   end
 end
 
-# better autocompletion with bond
-extend_console 'bond' do
-  Bond.start
-end
-
 extend_console 'interactive_editor' do
-  # we're done already
+  # no configuration needed
 end
 
 # Show results of all extension-loading
