@@ -209,5 +209,7 @@ hi link javaScriptNumber      Number
 " Special for CSharp
 hi  link csXmlTag             Keyword      
 
-
-" Special for PHP
+"Invisible character colors
+" highlight NonText    guifg=#4a4a59
+" highlight SpecialKey guifg=#4a4a59 guibg=#000000
+highlight SpecialKey guifg=#500000 guibg=#280000
