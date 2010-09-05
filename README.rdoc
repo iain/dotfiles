@@ -2,40 +2,49 @@
 
 This is where I put my bash settings for OSX. This includes:
 
-* Nicely colored and tiny prompt
+* Nicely colored prompt
 * Yellow = clean, red = dirty in prompt for SVN and Git
 * Automatic project aliases
 * Ruby on Rails specific aliases
+* RVM support
+* Bundler compatible irbrc
+* Vim configuration
 * ... and much more!
 
 == Installation
 
-* Check out this repository
-* Add these lines your /etc/bashrc, depending on where you cloned this repo:
+To get it all, run these commands:
 
-  . /Users/iain/.osx_settings/.general.sh
-  . /Users/iain/.osx_settings/.aliases.sh
-  . /Users/iain/.osx_settings/.git.sh
-  . /Users/iain/.osx_settings/.git_autocompletion.sh
-  . /Users/iain/.osx_settings/.project_aliases.sh
-  . /Users/iain/.osx_settings/.rails.sh
-  . /Users/iain/.osx_settings/.ruby.sh
-  . /Users/iain/.osx_settings/.ssh_autocompletion.sh
-  . /Users/iain/.osx_settings/.vcs.sh
+  cd ~
+  git clone git://github.com/iain/osx_settings.git .osx_settings
+  ln -fs .osx_settings/.autotest
+  ln -fs .osx_settings/.gemrc
+  ln -fs .osx_settings/.gitconfig
+  ln -fs .osx_settings/.gitignore
+  ln -fs .osx_settings/.irbrc
+  ln -fs .osx_settings/.profile
+  ln -fs .osx_settings/.rvmrc
+  ln -fs .osx_settings/.vim
+  ln -fs .osx_settings/.vimrc
 
-* Symlink any other files that you want to use, in your home directory.
-* Add your development directories to make their subdirectories symlinks, to your
-  bashrc or bash_profile:
 
-  PROJECT_PARENT_DIRS[1]="$HOME/Development/Ruby"
-  PROJECT_PARENT_DIRS[2]="$HOME/Development/Other"
+Basically, any file ending in <tt>.sh</tt> is to be included in your
+<tt>.bashrc</tt> or in your <tt>.profile</tt> and can stay where they are.
+All other files need to be in the home directory to work.
+
+To get project aliases working, edit <tt>.profile</tt> and change these lines
+to suit your environment:
+
+  PROJECT_PARENT_DIRS[0]="$HOME/Projects"
+
+Don't forget to enable 'Use bright colors for bold text' in Terminal.app, if
+you have trouble reading it.
 
 == Credits
 
 I can't remember exactly where I got all stuff, but mostly from relevance/etc.
-
 Heavily modified some stuff to fit my own needs of course.
 
 Thanks everybody who contributed!
-
 Feel free to use this, fork this or whatever.
+Additions are very welcome!
