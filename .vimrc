@@ -40,7 +40,7 @@ if has("gui_running") && has("gui_macvim")
 end
 
 " Toggle search highlighting
-noremap <Leader>h :set hlsearch!<CR>
+nmap <silent> ,/ :let @/=""<CR>
 
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :BufExplorer<cr>
@@ -84,3 +84,12 @@ set history=100
 
 " Syntax coloring lines that are too long just slows down the world
 set synmaxcol=2048
+
+" Turn off arrow keys
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Rename :W to :w
+cmap W w
