@@ -8,7 +8,7 @@ alias md=mkdir
 alias screen='TERM=screen screen'
 
 # listing files
-alias l='ls -lh'
+alias l='ls -alh'
 alias ltr='ls -ltr'
 alias lth='l -t|head'
 alias lh='ls -Shl | less'
