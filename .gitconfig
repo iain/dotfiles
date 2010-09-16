@@ -19,3 +19,5 @@
   branch = auto
 [diff "ruby"]
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+[push]
+  default = tracking
