@@ -32,15 +32,26 @@ if has("gui_running") && has("gui_macvim")
   set go-=T " No Toolbar
   set guioptions-=m " No Menubar
   set number
-  set hlsearch
 
   " create equally sized splits
   set equalalways
   set splitbelow splitright
-end
 
-" Toggle search highlighting
-nmap <silent> ,/ :let @/=""<CR>
+  " show relative line numbers (vim 7.3 and up)
+  set relativenumber
+
+  " max width
+  set wrap
+  set textwidth=79
+  set formatoptions=qrn1
+  set colorcolumn=85
+
+  set undofile
+  set undodir=~/.vim/undo
+
+  set guifont=Dejavu\ Sans\ Mono:h12
+
+end
 
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :BufExplorer<cr>
@@ -86,10 +97,42 @@ set history=100
 set synmaxcol=2048
 
 " Turn off arrow keys
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap j gj
+nnoremap k gk
 
 " Rename :W to :w
 cmap W w
+
+
+" search nonsense
+nnoremap / /\v
+vnoremap / /\v
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+nnoremap <tab> %
+vnoremap <tab> %
+
+set cursorline
+
+" Turn off F1
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+" Save all when focus lost
+au FocusLost * :wa
+
+" in insert mode, jj goes to normal mode
+inoremap jj <ESC>
