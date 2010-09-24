@@ -1,6 +1,6 @@
 set nocompatible
 syntax on
-" set background=dark
+set background=dark
 
 
 " Turn on automatic plugin loading
@@ -10,6 +10,7 @@ filetype plugin indent on
 " Backspace normally
 set backspace=indent,eol,start
 
+" I don't care what language I use, 2 spaces per tab!
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
@@ -25,27 +26,34 @@ map <C-K> <C-W>k
 set backupdir=~/.vim/tmp/
 set directory=~/.vim/tmp/
 
+" Normal line numbering
+set number
+
 if has("gui_running") && has("gui_macvim")
   colorscheme ir_black
   set fuoptions=maxvert,maxhorz " fullscreen options (MacVim only), resized window when changed to fullscreen
   set anti
   set go-=T " No Toolbar
   set guioptions-=m " No Menubar
-  set number
 
   " create equally sized splits
   set equalalways
   set splitbelow splitright
 
   " show relative line numbers (vim 7.3 and up)
+  set nonumber
   set relativenumber
+
+  " because it looks bad outside macvim
+  set cursorline
 
   " max width
   set wrap
   set textwidth=79
   set formatoptions=qrn1
-  set colorcolumn=85
+  set colorcolumn=100
 
+  " undoing even after closing the file
   set undofile
   set undodir=~/.vim/undo
 
@@ -111,10 +119,7 @@ nnoremap k gk
 " Rename :W to :w
 cmap W w
 
-
 " search nonsense
-nnoremap / /\v
-vnoremap / /\v
 set smartcase
 set gdefault
 set incsearch
@@ -124,15 +129,10 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
 
-set cursorline
-
 " Turn off F1
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
-
-" Save all when focus lost
-au FocusLost * :wa
 
 " in insert mode, jj goes to normal mode
 inoremap jj <ESC>
