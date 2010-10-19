@@ -1,4 +1,8 @@
 set nocompatible
+
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
 syntax on
 set background=dark
 
@@ -6,6 +10,7 @@ set background=dark
 " Turn on automatic plugin loading
 filetype plugin indent on
 
+set cindent
 
 " Backspace normally
 set backspace=indent,eol,start
