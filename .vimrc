@@ -121,7 +121,6 @@ cmap W w
 
 " search nonsense
 set smartcase
-set gdefault
 set incsearch
 set showmatch
 set hlsearch
