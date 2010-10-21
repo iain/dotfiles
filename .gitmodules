@@ -37,15 +37,9 @@
 [submodule ".vim/bundle/unimpaired"]
 	path = .vim/bundle/unimpaired
 	url = http://github.com/tpope/vim-unimpaired.git
-[submodule ".vim/bundle/javascript-indentation"]
-	path = .vim/bundle/javascript-indentation
-	url = http://github.com/vim-scripts/Javascript-Indentation.git
 [submodule ".vim/bundle/indent-anything"]
 	path = .vim/bundle/indent-anything
 	url = http://github.com/vim-scripts/IndentAnything.git
-[submodule ".vim/bundle/javascript-syntax"]
-	path = .vim/bundle/javascript-syntax
-	url = http://github.com/vim-scripts/JavaScript-syntax.git
 [submodule ".vim/bundle/jquery"]
 	path = .vim/bundle/jquery
 	url = http://github.com/vim-scripts/jQuery.git
