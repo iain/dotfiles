@@ -58,3 +58,6 @@
 [submodule ".vim/bundle/indentobject"]
 	path = .vim/bundle/indentobject
 	url = http://github.com/austintaylor/vim-indentobject.git
+[submodule ".vim/bundle/ack"]
+	path = .vim/bundle/ack
+	url = git://github.com/mileszs/ack.vim.git
