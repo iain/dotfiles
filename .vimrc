@@ -54,15 +54,18 @@ if has("gui_running") && has("gui_macvim")
 
   " max width
   set wrap
-  set textwidth=79
+  set textwidth=100
   set formatoptions=qrn1
-  set colorcolumn=100
+  set colorcolumn=101
 
   " undoing even after closing the file
   set undofile
   set undodir=~/.vim/undo
 
   set guifont=Dejavu\ Sans\ Mono:h12
+
+  " use par
+  set formatprg=par\ -w100
 
 end
 
@@ -140,3 +143,6 @@ vnoremap <F1> <ESC>
 
 " in insert mode, jj goes to normal mode
 inoremap jj <ESC>
+
+" The size of opened splits by :Vex and :Sex
+let g:netrw_winsize=50

@@ -7,6 +7,8 @@ export RUBY_GC_MALLOC_LIMIT=110000000
 export RUBY_HEAP_FREE_MIN=20000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 
+export BUNDLER_EDITOR='mvim'
+
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
