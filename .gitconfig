@@ -21,3 +21,5 @@
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
 [push]
   default = tracking
+[branch]
+  autosetuprebase = always

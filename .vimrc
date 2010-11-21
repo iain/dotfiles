@@ -34,12 +34,17 @@ set directory=~/.vim/tmp/
 " Normal line numbering
 set number
 
+colorscheme ir_black
+
 if has("gui_running") && has("gui_macvim")
-  colorscheme ir_black
-  set fuoptions=maxvert,maxhorz " fullscreen options (MacVim only), resized window when changed to fullscreen
+
+  " fullscreen options (MacVim only), resized window when changed to fullscreen
+  set fuoptions=maxvert,maxhorz
   set anti
-  set go-=T " No Toolbar
-  set guioptions-=m " No Menubar
+
+  " Turn on only autoselect, console dialogs and tab pages
+  " No menubar, toolbar or scrollbars
+  set guioptions=aAce
 
   " create equally sized splits
   set equalalways
@@ -48,6 +53,9 @@ if has("gui_running") && has("gui_macvim")
   " show relative line numbers (vim 7.3 and up)
   set nonumber
   set relativenumber
+
+  " Available when using experimental renderer
+  set transparency=15
 
   " because it looks bad outside macvim
   set cursorline
@@ -121,6 +129,10 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
+vnoremap <up> <nop>
+vnoremap <down> <nop>
+vnoremap <left> <nop>
+vnoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
 
