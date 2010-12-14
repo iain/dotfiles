@@ -55,13 +55,13 @@ if has("gui_running") && has("gui_macvim")
   set relativenumber
 
   " Available when using experimental renderer
-  set transparency=15
+  " set transparency=15
 
   " because it looks bad outside macvim
   set cursorline
 
   " max width
-  set wrap
+  set nowrap
   set textwidth=100
   set formatoptions=qrn1
   set colorcolumn=101
