@@ -23,7 +23,7 @@ To get it all, run these commands:
   ln -fs .osx_settings/.gitconfig
   ln -fs .osx_settings/.gitignore
   ln -fs .osx_settings/.irbrc
-  ln -fs .osx_settings/.profile
+  ln -fs .osx_settings/.bashrc
   ln -fs .osx_settings/.rvmrc
   ln -fs .osx_settings/.vim
   ln -fs .osx_settings/.vimrc
