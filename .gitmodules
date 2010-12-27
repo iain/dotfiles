@@ -61,3 +61,9 @@
 [submodule ".vim/bundle/ack"]
 	path = .vim/bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
+[submodule ".vim/bundle/textobj-user"]
+	path = .vim/bundle/textobj-user
+	url = git://github.com/kana/vim-textobj-user.git
+[submodule ".vim/bundle/textobj-rubyblock"]
+	path = .vim/bundle/textobj-rubyblock
+	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
