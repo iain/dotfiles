@@ -158,3 +158,12 @@ inoremap jj <ESC>
 
 " The size of opened splits by :Vex and :Sex
 let g:netrw_winsize=50
+
+" Remove ANY trailing whitespaces in ANY file I save
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
