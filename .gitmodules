@@ -67,3 +67,6 @@
 [submodule ".vim/bundle/textobj-rubyblock"]
 	path = .vim/bundle/textobj-rubyblock
 	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
+[submodule ".vim/bundle/ruby-refactoring"]
+	path = .vim/bundle/ruby-refactoring
+	url = git://github.com/ecomba/vim-ruby-refactoring.git
