@@ -41,7 +41,7 @@ __prompt_command() {
     alias push="commit ; git push"
     alias revert="git checkout"
   }
- 
+
   svn_dir() {
     [ -d ".svn" ] || return 1
     base_dir="."
@@ -69,7 +69,7 @@ __prompt_command() {
     alias revert="svn revert"
 
   }
- 
+
   bzr_dir() {
     base_dir=$(bzr root 2>/dev/null) || return 1
     if [ -n "$base_dir" ]; then
@@ -87,7 +87,7 @@ __prompt_command() {
   }
 
   git_dir || svn_dir || bzr_dir
- 
+
   if [ -n "$vcs" ]; then
     alias st="$vcs status"
     alias d="$vcs diff"
@@ -107,7 +107,7 @@ __prompt_command() {
     __vcs_sub_dir=''
     working_on=""
   fi
- 
+
   last_command=$(history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")
   __tab_title="$working_on[$last_command]"
   __pretty_pwd="${PWD/$HOME/~}"

@@ -1,33 +1,29 @@
-# always load gems for ruby
-export RUBYOPT=rubygems
+# Rails 2.X shortcuts
+alias sc='script/console'
+alias ss='script/server'
+alias sg='script/generate'
+alias sdb='script/dbconsole'
 
-# rubygems shortcuts (http://stephencelis.com/archive/2008/6/bashfully-yours-gem-shortcuts)
-alias gems='cd $(gem env gemdir)/gems'
-export GEMDIR=`gem env gemdir`
-gemdoc() {
-  open $GEMDIR/doc/`$(which ls) $GEMDIR/doc | grep $1 | sort | tail -1`/rdoc/index.html
-}
-_gemdocomplete() {
-  COMPREPLY=($(compgen -W '$(`which ls` $GEMDIR/doc)' -- ${COMP_WORDS[COMP_CWORD]}))
-  return 0
-}
-complete -o default -o nospace -F _gemdocomplete gemdoc
+# Rails 3 shortcuts
+alias r='bundle exec rails'
+alias b='gem install bundler && bundle install'
 
-gemlite() {
-  gem install $1 --no-rdoc --no-ri
-}
+# Run rake db:migrate and fill the test db, so autotest doesn't have to restart
+alias rdm='rake db:migrate db:test:prepare'
 
-# unit_record and autotest
-alias autou='autotest'
-alias autof='AUTOTEST=functional autotest'
+# I already know in which directoy I am, thank you
+alias rake='rake --silent'
 
-# run autotest locked to ZenTest 3.9.2
-alias autou392='autotest _3.9.2_'
-alias autof392='AUTOTEST=functional autotest _3.9.2_'
+# Ruby Enterprise Edition Optimalizations
+export RUBY_HEAP_MIN_SLOTS=1100000
+export RUBY_GC_MALLOC_LIMIT=110000000
+export RUBY_HEAP_FREE_MIN=20000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 
+# open stuff with mvim
+export BUNDLER_EDITOR='mvim'
+export GEMEDITOR='mvim'
 
-# shorten mongrel cluster commands
-# example: cluster_start myapp
-cluster_restart () { mongrel_rails cluster::restart -C /etc/mongrel_cluster/$1.yml;}
-cluster_start () { mongrel_rails cluster::start -C /etc/mongrel_cluster/$1.yml;}
-cluster_stop () { mongrel_rails cluster::stop -C /etc/mongrel_cluster/$1.yml;}
+# RVM
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+PS1="\[\033[1;32;30m\]\$(~/.rvm/bin/rvm-prompt i v g) $PS1"

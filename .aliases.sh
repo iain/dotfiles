@@ -1,9 +1,3 @@
-# general shortcuts
-alias c='cd '
-alias mv='mv -i'
-alias v='vmstat'
-alias md=mkdir
-
 # Need to do this so you use backspace in screen...I have no idea why
 alias screen='TERM=screen screen'
 
@@ -28,16 +22,6 @@ alias sadd="sst | grep '?' | cut -c5- | xargs svn add"
 
 # editing shortcuts
 alias m='mvim --remote-silent'
-alias e='emacs'
-alias erc='e /etc/bashrc'
-alias newrc='. /etc/bashrc'
-alias rsync_nosvn="rsync --exclude=.svn -r "
-alias rsync_novc="rsync --exclude=.svn --exclude=.git -r "
-
-alias sourceit='. ~/src/scripts/profile.d/00_startup.sh'
-
-# mate shortcuts
-alias m8prof='m ~/src/scripts/profile.d/'
 
 # ignore svn metadata - pipe this into xargs to do stuff
 alias no_svn="find . -path '*/.svn' -prune -o -type f -print"
@@ -49,24 +33,6 @@ function psg {
   ps aux | grep "[$FIRST]$REST"
 }
 
-# Mac style apache control
-# TODO init this style of aliases for darwin arch
-# alias htstart='sudo /System/Library/StartupItems/Apache/Apache start'
-# alias htrestart='sudo /System/Library/StartupItems/Apache/Apache restart'
-# alias htstop='sudo /System/Library/StartupItems/Apache/Apache stop'
-
-# Debian style apache control
-alias htreload='sudo /etc/init.d/apache2 reload'
-alias htrestart='sudo /etc/init.d/apache2 restart'
-alias htstop='sudo /etc/init.d/apache2 stop'
-
-alias cycle_passenger='touch tmp/restart.txt'
-
-# top level folder shortcuts
-alias src='cd ~/src'
-alias docs='cd ~/documents'
-alias scripts='cd ~/src/scripts'
-
 alias h?="history | grep "
 
 # display battery info on your Mac
@@ -75,3 +41,6 @@ alias battery='ioreg -w0 -l | grep Capacity | cut -d " " -f 17-50'
 
 # start tmux in utf8
 alias t='tmux -u'
+
+# open gitx from the terminal
+alias gitx='open /Applications/GitX.app'
