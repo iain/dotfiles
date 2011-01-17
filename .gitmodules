@@ -70,3 +70,6 @@
 [submodule ".vim/bundle/ruby-refactoring"]
 	path = .vim/bundle/ruby-refactoring
 	url = git://github.com/ecomba/vim-ruby-refactoring.git
+[submodule ".vim/bundle/tabular"]
+	path = .vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
