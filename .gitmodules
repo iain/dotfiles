@@ -1,75 +1,75 @@
 [submodule ".vim/bundle/tcomment"]
-	path = .vim/bundle/tcomment
-	url = http://github.com/tomtom/tcomment_vim.git
+  path = .vim/bundle/tcomment
+  url = http://github.com/tomtom/tcomment_vim.git
 [submodule ".vim/bundle/rails"]
-	path = .vim/bundle/rails
-	url = http://github.com/tpope/vim-rails.git
+  path = .vim/bundle/rails
+  url = http://github.com/tpope/vim-rails.git
 [submodule ".vim/bundle/surround"]
-	path = .vim/bundle/surround
-	url = http://github.com/tpope/vim-surround.git
+  path = .vim/bundle/surround
+  url = http://github.com/tpope/vim-surround.git
 [submodule ".vim/bundle/haml"]
-	path = .vim/bundle/haml
-	url = http://github.com/tpope/vim-haml.git
+  path = .vim/bundle/haml
+  url = http://github.com/tpope/vim-haml.git
 [submodule ".vim/bundle/cucumber"]
-	path = .vim/bundle/cucumber
-	url = http://github.com/tpope/vim-cucumber.git
+  path = .vim/bundle/cucumber
+  url = http://github.com/tpope/vim-cucumber.git
 [submodule ".vim/bundle/markdown"]
-	path = .vim/bundle/markdown
-	url = http://github.com/tpope/vim-markdown.git
+  path = .vim/bundle/markdown
+  url = http://github.com/tpope/vim-markdown.git
 [submodule ".vim/bundle/git"]
-	path = .vim/bundle/git
-	url = http://github.com/tpope/vim-git.git
+  path = .vim/bundle/git
+  url = http://github.com/tpope/vim-git.git
 [submodule ".vim/bundle/abolish"]
-	path = .vim/bundle/abolish
-	url = http://github.com/tpope/vim-abolish.git
+  path = .vim/bundle/abolish
+  url = http://github.com/tpope/vim-abolish.git
 [submodule ".vim/bundle/endwise"]
-	path = .vim/bundle/endwise
-	url = http://github.com/tpope/vim-endwise.git
+  path = .vim/bundle/endwise
+  url = http://github.com/tpope/vim-endwise.git
 [submodule ".vim/bundle/fugitive"]
-	path = .vim/bundle/fugitive
-	url = http://github.com/tpope/vim-fugitive.git
+  path = .vim/bundle/fugitive
+  url = http://github.com/tpope/vim-fugitive.git
 [submodule ".vim/bundle/checksyntax"]
-	path = .vim/bundle/checksyntax
-	url = http://github.com/tomtom/checksyntax_vim.git
+  path = .vim/bundle/checksyntax
+  url = http://github.com/tomtom/checksyntax_vim.git
 [submodule ".vim/bundle/matchit"]
-	path = .vim/bundle/matchit
-	url = http://github.com/edsono/vim-matchit.git
+  path = .vim/bundle/matchit
+  url = http://github.com/edsono/vim-matchit.git
 [submodule ".vim/bundle/unimpaired"]
-	path = .vim/bundle/unimpaired
-	url = http://github.com/tpope/vim-unimpaired.git
+  path = .vim/bundle/unimpaired
+  url = http://github.com/tpope/vim-unimpaired.git
 [submodule ".vim/bundle/indent-anything"]
-	path = .vim/bundle/indent-anything
-	url = http://github.com/vim-scripts/IndentAnything.git
-[submodule ".vim/bundle/jquery"]
-	path = .vim/bundle/jquery
-	url = http://github.com/vim-scripts/jQuery.git
+  path = .vim/bundle/indent-anything
+  url = http://github.com/vim-scripts/IndentAnything.git
 [submodule ".vim/bundle/align"]
-	path = .vim/bundle/align
-	url = http://github.com/vim-scripts/Align.git
+  path = .vim/bundle/align
+  url = http://github.com/vim-scripts/Align.git
 [submodule ".vim/bundle/rdoc"]
-	path = .vim/bundle/rdoc
-	url = http://github.com/hallison/vim-rdoc.git
+  path = .vim/bundle/rdoc
+  url = http://github.com/hallison/vim-rdoc.git
+[submodule ".vim/bundle/html5"]
+  path = .vim/bundle/html5
+  url = http://github.com/othree/html5.vim.git
+[submodule ".vim/bundle/indentobject"]
+  path = .vim/bundle/indentobject
+  url = http://github.com/austintaylor/vim-indentobject.git
+[submodule ".vim/bundle/ack"]
+  path = .vim/bundle/ack
+  url = git://github.com/mileszs/ack.vim.git
+[submodule ".vim/bundle/textobj-user"]
+  path = .vim/bundle/textobj-user
+  url = git://github.com/kana/vim-textobj-user.git
+[submodule ".vim/bundle/textobj-rubyblock"]
+  path = .vim/bundle/textobj-rubyblock
+  url = git://github.com/nelstrom/vim-textobj-rubyblock.git
+[submodule ".vim/bundle/ruby-refactoring"]
+  path = .vim/bundle/ruby-refactoring
+  url = git://github.com/ecomba/vim-ruby-refactoring.git
+[submodule ".vim/bundle/tabular"]
+  path = .vim/bundle/tabular
+  url = https://github.com/godlygeek/tabular.git
 [submodule ".vim/bundle/textile"]
 	path = .vim/bundle/textile
 	url = http://github.com/vim-scripts/Textile-for-VIM.git
-[submodule ".vim/bundle/html5"]
-	path = .vim/bundle/html5
-	url = http://github.com/othree/html5.vim.git
-[submodule ".vim/bundle/indentobject"]
-	path = .vim/bundle/indentobject
-	url = http://github.com/austintaylor/vim-indentobject.git
-[submodule ".vim/bundle/ack"]
-	path = .vim/bundle/ack
-	url = git://github.com/mileszs/ack.vim.git
-[submodule ".vim/bundle/textobj-user"]
-	path = .vim/bundle/textobj-user
-	url = git://github.com/kana/vim-textobj-user.git
-[submodule ".vim/bundle/textobj-rubyblock"]
-	path = .vim/bundle/textobj-rubyblock
-	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
-[submodule ".vim/bundle/ruby-refactoring"]
-	path = .vim/bundle/ruby-refactoring
-	url = git://github.com/ecomba/vim-ruby-refactoring.git
-[submodule ".vim/bundle/tabular"]
-	path = .vim/bundle/tabular
-	url = https://github.com/godlygeek/tabular.git
+[submodule ".vim/bundle/jquery"]
+	path = .vim/bundle/jquery
+	url = http://github.com/vim-scripts/jQuery.git
