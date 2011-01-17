@@ -34,9 +34,11 @@ set directory=~/.vim/tmp/
 " Normal line numbering
 set number
 
-colorscheme ir_black
+colorscheme tir_black
 
 if has("gui_running") && has("gui_macvim")
+
+  colorscheme ir_black
 
   " fullscreen options (MacVim only), resized window when changed to fullscreen
   set fuoptions=maxvert,maxhorz
@@ -164,6 +166,7 @@ fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
     let c = col(".")
     %s/\s\+$//e
+    %s/\t/  /ge
     call cursor(l, c)
 endfun
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
