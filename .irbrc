@@ -33,7 +33,7 @@ IRB.conf[:PROMPT][:SIMPLE_COLOR] = {
   :PROMPT_S => "#{ANSI[:YELLOW]}?>#{ANSI[:RESET]} ",
   :RETURN   => "#{ANSI[:GREEN]}=>#{ANSI[:RESET]} %s\n",
   :AUTO_INDENT => true }
-IRB.conf[:PROMPT_MODE] = :SIMPLE_COLOR
+IRB.conf[:PROMPT_MODE] = :SIMPLE
 
 # Loading extensions of the console. This is wrapped
 # because some might not be included in your Gemfile
@@ -114,7 +114,7 @@ extend_console 'pm', true, false do
     end
     max_name = data.collect {|item| item[0].size}.max
     max_args = data.collect {|item| item[1].size}.max
-    data.each do |item| 
+    data.each do |item|
       print " #{ANSI[:YELLOW]}#{item[0].to_s.rjust(max_name)}#{ANSI[:RESET]}"
       print "#{ANSI[:BLUE]}#{item[1].ljust(max_args)}#{ANSI[:RESET]}"
       print "   #{ANSI[:GRAY]}#{item[2]}#{ANSI[:RESET]}\n"
