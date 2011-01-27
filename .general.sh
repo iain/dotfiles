@@ -25,6 +25,9 @@ fi
 # Load self compiled shit too
 export PATH="/usr/local/bin:$PATH"
 
+# Load Node.js bin:
+export PATH="/usr/local/share/npm/bin:$PATH"
+
 # Bash completion by homebrew
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
