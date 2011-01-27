@@ -10,7 +10,6 @@ set background=dark
 " Turn on automatic plugin loading
 filetype plugin indent on
 
-set cindent
 
 " Backspace normally
 set backspace=indent,eol,start
@@ -20,6 +19,10 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+set autoindent
+set cindent
+set smartindent
+set smarttab
 
 " Directly switch between open splitted windows
 map <C-J> <C-W>j
@@ -32,8 +35,9 @@ set backupdir=~/.vim/tmp/
 set directory=~/.vim/tmp/
 
 " Normal line numbering
-set number
+" set number
 
+" tir_black looks most like ir_black in console
 colorscheme tir_black
 
 if has("gui_running") && has("gui_macvim")
@@ -46,27 +50,27 @@ if has("gui_running") && has("gui_macvim")
 
   " Turn on only autoselect, console dialogs and tab pages
   " No menubar, toolbar or scrollbars
-  set guioptions=aAce
+  set guioptions=Ace
 
   " create equally sized splits
   set equalalways
   set splitbelow splitright
 
   " show relative line numbers (vim 7.3 and up)
-  set nonumber
-  set relativenumber
+  " set nonumber
+  " set relativenumber
 
   " Available when using experimental renderer
   " set transparency=15
 
   " because it looks bad outside macvim
-  set cursorline
+  " set cursorline
 
   " max width
   set nowrap
   set textwidth=100
   set formatoptions=qrn1
-  set colorcolumn=101
+  " set colorcolumn=101
 
   " undoing even after closing the file
   set undofile
@@ -80,7 +84,7 @@ if has("gui_running") && has("gui_macvim")
 end
 
 " Buffer Explorer opens with Ctrl+B
-nnoremap <C-B> :BufExplorer<cr>
+" nnoremap <C-B> :BufExplorer<cr>
 
 " Always show statusbar
 set laststatus=2
@@ -101,7 +105,7 @@ endif
 set lazyredraw
 
 " Don't scroll near the edge
-set scrolloff=8
+set scrolloff=15
 
 " Turn off beep
 set vb t_vb=
@@ -173,22 +177,23 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+" let mapleader=','
 if exists(":Tabularize")
-  nmap <Leader>a= :Tabularize /=<CR>
-  vmap <Leader>a= :Tabularize /=<CR>
-  nmap <Leader>a: :Tabularize /:\zs<CR>
-  vmap <Leader>a: :Tabularize /:\zs<CR>
+  nmap <Leader>t= :Tabularize /=<CR>
+  vmap <Leader>t= :Tabularize /=<CR>
+  nmap <Leader>t: :Tabularize /:\zs<CR>
+  vmap <Leader>t: :Tabularize /:\zs<CR>
+
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+  function! s:align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
 endif
-
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
