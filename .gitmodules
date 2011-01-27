@@ -73,3 +73,6 @@
 [submodule ".vim/bundle/jquery"]
 	path = .vim/bundle/jquery
 	url = http://github.com/vim-scripts/jQuery.git
+[submodule ".vim/bundle/coffeescript"]
+	path = .vim/bundle/coffeescript
+	url = https://github.com/kchmck/vim-coffee-script.git
