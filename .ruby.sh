@@ -26,4 +26,4 @@ export GEMEDITOR='mvim'
 
 # RVM
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-PS1="\[\033[1;32;30m\]\$(~/.rvm/bin/rvm-prompt i v g) $PS1"
+PS1="\[\033[0;32;90m\]\$(~/.rvm/bin/rvm-prompt i v g) $PS1"

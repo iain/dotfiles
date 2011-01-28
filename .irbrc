@@ -16,7 +16,7 @@ ANSI[:RESET]     = "\e[0m"
 ANSI[:BOLD]      = "\e[1m"
 ANSI[:UNDERLINE] = "\e[4m"
 ANSI[:LGRAY]     = "\e[0;37m"
-ANSI[:GRAY]      = "\e[1;30m"
+ANSI[:GRAY]      = "\e[0;90m"
 ANSI[:RED]       = "\e[31m"
 ANSI[:GREEN]     = "\e[32m"
 ANSI[:YELLOW]    = "\e[33m"
@@ -56,6 +56,10 @@ $console_extensions = []
 extend_console 'wirble' do
   Wirble.init
   Wirble.colorize
+end
+
+extend_console 'wirb' do
+  Wirb.start
 end
 
 # Hirb makes tables easy.
