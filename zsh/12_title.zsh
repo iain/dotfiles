@@ -1,8 +1,8 @@
 case $TERM in (*xterm*|ansi)
 
   # set the terminal title and tab title when switching directories
-  function settab { print -Pn "\e]1;%n: %~\a" }
-  function settitle { print -Pn "\e]2;%n: %~\a" }
+  function settab { print -Pn "\e]1;%~\a" }
+  function settitle { print -Pn "\e]2;%~\a" }
   function chpwd { settab; settitle }
   settab; settitle
 
@@ -13,8 +13,7 @@ case $TERM in (*xterm*|ansi)
   # sets the tab title to the currently running command (not process)
   preexec() {
     NEWLY_OPENED=""
-    print -Pn "\e]1;Running: $1\a"
-    # settitle
+    print -Pn "\e]0;Running: $1\a"
   }
 
   # sets the tab title to the result of the last run command (not process)
