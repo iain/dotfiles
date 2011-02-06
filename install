@@ -1,0 +1,27 @@
+#!/bin/sh
+mydir=`dirname $0`
+if [[ $mydir = . ]]; then
+  mydir=`pwd`
+fi
+echo My Directory: $mydir
+backup=".osx-settings-backup-`date +%s`"
+echo "Any files that already existed are backed up in: $HOME/$backup"
+
+# Install submodules
+git submodule update --init
+
+# Backup the stuff and create symlinks
+pattern='^\.[a-z]{2,}'
+for f in $mydir/.*; do
+  file=`basename $f`
+  if [[ "${file}" =~ $pattern ]]; then
+    if [[ -f $HOME/$file || -d $HOME/$file ]]; then
+      mkdir -p $HOME/$backup
+      cp -R $HOME/$file $HOME/$backup/$file
+    fi
+    if [[ "$file" != ".gitmodules" && "$file" != ".git" ]]; then # ignoring git internals
+      echo "Installing: $file"
+      ln -fs $mydir/$file $HOME/$file
+    fi
+  fi
+done

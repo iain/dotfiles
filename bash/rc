@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 pattern='[0-9]{2}_.*'
 for file in $BASH_RC_SOURCES; do
   if [[ "${file}" =~ $pattern ]]; then

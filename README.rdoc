@@ -1,6 +1,8 @@
 = OSX Settings
 
-This is where I put my bash settings for OSX. This includes:
+This repository contains my bash, zsh, and Vim settings.
+
+Some of the features include:
 
 * Nicely colored prompt
 * Yellow = clean, red = dirty in prompt for SVN and Git
@@ -13,39 +15,51 @@ This is where I put my bash settings for OSX. This includes:
 
 == Installation
 
-To get it all, run these commands:
+Installation is really easy, just run these commands:
 
-  cd ~
-  git clone git://github.com/iain/osx_settings.git .osx_settings
-  git submodule update --init
-  ln -fs .osx_settings/.autotest
-  ln -fs .osx_settings/.gemrc
-  ln -fs .osx_settings/.gitconfig
-  ln -fs .osx_settings/.gitignore
-  ln -fs .osx_settings/.irbrc
-  ln -fs .osx_settings/.bashrc
-  ln -fs .osx_settings/.rvmrc
-  ln -fs .osx_settings/.vim
-  ln -fs .osx_settings/.vimrc
+  git clone git://github.com/iain/osx_settings.git ~/.osx_settings
+  ~/.osx_settings/install
+
+This will create backups for anything you already have and add symlinks to these parts.
+
+== Updgrading
+
+To get the latest and greatest:
+
+  cd ~/.osx_settings
+  git pull origin master
+  ./update-submodules
+
+This will update all the vim plugins (through pathogen) too. If you've customized anything, you will
+have to deal with merge conflicts yourself.
+
+== Customizing
+
+This scripts adds aliases for your project directories, but you'll have to tell it where your
+projects can be found.
+
+If you're using bash, edit `.bashrc` and add something like:
+
+  PROJECT_PARENT_DIRS[0]="$HOME/code"
+
+If you're using zsh, edit `.zshrc` and add something like:
+
+  PROJECT_PARENT_DIRS+=("$HOME/code")
 
 
-Basically, any file ending in <tt>.sh</tt> is to be included in your
-<tt>.bashrc</tt> or in your <tt>.profile</tt> and can stay where they are.
-All other files need to be in the home directory to work.
+== Tips
 
-To get project aliases working, edit <tt>.profile</tt> and change these lines
-to suit your environment:
+Don't forget to enable 'Use bright colors for bold text' in Terminal.app, if you have trouble
+reading stuff.
 
-  PROJECT_PARENT_DIRS[0]="$HOME/Projects"
-
-Don't forget to enable 'Use bright colors for bold text' in Terminal.app, if
-you have trouble reading it.
+My ZSH config is still rather newish, just switched to it. If you're not already using zsh, you
+should, it rocks!
 
 == Credits
 
-I can't remember exactly where I got all stuff, but mostly from relevance/etc.
-Heavily modified some stuff to fit my own needs of course.
+I can't remember exactly where I got all stuff, but mostly from `relevance/etc`. And my zsh config
+is heavily influenced from `bryanl/zshkit`. Heavily modified some stuff to fit my own needs of
+course.
 
-Thanks everybody who contributed!
-Feel free to use this, fork this or whatever.
-Additions are very welcome!
+Thanks everybody who contributed! Feel free to use this, fork this or whatever. Additions are very
+welcome!
