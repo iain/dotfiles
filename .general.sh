@@ -29,6 +29,7 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/share/npm/bin:$PATH"
 
 # Bash completion by homebrew
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-  . `brew --prefix`/etc/bash_completion
-fi
+# WILL BREAK WITH THE MOST RECENT VERSION!!
+# if [ -f `brew --prefix`/etc/bash_completion ]; then
+#   . `brew --prefix`/etc/bash_completion
+# fi
