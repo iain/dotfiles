@@ -67,4 +67,4 @@ course.
 Thanks everybody who contributed! Feel free to use this, fork this or whatever. Additions are very
 welcome!
 
-For more information, see my website: {iain.nl}[http://iain.nl].
+For more information, see my website: [iain.nl](http://iain.nl/).
