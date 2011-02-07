@@ -16,10 +16,10 @@ CYAN=$'%{\e[0;36m%}'
 WHITE=$'%{\e[0;37m%}'
 
 # I am single minded
-export EDITOR=mvim
+export EDITOR=vim
 export VISUAL=mvim
-export GIT_EDITOR=mvim
-export SVN_EDITOR=mvim
+export GIT_EDITOR=vim
+export SVN_EDITOR=vim
 
 # color!
 export CLICOLOR=1
