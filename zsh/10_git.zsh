@@ -86,6 +86,3 @@ function nhgk () {
 # some aliases
 alias st='git status'
 alias d='git diff'
-
-# open gitx from the terminal
-alias gitx='open /Applications/GitX.app'
