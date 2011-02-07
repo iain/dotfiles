@@ -9,6 +9,18 @@ function git-dirty () {
 
 function git-need-to-push() {
   if pushtime=$(echo $1 | grep 'Your branch is ahead' 2> /dev/null); then
+    echo "${MAGENTA}↓${RESET} "
+  fi
+}
+
+function git-has-diverged() {
+  if pulltime=$(echo $1 | grep 'have diverged' 2> /dev/null); then
+    echo "${MAGENTA}↕${RESET} "
+  fi
+}
+
+function git-need-to-pull() {
+  if pulltime=$(echo $1 | grep 'Your branch is behind' 2> /dev/null); then
     echo "${MAGENTA}↑${RESET} "
   fi
 }
@@ -19,15 +31,18 @@ function git-prompt() {
   dirty=$(echo $gstatus | sed 's/^#.*$//' | tail -2 | grep 'nothing to commit (working directory clean)'; echo $?)
   if [[ x$branch != x ]]; then
     dirty_color=$GREEN
-    push_status=$(git-need-to-push $gstatus 2> /dev/null)
     if [[ $dirty = 1 ]]; then
       dirty_color=$RED
     fi
+
+    push_status=$(git-need-to-push $gstatus 2> /dev/null)
+    pull_status=$(git-need-to-pull $gstatus 2> /dev/null)
+    diverge_status=$(git-has-diverged $gstatus 2> /dev/null)
+
     basedir=$(git-basedir)
     subdir=$(git-subdir)
-    if [ x$branch != x ]; then
-      echo "$basedir %{$dirty_color%}$branch%{$RESET%} $push_status$subdir "
-    fi
+
+    echo "$basedir %{$dirty_color%}$branch%{$RESET%} $push_status$pull_status$diverge_status$subdir "
   else
     echo "$BLUE${PWD/$HOME/~}$RESET "
   fi
