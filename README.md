@@ -22,6 +22,8 @@ Installation is really easy, just run these commands:
 
 This will create backups for anything you already have and add symlinks to these parts.
 
+<strong>Caution</strong> Don't forget to change the `.gitconfig` file.
+
 ## Updgrading
 
 To get the latest and greatest:
