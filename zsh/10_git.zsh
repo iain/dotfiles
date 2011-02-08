@@ -9,7 +9,7 @@ function git-dirty () {
 
 function git-need-to-push() {
   if pushtime=$(echo $1 | grep 'Your branch is ahead' 2> /dev/null); then
-    echo "${MAGENTA}↓${RESET} "
+    echo "${MAGENTA}↑${RESET} "
   fi
 }
 
@@ -21,7 +21,7 @@ function git-has-diverged() {
 
 function git-need-to-pull() {
   if pulltime=$(echo $1 | grep 'Your branch is behind' 2> /dev/null); then
-    echo "${MAGENTA}↑${RESET} "
+    echo "${MAGENTA}↓${RESET} "
   fi
 }
 
