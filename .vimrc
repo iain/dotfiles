@@ -35,7 +35,7 @@ set backupdir=~/.vim/tmp/
 set directory=~/.vim/tmp/
 
 " Normal line numbering
-" set number
+set number
 
 " tir_black looks most like ir_black in console
 colorscheme tir_black
@@ -90,7 +90,9 @@ end
 set laststatus=2
 
 " Set the status line
-set statusline=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%c\ Buf:%n\ [%b][0x%B]
+set statusline=%#warningmsg#
+set statusline+=%*
+set statusline+=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%c\ Buf:%n\ [%b][0x%B]
 
 set encoding=utf-8
 
@@ -99,6 +101,15 @@ if (&termencoding == "utf-8") || has("gui_running")
   set listchars=tab:·\ ,trail:\ ,
   set list
   noremap <Leader>i :set list!<CR>
+
+  " Syntastic
+  let g:syntastic_enable_signs=1
+  " let g:syntastic_auto_loc_list=1
+
+  sign define SyntasticError linehl=Error texthl=Error
+  highlight SignColumn guibg=#222222
+  set statusline+=%{SyntasticStatuslineFlag()}
+
 endif
 
 " Don't redraw during macro execution
