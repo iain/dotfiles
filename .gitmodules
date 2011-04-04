@@ -82,3 +82,6 @@
 [submodule ".vim/bundle/css3"]
 	path = .vim/bundle/css3
 	url = git://github.com/hail2u/vim-css3-syntax.git
+[submodule ".vim/bundle/solarized"]
+	path = .vim/bundle/solarized
+	url = git://github.com/altercation/vim-colors-solarized.git
