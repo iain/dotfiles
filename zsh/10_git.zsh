@@ -101,3 +101,5 @@ function nhgk () {
 # some aliases
 alias st='git status'
 alias d='git diff'
+alias gf='git fetch && git status'
+alias gff='git merge origin/master --ff-only'
