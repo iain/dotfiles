@@ -80,17 +80,145 @@ extend_console 'rails2', (ENV.include?('RAILS_ENV') && !Object.const_defined?('R
 end
 
 # When you're using Rails 3 console, show queries in the console
+# http://rbjl.net/49-railsrc-rails-console-snippets
 extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
-  $odd_or_even_queries = false
-  ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
-    $odd_or_even_queries = !$odd_or_even_queries
-    color = $odd_or_even_queries ? ANSI[:CYAN] : ANSI[:MAGENTA]
-    event = ActiveSupport::Notifications::Event.new(*args)
-    time  = "%.1fms" % event.duration
-    name  = event.payload[:name]
-    sql   = event.payload[:sql].gsub("\n", " ").squeeze(" ")
-    puts "  #{ANSI[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI[:RESET]}  #{sql}"
+
+  # loggers
+  ActiveRecord::Base.logger     = Logger.new STDOUT
+  ActiveRecord::Base.clear_reloadable_connections!
+
+  ActionController::Base.logger = Logger.new STDOUT
+
+  # named routes and helpers
+  include Rails.application.routes.url_helpers
+  default_url_options[:host] = Rails.application.class.parent_name.downcase
+
+  # include ActionView::Helpers           # All Rails helpers
+  include ApplicationController._helpers # Your own helpers
+
+  # unfortunately that breaks some functionality (e.g. the named route helpers above)
+  #  so, look at actionpack/lib/action_view/helpers.rb and choose the helpers you need
+  #  (and which don't break anything), e.g.
+  include ActionView::Helpers::DebugHelper
+  include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::RawOutputHelper
+  include ActionView::Helpers::SanitizeHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TranslationHelper
+
+  if defined?(Hirb)
+    # hirb view for a route
+    class Hirb::Helpers::Route < Hirb::Helpers::AutoTable
+      def self.render(output, options = {})
+        super( output.requirements.map{ |k,v|
+          [k, v.inspect]
+        }, options.merge({
+          :headers     => [output.name || '', "#{ output.verb || 'ANY' } #{ output.path }"],
+          :unicode     => true,
+          :description => nil,
+        }) )
+      end
+    end
+    Hirb.add_view ActionDispatch::Routing::Route, :class => Hirb::Helpers::Route
+
+    # short and long route list
+    def routes(long_output = false)
+      if long_output
+        Rails.application.routes.routes.each{ |e|
+          puts Hirb::Helpers::Route.render(e)
+        }
+        true
+      else
+        Hirb::Console.render_output Rails.application.routes.routes.map{|e|
+          [e.name || '', e.verb || 'ANY', e.path]
+        },{
+          :class   => Hirb::Helpers::AutoTable,
+          :headers => %w<name verb path>,
+        }
+      end
+    end
+
+    # misc db helpers (requires hirb)
+    module DatabaseHelpers
+      extend self
+
+      def tables
+        Hirb::Console.render_output ActiveRecord::Base.connection.tables.map{|e|[e]},{
+          :class   => Hirb::Helpers::AutoTable,
+          :headers => %w<tables>,
+        }
+        true
+      end
+
+      def table(which)
+        Hirb::Console.render_output ActiveRecord::Base.connection.columns(which).map{ |e|
+          [e.name, e.type, e.sql_type, e.limit, e.default, e.scale, e.precision, e.primary, e.null]
+        },{
+          :class   => Hirb::Helpers::AutoTable,
+          :headers => %w<name type sql_type limit default scale precision primary null>,
+        }
+        true
+      end
+
+      def counts
+        Hirb::Console.render_output ActiveRecord::Base.connection.tables.map{|e|
+          [e, ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{e}")]
+        },{
+          :class   => Hirb::Helpers::AutoTable,
+          :headers => %w<table count>,
+        }
+        true
+      end
+
+      # ...
+    end
+    def db; DatabaseHelpers; end
+
   end
+
+  # get a specific route via index or name
+  def route(index_or_name)
+    route = case index_or_name
+            when Integer
+              Rails.application.routes.routes[ index_or_name ]
+            when Symbol # named route
+              Rails.application.routes.named_routes.get index_or_name
+            end
+  end
+
+  # access to routeset for easy recognize / generate
+  def r
+    ActionController::Routing::Routes
+  end
+
+
+  # # #
+  # plain sql
+  def sql(query)
+    ActiveRecord::Base.connection.select_all(query)
+  end
+
+  # # #
+  # instead of User.find(...) you can do user(...)
+  #   without arguments it only returns the model class
+  #   based on http://www.clarkware.com/blog/2007/09/03/console-shortcut
+  Dir.glob( File.join(Dir.pwd, *%w<app models ** *.rb>) ).map { |file_name|
+    table_name = File.basename(file_name).split('.')[0..-2].join
+    Object.instance_eval do
+      define_method(table_name) do |*args|
+        table_class = table_name.camelize.constantize
+        if args.empty?
+          table_class
+        else
+          table_class.send(:find, *args)
+        end
+      end
+    end
+  }
+
+
+
 end
 
 # Add a method pm that shows every method on an object
@@ -114,7 +242,7 @@ extend_console 'pm', true, false do
         args = "(#{(1..n).collect {|i| "arg#{i}"}.join(", ")}, ...)"
       end
       klass = $1 if method.inspect =~ /Method: (.*?)#/
-      [name.to_s, args, klass]
+        [name.to_s, args, klass]
     end
     max_name = data.collect {|item| item[0].size}.max
     max_args = data.collect {|item| item[1].size}.max
