@@ -101,15 +101,6 @@ if (&termencoding == "utf-8") || has("gui_running")
   set listchars=tab:·\ ,trail:\ ,
   set list
   noremap <Leader>i :set list!<CR>
-
-  " Syntastic
-  let g:syntastic_enable_signs=1
-  " let g:syntastic_auto_loc_list=1
-
-  sign define SyntasticError linehl=Error texthl=Error
-  highlight SignColumn guibg=#222222
-  set statusline+=%{SyntasticStatuslineFlag()}
-
 endif
 
 " Don't redraw during macro execution
