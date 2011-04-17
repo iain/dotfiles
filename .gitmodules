@@ -28,9 +28,6 @@
 [submodule ".vim/bundle/fugitive"]
   path = .vim/bundle/fugitive
   url = http://github.com/tpope/vim-fugitive.git
-[submodule ".vim/bundle/checksyntax"]
-  path = .vim/bundle/checksyntax
-  url = http://github.com/tomtom/checksyntax_vim.git
 [submodule ".vim/bundle/matchit"]
   path = .vim/bundle/matchit
   url = http://github.com/edsono/vim-matchit.git
@@ -68,20 +65,17 @@
   path = .vim/bundle/tabular
   url = https://github.com/godlygeek/tabular.git
 [submodule ".vim/bundle/textile"]
-	path = .vim/bundle/textile
-	url = http://github.com/vim-scripts/Textile-for-VIM.git
+  path = .vim/bundle/textile
+  url = http://github.com/vim-scripts/Textile-for-VIM.git
 [submodule ".vim/bundle/jquery"]
-	path = .vim/bundle/jquery
-	url = http://github.com/vim-scripts/jQuery.git
+  path = .vim/bundle/jquery
+  url = http://github.com/vim-scripts/jQuery.git
 [submodule ".vim/bundle/coffeescript"]
-	path = .vim/bundle/coffeescript
-	url = https://github.com/kchmck/vim-coffee-script.git
-[submodule ".vim/bundle/syntastic"]
-	path = .vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
+  path = .vim/bundle/coffeescript
+  url = https://github.com/kchmck/vim-coffee-script.git
 [submodule ".vim/bundle/css3"]
-	path = .vim/bundle/css3
-	url = git://github.com/hail2u/vim-css3-syntax.git
+  path = .vim/bundle/css3
+  url = git://github.com/hail2u/vim-css3-syntax.git
 [submodule ".vim/bundle/solarized"]
-	path = .vim/bundle/solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
+  path = .vim/bundle/solarized
+  url = git://github.com/altercation/vim-colors-solarized.git
