@@ -5,7 +5,7 @@ alias sg='script/generate'
 alias sdb='script/dbconsole'
 
 # Rails 3 shortcuts
-alias r='bundle exec rails'
+alias r='./script/rails'
 alias b='gem install bundler && bundle install'
 
 # Run rake db:migrate and fill the test db, so autotest doesn't have to restart
@@ -13,6 +13,8 @@ alias rdm='rake db:migrate db:test:prepare'
 
 # I already know in which directoy I am, thank you
 alias rake='rake --silent'
+
+alias rr='touch tmp/restart.txt'
 
 # Ruby Enterprise Edition Optimalizations
 export RUBY_HEAP_MIN_SLOTS=1100000
@@ -23,3 +25,7 @@ export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 # open stuff with mvim
 export BUNDLER_EDITOR='mvim'
 export GEMEDITOR='mvim'
+
+# cucumber shortcuts, because I can save seconds not using rake for this
+alias cucumber='cucumber -r features'
+alias wip='cucumber --profile wip'
