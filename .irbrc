@@ -84,8 +84,10 @@ end
 extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
 
   # loggers
-  ActiveRecord::Base.logger     = Logger.new STDOUT
-  ActiveRecord::Base.clear_reloadable_connections!
+  if defined?(ActiveRecord)
+    ActiveRecord::Base.logger     = Logger.new STDOUT
+    ActiveRecord::Base.clear_reloadable_connections!
+  end
 
   ActionController::Base.logger = Logger.new STDOUT
 
@@ -101,7 +103,7 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
   #  (and which don't break anything), e.g.
   include ActionView::Helpers::DebugHelper
   include ActionView::Helpers::NumberHelper
-  include ActionView::Helpers::RawOutputHelper
+  # include ActionView::Helpers::RawOutputHelper
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
