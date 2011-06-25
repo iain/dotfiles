@@ -27,5 +27,5 @@ export BUNDLER_EDITOR='mvim'
 export GEMEDITOR='mvim'
 
 # cucumber shortcuts, because I can save seconds not using rake for this
-alias cucumber='cucumber -r features'
-alias wip='cucumber --profile wip'
+alias c='bundle exec ./script/cucumber -r features'
+alias wip='c --profile wip'
