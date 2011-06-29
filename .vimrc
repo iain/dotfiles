@@ -24,6 +24,8 @@ set cindent
 set smartindent
 set smarttab
 
+let mapleader=","
+
 " Directly switch between open splitted windows
 map <C-J> <C-W>j
 map <C-H> <C-W>h
@@ -93,6 +95,7 @@ set laststatus=2
 set statusline=%#warningmsg#
 set statusline+=%*
 set statusline+=%f\ %m\ %r\ Line:%l/%L[%p%%]\ Col:%c\ Buf:%n\ [%b][0x%B]
+set statusline+=%{fugitive#statusline()}
 
 set encoding=utf-8
 
@@ -129,23 +132,24 @@ set history=100
 set synmaxcol=2048
 
 " Turn off arrow keys
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-vnoremap <up> <nop>
-vnoremap <down> <nop>
-vnoremap <left> <nop>
-vnoremap <right> <nop>
+" nnoremap <up> <nop>
+" nnoremap <down> <nop>
+" nnoremap <left> <nop>
+" nnoremap <right> <nop>
+" inoremap <up> <nop>
+" inoremap <down> <nop>
+" inoremap <left> <nop>
+" inoremap <right> <nop>
+" vnoremap <up> <nop>
+" vnoremap <down> <nop>
+" vnoremap <left> <nop>
+" vnoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
 
 " Rename :W to :w
-cmap W w
+" cmap W w
+command! W :w
 
 " search nonsense
 set smartcase
@@ -181,10 +185,10 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 " let mapleader=','
 if exists(":Tabularize")
-  nmap <Leader>t= :Tabularize /=<CR>
-  vmap <Leader>t= :Tabularize /=<CR>
-  nmap <Leader>t: :Tabularize /:\zs<CR>
-  vmap <Leader>t: :Tabularize /:\zs<CR>
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
@@ -199,3 +203,74 @@ function! s:align()
     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
   endif
 endfunction
+
+
+
+" GRB: Put useful info in status line
+:set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
+:hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
+
+
+
+
+
+" GRB: clear the search buffer when hitting return
+:nnoremap <CR> :nohlsearch<cr>
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Running tests
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" vim-makegreen binds itself to ,t unless something else is bound to its
+" function.
+map <leader>\dontstealmymapsmakegreen :w\|:call MakeGreen('spec')<cr>
+
+function! RunTests(filename)
+    " Write the file and run tests for the given filename
+    :w
+    :silent !echo;echo;echo;echo;echo
+    if filereadable("script/test")
+        exec ":!script/test " . a:filename
+    else
+        exec ":!bundle exec rspec " . a:filename
+    end
+endfunction
+
+function! SetTestFile()
+    " Set the spec file that tests will be run for.
+    let t:grb_test_file=@%
+endfunction
+
+function! RunTestFile(...)
+    if a:0
+        let command_suffix = a:1
+    else
+        let command_suffix = ""
+    endif
+
+    " Run the tests for the previously-marked file.
+    let in_spec_file = match(expand("%"), '_spec.rb$') != -1
+    if in_spec_file
+        call SetTestFile()
+    elseif !exists("t:grb_test_file")
+        return
+    end
+    call RunTests(t:grb_test_file . command_suffix)
+endfunction
+
+function! RunNearestTest()
+    let spec_line_number = line('.')
+    call RunTestFile(":" . spec_line_number)
+endfunction
+
+map <leader>t :call RunTestFile()<cr>
+map <leader>T :call RunNearestTest()<cr>
+map <leader>a :call RunTests('spec')<cr>
+map <leader>c :w\|:!cucumber<cr>
+map <leader>C :w\|:!cucumber --profile wip<cr>
+
+nnoremap <c-z> :call RunTestFile()<cr>
+nnoremap <c-x> :call RunNearestTest()<cr>

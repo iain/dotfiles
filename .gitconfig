@@ -12,6 +12,7 @@
   br = branch
   df = diff
   lg = log -p
+  aa = add --all
 [color]
   ui = true
   diff = auto
