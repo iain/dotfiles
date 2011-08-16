@@ -103,3 +103,9 @@ alias st='git status'
 alias d='git diff'
 alias gf='git fetch && git status'
 alias gff='git merge origin/master --ff-only'
+
+function ff () {
+  branch=$(git-branch-name)
+  code="git merge origin/$branch --ff-only"
+  eval $code
+}
