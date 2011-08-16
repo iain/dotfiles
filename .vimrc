@@ -212,10 +212,12 @@ endfunction
 
 
 
-
-
-" GRB: clear the search buffer when hitting return
-:nnoremap <CR> :nohlsearch<cr>
+" Map ,e and ,v to open files in the same directory as the current file
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :edit %%
+map <leader>v :view %%
+map <leader>m :vsplit %%
+map <leader>n :split %%
 
 
 
@@ -235,7 +237,7 @@ function! RunTests(filename)
     if filereadable("script/test")
         exec ":!script/test " . a:filename
     else
-        exec ":!bundle exec rspec " . a:filename
+        exec ":!bundle exec rspec -fd " . a:filename
     end
 endfunction
 
