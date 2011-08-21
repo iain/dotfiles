@@ -3,3 +3,4 @@ rvm_pretty_print_flag=1
 rvm_make_flags="-j 8"
 rvm_project_rvmrc_default=1
 rvm_trust_rvmrcs_flag=1
+rvm_project_rvmrc=1
