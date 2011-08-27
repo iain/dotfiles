@@ -1,8 +1,5 @@
-[user]
-  email = iain@iain.nl
-	name = Iain Hecker
 [core]
-  excludesfile = /Users/iain/.gitignore
+  excludesfile = ~/.gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [alias]
   co = checkout
