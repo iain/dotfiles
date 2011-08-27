@@ -28,11 +28,12 @@ function git-need-to-pull() {
 function git-prompt() {
   gstatus=$(git status 2> /dev/null)
   branch=$(echo $gstatus | head -1 | sed 's/^# On branch //')
-  dirty=$(echo $gstatus | sed 's/^#.*$//' | tail -2 | grep 'nothing to commit (working directory clean)'; echo $?)
   if [[ x$branch != x ]]; then
-    dirty_color=$GREEN
+    dirty=$(echo $gstatus | sed 's/^#.*$//' | tail -2 | grep 'nothing to commit (working directory clean)'; echo $?)
     if [[ $dirty = 1 ]]; then
       dirty_color=$RED
+    else
+      dirty_color=$GREEN
     fi
 
     push_status=$(git-need-to-push $gstatus 2> /dev/null)
