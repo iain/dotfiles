@@ -4,7 +4,7 @@ This repository contains my bash, zsh, and Vim settings.
 
 Some of the features include:
 
-* Nicely colored prompt
+* Nicely colored prompt for both Bash and ZSH.
 * Yellow = clean, red = dirty in prompt for SVN and Git
 * Automatic project aliases
 * Ruby on Rails specific aliases
@@ -18,7 +18,8 @@ Some of the features include:
 Installation is really easy, just run these commands:
 
     git clone git://github.com/iain/osx_settings.git ~/.osx_settings
-    ~/.osx_settings/install
+    cd ~/.osx_settings
+    ./install
 
 This will create backups for anything you already have and add symlinks to these parts.
 
@@ -53,78 +54,24 @@ way it will get automatically loaded, without creating merge conflicts when you 
 
 ## Tips
 
-Don't forget to enable 'Use bright colors for bold text' in Terminal.app, if you have trouble
+Don't forget to enable `Use bright colors for bold text` in Terminal.app, if you have trouble
 reading stuff.
 
 My ZSH config is still rather newish, just switched to it. If you're not already using zsh, you
-should, it rocks!
+should, it rocks! If you find anything missing, please open a pull request!
 
 ### iTerm2
 
 iTerm2 is totally awesome, but you cannot import and export your settings. So here are my more
 interesting settings.
 
-Global Settings:
+In the iTerm2 General settings, check `Load preferences from a user-defined folder or URL`. Fill in
+the text field to point to `~/.osx_settings/iterm2`. You might need to restart iTerm2 after that.
 
-* Show window number in title: off
-* Show current job name in title: off
-
-Advanced Settings:
-
-* Hide scrollbar and resize control: on
-* Hide tab when there is only one session: on
-
-Bookmark Settings, Global:
-
-* Command: /usr/local/bin/zsh
-* Reuse Previous Tab's Directory
-
-Basic Colors:
-
-* Foreground:     `#EEEEEE`
-* Background:     `#000000`
-* Bold:           `#FFFFFF`
-* Selection:      `#353883`
-* Selected Text:  `#FFFFFF`
-* Cursor:         `#FFA560`
-* Cursor Text:    `#FFFFFF`
-
-ANSI Colors: Normal:
-
-* Black:    `#000000`
-* Red:      `#FF6C60`
-* Green:    `#A8FF60`
-* Yellow:   `#FFFFB6`
-* Blue:     `#96CBFE`
-* Magenta:  `#FF73FD`
-* Cyan:     `#C6C5FE`
-* White:    `#EEEEEE`
-
-ANSI Colors: Bright:
-
-* Black:    `#555555`
-* Red:      `#FF5555`
-* Green:    `#CEFFAB`
-* Yellow:   `#FFFFCB`
-* Blue:     `#B5DCFE`
-* Magenta:  `#FF9CFE`
-* Cyan:     `#DFDFFE`
-* White:    `#FFFFFF`
-
-Bookmark Settings, Display:
-
-* Anti-Aliasing
-* Fonts: 12pt DejaVu Sans Mono
-
-Bookmark Settings, Terminal:
-
-* Keep bookmark name in session-set window title: off
-* Close the session when it ends: on
-* Silence bell
-* Character Encoding: Unicode (UTF-8)
-* Report Terminal Type: xterm
-* Enable xterm mouse reporting: on
-
+You now have iTerm2 set up with zsh. To get prettier colors, go to the `Profiles` tab and select
+`Colors` in the right pane. Open the `Load Presets` dropdown and choose `Import`. The colorschemes are
+in the iterm2 directory. You can use `Cmd+Shift+G` to access the otherwise hidden `.osx_settings`
+directory. Choose `ir_black.itermcolors` to color the terminal in the same colors as vim.
 
 ## Credits
 
