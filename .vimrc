@@ -132,18 +132,18 @@ set history=100
 set synmaxcol=2048
 
 " Turn off arrow keys
-" nnoremap <up> <nop>
-" nnoremap <down> <nop>
-" nnoremap <left> <nop>
-" nnoremap <right> <nop>
-" inoremap <up> <nop>
-" inoremap <down> <nop>
-" inoremap <left> <nop>
-" inoremap <right> <nop>
-" vnoremap <up> <nop>
-" vnoremap <down> <nop>
-" vnoremap <left> <nop>
-" vnoremap <right> <nop>
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <up> <nop>
+vnoremap <down> <nop>
+vnoremap <left> <nop>
+vnoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
 
@@ -237,7 +237,7 @@ function! RunTests(filename)
     if filereadable("script/test")
         exec ":!script/test " . a:filename
     else
-        exec ":!bundle exec rspec -fd " . a:filename
+        exec ":!bundle exec rspec -fd --no-color " . a:filename
     end
 endfunction
 
