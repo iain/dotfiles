@@ -294,7 +294,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>281 173 805 484 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 577 570 451 0 0 1680 1028 </string>
+	<string>0 32 1674 990 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -512,6 +512,8 @@
 			<string>Recycle</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
+			<key>Disable Printing</key>
+			<false/>
 			<key>Disable Smcup Rmcup</key>
 			<false/>
 			<key>Disable Window Resizing</key>
@@ -882,7 +884,7 @@
 			<key>Tags</key>
 			<array/>
 			<key>Terminal Type</key>
-			<string>xterm</string>
+			<string>xterm-256color</string>
 			<key>Transparency</key>
 			<real>0.0</real>
 			<key>Unlimited Scrollback</key>
@@ -932,7 +934,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2011-08-21T10:21:10Z</date>
+	<date>2011-08-26T19:50:06Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -966,6 +968,6 @@
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
 	<key>iTerm Version</key>
-	<string>1.0.0.20110810</string>
+	<string>1.0.0.20110821</string>
 </dict>
 </plist>
