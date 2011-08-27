@@ -1,3 +1,5 @@
+#!/bin/sh
+set -e
 cd .vim/bundle/command-t/
 /usr/bin/rake make
 cd ../../../

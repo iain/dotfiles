@@ -1,10 +1,11 @@
 #!/bin/sh
+set -e
 mydir=`dirname $0`
 if [[ $mydir = . ]]; then
   mydir=`pwd`
 fi
 echo My Directory: $mydir
-backup=".osx-settings-backup-`date +%s`"
+backup=".osx_settings-backup-`date +%s`"
 echo "Any files that already existed are backed up in: $HOME/$backup"
 
 # Install submodules
