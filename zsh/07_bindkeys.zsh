@@ -1,5 +1,5 @@
 # be like vi
-bindkey -v
+# bindkey -v
 
 # but be more like vim, as in: properly use special keys
 typeset -g -A key
