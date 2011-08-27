@@ -23,7 +23,10 @@ Installation is really easy, just run these commands:
 
 This will create backups for anything you already have and add symlinks to these parts.
 
-**Caution** Don't forget to change the `.gitconfig` file.
+Dont't forget to configure git:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
 
 ## Updgrading
 
