@@ -1,5 +1,5 @@
 [core]
-  excludesfile = ~/.gitignore
+  excludesfile = ~/.osx_settings/.global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [alias]
   co = checkout
@@ -15,6 +15,8 @@
   diff = auto
   status = auto
   branch = auto
+[diff]
+  renames = copies
 [diff "ruby"]
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
 [push]
