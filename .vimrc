@@ -21,7 +21,3 @@ source ~/.vim/config/tabularize.vim
 source ~/.vim/config/tests.vim
 source ~/.vim/config/visual.vim
 source ~/.vim/config/whitespace.vim
-
-if has("gui_macvim")
-  source ~/.vim/config/macvim.vim
-end

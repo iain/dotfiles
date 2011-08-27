@@ -22,8 +22,11 @@ set textwidth=100
 " wrap texts and comments
 set formatoptions=qrn1
 
-" Don't scroll near the edge
+" Keep a few lines above and below current line
 set scrolloff=4
+
+" Number of lines to scroll when cursor leaves the screen
+set scrolljump=8
 
 " Show the current command in the lower right corner
 set showcmd
@@ -34,3 +37,6 @@ set showmode
 " Make the 'cw' and like commands put a $ at the end instead of just deleting
 " the text and replacing it
 set cpoptions=ces$
+
+" Don't make screens so tiny
+" set winminheight=10

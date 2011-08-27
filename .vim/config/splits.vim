@@ -13,3 +13,7 @@ map <leader>e :edit %%
 map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
+
+" create equally sized splits
+set equalalways
+set splitbelow splitright
