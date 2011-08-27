@@ -1,9 +1,6 @@
 " Backspace normally
 set backspace=indent,eol,start
 
-" If you see <leader>x than it means to press comma-x
-let mapleader=","
-
 " Rename :W to :w
 command! W :w
 

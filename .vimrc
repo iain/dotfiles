@@ -7,6 +7,9 @@ call pathogen#runtime_append_all_bundles()
 " Encoding
 set encoding=utf-8
 
+" If you see <leader>x than it means to press comma-x
+let mapleader=","
+
 " more config per topic
 source ~/.vim/config/arrows.vim
 source ~/.vim/config/buf_explorer.vim
