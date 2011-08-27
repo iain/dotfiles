@@ -23,7 +23,7 @@ Installation is really easy, just run these commands:
 
 This will create backups for anything you already have and add symlinks to these parts.
 
-<strong>Caution</strong> Don't forget to change the `.gitconfig` file.
+**Caution** Don't forget to change the `.gitconfig` file.
 
 ## Updgrading
 
@@ -38,10 +38,16 @@ have to deal with merge conflicts yourself.
 
 ## Customizing
 
+
+### Project aliases
+
 This scripts adds aliases for your project directories, but you'll have to tell it where your
 projects can be found.
 
+Depending on which shell you use, create `bash/98_project_dirs.sh` or `zsh/98_project_dirs.zsh`.
+
 If you're using bash, edit `.bashrc` and add something like:
+
 
     PROJECT_PARENT_DIRS[0]="$HOME/code"
 
@@ -49,8 +55,11 @@ If you're using zsh, edit `.zshrc` and add something like:
 
     PROJECT_PARENT_DIRS+=("$HOME/code")
 
-Alternatively, you can add any configuration to `bash/00_personal.sh` or `zsh/00_personal.zsh`. This
-way it will get automatically loaded, without creating merge conflicts when you update.
+Add as many directories as you like.
+
+### Fonts
+
+I'm using Deja Vu Sans mono as font. You can download it [here](http://dejavu-fonts.org/wiki/Download).
 
 ## Tips
 
@@ -66,12 +75,8 @@ iTerm2 is totally awesome, but you cannot import and export your settings. So he
 interesting settings.
 
 In the iTerm2 General settings, check `Load preferences from a user-defined folder or URL`. Fill in
-the text field to point to `~/.osx_settings/iterm2`. You might need to restart iTerm2 after that.
-
-You now have iTerm2 set up with zsh. To get prettier colors, go to the `Profiles` tab and select
-`Colors` in the right pane. Open the `Load Presets` dropdown and choose `Import`. The colorschemes are
-in the iterm2 directory. You can use `Cmd+Shift+G` to access the otherwise hidden `.osx_settings`
-directory. Choose `ir_black.itermcolors` to color the terminal in the same colors as vim.
+the text field to point to `/Users/your_name/.osx_settings/iterm2`.
+You might need to restart iTerm2 after that.
 
 ## Credits
 
