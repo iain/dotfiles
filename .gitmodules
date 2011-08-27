@@ -76,3 +76,6 @@
 [submodule ".vim/bundle/makegreen"]
   path = .vim/bundle/makegreen
   url = https://github.com/garybernhardt/vim-makegreen.git
+[submodule ".vim/bundle/command-t"]
+	path = .vim/bundle/command-t
+	url = git://git.wincent.com/command-t.git

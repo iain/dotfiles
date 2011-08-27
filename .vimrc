@@ -276,3 +276,10 @@ map <leader>C :w\|:!cucumber --profile wip<cr>
 
 nnoremap <c-z> :call RunTestFile()<cr>
 nnoremap <c-x> :call RunNearestTest()<cr>
+
+
+noremap <leader>o <Esc>:CommandT<CR>
+noremap <leader>O <Esc>:CommandTFlush<CR>
+noremap <leader>r <Esc>:CommandTBuffer<CR>
+
+:set wildignore+=*.o,*.obj,.git,tmp/**/*

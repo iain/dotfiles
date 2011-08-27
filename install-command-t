@@ -1,0 +1,3 @@
+cd .vim/bundle/command-t/
+/usr/bin/rake make
+cd ../../../
