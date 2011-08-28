@@ -6,12 +6,10 @@ set backup
 set backupdir=~/.vim/tmp/
 set directory=~/.vim/tmp/
 
-if version >= 730
-
+if has("gui_macvim")
   " undoing even after closing the file
   set undofile
   set undodir=~/.vim/undo
-
 end
 
 " When editing a file, always jump to the last known cursor position.
