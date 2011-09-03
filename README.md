@@ -64,19 +64,16 @@ I'm using Deja Vu Sans mono as font. You can download it [here](http://dejavu-fo
 Programmers can be very anal about fonts, so if you don't like it, feel free to use something
 different.
 
-### Terminal.app
-
-Don't forget to enable `Use bright colors for bold text` in Terminal.app, if you have trouble
-reading stuff.
-
 ### iTerm2
-
-iTerm2 is totally awesome, but you cannot import and export your settings. So here are my more
-interesting settings.
 
 In the iTerm2 General settings, check `Load preferences from a user-defined folder or URL`. Fill in
 the text field to point to `/Users/your_name/.osx_settings/iterm2`.
 You might need to restart iTerm2 after that.
+
+### Terminal.app
+
+Don't forget to enable `Use bright colors for bold text` in Terminal.app, if you have trouble
+reading the colors. And choose the Pro theme of course.
 
 ## Credits
 
