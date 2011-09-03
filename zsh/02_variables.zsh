@@ -5,15 +5,15 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/share/npm/bin:$PATH"
 
 # colors (used mainly in prompt coloring)
-RESET=$'%{\e[1;00m%}'
-GRAY=$'%{\e[0;90m%}'
-RED=$'%{\e[0;31m%}'
-GREEN=$'%{\e[0;32m%}'
-YELLOW=$'%{\e[0;33m%}'
-BLUE=$'%{\e[0;34m%}'
-MAGENTA=$'%{\e[0;35m%}'
-CYAN=$'%{\e[0;36m%}'
-WHITE=$'%{\e[0;37m%}'
+export reset=$'%{\e[0;00m%}'
+export gray=$'%{\e[0;90m%}'
+export red=$'%{\e[0;31m%}'
+export green=$'%{\e[0;32m%}'
+export yellow=$'%{\e[0;33m%}'
+export blue=$'%{\e[0;34m%}'
+export magenta=$'%{\e[0;35m%}'
+export cyan=$'%{\e[0;36m%}'
+export white=$'%{\e[0;37m%}'
 
 # I am single minded
 export EDITOR=vim

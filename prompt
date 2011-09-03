@@ -1,0 +1,107 @@
+#!/bin/bash
+exit_status=$1
+result=""
+
+function finish {
+  exit_code_color
+  prompt_type
+  space
+  append $reset
+  echo $result
+}
+
+function prompt_type {
+  status=$(git status 2> /dev/null)
+  if [[ $? == 0 ]]; then
+    git_prompt
+  else
+    normal_prompt
+  fi
+}
+
+function append {
+  result=$result$1
+}
+
+function space {
+  result="$result "
+}
+
+function exit_code_color {
+  if [[ $exit_status == 0 ]]; then
+    append $blue
+  else
+    append $red
+  fi
+}
+
+function git_prompt {
+  branch=$(git branch | grep '^\*' | sed 's/^\*\ //')
+  subdir=$(git rev-parse --show-prefix)
+  basedir=$(git rev-parse --show-cdup)
+  basedir
+  branch
+  merge
+  subdir
+}
+
+function branch {
+  space
+  if clean; then
+    append $green
+  else
+    append $yellow
+  fi
+  append $branch
+}
+
+function normal_prompt {
+  append "${PWD/$HOME/~}"
+}
+
+function clean {
+  echo $status | grep "nothing to commit (working directory clean)" > /dev/null
+}
+
+function ahead {
+  echo $status | grep 'Your branch is ahead' > /dev/null
+}
+
+function diverged {
+  echo $status | grep 'have diverged' > /dev/null
+}
+
+function behind {
+  echo $status | grep 'Your branch is behind' > /dev/null
+}
+
+function basedir {
+  if [ -n "$basedir" ]; then
+    dir=$(cd $basedir; pwd)
+  else
+    dir=$PWD
+  fi
+  append $(basename $dir)
+}
+
+function merge {
+  append $magenta
+  if ahead; then
+    space
+    append "↑"
+  elif behind; then
+    space
+    append "↓"
+  elif diverged; then
+    space
+    append "↕"
+  fi
+}
+
+function subdir {
+  space
+  append $cyan
+  append "/${subdir%/}"
+}
+
+finish

@@ -31,7 +31,7 @@ case $TERM in (*xterm*|ansi)
     else
       # When using iTerm2's "Reuse Previous Tab Directory", it doesn't load the right ruby/gemset
       # This is the safest and easiest way I could think about to "fix" it
-      rvm reload
+      # rvm reload
     fi
   }
   ;;

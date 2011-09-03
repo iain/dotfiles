@@ -25,5 +25,9 @@ export BUNDLER_EDITOR='mvim'
 export GEMEDITOR='mvim'
 
 # RVM
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-PS1="\[\033[0;32;90m\]\$(~/.rvm/bin/rvm-prompt i v g) $PS1"
+if [[ -s $HOME/.rvm/scripts/rvm ]]; then
+  source $HOME/.rvm/scripts/rvm
+  __rvm_prompt="$gray\$(~/.rvm/bin/rvm-prompt) "
+else
+  __rvm_prompt=""
+fi
