@@ -1,5 +1,12 @@
 if [[ $SHLVL < 3 ]]; then
+
   mydir=`dirname $0`
+  shared=$mydir/../shared
+
+  for f in $shared/??_*; do
+    source $f
+  done
+
 
   for f in $mydir/??_*; do
     source $f
