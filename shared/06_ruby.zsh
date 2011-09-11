@@ -12,7 +12,7 @@ alias b='gem install bundler && bundle install'
 alias rdm='rake db:migrate db:test:prepare'
 
 # I already know in which directoy I am, thank you
-alias rake='rake --silent'
+# alias rake='rake --silent'
 
 alias rr='touch tmp/restart.txt'
 
