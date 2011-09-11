@@ -1,6 +1,9 @@
 # be like vi
 # bindkey -v
 
+# be like emacs (and bash)
+bindkey -e
+
 # but be more like vim, as in: properly use special keys
 typeset -g -A key
 key[F1]='^[OP'
