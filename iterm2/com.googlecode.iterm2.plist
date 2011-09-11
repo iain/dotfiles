@@ -18,6 +18,8 @@
 	<true/>
 	<key>Control</key>
 	<integer>1</integer>
+	<key>CopyLastNewline</key>
+	<false/>
 	<key>CopySelection</key>
 	<true/>
 	<key>Custom Color Presets</key>
@@ -661,6 +663,8 @@
 	<true/>
 	<key>DimOnlyText</key>
 	<true/>
+	<key>DisableFullscreenTransparency</key>
+	<false/>
 	<key>EnableRendezvous</key>
 	<false/>
 	<key>FocusFollowsMouse</key>
@@ -722,7 +726,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>281 173 851 483 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 559 650 451 0 0 1680 1028 </string>
+	<string>0 10 1674 1012 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -890,9 +894,9 @@
 			<key>Background Image Location</key>
 			<string></string>
 			<key>Blink Allowed</key>
-			<false/>
+			<true/>
 			<key>Blinking Cursor</key>
-			<false/>
+			<true/>
 			<key>Blur</key>
 			<false/>
 			<key>Blur Radius</key>
@@ -1278,7 +1282,7 @@
 			<string>DejaVuSansMono 13</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
-			<key>Prompt Before Closing</key>
+			<key>Prompt Before Closing 2</key>
 			<integer>2</integer>
 			<key>Right Option Key Sends</key>
 			<integer>0</integer>
@@ -1289,6 +1293,8 @@
 			<key>Scrollback Lines</key>
 			<integer>0</integer>
 			<key>Scrollback With Status Bar</key>
+			<true/>
+			<key>Scrollback in Alternate Screen</key>
 			<true/>
 			<key>Selected Text Color</key>
 			<dict>
@@ -1894,6 +1900,8 @@
 			<integer>0</integer>
 			<key>Prompt Before Closing</key>
 			<integer>2</integer>
+			<key>Prompt Before Closing 2</key>
+			<integer>2</integer>
 			<key>Right Option Key Sends</key>
 			<integer>0</integer>
 			<key>Rows</key>
@@ -1985,7 +1993,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2011-09-03T10:53:08Z</date>
+	<date>2011-09-10T12:32:38Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2000,6 +2008,8 @@
 	<integer>6</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
+	<key>ThreeFingerEmulates</key>
+	<false/>
 	<key>URLHandlersByGuid</key>
 	<dict/>
 	<key>UseBorder</key>
@@ -2019,6 +2029,6 @@
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
 	<key>iTerm Version</key>
-	<string>1.0.0.20110828</string>
+	<string>1.0.0.20110909</string>
 </dict>
 </plist>
