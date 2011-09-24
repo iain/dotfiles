@@ -24,3 +24,4 @@ source ~/.vim/config/tabularize.vim
 source ~/.vim/config/tests.vim
 source ~/.vim/config/visual.vim
 source ~/.vim/config/whitespace.vim
+source ~/.vim/config/winheight.vim
