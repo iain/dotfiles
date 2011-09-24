@@ -46,5 +46,5 @@ map <leader>a :call RunTests('spec')<cr>
 map <leader>c :w\|:!cucumber<cr>
 map <leader>C :w\|:!cucumber --profile wip<cr>
 
-nnoremap <c-z> :call RunTestFile()<cr>
-nnoremap <c-x> :call RunNearestTest()<cr>
+" nnoremap <c-z> :call RunTestFile()<cr>
+" nnoremap <c-x> :call RunNearestTest()<cr>
