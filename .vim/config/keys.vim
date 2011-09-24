@@ -15,8 +15,8 @@ inoremap jj <ESC>
 
 
 " visual shifting (does not exit Visual mode)
-vnoremap < <gv
-vnoremap > >gv
+" vnoremap < <gv
+" vnoremap > >gv
 
 " shifting with Cmd square brackets
 nmap <D-[> <<
