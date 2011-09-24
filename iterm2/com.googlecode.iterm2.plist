@@ -688,13 +688,13 @@
 	<key>HotKeyTogglesWindow</key>
 	<false/>
 	<key>Hotkey</key>
-	<false/>
+	<true/>
 	<key>HotkeyChar</key>
-	<integer>0</integer>
+	<integer>167</integer>
 	<key>HotkeyCode</key>
-	<integer>0</integer>
+	<integer>10</integer>
 	<key>HotkeyModifiers</key>
-	<integer>0</integer>
+	<integer>1048840</integer>
 	<key>IRMemory</key>
 	<integer>4</integer>
 	<key>JobName</key>
@@ -726,7 +726,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>281 173 851 483 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 10 1674 1012 0 0 1680 1028 </string>
+	<string>0 577 650 451 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1269,7 +1269,7 @@
 			<key>Log Directory</key>
 			<string></string>
 			<key>Minimum Contrast</key>
-			<real>0.0</real>
+			<real>0.33666667342185974</real>
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
@@ -1993,7 +1993,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2011-09-10T12:32:38Z</date>
+	<date>2011-09-24T16:59:53Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
