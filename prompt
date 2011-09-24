@@ -47,7 +47,7 @@ function minutes_since_last_commit {
   fi
 }
 
-function colored_minutes_since_last_commit {
+function time_since_last_commit {
   minutes=$(minutes_since_last_commit)
   if [ "$minutes" -ne -1 ]; then
     space
@@ -92,7 +92,7 @@ function git_prompt {
   subdir=$(git rev-parse --show-prefix)
   basedir=$(git rev-parse --show-cdup)
   basedir
-  colored_minutes_since_last_commit
+  time_since_last_commit
   branch
   merge
   subdir
