@@ -6,7 +6,6 @@ alias sdb='script/dbconsole'
 
 # Rails 3 shortcuts
 alias r='./script/rails'
-alias b='gem install bundler && bundle install'
 
 # Run rake db:migrate and fill the test db, so autotest doesn't have to restart
 alias rdm='rake db:migrate db:test:prepare'
@@ -31,3 +30,8 @@ alias c='bundle exec ./script/cucumber -r features'
 alias wip='c --profile wip'
 
 alias specdoc='time rspec -fd'
+
+function b() {
+  which bundle > /dev/null || gem install bundler --no-ri --no-rdoc
+  bundle check || bundle install
+}
