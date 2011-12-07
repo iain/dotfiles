@@ -1,3 +1,6 @@
+[user]
+  email = iain@iain.nl
+  name = iain
 [core]
   excludesfile = ~/.osx_settings/.global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
@@ -35,3 +38,5 @@
   default = upstream
 [branch]
   autosetuprebase = always
+[http]
+	postBuffer = 100m
