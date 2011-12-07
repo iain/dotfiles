@@ -29,3 +29,5 @@ export GEMEDITOR='mvim'
 # cucumber shortcuts, because I can save seconds not using rake for this
 alias c='bundle exec ./script/cucumber -r features'
 alias wip='c --profile wip'
+
+alias specdoc='time rspec -fd'

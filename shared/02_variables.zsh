@@ -2,7 +2,8 @@
 export PATH="/usr/local/bin:$PATH"
 
 # Load Node.js bin:
-export PATH="/usr/local/share/npm/bin:$PATH"
+export PATH="/usr/local/lib/node_modules/npm/node_modules/coffee-script/bin:$PATH"
+export NODE_PATH="/usr/local/lib/node_modules"
 
 # I am single minded
 export EDITOR=vim

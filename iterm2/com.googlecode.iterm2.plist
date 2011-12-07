@@ -726,7 +726,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>281 173 851 483 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 577 650 451 0 0 1680 1028 </string>
+	<string>0 32 1674 990 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1898,8 +1898,6 @@
 			<string>DejaVuSansMono 13</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
-			<key>Prompt Before Closing</key>
-			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
 			<integer>2</integer>
 			<key>Right Option Key Sends</key>
@@ -1911,6 +1909,8 @@
 			<key>Scrollback Lines</key>
 			<integer>0</integer>
 			<key>Scrollback With Status Bar</key>
+			<true/>
+			<key>Scrollback in Alternate Screen</key>
 			<true/>
 			<key>Selected Text Color</key>
 			<dict>
@@ -2028,6 +2028,10 @@
 	<integer>0</integer>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
+	<key>findIgnoreCase_iTerm</key>
+	<true/>
+	<key>findRegex_iTerm</key>
+	<false/>
 	<key>iTerm Version</key>
 	<string>1.0.0.20110909</string>
 </dict>

@@ -14,7 +14,7 @@ set guioptions=Ace
 " set relativenumber
 
 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
-set guifont=Dejavu\ Sans\ Mono:h12
+set guifont=Dejavu\ Sans\ Mono:h13
 
 " use par
 set formatprg=par\ -w100
