@@ -27,7 +27,7 @@ Dont't forget to configure git:
     git config --global user.name "Your Name"
     git config --global user.email you@example.com
 
-## Updgrading
+## Upgrading
 
 To get the latest and greatest:
 
