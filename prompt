@@ -94,8 +94,22 @@ function git_prompt {
   basedir
   time_since_last_commit
   branch
+  in_rebase
   merge
   subdir
+}
+
+function in_rebase {
+  if [ -n "$basedir" ]; then
+    dir=$basedir
+  else
+    dir='.'
+  fi
+  if [[ -d $dir/.git/rebase-apply ]]; then
+    space
+    append $yellow
+    append "rebasing!"
+  fi
 }
 
 function branch {
