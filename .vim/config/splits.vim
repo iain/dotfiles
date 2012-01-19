@@ -17,3 +17,12 @@ map <leader>n :split %%
 " create equally sized splits
 set equalalways
 set splitbelow splitright
+
+" Fast window resizing with +/- keys (horizontal); / and * keys (vertical)
+" only keypad
+if bufwinnr(1)
+  map <kPlus> 5<C-W>+
+  map <kMinus> 5<C-W>-
+  map <kDivide> 5<c-w><
+  map <kMultiply> 5<c-w>>
+endif
