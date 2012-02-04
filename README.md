@@ -75,6 +75,16 @@ You might need to restart iTerm2 after that.
 Don't forget to enable `Use bright colors for bold text` in Terminal.app, if you have trouble
 reading the colors. And choose the Pro theme of course.
 
+### Homebrew
+
+Here's what I install on a clean OSX:
+
+```
+brew install ack imagemagick mongodb par readline wget git-flow libyaml mysql sl zsh cowsay node sqlite htop memcached postgresql tree elasticsearch cowsay
+```
+
+Make sure to read the caveats of those packages to make them start up automatically when that makes sense.
+
 ## Credits
 
 Thanks everybody who puts their dotfiles online. I copied a lot from practically every repository.
