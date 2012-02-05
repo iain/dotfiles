@@ -80,10 +80,28 @@ reading the colors. And choose the Pro theme of course.
 Here's what I install on a clean OSX:
 
 ```
-brew install ack imagemagick mongodb par readline wget git-flow libyaml mysql sl zsh cowsay node sqlite htop memcached postgresql tree elasticsearch cowsay
+brew install ack imagemagick mongodb par readline wget git-flow \
+    libyaml mysql zsh node sqlite memcached postgresql tree elasticsearch
 ```
 
 Make sure to read the caveats of those packages to make them start up automatically when that makes sense.
+
+### Gems
+
+I use [hitch](https://github.com/therubymug/hitch) for pair programming. I also use RVM.
+After installing the rubies I want, I run.
+
+``` bash
+for x in $(rvm list strings); do rvm use $x@global && gem install hitch; done
+```
+
+And since I want Bundler 1.1 (currently in rc):
+
+``` bash
+for x in $(rvm list strings); do rvm use $x@global && gem uninstall bundler -ax; gem install bundler --pre; done
+```
+
+
 
 ## Credits
 
