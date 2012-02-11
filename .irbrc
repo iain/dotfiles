@@ -122,7 +122,6 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
         }) )
       end
     end
-    Hirb.add_view ActionDispatch::Routing::Route, :class => Hirb::Helpers::Route
 
     # short and long route list
     def routes(long_output = false)
