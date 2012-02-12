@@ -88,3 +88,6 @@
 [submodule ".vim/bundle/rake"]
 	path = .vim/bundle/rake
 	url = git://github.com/tpope/vim-rake.git
+[submodule ".vim"]
+	path = .vim
+	url = https://github.com/iain/vim-files.git
