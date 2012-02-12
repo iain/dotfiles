@@ -1,3 +1,4 @@
+alias s='git status --short'
 alias st='git status'
 alias co='git checkout'
 alias ci='git commit'
