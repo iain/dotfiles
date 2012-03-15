@@ -32,6 +32,6 @@ alias wip='c --profile wip'
 alias specdoc='time rspec -fd'
 
 function b() {
-  which bundle > /dev/null || gem install bundler --no-ri --no-rdoc
+  gem which bundler > /dev/null 2>&1 || gem install bundler --no-ri --no-rdoc
   bundle check || bundle install
 }
