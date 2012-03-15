@@ -12,6 +12,9 @@ Some of the features include:
 * Vim configuration
 * ... and much more!
 
+There is absolutely NO guarantee for this project to work on your machine.
+Only use this if you know what you are doing.
+
 ## Installation
 
 Installation is really easy, just run these commands:
