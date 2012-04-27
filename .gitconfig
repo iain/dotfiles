@@ -20,6 +20,10 @@
   ff = merge --ff-only
   newauthor = commit --amend --reset-author -C HEAD
   poes = push
+  l = "!source ~/.githelpers && pretty_git_log"
+  la = !git l --all
+  h = !git head
+  hp = "!source ~/.githelpers && show_git_head"
 [color]
   ui = true
   diff = auto

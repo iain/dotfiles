@@ -3,4 +3,5 @@ export LC_ALL=en_US.UTF-8
 PROJECT_PARENT_DIRS=()
 source ~/.osx_settings/zsh/rc
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+export PATH=$PATH:$HOME/.rvm/bin
+export PATH=$PATH:/usr/local/sbin

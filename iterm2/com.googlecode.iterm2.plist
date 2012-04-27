@@ -760,7 +760,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>584 254 924 485 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 4 1680 1024 0 0 1680 1028 </string>
+	<string>0 16 1674 1012 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>0 548 650 473 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
@@ -2947,7 +2947,7 @@
 	<key>OnlyWhenMoreTabs</key>
 	<true/>
 	<key>OpenArrangementAtStartup</key>
-	<true/>
+	<false/>
 	<key>OpenBookmark</key>
 	<false/>
 	<key>OpenTmuxWindowsIn</key>

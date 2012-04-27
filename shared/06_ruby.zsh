@@ -31,7 +31,13 @@ alias wip='c --profile wip'
 
 alias specdoc='time rspec -fd'
 
+# checks to see if bundler is installed, if it isn't it will install it
+# checks to see if your bundle is complete, runs bundle install if it isn't
+# if any arguments have been passed it will run it with bundle exec
 function b() {
   gem which bundler > /dev/null 2>&1 || gem install bundler --no-ri --no-rdoc
   bundle check || bundle install
+  if [ $1 ]; then
+    bundle exec $*
+  fi
 }
