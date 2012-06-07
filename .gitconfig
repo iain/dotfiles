@@ -24,6 +24,7 @@
   la = !git l --all
   h = !git head
   hp = "!source ~/.githelpers && show_git_head"
+  svnmode = "!git commit -am \"$(curl -s whatthecommit.com/index.txt)\""
 [color]
   ui = true
   diff = auto
