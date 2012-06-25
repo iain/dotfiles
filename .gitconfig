@@ -10,9 +10,7 @@
   df = diff
   lg = log -p
   aa = add --all
-  lol = log --pretty=oneline --abbrev-commit --graph --decorate
   unstage = reset HEAD
-  done = !git fetch && git rebase origin/master && git checkout master && git merge @{-1} && rake && git push
   new = ls-files --others --exclude-standard
   added = diff --cached --name-only
   today = log --stat --since='1 Day Ago' --graph --pretty=oneline --abbrev-commit --date=relative
@@ -22,9 +20,9 @@
   poes = push
   l = "!source ~/.githelpers && pretty_git_log"
   la = !git l --all
-  h = !git head
   hp = "!source ~/.githelpers && show_git_head"
-  svnmode = "!git commit -am \"$(curl -s whatthecommit.com/index.txt)\""
+  wtf = "!git commit -m \"$(curl -s whatthecommit.com/index.txt)\""
+  scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
 [color]
   ui = true
   diff = auto
