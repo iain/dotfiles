@@ -14,3 +14,5 @@
 --type-set=yaml=.yml,.yaml
 --type-set=sass=.sass,.scss
 --type-set=coffee=.coffee
+--type-set=slim=.slim
+--type-set=rackup=.ru
