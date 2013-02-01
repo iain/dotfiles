@@ -8,6 +8,8 @@ alias tf='tail -f -n 100'
 # editing shortcuts
 alias m='mvim --remote-silent'
 
+alias grep='grep --colour=always'
+
 # grep for a process
 function psg {
   FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
