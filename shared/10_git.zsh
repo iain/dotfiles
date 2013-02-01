@@ -6,8 +6,11 @@ alias checkout='git checkout'
 
 alias ci='git commit'
 alias commit='git commit'
+alias amend='git commit --amend'
+alias cm='git commit --message'
 
 alias up='git pull --ff-only'
+alias upstash='git stash && git pull --ff-only && git stash pop'
 
 alias br='git branch'
 alias branch='git branch'
@@ -16,7 +19,7 @@ alias lg='git log -p'
 alias ll='git l'
 alias la='git la'
 
-alias aa='git add --all'
+alias aa='git add --all && git status -sb'
 
 alias d='git diff'
 alias df='git diff'
