@@ -1,3 +1,6 @@
+# rbenv support
+if which rbenv > /dev/null; then eval "$(rbenv init - zsh)"; fi
+
 # Rails 2.X shortcuts
 alias sc='script/console'
 alias ss='script/server'
@@ -13,7 +16,7 @@ alias rdm='rake db:migrate db:test:prepare'
 # I already know in which directoy I am, thank you
 # alias rake='rake --silent'
 
-alias rr='touch tmp/restart.txt'
+alias rr='mkdir -p tmp && touch tmp/restart.txt'
 
 # Ruby Enterprise Edition Optimalizations
 export RUBY_HEAP_MIN_SLOTS=1100000
@@ -26,7 +29,7 @@ export BUNDLER_EDITOR='mvim'
 export GEMEDITOR='mvim'
 
 # cucumber shortcuts, because I can save seconds not using rake for this
-alias c='bundle exec ./script/cucumber -r features'
+alias c='cucumber -r features'
 alias wip='c --profile wip'
 
 alias specdoc='time rspec -fd'
@@ -41,3 +44,8 @@ function b() {
     bundle exec $*
   fi
 }
+
+alias be='bundle exec'
+
+# I've switched to pry
+alias irb='pry'
