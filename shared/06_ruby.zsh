@@ -34,6 +34,8 @@ alias wip='c --profile wip'
 
 alias specdoc='time rspec -fd'
 
+alias s='rspec --require ~/.osx_settings/rspec_focus --order default --color --tty'
+
 # checks to see if bundler is installed, if it isn't it will install it
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec
@@ -49,3 +51,18 @@ alias be='bundle exec'
 
 # I've switched to pry
 alias irb='pry'
+
+
+function run-tests() {
+  if [ ! -p test-commands ]; then
+    mkfifo test-commands
+  fi
+  while true; do
+    cmd="$(cat test-commands)"
+    echo
+    echo -n "Running: "
+    echo $cmd
+    echo
+    sh -c $cmd
+  done
+}
