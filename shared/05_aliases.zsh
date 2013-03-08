@@ -5,6 +5,9 @@ alias lth='l -t|head'
 alias lh='ls -Shl | less'
 alias tf='tail -f -n 100'
 
+# color codes in less
+alias less='less -R'
+
 # editing shortcuts
 alias m='mvim --remote-silent'
 
