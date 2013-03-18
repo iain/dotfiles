@@ -1,12 +1,6 @@
 # rbenv support
 if which rbenv > /dev/null; then eval "$(rbenv init - zsh)"; fi
 
-# Rails 2.X shortcuts
-alias sc='script/console'
-alias ss='script/server'
-alias sg='script/generate'
-alias sdb='script/dbconsole'
-
 # Rails 3 shortcuts
 alias r='./script/rails'
 
@@ -28,12 +22,9 @@ export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 export BUNDLER_EDITOR='mvim'
 export GEMEDITOR='mvim'
 
-# cucumber shortcuts, because I can save seconds not using rake for this
-alias c='cucumber -r features'
+alias c='bundle exec cucumber -r features'
 alias wip='c --profile wip'
-
 alias specdoc='time rspec -fd'
-
 alias s='rspec --require ~/.osx_settings/rspec_focus --order default --color --tty'
 
 # checks to see if bundler is installed, if it isn't it will install it
