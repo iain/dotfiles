@@ -45,15 +45,16 @@ alias irb='pry'
 
 
 function run-tests() {
-  if [ ! -p test-commands ]; then
-    mkfifo test-commands
+  if [ ! -p ~/.vim/commands-fifo ]; then
+    mkfifo ~/.vim/commands-fifo
   fi
   while true; do
-    cmd="$(cat test-commands)"
-    echo
-    echo -n "Running: "
-    echo $cmd
-    echo
-    sh -c $cmd
+    cmd="$(cat ~/.vim/commands-fifo)"
+    if [ -n "$cmd" ]; then
+      echo
+      echo "\e[33m$cmd\e[0m"
+      echo
+      sh -c $cmd
+    fi
   done
 }
