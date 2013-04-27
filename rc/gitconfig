@@ -1,5 +1,5 @@
 [core]
-  excludesfile = ~/.osx_settings/.global_gitignore
+  excludesfile = ~/.osx_settings/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [alias]
   co = checkout
@@ -50,4 +50,4 @@
 [url "git@heroku.com:"]
   insteadOf = heroku:
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
