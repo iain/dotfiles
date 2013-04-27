@@ -30,16 +30,8 @@ Dont't forget to configure git:
     git config --global user.name "Your Name"
     git config --global user.email you@example.com
 
-## Upgrading
-
-To get the latest and greatest:
-
-    cd ~/.osx_settings
-    git pull origin master
-    ./update-submodules
-
-This will update all the vim plugins (through pathogen) too. If you've customized anything, you will
-have to deal with merge conflicts yourself.
+Vim will automatically install itself when you start it for the first time.
+Delete (or move) your .vim home directory to let it install.
 
 ## Customizing
 
@@ -83,8 +75,8 @@ reading the colors. And choose the Pro theme of course.
 Here's what I install on a clean OSX:
 
 ```
-brew install ack imagemagick mongodb par readline wget git-flow \
-    libyaml mysql zsh node sqlite memcached postgresql tree elasticsearch
+brew install ack imagemagick par readline wget git-flow \
+    libyaml mysql zsh node sqlite memcached postgresql tree
 ```
 
 Make sure to read the caveats of those packages to make them start up automatically when that makes sense.
