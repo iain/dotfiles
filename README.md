@@ -19,8 +19,8 @@ Only use this if you know what you are doing.
 
 Installation is really easy, just run these commands:
 
-    git clone git://github.com/iain/osx_settings.git ~/.osx_settings
-    cd ~/.osx_settings
+    git clone git://github.com/iain/dotfiles.git ~/.dotfiles
+    cd ~/.dotfiles
     ./install
 
 This will create backups for anything you already have and add symlinks to these parts.
@@ -62,7 +62,7 @@ My DejaVuSansMono, including the powerline patch is included for convenience.
 ### iTerm2
 
 In the iTerm2 General settings, check `Load preferences from a user-defined folder or URL`. Fill in
-the text field to point to `/Users/your_name/.osx_settings/iterm2`.
+the text field to point to `/Users/your_name/.dotfiles/iterm2`.
 You might need to restart iTerm2 after that.
 
 ### Terminal.app

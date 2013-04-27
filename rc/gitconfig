@@ -1,5 +1,5 @@
 [core]
-  excludesfile = ~/.osx_settings/global_gitignore
+  excludesfile = ~/.dotfiles/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [alias]
   co = checkout
@@ -18,9 +18,9 @@
   ff = merge --ff-only
   newauthor = commit --amend --reset-author -C HEAD
   poes = push
-  l = "!source ~/.osx_settings/githelpers && pretty_git_log"
+  l = "!source ~/.dotfiles/githelpers && pretty_git_log"
   la = !git l --all
-  hp = "!source ~/.osx_settings/githelpers && show_git_head"
+  hp = "!source ~/.dotfiles/githelpers && show_git_head"
   wtf = "!git commit -m \"$(curl -s whatthecommit.com/index.txt)\""
   scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
   ready = rebase -i @{u}

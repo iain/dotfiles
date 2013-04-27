@@ -8,7 +8,7 @@ fi
 echo My Directory: $mydir
 
 
-backup=".osx_settings-backup-`date +%s`"
+backup=".dotfiles-backup-`date +%s`"
 echo "Any files that already existed are backed up in: $HOME/$backup"
 
 # Backup the stuff and create symlinks

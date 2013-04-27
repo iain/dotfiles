@@ -25,7 +25,7 @@ export GEMEDITOR='mvim'
 alias c='bundle exec cucumber -r features'
 alias wip='c --profile wip'
 alias specdoc='time rspec -fd'
-alias s='rspec --require ~/.osx_settings/rspec_focus --order default --color --tty'
+alias s='rspec --require ~/.dotfiles/rspec_focus --order default --color --tty'
 
 # checks to see if bundler is installed, if it isn't it will install it
 # checks to see if your bundle is complete, runs bundle install if it isn't

@@ -2,13 +2,13 @@
 
 pattern='[0-9]{2}_.*'
 
-for file in ~/.osx_settings/shared/*.zsh; do
+for file in ~/.dotfiles/shared/*.zsh; do
   if [[ "${file}" =~ $pattern ]]; then
     source $file
   fi
 done
 
-for file in ~/.osx_settings/bash/*.sh; do
+for file in ~/.dotfiles/bash/*.sh; do
   if [[ "${file}" =~ $pattern ]]; then
     source $file
   fi
