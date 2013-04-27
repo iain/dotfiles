@@ -1,4 +1,4 @@
-# OSX Settings
+# Dotfiles
 
 This repository contains my bash, zsh, and Vim settings.
 
@@ -40,15 +40,13 @@ Delete (or move) your .vim home directory to let it install.
 This scripts adds aliases for your project directories, but you'll have to tell it where your
 projects can be found.
 
-Depending on which shell you use, create `bash/98_project_dirs.sh` or `zsh/98_project_dirs.zsh`.
-
-If you're using bash, edit `.bashrc` and add something like:
-
-    PROJECT_PARENT_DIRS[0]="$HOME/code"
-
-If you're using zsh, edit `.zshrc` and add something like:
+For ZSH, edit `zsh/98_personal.zsh`, and add lines like:
 
     PROJECT_PARENT_DIRS+=("$HOME/code")
+
+In Bash, edit `bash/98_personal.sh`, and add something like:
+
+    PROJECT_PARENT_DIRS[0]="$HOME/code"
 
 Add as many directories as you like.
 
@@ -58,6 +56,8 @@ I'm using Deja Vu Sans mono as font. You can download it [here](http://dejavu-fo
 
 Programmers can be very anal about fonts, so if you don't like it, feel free to use something
 different.
+
+My DejaVuSansMono, including the powerline patch is included for convenience.
 
 ### iTerm2
 
@@ -89,13 +89,6 @@ After installing the rubies I want, I run.
 ``` bash
 for x in $(rvm list strings); do rvm use $x@global && gem install hitch; done
 ```
-
-And since I want Bundler 1.1 (currently in rc):
-
-``` bash
-for x in $(rvm list strings); do rvm use $x@global && gem uninstall bundler -ax; gem install bundler --pre; done
-```
-
 
 
 ## Credits
