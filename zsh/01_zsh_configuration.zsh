@@ -1,8 +1,9 @@
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
 
-setopt appendhistory autocd beep extendedglob nomatch
+setopt append_history share_history histignorealldups
+setopt autocd beep extendedglob nomatch
 setopt hist_ignore_all_dups
 unsetopt auto_name_dirs
 
