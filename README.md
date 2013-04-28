@@ -52,11 +52,13 @@ these parts.
 
 Add and change these lines to `~/.dotfiles/config/personal.sh`:
 
-    export GIT_AUTHOR_NAME="Your Name"
-    export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
+``` bash
+export GIT_AUTHOR_NAME="Your Name"
+export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
 
-    export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
-    export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
+export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+```
 
 See the chapter on personal configuration below for more information.
 
