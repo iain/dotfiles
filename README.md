@@ -50,10 +50,15 @@ these parts.
 
 ### Git
 
-Don't forget to configure git:
+Add and change these lines to `~/.dotfiles/config/personal.sh`:
 
-    git config --global user.name "Your Name"
-    git config --global user.email you@example.com
+    export GIT_AUTHOR_NAME="Your Name"
+    export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
+
+    export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
+    export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+
+See the chapter on personal configuration below for more information.
 
 ## Customizing
 
@@ -67,6 +72,7 @@ that.
 ### Vim
 
 Vim will automatically install itself when you start Vim for the first time.
+
 Delete (or move) your `~/.vim` directory to let it install.
 
 ### Personal Configuration
