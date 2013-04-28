@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 alias q exit
 
 Pry.config.editor = 'mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
@@ -12,6 +13,7 @@ require 'yaml'
 require 'pathname'
 require 'time'
 require 'securerandom'
+require 'open-uri'
 
 Thread.abort_on_exception = true
 

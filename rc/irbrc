@@ -10,3 +10,17 @@ require 'json'
 require 'yaml'
 require 'pathname'
 require 'time'
+require 'securerandom'
+require 'open-uri'
+
+Thread.abort_on_exception = true
+
+begin
+  require 'letters'
+rescue LoadError
+end
+
+begin
+  require "awesome_print"
+rescue LoadError
+end

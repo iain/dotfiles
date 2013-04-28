@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+set -u
+
+mydir=`pwd`
+backup="$HOME/.dotfiles-backup-`date +%s`"
+
+# Backup the stuff and create symlinks
+for f in $mydir/rc/*; do
+
+  file=`basename $f`
+  dest="$HOME/.$file"
+  source="$mydir/rc/$file"
+
+  if [[ -f $dest || -d $dest ]]; then
+    mkdir -p $backup
+    echo "Making backup of $dest in $backup"
+    cp -R $dest $backup/$file
+  fi
+  echo "Symlinking: .$file"
+  ln -fs $source $dest
+
+done
+
+echo "Done."

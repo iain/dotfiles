@@ -1,2 +1,29 @@
-PROJECT_PARENT_DIRS[0]=""
-source ~/.dotfiles/bash/rc
+source ~/.dotfiles/config/local.bash
+source ~/.dotfiles/config/global.sh
+
+# Define the directories you store your projects in in
+#   ~/.dotfiles/config/personal.bash
+#
+# PROJECT_PARENT_DIRS[0]="$HOME/src"
+# PROJECT_PARENT_DIRS[1]="$HOME/work"
+
+if [[ -f ~/.dotfiles/config/personal.bash ]]; then
+  source ~/.dotfiles/config/personal.bash
+fi
+
+if [[ -f ~/.dotfiles/config/personal.sh ]]; then
+  source ~/.dotfiles/config/personal.sh
+fi
+
+for PARENT_DIR in ${PROJECT_PARENT_DIRS[@]} ; do
+  if [ -d "$PARENT_DIR" ]; then
+    for PROJECT_DIR in $(/bin/ls $PARENT_DIR); do
+      if [ ! -z `which $PROJECT_DIR` ]; then
+        continue # don't set alias if there is something already a command on the path with the same name
+      fi
+      if [ -d "$PARENT_DIR/$PROJECT_DIR" ]; then
+        alias "$PROJECT_DIR"="cd $PARENT_DIR/$PROJECT_DIR"
+      fi
+    done
+  fi
+done

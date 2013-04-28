@@ -1,13 +1,31 @@
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export SHELL=$(which zsh)
+source ~/.dotfiles/config/local.zsh
+source ~/.dotfiles/config/tab_title.zsh
+source ~/.dotfiles/config/git_autocomplete.zsh
+source ~/.dotfiles/config/global.sh
+
+# Define the directories you store your projects in in
+#   ~/.dotfiles/script/personal.zsh
+#
+# PROJECT_PARENT_DIRS+=("$HOME/Projects")
+
 PROJECT_PARENT_DIRS=()
-source ~/.dotfiles/zsh/rc
 
-if [[ -d "$HOME/.rvm/bin" ]]; then
-  export PATH=$PATH:$HOME/.rvm/bin
+if [[ -f ~/.dotfiles/config/personal.zsh ]]; then
+  source ~/.dotfiles/config/personal.zsh
 fi
 
-if [[ -d "/usr/local/sbin" ]]; then
-  export PATH=$PATH:/usr/local/sbin
+if [[ -f ~/.dotfiles/config/personal.sh ]]; then
+  source ~/.dotfiles/config/personal.sh
 fi
+
+for PARENT_DIR in ${PROJECT_PARENT_DIRS[@]} ; do
+  if [ -d "$PARENT_DIR" ]; then
+    for PROJECT_DIR in $(/bin/ls $PARENT_DIR); do
+      if [[ ! -z `which $PROJECT_DIR 2> /dev/null` ]]; then
+        if [ -d "$PARENT_DIR/$PROJECT_DIR" ]; then
+          alias "$PROJECT_DIR"="cd $PARENT_DIR/$PROJECT_DIR"
+        fi
+      fi
+    done
+  fi
+done
