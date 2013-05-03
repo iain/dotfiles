@@ -217,16 +217,19 @@ map <leader>p :call PromoteToLet()<cr>
 
 " Align = signs
 nmap <Leader>a= :Tabularize /=<cr>
-vmap <Leader>a= :Tabularize /=<cr>
+vmap <Leader>a= :Tabularize /=<cr>gv
 " Align after colons
-nmap <Leader>a: :Tabularize /:\zs<cr>
-vmap <Leader>a: :Tabularize /:\zs<cr>
+nmap <Leader>a: :Tabularize /:\zs/l1<cr>
+vmap <Leader>a: :Tabularize /:\zs/l1<cr>gv
 " Align hashrockets
 nmap <Leader>a> :Tabularize /=><cr>
-vmap <Leader>a> :Tabularize /=><cr>
+vmap <Leader>a> :Tabularize /=><cr>gv
 " Align commas
-nmap <Leader>a, :Tabularize /,\zs<cr>
-vmap <Leader>a, :Tabularize /,\zs<cr>
+nmap <Leader>a, :Tabularize /,\zs/l1<cr>
+vmap <Leader>a, :Tabularize /,\zs/l1<cr>gv
+" Align words and fix indentation
+nmap <Leader>aw :Tabularize /\s\+\zs/l1<cr>=ip
+vmap <Leader>aw :Tabularize /\s\+\zs/l1<cr>gv=gv
 
 " Fugitive (Git)
 map <Leader>gc :Gcommit<cr>
