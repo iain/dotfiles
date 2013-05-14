@@ -768,7 +768,7 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>384 210 924 485 0 0 1680 1028 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1680 0 2560 1440 1680 0 2560 1440 </string>
+	<string>0 26 1440 804 0 0 1440 830 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>0 548 650 473 0 0 1680 1028 </string>
 	<key>New Bookmarks</key>
@@ -2296,7 +2296,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2013-04-27T13:15:29Z</date>
+	<date>2013-05-13T13:27:51Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
