@@ -230,6 +230,12 @@ vmap <Leader>a, :Tabularize /,\zs/l1<cr>gv
 " Align words and fix indentation
 nmap <Leader>aw :Tabularize /\s\+\zs/l1<cr>=ip
 vmap <Leader>aw :Tabularize /\s\+\zs/l1<cr>gv=gv
+" Align comments
+nmap <Leader>ac :Tabularize /#<cr>
+" Align blocks
+nmap <Leader>a{ :Tabularize /{<cr>
+vmap <Leader>a{ :Tabularize /{<cr>gv
+vmap <Leader>a{ :Tabularize /{<cr>gv
 
 " Fugitive (Git)
 map <Leader>gc :Gcommit<cr>
