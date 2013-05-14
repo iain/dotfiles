@@ -5,7 +5,7 @@ set nocompatible
 filetype off
 
 let needsToInstallBundles=0
-if !isdirectory(expand("~/.vim"))
+if !isdirectory(expand("~/.vim/bundle/vundle"))
   echo "\nInstalling Vim dependencies... Please be patient!\n"
   silent !mkdir -p ~/.vim/tmp
   silent !mkdir -p ~/.vim/swap
@@ -46,7 +46,10 @@ Bundle 'kana/vim-textobj-user'
 Bundle 'kien/ctrlp.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'nelstrom/vim-visual-star-search'
+Bundle 'nelstrom/vim-americanize'
 Bundle 'tomtom/tcomment_vim'
+Bundle 'tpope/vim-abolish'
 Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sensible'
@@ -122,7 +125,9 @@ let ruby_space_errors = 1 " Highlights trailing spaces
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
-
+if exists(':Americanize')
+  :Americanize
+endif
 
 
 " ==========================
@@ -243,7 +248,7 @@ map <Leader>gb :Gblame<cr>
 map <Leader>gs :Gstatus<cr>
 
 " Clear trailing whitespace
-map <Leader>rw :%s/\s\+$//<cr>:w<cr>
+map <Leader>w :%s/\s\+$//<cr>:w<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
