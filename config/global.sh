@@ -39,7 +39,6 @@ alias m='mvim --remote-silent' # open file in existing mvim
 alias grep='grep --colour=always'
 
 # Ruby aliases
-alias r='./script/rails'
 alias rdm='rake db:migrate db:test:prepare'
 alias rr='mkdir -p tmp && touch tmp/restart.txt'
 alias c='bundle exec cucumber -r features'
@@ -75,6 +74,14 @@ alias fetch='git fetch'
 alias gf='git fetch && git status'
 alias push='git push'
 
+
+function r() {
+  if [ -f "./script/rails" ]; then
+    ./script/rails $*
+  else
+    ./bin/rails $*
+  fi
+}
 # checks to see if bundler is installed, if it isn't it will install it
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec
