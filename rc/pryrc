@@ -17,11 +17,6 @@ require 'open-uri'
 
 Thread.abort_on_exception = true
 
-begin
-  require 'letters'
-rescue LoadError => e
-end
-
 Pry.config.prompt = proc do |obj, level, _|
   prompt = ""
   prompt << "#{Rails.version}@" if defined?(Rails)
@@ -33,7 +28,7 @@ if defined?(Rails)
   begin
     require "rails/console/app"
     require "rails/console/helpers"
-  rescue LoadError => e
+  rescue LoadError
     require "console_app"
     require "console_with_helpers"
   end
@@ -42,5 +37,10 @@ end
 begin
   require "awesome_print"
   Pry.config.print = proc {|output, value| Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output)}
-rescue LoadError => err
+rescue LoadError
+end
+
+begin
+  require "active_support/core_ext"
+rescue LoadError
 end
