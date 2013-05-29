@@ -1,0 +1,17 @@
+# Use rbenv if available
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# Don't stop, timeout is 7 days
+export POW_TIMEOUT=7*24*60*60
+
+# One is enough, more would potentially hide blocking requests
+export POW_WORKERS=1
+
+# POW_BIN: the path to the pow binary. (This should be correctly configured for you.)
+# POW_DST_PORT: the public port Pow expects to be forwarded or otherwise proxied for incoming HTTP requests. Defaults to 80.
+# POW_HTTP_PORT: the TCP port Pow opens for accepting incoming HTTP requests. Defaults to 20559.
+# POW_DNS_PORT: the UDP port Pow listens on for incoming DNS queries. Defaults to 20560.
+# POW_TIMEOUT: how long (in seconds) to leave inactive Rack applications running before they're killed. Defaults to 15 minutes (900 seconds).
+# POW_WORKERS: the maximum number of worker processes to spawn for any given application. Defaults to 2.
+# POW_DOMAINS: the top-level domains for which Pow will respond to DNS A queries with 127.0.0.1. Defaults to dev. If you configure this in your ~/.powconfig you will need to re-run sudo pow --install-system to make /etc/resolver aware of the new TLDs.
+# POW_EXT_DOMAINS: additional top-level domains for which Pow will serve HTTP requests (but not DNS requests -- hence the "ext").
