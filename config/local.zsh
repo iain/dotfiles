@@ -23,7 +23,7 @@ function ___rvm_prompt {
 
 # rbenv support
 if which rbenv > /dev/null; then
-  eval "$(rbenv init - zsh)";
+  eval "$(rbenv init - zsh --no-rehash)";
 fi
 
 HISTFILE=~/.histfile
