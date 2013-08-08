@@ -197,9 +197,9 @@ inoremap <s-tab> <c-n>
 " Aligns tables in Cucumber
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>AlignCucumberTables()<cr>a
 
-" Since syntastic was added, :E has an ambiguous mapping.
-" This reverts the old behaviour of starting Netrw.
-cnoreabbrev E Explore
+" A common typo is ":E" when actually meaning ":e" and not ":Explore" or
+" ":Errors".
+cnoreabbrev E e
 
 
 
