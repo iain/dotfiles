@@ -28,7 +28,8 @@ Only use this if you know what you are doing.
 Here's what I install on a clean OSX:
 
     brew install ack imagemagick par readline wget \
-      libyaml mysql zsh node sqlite memcached postgresql tree
+      libyaml mysql zsh node sqlite memcached \
+      postgresql tree openssl
 
 Make sure to read the caveats of those packages to make them start up
 automatically when that makes sense.
