@@ -123,6 +123,9 @@ set hlsearch
 let ruby_no_expensive = 1 " Differentiate between do..end and class..end is slow
 let ruby_operators = 1    " Highlight Ruby operators
 
+let g:netrw_list_hide  = "\.git,\.DS_Store"
+let g:netrw_banner     = 0
+
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
 if exists(':Americanize')
