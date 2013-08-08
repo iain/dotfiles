@@ -58,6 +58,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/bufexplorer.zip'
 Bundle 'vim-scripts/netrw.vim'
+Bundle 'michaeljsmith/vim-indent-object'
 
 Bundle 'Lokaltog/vim-powerline'
 
