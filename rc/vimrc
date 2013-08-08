@@ -40,6 +40,7 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/VimClojure'
 
 " Other
+Bundle 'csexton/trailertrash.vim'
 Bundle 'edsono/vim-matchit'
 Bundle 'godlygeek/tabular'
 Bundle 'kana/vim-textobj-user'
@@ -121,7 +122,6 @@ set hlsearch
 
 let ruby_no_expensive = 1 " Differentiate between do..end and class..end is slow
 let ruby_operators = 1    " Highlight Ruby operators
-let ruby_space_errors = 1 " Highlights trailing spaces
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
