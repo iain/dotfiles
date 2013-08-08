@@ -119,6 +119,7 @@ function run-tests() {
   if [ ! -p ~/.vim/commands-fifo ]; then
     mkfifo ~/.vim/commands-fifo
   fi
+  echo "Waiting for tests..."
   while true; do
     cmd="$(cat ~/.vim/commands-fifo)"
     if [ -n "$cmd" ]; then
