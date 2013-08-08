@@ -130,6 +130,15 @@ function run-tests() {
     fi
   done
 }
+alias rt='run-tests'
+
+function drain-fifo() {
+  if [ ! -p ~/.vim/commands-fifo ]; then
+    mkfifo ~/.vim/commands-fifo
+  fi
+  echo "Draining commands fifo... Press Ctrl+C now."
+  cat -u ~/.vim/commands-fifo
+}
 
 # grep for a process
 function psg {
