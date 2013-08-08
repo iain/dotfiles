@@ -185,6 +185,9 @@ nnoremap <S-k> kJ
 " Remap return to clear search highlight
 nnoremap <cr> :nohlsearch<cr>
 
+" In normal mode, space will start command mode.
+nnoremap <space> :
+
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :BufExplorer<cr>
 
