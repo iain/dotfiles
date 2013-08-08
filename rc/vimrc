@@ -128,6 +128,8 @@ let g:netrw_banner     = 0
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
+set formatprg=par\ -w100\ -q
+
 if exists(':Americanize')
   :Americanize
 endif
