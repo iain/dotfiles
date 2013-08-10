@@ -115,31 +115,6 @@ function github-go () {
   open $(github-url)
 }
 
-function run-tests() {
-  if [ ! -p ~/.vim/commands-fifo ]; then
-    mkfifo ~/.vim/commands-fifo
-  fi
-  echo "Waiting for tests..."
-  while true; do
-    cmd="$(cat ~/.vim/commands-fifo)"
-    if [ -n "$cmd" ]; then
-      echo
-      echo "\e[33m$cmd\e[0m"
-      echo
-      sh -c $cmd
-    fi
-  done
-}
-alias rt='run-tests'
-
-function drain-fifo() {
-  if [ ! -p ~/.vim/commands-fifo ]; then
-    mkfifo ~/.vim/commands-fifo
-  fi
-  echo "Draining commands fifo... Press Ctrl+C now."
-  cat -u ~/.vim/commands-fifo
-}
-
 # grep for a process
 function psg {
   FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`

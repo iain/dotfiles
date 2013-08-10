@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+filename = ARGV[0]
+
+def notify(message, options = {})
+  require 'terminal-notifier'
+  TerminalNotifier.notify(message, options.merge(title: "Test Results", activate: "com.googlecode.iTerm2"))
+rescue LoadError
+  puts message
+end
+
+case filename
+when /_spec\.rb\b/
+  command = "rspec --order default --format documentation #{filename}"
+when /\.feature\b/
+  if filename =~ /:\d+$/
+    command = "cucumber --no-profile --strict --require features --format pretty #{filename}"
+  else
+    command = "cucumber --strict --format pretty #{filename}"
+  end
+when /_test\.rb\b/
+  command = "ruby #{filename}"
+else
+  message = "Unknown test file: #{filename}"
+  command = "false"
+end
+
+success = system command
+message ||= command
+
+notify message, subtitle: (success ? " ✔ Success" : " ✘ Failure")
+exit success

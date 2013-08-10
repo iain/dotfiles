@@ -59,6 +59,7 @@ Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/bufexplorer.zip'
 Bundle 'vim-scripts/netrw.vim'
 Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'thoughtbot/vim-rspec'
 
 Bundle 'Lokaltog/vim-powerline'
 
@@ -126,10 +127,11 @@ let ruby_operators = 1    " Highlight Ruby operators
 
 let g:netrw_list_hide  = "\.git,\.DS_Store"
 let g:netrw_banner     = 0
+let g:netrw_localrmdir='rm -r'
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
-set formatprg=par\ -w100\ -q
+set formatprg=par\ -w80\ -q
 
 if exists(':Americanize')
   :Americanize
@@ -221,12 +223,16 @@ map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
 
-" Calling RSpec functions
-map <leader>t :call RunTestFile()<cr>
-map <leader>T :call RunNearestTest()<cr>
-map <leader>r :call RunTests('spec')<cr>
-map <leader>c :call RunCucumber(@%)<cr>
-map <leader>C :call RunCucumberWip()<cr>
+let g:rspec_command_launcher = "iterm"
+let g:rspec_command_executable = "run_test {spec}"
+
+" Rspec.vim mappings
+map <Leader>t :call RunCurrentSpecFile()<cr>
+map <Leader>T :call RunNearestSpec()<cr>
+map <Leader>l :call RunLastSpec()<cr>
+map <Leader>r :call RunAllSpecs()<cr>
+
+" Custom functions
 map <leader>p :call PromoteToLet()<cr>
 
 " Align = signs
@@ -252,12 +258,10 @@ vmap <Leader>a{ :Tabularize /{<cr>gv
 vmap <Leader>a{ :Tabularize /{<cr>gv
 
 " Fugitive (Git)
-map <Leader>gc :Gcommit<cr>
-map <Leader>gb :Gblame<cr>
-map <Leader>gs :Gstatus<cr>
-
-" Clear trailing whitespace
-map <Leader>w :%s/\s\+$//<cr>:w<cr>
+map <Leader><Leader>c :Gcommit<cr>
+map <Leader><Leader>b :Gblame<cr>
+map <Leader><Leader>s :Gstatus<cr>
+map <Leader><Leader>w :Gwrite<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
@@ -278,52 +282,6 @@ function! InsertTabWrapper()
   else
     return "\<c-p>"
   endif
-endfunction
-
-" Runs a commands through a Unix named-pipe.
-function! RunPipe(command)
-  :w
-  exec ":silent !echo \"" . a:command . "\" > ~/.vim/commands-fifo"
-endfunction
-
-function! RunTests(filename)
-  " Write the file and run tests for the given filename
-  call RunPipe("rspec --format documentation --order default --color --tty " . a:filename)
-endfunction
-
-function! SetTestFile()
-  " Set the spec file that tests will be run for.
-  let t:grb_test_file=@%
-endfunction
-
-function! RunTestFile(...)
-  if a:0
-    let command_suffix = a:1
-  else
-    let command_suffix = ""
-  endif
-
-  " Run the tests for the previously-marked file.
-  let in_spec_file = match(expand("%"), '_spec.rb$') != -1
-  if in_spec_file
-    call SetTestFile()
-  elseif !exists("t:grb_test_file")
-    return
-  end
-  call RunTests(t:grb_test_file . command_suffix)
-endfunction
-
-function! RunNearestTest()
-  let spec_line_number = line('.')
-  call RunTestFile(":" . spec_line_number)
-endfunction
-
-function! RunCucumberWip()
-  call RunPipe("bundle exec cucumber --profile wip")
-endfunction
-
-function! RunCucumber(filename)
-  call RunPipe("bundle exec cucumber --require features " . a:filename)
 endfunction
 
 " Convert local variable to RSpec let block
