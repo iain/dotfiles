@@ -12,15 +12,15 @@ end
 
 case filename
 when /_spec\.rb\b/
-  command = "rspec --order default --format documentation #{filename}"
+  command = "bundle exec rspec --order default --format documentation #{filename}"
 when /\.feature\b/
   if filename =~ /:\d+$/
-    command = "cucumber --no-profile --strict --require features --format pretty #{filename}"
+    command = "bundle exec cucumber --no-profile --strict --require features --format pretty #{filename}"
   else
-    command = "cucumber --strict --format pretty #{filename}"
+    command = "bundle exec cucumber --strict --format pretty #{filename}"
   end
 when /_test\.rb\b/
-  command = "ruby #{filename}"
+  command = "bundle exec ruby #{filename}"
 else
   message = "Unknown test file: #{filename}"
   command = "false"
