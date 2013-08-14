@@ -5,7 +5,7 @@
   co = checkout
   st = status
   ci = commit
-  up = pull
+  up = pull --ff-only
   br = branch
   df = diff
   lg = log -p

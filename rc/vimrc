@@ -262,6 +262,9 @@ map <Leader><Leader>c :Gcommit<cr>
 map <Leader><Leader>b :Gblame<cr>
 map <Leader><Leader>s :Gstatus<cr>
 map <Leader><Leader>w :Gwrite<cr>
+map <Leader><Leader>p :Git push<cr>
+map <Leader><Leader>f :Git fetch<cr>
+map <Leader><Leader>u :Git up<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
