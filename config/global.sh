@@ -91,7 +91,7 @@ function r() {
 # if any arguments have been passed it will run it with bundle exec
 function b() {
   gem which bundler > /dev/null 2>&1 || gem install bundler --no-ri --no-rdoc
-  bundle check || bundle install
+  bundle check || bundle install -j4
   if [ $1 ]; then
     bundle exec $*
   fi
