@@ -124,3 +124,9 @@ function psg {
   REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
   ps aux | grep "[$FIRST]$REST"
 }
+
+function psr {
+  FIRST=`echo ruby | sed -e 's/^\(.\).*/\1/'`
+  REST=`echo ruby | sed -e 's/^.\(.*\)/\1/'`
+  ps aux | grep -v "Pow" | grep "[$FIRST]$REST"
+}
