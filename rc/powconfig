@@ -4,8 +4,7 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Don't stop, timeout is 7 days
 export POW_TIMEOUT=7*24*60*60
 
-# One is enough, more would potentially hide blocking requests
-export POW_WORKERS=1
+export POW_WORKERS=4
 
 # POW_BIN: the path to the pow binary. (This should be correctly configured for you.)
 # POW_DST_PORT: the public port Pow expects to be forwarded or otherwise proxied for incoming HTTP requests. Defaults to 80.
