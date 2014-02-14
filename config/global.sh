@@ -24,10 +24,12 @@ fi
 if [[ -d "/usr/local/sbin" ]]; then
   export PATH=$PATH:/usr/local/sbin
 fi
-export PATH=$PATH:$HOME/.dotfiles/bin
 # Load Node.js bin:
 export PATH="/usr/local/share/npm/bin:$PATH"
 export NODE_PATH="/usr/local/lib/node_modules"
+
+# Our own bin directory is more important than the rest
+export PATH=$HOME/.dotfiles/bin:$PATH
 
 # General aliases
 alias l='ls -halo'
