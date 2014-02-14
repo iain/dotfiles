@@ -57,9 +57,15 @@ Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/bufexplorer.zip'
-Bundle 'vim-scripts/netrw.vim'
+Bundle 'eiginn/netrw'
 Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'thoughtbot/vim-rspec'
+Bundle 'gavinbeatty/dragvisuals.vim'
+Bundle 'guns/vim-clojure-static'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'iain/vim-rspec'
+
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
 
 Bundle 'Lokaltog/vim-powerline'
 
@@ -95,6 +101,7 @@ set vb t_vb=               " Turn off beep
 set lazyredraw             " Don't redraw during macro execution
 set synmaxcol=2048         " Stop syntax highlighting for long lines
 set relativenumber         " Relative line numbering
+set number                 " Relative line numbering
 set nowrap                 " No wrapping by default
 set scrolloff=4            " Keep a few lines above and below current line
 set equalalways            " create equally sized splits
@@ -128,6 +135,11 @@ let ruby_operators = 1    " Highlight Ruby operators
 let g:netrw_list_hide  = "\.git,\.DS_Store"
 let g:netrw_banner     = 0
 let g:netrw_localrmdir='rm -r'
+let g:netrw_nobeval = 1
+
+if has("balloon_eval")
+  set noballooneval
+endif
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
@@ -152,6 +164,12 @@ autocmd BufReadPost *
 au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 
+" Add rainbows and unicorns
+au BufReadPost * RainbowParenthesesActivate
+au BufReadPost * RainbowParenthesesLoadRound
+au BufReadPost * RainbowParenthesesLoadSquare
+au BufReadPost * RainbowParenthesesLoadBraces
+" au BufReadPost * RainbowParenthesesLoadChevrons
 
 
 " ==========================
@@ -187,8 +205,13 @@ nnoremap <S-k> kJ
 " Remap return to clear search highlight
 nnoremap <cr> :nohlsearch<cr>
 
+" highlight the 100th character
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
+
 " In normal mode, space will start command mode.
 nnoremap <space> :
+vnoremap <space> :
 
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :BufExplorer<cr>
@@ -207,7 +230,13 @@ inoremap <silent> <Bar>   <Bar><Esc>:call <SID>AlignCucumberTables()<cr>a
 " ":Errors".
 cnoreabbrev E e
 
+" Dragvisuals configuration
+vmap <expr> <LEFT> DVB_Drag('left')
+vmap <expr> <RIGHT> DVB_Drag('right')
+vmap <expr> <DOWN> DVB_Drag('down')
+vmap <expr> <UP> DVB_Drag('up')
 
+vmap <expr> D DVB_Duplicate()
 
 
 
@@ -239,8 +268,8 @@ map <leader>p :call PromoteToLet()<cr>
 nmap <Leader>a= :Tabularize /=<cr>
 vmap <Leader>a= :Tabularize /=<cr>gv
 " Align after colons
-nmap <Leader>a: :Tabularize /:\zs/l1<cr>
-vmap <Leader>a: :Tabularize /:\zs/l1<cr>gv
+nmap <Leader>a: :Tabularize /:\s\zs/l1<cr>
+vmap <Leader>a: :Tabularize /:\s\zs/l1<cr>gv
 " Align hashrockets
 nmap <Leader>a> :Tabularize /=><cr>
 vmap <Leader>a> :Tabularize /=><cr>gv
@@ -271,6 +300,7 @@ map <Leader>q :split ~/Dropbox/notes.md<cr>
 
 
 
+nmap <silent> <leader>d <Plug>DashSearch
 
 
 " ==========================
