@@ -32,7 +32,7 @@ export NODE_PATH="/usr/local/lib/node_modules"
 export PATH=$HOME/.dotfiles/bin:$PATH
 
 # General aliases
-alias l='ls -halo'
+alias l='ls -FhAlo'
 alias ltr='ls -lt'
 alias lth='l -t|head'
 alias lh='ls -Shl | less'
