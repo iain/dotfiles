@@ -51,6 +51,7 @@ alias s='rspec --require ~/.dotfiles/script/rspec_focus --order default --color 
 alias be='bundle exec'
 alias irb='pry'
 alias guard='bundle exec guard'
+alias fs='foreman start'
 
 # Git aliases
 alias cdb='base=$(git rev-parse --show-cdup) && cd $base'
