@@ -2254,7 +2254,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2014-01-18T17:41:35Z</date>
+	<date>2014-02-14T12:21:48Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2282,6 +2282,8 @@
 		<key>ssh</key>
 		<string>48CC9E71-9A41-4FCE-9ADA-DDC23E7C34C1</string>
 	</dict>
+	<key>Use background pattern indicator</key>
+	<true/>
 	<key>UseBorder</key>
 	<false/>
 	<key>UseCompactLabel</key>
