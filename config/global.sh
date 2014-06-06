@@ -44,8 +44,8 @@ alias grep='grep --colour=always'
 # Ruby aliases
 alias rdm='rake db:migrate db:test:prepare'
 alias rr='mkdir -p tmp && touch tmp/restart.txt'
-alias c='bundle exec cucumber -r features'
-alias wip='c --profile wip'
+alias cu='bundle exec cucumber -r features'
+alias wip='cu --profile wip'
 alias specdoc='time rspec -fd'
 alias s='rspec --require ~/.dotfiles/script/rspec_focus --order default --color --tty'
 alias be='bundle exec'
@@ -54,15 +54,16 @@ alias guard='bundle exec guard'
 alias fs='foreman start'
 
 # Git aliases
+alias c='git commit'
+alias p='git push'
 alias cdb='base=$(git rev-parse --show-cdup) && cd $base'
 alias st='git status'
 alias status='git status'
 alias co='git checkout'
 alias checkout='git checkout'
 alias ci='git commit'
-alias commit='git commit'
+alias commit='echo "Use c"'
 alias amend='git commit --amend'
-alias cm='git commit --message'
 alias up='git up'
 alias upstash='git stash && git pull --ff-only && git stash pop'
 alias br='git branch'
@@ -130,4 +131,18 @@ function psr {
   FIRST=`echo ruby | sed -e 's/^\(.\).*/\1/'`
   REST=`echo ruby | sed -e 's/^.\(.*\)/\1/'`
   ps aux | grep -v "Pow" | grep "[$FIRST]$REST"
+}
+
+function git {
+  args="$@";
+  if [[ -z $(grep "commit" <<< "$args") ]]; then
+    /usr/local/bin/git "$@"
+  else
+    message=$(echo "$args" | ruby -e 'ARGF.read.split(/\s/).find { |arg| arg =~ /\A-[^-]/ ? arg.include?("m") : arg.include?("--message") } ? exit(1) : exit(0)')
+    if [[ $? == 0 ]]; then
+      /usr/local/bin/git "$@"
+    else
+      echo "Don't use -m."
+    fi
+  fi
 }
