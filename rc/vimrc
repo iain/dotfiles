@@ -246,6 +246,8 @@ vmap <expr> <UP> DVB_Drag('up')
 vmap <expr> D DVB_Duplicate()
 
 
+" Insert hex keys
+inoremap <silent> <F12> <ESC>:r ! ruby -r securerandom -e "print SecureRandom.hex(32)"<CR>kJ
 
 " ==========================
 " LEADER KEYS
