@@ -38,6 +38,7 @@ Bundle 'tpope/vim-markdown'
 Bundle 'tpope/vim-cucumber'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/VimClojure'
+Bundle 'Keithbsmiley/rspec.vim'
 
 " Other
 Bundle 'csexton/trailertrash.vim'
