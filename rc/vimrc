@@ -133,10 +133,13 @@ set hlsearch
 let ruby_no_expensive = 1 " Differentiate between do..end and class..end is slow
 let ruby_operators = 1    " Highlight Ruby operators
 
-let g:netrw_list_hide  = "\.git,\.DS_Store"
+" Hide DS_store, .git and current and previous directory indicators
+" Use - to go up one dir
+let g:netrw_list_hide= "\.DS_Store,\.git/,^\\\./,^\\\.\\\./"
 let g:netrw_banner     = 0
 let g:netrw_localrmdir='rm -r'
 let g:netrw_nobeval = 1
+let g:netrw_liststyle=1
 
 if has("balloon_eval")
   set noballooneval
@@ -202,6 +205,9 @@ nnoremap k gk
 
 " Shift+K becomes similar to Shift+J
 nnoremap <S-k> kJ
+
+" Go up one dir, normally just for netrw, now also in files
+nnoremap - :Ex<cr>
 
 " Remap return to clear search highlight
 nnoremap <cr> :nohlsearch<cr>
