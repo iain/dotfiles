@@ -329,8 +329,8 @@ endfunction
 " Convert local variable to RSpec let block
 function! PromoteToLet()
   :normal! dd
-  :exec '?^\s*it\>'
-  :normal! P
+  :exec '?^\s*describe\|context\|RSpec\.describe\>'
+  :normal! p
   :.s/\(\w\+\) = \(.*\)$/let(:\1) { \2 }/
   :normal ==
 endfunction
