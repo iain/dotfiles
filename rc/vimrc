@@ -62,7 +62,7 @@ Bundle 'vim-scripts/bufexplorer.zip'
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'gavinbeatty/dragvisuals.vim'
 Bundle 'guns/vim-clojure-static'
-Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'luochen1990/rainbow'
 Bundle 'iain/vim-rspec'
 
 Bundle 'rizzatti/funcoo.vim'
@@ -169,11 +169,7 @@ au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 
 " Add rainbows and unicorns
-au BufReadPost * RainbowParenthesesActivate
-au BufReadPost * RainbowParenthesesLoadRound
-au BufReadPost * RainbowParenthesesLoadSquare
-au BufReadPost * RainbowParenthesesLoadBraces
-" au BufReadPost * RainbowParenthesesLoadChevrons
+let g:rainbow_active = 1
 
 
 " ==========================
