@@ -226,9 +226,6 @@ cnoremap %% <C-R>=expand('%:h').'/'<cr>
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 
-" Aligns tables in Cucumber
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>AlignCucumberTables()<cr>a
-
 " A common typo is ":E" when actually meaning ":e" and not ":Explore" or
 " ":Errors".
 cnoreabbrev E e
@@ -272,9 +269,6 @@ map <leader>p :call PromoteToLet()<cr>
 " Align = signs
 nmap <Leader>a= :Tabularize /=<cr>
 vmap <Leader>a= :Tabularize /=<cr>gv
-" Align after colons
-nmap <Leader>a: :Tabularize /:\s\zs/l1<cr>
-vmap <Leader>a: :Tabularize /:\s\zs/l1<cr>gv
 " Align hashrockets
 nmap <Leader>a> :Tabularize /=><cr>
 vmap <Leader>a> :Tabularize /=><cr>gv
@@ -331,7 +325,7 @@ function! PromoteToLet()
   :normal ==
 endfunction
 
-" Aligns tables in cucumber
+" Aligns tables in cucumber, from tim pope: https://gist.github.com/tpope/287147
 function! s:AlignCucumberTables()
   let p = '^\s*|\s.*\s|\s*$'
   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -342,3 +336,82 @@ function! s:AlignCucumberTables()
     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
   endif
 endfunction
+
+" Only enable in cucumber
+function! EnableCucumberTables()
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>AlignCucumberTables()<cr>a
+endfunction
+au FileType cucumber call EnableCucumberTables()
+
+" Automatically align multiline hashes in Ruby (Ruby 1.9 syntax only).
+function! AlignRubyHashes()
+  " Only look for lines that start with a simple keyword, colon, space, and
+  " ending in a comma.
+  let p = '^\s*\w\+:\s.*,$'
+
+  " Don't do anything if there is no Tabularize, or there is no surrounding
+  " line that can be aligned with.
+  if exists(':Tabularize') && (getline(line('.')) =~# '^\s*\w\+:\s$') && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    " save current position because later command moves the cursor
+    let currentLine = line(".")
+    let currentCol = col(".")
+
+    call DoAlignRubyHashes()
+
+    " Since the current line cannot be aligned yet when it is too short, find
+    " a line to compare it with. This is either the previous line or the next
+    " line.
+    if (getline(currentLine-1) =~ p)
+      let compareLine = currentLine - 1
+    else
+      let compareLine = currentLine + 1
+    endif
+
+    " Calculate how many spaces to add.
+    let positionOfValues = strlen(matchstr(getline(compareLine), '^.*:\s\+'))
+    let missingSpaces = (positionOfValues - currentCol) + 1
+
+    " Add missing spaces
+    if missingSpaces > 0
+      exe currentLine.'s/$/'.repeat(' ', missingSpaces)
+    endif
+
+    " Set the cursor to the proper position
+    call cursor(currentLine, currentCol + missingSpaces)
+
+  endif
+endfunction
+
+function! DoAlignRubyHashes()
+  let p = '^\s*\w\+:\s.*,$'
+
+  " Calculate the range to act. Default Tabularize doesn't do this properly,
+  " because the range is determined by a different regex than the alignment
+  " regex.
+  let from = line('.')
+  while (getline(from - 1) =~ p)
+    let from -= 1
+  endwhile
+
+  let to = line('.')
+  while (getline(to + 1) =~ p)
+    let to += 1
+  endwhile
+
+  " Call Tabularize with the new range
+  exe from.','.to.'Tabularize/\(:.*\)\@<!\(:\s\)\zs/l1'
+  normal! 0
+
+endfunction
+
+function! EnableRubyHash()
+  inoremap <silent> <space>   <space><Esc>:call AlignRubyHashes()<cr>a
+endfunction
+
+au FileType ruby call EnableRubyHash()
+
+" Align after colons, but only the first one in the line,
+" In normal mode, determine range automatically
+nmap <Leader>a: :call DoAlignRubyHashes()<cr>
+" In visual mode, the range is already fixed
+vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
