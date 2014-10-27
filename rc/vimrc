@@ -57,6 +57,7 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
+Bundle 'tpope/vim-vinegar'
 Bundle 'vim-scripts/bufexplorer.zip'
 " Bundle 'eiginn/netrw'
 Bundle 'michaeljsmith/vim-indent-object'
@@ -88,7 +89,7 @@ filetype plugin indent on
 if has("gui_macvim")
   set antialias                      " Pretty
   set guioptions=Ace                 " No menubar, toolbar or scrollbars, as minimal as possible
-  set guifont=Dejavu\ Sans\ Mono:h18 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
+  set guifont=Dejavu\ Sans\ Mono:h16 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
   colorscheme ir_black               " Pastel colors
   set fuoptions=maxvert,maxhorz      " Fixes Full Screen on OSX
   " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
@@ -135,15 +136,17 @@ let ruby_operators = 1    " Highlight Ruby operators
 
 " Hide DS_store, .git and current and previous directory indicators
 " Use - to go up one dir
-let g:netrw_list_hide= "\.DS_Store,\.git/,^\\\./,^\\\.\\\./"
-let g:netrw_banner     = 0
-let g:netrw_localrmdir='rm -r'
+" let g:netrw_list_hide= "\.DS_Store,\.git/,^\\\./,^\\\.\\\./"
+" let g:netrw_banner     = 0
+" let g:netrw_localrmdir='rm -r'
 let g:netrw_nobeval = 1
-let g:netrw_liststyle=1
+" let g:netrw_liststyle=1
 
 if has("balloon_eval")
   set noballooneval
 endif
+
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
@@ -201,9 +204,6 @@ nnoremap k gk
 
 " Shift+K becomes similar to Shift+J
 nnoremap <S-k> kJ
-
-" Go up one dir, normally just for netrw, now also in files
-nnoremap - :Ex<cr>
 
 " Remap return to clear search highlight
 nnoremap <cr> :nohlsearch<cr>
@@ -321,7 +321,7 @@ function! PromoteToLet()
   :normal! dd
   :exec '?^\s*describe\|context\|RSpec\.describe\>'
   :normal! p
-  :.s/\(\w\+\) = \(.*\)$/let(:\1) { \2 }/
+  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
   :normal ==
 endfunction
 
@@ -403,12 +403,6 @@ function! DoAlignRubyHashes()
   normal! 0
 
 endfunction
-
-function! EnableRubyHash()
-  inoremap <silent> <space>   <space><Esc>:call AlignRubyHashes()<cr>a
-endfunction
-
-au FileType ruby call EnableRubyHash()
 
 " Align after colons, but only the first one in the line,
 " In normal mode, determine range automatically
