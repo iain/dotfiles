@@ -12,7 +12,7 @@ end
 
 case filename
 when /_spec\.rb\b/
-  command = "bundle exec rspec --order default --format documentation #{filename}"
+  command = "bundle exec rspec --order defined --format documentation #{filename}"
 when /\.feature\b/
   if filename =~ /:\d+$/
     command = "bundle exec cucumber --no-profile --strict --require features --format pretty #{filename}"

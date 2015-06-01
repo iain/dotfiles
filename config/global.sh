@@ -30,6 +30,7 @@ export NODE_PATH="/usr/local/lib/node_modules"
 
 # Our own bin directory is more important than the rest
 export PATH=$HOME/.dotfiles/bin:$PATH
+export PATH=$HOME/.bin:$PATH
 
 # General aliases
 alias l='ls -FhAlo'
@@ -40,6 +41,7 @@ alias tf='tail -f -n 100'
 alias less='less -R' # color codes in less
 alias m='mvim --remote-silent' # open file in existing mvim
 alias grep='grep --colour=always'
+alias g='git'
 
 # Ruby aliases
 alias rdm='rake db:migrate db:test:prepare'

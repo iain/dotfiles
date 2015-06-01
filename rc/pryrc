@@ -39,8 +39,3 @@ begin
   Pry.config.print = proc {|output, value| Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output)}
 rescue LoadError
 end
-
-begin
-  require "active_support/core_ext"
-rescue LoadError
-end
