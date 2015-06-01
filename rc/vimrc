@@ -23,52 +23,49 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'Syntastic'
 Bundle 'tpope/vim-fugitive'
-
-" Colorschemes
+"
+" " Colorschemes
 Bundle 'wgibbs/vim-irblack'
 Bundle 'vim-scripts/tir_black'
-
-" Syntax & Language Support
+"
+" " Syntax & Language Support
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'kchmck/vim-coffee-script'
-Bundle 'nono/vim-handlebars'
+" Bundle 'nono/vim-handlebars'
 Bundle 'othree/html5-syntax.vim'
 Bundle 'slim-template/vim-slim'
 Bundle 'tpope/vim-markdown'
 Bundle 'tpope/vim-cucumber'
+Bundle 'tpope/vim-haml'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/VimClojure'
 Bundle 'Keithbsmiley/rspec.vim'
-
-" Other
+Bundle 'elixir-lang/vim-elixir'
+"
+" " Other
 Bundle 'csexton/trailertrash.vim'
-Bundle 'edsono/vim-matchit'
+" Bundle 'edsono/vim-matchit'
 Bundle 'godlygeek/tabular'
-Bundle 'kana/vim-textobj-user'
-Bundle 'kien/ctrlp.vim'
+" Bundle 'kana/vim-textobj-user'
+" Bundle 'kien/ctrlp.vim'
 Bundle 'mileszs/ack.vim'
-Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'nelstrom/vim-visual-star-search'
-Bundle 'nelstrom/vim-americanize'
+" Bundle 'nelstrom/vim-textobj-rubyblock'
+" Bundle 'nelstrom/vim-visual-star-search'
 Bundle 'tomtom/tcomment_vim'
 Bundle 'tpope/vim-abolish'
-Bundle 'tpope/vim-bundler'
+" " Bundle 'tpope/vim-bundler' " slow startup time
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sensible'
-Bundle 'tpope/vim-surround'
+" Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-vinegar'
-Bundle 'vim-scripts/bufexplorer.zip'
-" Bundle 'eiginn/netrw'
+" Bundle 'vim-scripts/bufexplorer.zip'
+" " Bundle 'eiginn/netrw'
 Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'gavinbeatty/dragvisuals.vim'
+" " Bundle 'gavinbeatty/dragvisuals.vim'
 Bundle 'guns/vim-clojure-static'
 Bundle 'luochen1990/rainbow'
 Bundle 'iain/vim-rspec'
-
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-
 Bundle 'Lokaltog/vim-powerline'
 
 if needsToInstallBundles == 1
@@ -78,7 +75,6 @@ if needsToInstallBundles == 1
 endif
 
 filetype plugin indent on
-
 
 
 
@@ -132,15 +128,9 @@ set smartcase
 set hlsearch
 
 let ruby_no_expensive = 1 " Differentiate between do..end and class..end is slow
-let ruby_operators = 1    " Highlight Ruby operators
+let ruby_operators = 0    " Highlight Ruby operators
 
-" Hide DS_store, .git and current and previous directory indicators
-" Use - to go up one dir
-" let g:netrw_list_hide= "\.DS_Store,\.git/,^\\\./,^\\\.\\\./"
-" let g:netrw_banner     = 0
-" let g:netrw_localrmdir='rm -r'
 let g:netrw_nobeval = 1
-" let g:netrw_liststyle=1
 
 if has("balloon_eval")
   set noballooneval
@@ -151,10 +141,6 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
 set formatprg=par\ -w80\ -q
-
-if exists(':Americanize')
-  :Americanize
-endif
 
 
 " ==========================
@@ -230,14 +216,6 @@ inoremap <s-tab> <c-n>
 " ":Errors".
 cnoreabbrev E e
 
-" Dragvisuals configuration
-vmap <expr> <LEFT> DVB_Drag('left')
-vmap <expr> <RIGHT> DVB_Drag('right')
-vmap <expr> <DOWN> DVB_Drag('down')
-vmap <expr> <UP> DVB_Drag('up')
-
-vmap <expr> D DVB_Duplicate()
-
 
 " Insert hex keys
 inoremap <silent> <F12> <ESC>:r ! ruby -r securerandom -e "print SecureRandom.hex(32)"<CR>kJ
@@ -254,14 +232,13 @@ map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
 
-let g:rspec_command_launcher = "iterm"
-let g:rspec_command_executable = "run_test {spec}"
 
-" Rspec.vim mappings
-map <Leader>t :call RunCurrentSpecFile()<cr>
-map <Leader>T :call RunNearestSpec()<cr>
-map <Leader>l :call RunLastSpec()<cr>
-map <Leader>r :call RunAllSpecs()<cr>
+" Rspec.vim
+let g:rspec_runner = "os_x_iterm"
+map <Leader>t :w<cr>:call RunCurrentSpecFile()<cr>
+map <Leader>T :w<cr>:call RunNearestSpec()<cr>
+map <Leader>l :w<cr>:call RunLastSpec()<cr>
+map <Leader>r :w<cr>:call RunAllSpecs()<cr>
 
 " Custom functions
 map <leader>p :call PromoteToLet()<cr>
@@ -297,9 +274,6 @@ map <Leader><Leader>u :Git up<cr>
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
 
-
-
-nmap <silent> <leader>d <Plug>DashSearch
 
 
 " ==========================
