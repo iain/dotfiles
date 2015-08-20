@@ -81,6 +81,7 @@ alias f='git fetch'
 alias fetch='git fetch'
 alias gf='git fetch && git status'
 alias push='git push'
+alias po='powder open'
 
 
 function r() {
