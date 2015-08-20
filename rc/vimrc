@@ -97,7 +97,7 @@ end
 
 set vb t_vb=               " Turn off beep
 set lazyredraw             " Don't redraw during macro execution
-set synmaxcol=2048         " Stop syntax highlighting for long lines
+set synmaxcol=512          " Stop syntax highlighting for long lines
 set relativenumber         " Relative line numbering
 set number                 " Relative line numbering
 set nowrap                 " No wrapping by default
@@ -132,9 +132,10 @@ let ruby_operators = 0    " Highlight Ruby operators
 
 let g:netrw_nobeval = 1
 
-if has("balloon_eval")
-  set noballooneval
-endif
+" Those balloon things are annoying as hell
+set noballooneval
+set balloondelay=100000
+setlocal balloonexpr=
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
