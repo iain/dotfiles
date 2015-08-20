@@ -75,8 +75,8 @@ function time_since_last_commit {
 }
 
 function branch_or_commit {
-  branch=$(git branch | grep '^\*' | sed 's/^\*\ //')
-  if [ "$branch" == "(no branch)" ]; then
+  branch=$(git branch --no-color | grep --color=never '^\*' | sed 's/^\*\ //')
+  if [[ $branch == "(no"* ]]; then
     # when not on any branch, always color red
     echo "$red$(git rev-list -n 1 --abbrev-commit HEAD)"
   elif [ "$branch" == "" ]; then
