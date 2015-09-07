@@ -117,6 +117,27 @@ Some Ruby related stuff:
     curl get.pow.cx | sh
     gem install bundler pry pry-doc powder
 
+### Aliases
+
+There are a lot of aliases in my dotfiles.
+Here are the ones I use on a daily basis:
+
+* `aa` - `git add --all && git status -sb`
+* `c` - `git commit`
+* `p` - `git push`
+* `st` - `git status`
+* `f` - `git fetch --all && git status`
+* `up` - `git pull --ff-only`
+* `upstash` - `git stash && git pull --ff-only && git stash pop`
+* `unstage` - an autocompletable version of `git reset HEAD --`
+* `co` - `git checkout`
+* `d` - `git diff`
+* `dc` - `git diff --cached`
+* `m` - `macvim --remote-silent`
+* `b` - a function that does `bundle check && bundle install` in a clever way
+* `be` - `bundle exec`
+* `rdm` - `rake db:migrate db:test:prepare`
+* `l` - `ls -FhAlo`
 
 ## Credits
 
