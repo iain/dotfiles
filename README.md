@@ -1,5 +1,8 @@
 # .dotfiles
 
+> In Unix-like operating systems, any file or folder that starts with a dot character (for example, /home/user/.config), commonly called a dot file or dotfile, is to be treated as hidden.
+> A convention arose of using dotfile in the user's home directory to store per-user configuration or informational text.
+
 Here are the settings I use.
 
 * Ruby
