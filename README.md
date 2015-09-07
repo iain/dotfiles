@@ -1,76 +1,61 @@
 # .dotfiles
 
-This repository contains my Bash, ZSH, and Vim settings.
+Here are the settings I use.
 
-Some of the features include:
-
-* Nicely colored prompt for both Bash and ZSH.
-* Automatic project aliases
-* Lots of cool aliases
-* Ruby on Rails specific aliases
-* RVM and rbenv support
-* Vim configuration
-* ... and much more!
-
-There is absolutely NO guarantee for this project to work on your machine.
-Only use this if you know what you are doing.
+* Ruby
+* ZSH
+* Vim
 
 ## Installation
 
-### Prerequisites
+These are the steps for installing a clean machine:
 
-* Xcode (download from App store)
-* [iTerm2](http://www.iterm2.com/)
-* [Homebrew](http://mxcl.github.io/homebrew/)
+1. Install [iTerm2](http://www.iterm2.com/)
+2. Install [Homebrew](http://mxcl.github.io/homebrew/):
 
-### Homebrew
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-Here's what I install on a clean OSX:
+3. Install some of the most often used programs:
 
-    brew install ack imagemagick par readline wget \
-      libyaml mysql zsh node sqlite memcached \
-      postgresql tree openssl
+        brew install zsh git macvim par wget libyaml the_silver_searcher tree
 
-Make sure to read the caveats of those packages to make them start up
-automatically when that makes sense.
+4. Install a recent Ruby version:
 
-I use rbenv and ruby-build for installing Ruby:
+        brew install rbenv ruby-build
+        rbenv install 2.2.3
+        rbenv global 2.2.3
 
-    brew install rbenv ruby-build
+5. Install the dotfiles:
 
-### dotfiles
+        git clone https://github.com/iain/dotfiles.git ~/.dotfiles
+        cd ~/.dotfiles
+        ./script/install
+        
+    This will backup any previous dotfiles you have.
+        
+6. Configure iTerm2:
 
-To install the dotfiles:
+    * Open iTerm2.
+    * Go to the Preferences (⌘,)
+    * In the General tab, check `Load preferences from a custom folder or URL`.
+    * Fill in the text field to point to `/Users/your_name/.dotfiles/iterm2`.
+      (replace "your_name" with your username, which you can verify by running `whoami`)
+    * Restart iTerm2.
+    
+7. Configure Git to use your own name:
 
-    git clone https://github.com/iain/dotfiles.git ~/.dotfiles
-    cd ~/.dotfiles
-    ./script/install
+    Add and change these lines to `~/.dotfiles/config/personal.sh`:
+    
+        export GIT_AUTHOR_NAME="Your Name"
+        export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
+        export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
+        export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+    
+8. Celebrate!
 
-This will create backups for anything you already have and add symlinks to
-these parts.
+## Config
 
-### Git
-
-Add and change these lines to `~/.dotfiles/config/personal.sh`:
-
-``` bash
-export GIT_AUTHOR_NAME="Your Name"
-export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
-
-export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
-export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
-```
-
-See the chapter on personal configuration below for more information.
-
-## Customizing
-
-### iTerm2
-
-In the iTerm2 General settings, check `Load preferences from a user-defined
-folder or URL`. Fill in the text field to point to
-`/Users/your_name/.dotfiles/iterm2`. You might need to restart iTerm2 after
-that.
+Here are some more things you can do.
 
 ### Vim
 
@@ -115,6 +100,23 @@ different.
 
 My DejaVuSansMono, including the [powerline](https://github.com/Lokaltog/vim-powerline)
 patch is included for convenience.
+
+### More programs.
+
+For my own convenience, here are some extra apps I tend to want on my machine.
+
+    brew install mysql postgresql sqlite \
+      mercurial go elixir node \
+      imagemagick graphviz \
+      cloc htop-osx
+
+**NB** Don't forget to read the output and follow the instructions.
+      
+Some Ruby related stuff:
+
+    curl get.pow.cx | sh
+    gem install bundler pry pry-doc powder
+
 
 ## Credits
 
