@@ -30,9 +30,9 @@ These are the steps for installing a clean machine:
         git clone https://github.com/iain/dotfiles.git ~/.dotfiles
         cd ~/.dotfiles
         ./script/install
-        
+
     This will backup any previous dotfiles you have.
-        
+
 6. Configure iTerm2:
 
     * Open iTerm2.
@@ -41,16 +41,16 @@ These are the steps for installing a clean machine:
     * Fill in the text field to point to `/Users/your_name/.dotfiles/iterm2`.
       (replace "your_name" with your username, which you can verify by running `whoami`)
     * Restart iTerm2.
-    
+
 7. Configure Git to use your own name:
 
     Add and change these lines to `~/.dotfiles/config/personal.sh`:
-    
+
         export GIT_AUTHOR_NAME="Your Name"
         export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
         export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
         export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
-    
+
 8. Celebrate!
 
 ## Config
@@ -111,7 +111,7 @@ For my own convenience, here are some extra apps I tend to want on my machine.
       cloc htop-osx
 
 **NB** Don't forget to read the output and follow the instructions.
-      
+
 Some Ruby related stuff:
 
     curl get.pow.cx | sh
