@@ -5,72 +5,73 @@ set nocompatible
 filetype off
 
 let needsToInstallBundles=0
-if !isdirectory(expand("~/.vim/bundle/vundle"))
+if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
   echo "\nInstalling Vim dependencies... Please be patient!\n"
   silent !mkdir -p ~/.vim/tmp
   silent !mkdir -p ~/.vim/swap
   silent !mkdir -p ~/.vim/undo
   silent !mkdir -p ~/.vim/bundle
   silent !mkfifo ~/.vim/commands-fifo
-  silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+  silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   let needsToInstallBundles=1
 endif
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 " Do these first, because other plugins depend on them
-Bundle 'gmarik/vundle'
-Bundle 'Syntastic'
-Bundle 'tpope/vim-fugitive'
-"
-" " Colorschemes
-Bundle 'wgibbs/vim-irblack'
-Bundle 'vim-scripts/tir_black'
-"
-" " Syntax & Language Support
-Bundle 'hail2u/vim-css3-syntax'
-Bundle 'kchmck/vim-coffee-script'
-" Bundle 'nono/vim-handlebars'
-Bundle 'othree/html5-syntax.vim'
-Bundle 'slim-template/vim-slim'
-Bundle 'tpope/vim-markdown'
-Bundle 'tpope/vim-cucumber'
-Bundle 'tpope/vim-haml'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'vim-scripts/VimClojure'
-Bundle 'Keithbsmiley/rspec.vim'
-Bundle 'elixir-lang/vim-elixir'
-"
-" " Other
-Bundle 'csexton/trailertrash.vim'
-" Bundle 'edsono/vim-matchit'
-Bundle 'godlygeek/tabular'
-" Bundle 'kana/vim-textobj-user'
-" Bundle 'kien/ctrlp.vim'
-Bundle 'mileszs/ack.vim'
-" Bundle 'nelstrom/vim-textobj-rubyblock'
-" Bundle 'nelstrom/vim-visual-star-search'
-Bundle 'tomtom/tcomment_vim'
-Bundle 'tpope/vim-abolish'
-" " Bundle 'tpope/vim-bundler' " slow startup time
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-sensible'
-" Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-vinegar'
-" Bundle 'vim-scripts/bufexplorer.zip'
-" " Bundle 'eiginn/netrw'
-Bundle 'michaeljsmith/vim-indent-object'
-" " Bundle 'gavinbeatty/dragvisuals.vim'
-Bundle 'guns/vim-clojure-static'
-Bundle 'luochen1990/rainbow'
-Bundle 'iain/vim-rspec'
-Bundle 'Lokaltog/vim-powerline'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Syntastic'
+Plugin 'tpope/vim-fugitive'
+
+" Colorschemes
+Plugin 'wgibbs/vim-irblack'
+Plugin 'vim-scripts/tir_black'
+
+" Syntax & Language Support
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'othree/html5-syntax.vim'
+Plugin 'slim-template/vim-slim'
+Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-cucumber'
+Plugin 'tpope/vim-haml'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'vim-scripts/VimClojure'
+Plugin 'Keithbsmiley/rspec.vim'
+Plugin 'elixir-lang/vim-elixir'
+
+Plugin 'pangloss/vim-javascript'
+Plugin 'isRuslan/vim-es6'
+Plugin 'mxw/vim-jsx'
+
+" Other
+Plugin 'nelstrom/vim-markdown-folding'
+Plugin 'csexton/trailertrash.vim'
+Plugin 'edsono/vim-matchit'
+Plugin 'godlygeek/tabular'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-vinegar'
+Plugin 'michaeljsmith/vim-indent-object'
+Plugin 'guns/vim-clojure-static'
+Plugin 'luochen1990/rainbow'
+Plugin 'iain/vim-rspec'
+
+" Always last
+Plugin 'Lokaltog/vim-powerline'
+
+call vundle#end()
+filetype plugin indent on
 
 if needsToInstallBundles == 1
-  echo "\nInstalling Bundles, please ignore key map error messages\n"
-  :BundleInstall!
+  echo "\nInstalling plugins.\n"
+  :PluginInstall
   echo "\nInstalled.\n"
 endif
 
@@ -85,7 +86,7 @@ filetype plugin indent on
 if has("gui_macvim")
   set antialias                      " Pretty
   set guioptions=Ace                 " No menubar, toolbar or scrollbars, as minimal as possible
-  set guifont=Dejavu\ Sans\ Mono:h16 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
+  set guifont=Dejavu\ Sans\ Mono:h15 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
   colorscheme ir_black               " Pastel colors
   set fuoptions=maxvert,maxhorz      " Fixes Full Screen on OSX
   " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
@@ -384,3 +385,13 @@ endfunction
 nmap <Leader>a: :call DoAlignRubyHashes()<cr>
 " In visual mode, the range is already fixed
 vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
+
+" Syntastic configuration
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
