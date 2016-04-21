@@ -13,22 +13,23 @@ Here are the settings I use.
 
 These are the steps for installing a clean machine:
 
-1. Install [iTerm2](http://www.iterm2.com/)
-2. Install [Homebrew](http://mxcl.github.io/homebrew/):
+1. Install [iTerm2](http://www.iterm2.com/) - make sure to get version 3 (currently in beta)
+2. Install [MacVIM](http://macvim-dev.github.io/macvim/)
+3. Install [Homebrew](http://brew.sh/):
 
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-3. Install some of the most often used programs:
+4. Install some of the most often used programs:
 
-        brew install zsh git macvim par wget libyaml the_silver_searcher tree
+        brew install zsh git par wget libyaml the_silver_searcher tree
 
-4. Install a recent Ruby version:
+5. Install a recent Ruby version:
 
         brew install rbenv ruby-build
         rbenv install 2.2.3
         rbenv global 2.2.3
 
-5. Install the dotfiles:
+6. Install the dotfiles:
 
         git clone https://github.com/iain/dotfiles.git ~/.dotfiles
         cd ~/.dotfiles
@@ -36,16 +37,16 @@ These are the steps for installing a clean machine:
 
     This will backup any previous dotfiles you have.
 
-6. Configure iTerm2:
+7. Configure iTerm2:
 
     * Open iTerm2.
-    * Go to the Preferences (⌘,)
+    * Go to the Preferences (`⌘,`)
     * In the General tab, check `Load preferences from a custom folder or URL`.
     * Fill in the text field to point to `/Users/your_name/.dotfiles/iterm2`.
       (replace "your_name" with your username, which you can verify by running `whoami`)
     * Restart iTerm2.
 
-7. Configure Git to use your own name:
+8. Configure Git to use your own name:
 
     Add and change these lines to `~/.dotfiles/config/personal.sh`:
 
@@ -54,7 +55,7 @@ These are the steps for installing a clean machine:
         export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
         export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
 
-8. Celebrate!
+9. Celebrate!
 
 ## Config
 
