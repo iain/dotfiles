@@ -46,7 +46,6 @@ Plugin 'isRuslan/vim-es6'
 Plugin 'mxw/vim-jsx'
 
 " Other
-Plugin 'nelstrom/vim-markdown-folding'
 Plugin 'csexton/trailertrash.vim'
 Plugin 'edsono/vim-matchit'
 Plugin 'godlygeek/tabular'
@@ -61,7 +60,7 @@ Plugin 'tpope/vim-vinegar'
 Plugin 'michaeljsmith/vim-indent-object'
 Plugin 'guns/vim-clojure-static'
 Plugin 'luochen1990/rainbow'
-Plugin 'iain/vim-rspec'
+Plugin 'thoughtbot/vim-rspec'
 
 " Always last
 Plugin 'Lokaltog/vim-powerline'
@@ -198,7 +197,7 @@ nnoremap <cr> :nohlsearch<cr>
 
 " highlight the 100th character
 highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%81v', 100)
+call matchadd('ColorColumn', '\%101v', 100)
 
 " In normal mode, space will start command mode.
 nnoremap <space> :
@@ -234,13 +233,6 @@ map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
 
-
-" Rspec.vim
-let g:rspec_runner = "os_x_iterm"
-map <Leader>t :w<cr>:call RunCurrentSpecFile()<cr>
-map <Leader>T :w<cr>:call RunNearestSpec()<cr>
-map <Leader>l :w<cr>:call RunLastSpec()<cr>
-map <Leader>r :w<cr>:call RunAllSpecs()<cr>
 
 " Custom functions
 map <leader>p :call PromoteToLet()<cr>
@@ -395,3 +387,11 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
+
+" vim-rspec configuration
+let g:rspec_runner = "os_x_iterm2"
+let g:rspec_command = "bundle exec rspec {spec}"
+map <Leader>t :w<cr>:call RunCurrentSpecFile()<cr>
+map <Leader>T :w<cr>:call RunNearestSpec()<cr>
+map <Leader>l :w<cr>:call RunLastSpec()<cr>
+map <Leader>r :w<cr>:call RunAllSpecs()<cr>
