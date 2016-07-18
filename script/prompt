@@ -127,7 +127,7 @@ function normal_prompt {
 }
 
 function clean {
-  echo $status | grep "working directory clean" > /dev/null
+  echo $status | grep "working tree clean" > /dev/null
 }
 
 function ahead {
