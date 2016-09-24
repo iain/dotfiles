@@ -96,6 +96,7 @@ function git_prompt {
   branch
   in_rebase
   merge
+  stashes
   subdir
 }
 
@@ -107,8 +108,8 @@ function in_rebase {
   fi
   if [[ -d $dir/.git/rebase-apply ]]; then
     space
-    append $yellow
-    append "rebasing!"
+    append $red
+    append "[REBASE!]"
   fi
 }
 
@@ -162,6 +163,23 @@ function merge {
   elif diverged; then
     space
     append "↕"
+  fi
+}
+
+function stashes {
+  number_of_stashes=$(git stash list | wc -l | tr -d '[[:space:]]')
+  append $gray
+  if [ $number_of_stashes -eq "0" ]; then
+    space
+  elif [ $number_of_stashes -eq "1" ]; then
+    space
+    append "Σ"
+  elif [ $number_of_stashes -eq "2" ]; then
+    space
+    append "ΣΣ"
+  else
+    space
+    append "Σ${number_of_stashes}"
   fi
 }
 
