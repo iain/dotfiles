@@ -5,48 +5,34 @@
 
 Here are the settings I use.
 
-* Ruby
-* ZSH
-* Vim
-
 ## Installation
 
-These are the steps for installing a clean machine:
+These are the steps for installing the essentials.
 
-1. Install [iTerm2](http://www.iterm2.com/) - make sure to get version 3 (currently in beta)
+1. Install [iTerm2](http://www.iterm2.com/)
 2. Install [MacVIM](http://macvim-dev.github.io/macvim/)
-3. Install [Homebrew](http://brew.sh/):
-
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
+3. Install [Homebrew](http://brew.sh/)
 4. Install some of the most often used programs:
 
-        brew install zsh git par wget libyaml the_silver_searcher tree
+        brew install zsh git par the_silver_searcher tree
 
-5. Install a recent Ruby version:
-
-        brew install rbenv ruby-build
-        rbenv install 2.2.3
-        rbenv global 2.2.3
-
-6. Install the dotfiles:
+5. Install the dotfiles:
 
         git clone https://github.com/iain/dotfiles.git ~/.dotfiles
         cd ~/.dotfiles
         ./script/install
 
-    This will backup any previous dotfiles you have.
+    (This will backup any previous dotfiles you have.)
 
-7. Configure iTerm2:
+6. Configure iTerm2:
 
     * Open iTerm2.
     * Go to the Preferences (`⌘,`)
     * In the General tab, check `Load preferences from a custom folder or URL`.
-    * Fill in the text field to point to `/Users/your_name/.dotfiles/iterm2`.
-      (replace "your_name" with your username, which you can verify by running `whoami`)
+    * Fill in: `~/.dotfiles/iterm2`.
     * Restart iTerm2.
 
-8. Configure Git to use your own name:
+7. Configure Git to use your own name:
 
     Add and change these lines to `~/.dotfiles/config/personal.sh`:
 
@@ -55,11 +41,18 @@ These are the steps for installing a clean machine:
         export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
         export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
 
-9. Celebrate!
 
 ## Config
 
-Here are some more things you can do.
+
+| Directory | Description                |
+| --------- | -------------------------- |
+| bin       | executables                |
+| config    | zsh and bash configuration |
+| iterm2    | iterm2 configuration       |
+| rc        | all the dotfiles           |
+| script    | private helper scripts     |
+
 
 ### Vim
 
@@ -97,51 +90,37 @@ Add as many directories as you like.
 
 ### Fonts
 
-I'm using DejaVuSansMono as font. You can download it [here](http://dejavu-fonts.org/wiki/Download).
-
-Programmers can be very anal about fonts, so if you don't like it, feel free to use something
-different.
-
-My DejaVuSansMono, including the [powerline](https://github.com/Lokaltog/vim-powerline)
-patch is included for convenience.
-
-### More programs.
-
-For my own convenience, here are some extra apps I tend to want on my machine.
-
-    brew install mysql postgresql sqlite \
-      mercurial go elixir node \
-      imagemagick graphviz \
-      cloc htop-osx
-
-**NB** Don't forget to read the output and follow the instructions.
-
-Some Ruby related stuff:
-
-    curl get.pow.cx | sh
-    gem install bundler pry pry-doc powder
+I'm using the [Hack font](http://sourcefoundry.org/hack/). If this one is not to
+your liking, [here are a bunch more](https://github.com/powerline/fonts).
 
 ### Aliases
 
 There are a lot of aliases in my dotfiles.
 Here are the ones I use on a daily basis:
 
-* `aa` - `git add --all && git status -sb`
-* `c` - `git commit`
-* `p` - `git push`
-* `st` - `git status`
-* `f` - `git fetch --all && git status`
-* `up` - `git pull --ff-only`
-* `upstash` - `git stash && git pull --ff-only && git stash pop`
-* `unstage` - an autocompletable version of `git reset HEAD --`
-* `co` - `git checkout`
-* `d` - `git diff`
-* `dc` - `git diff --cached`
-* `m` - `macvim --remote-silent`
-* `b` - a function that does `bundle check && bundle install` in a clever way
-* `be` - `bundle exec`
-* `rdm` - `rake db:migrate db:test:prepare`
-* `l` - `ls -FhAlo`
+
+| Alias     | Command                                            | Description                                       |
+| --------- | -------------------------------------------------- | ------------------------------------------------- |
+| `l`       | `ls -FhAlo`                                        | List only things that are not the same everywhere |
+| `st`      | `git status`                                       |                                                   |
+| `aa`      | `git add --all && git status -sb`                  | Add all files and show them                       |
+| `c`       | `git commit`                                       |                                                   |
+| `p`       | `git push`                                         |                                                   |
+| `gf`      | `git fetch --all && git status`                    | Get everything locally, safe to run whenever      |
+| `up`      | `git pull --ff-only`                               | git pull only if it's ~straight~ fast forward     |
+| `upstash` | `git stash && git pull --ff-only && git stash pop` | yeah....                                          |
+| `unstage` | `git reset HEAD --`                                | filenames autocomplete after this                 |
+| `co`      | `git checkout`                                     |                                                   |
+| `d`       | `git diff`                                         | what changes are unstaged?                        |
+| `dc`      | `git diff --cached`                                | what changes are staged for commit?               |
+| `m`       | `macvim --remote-silent`                           | opens a file in existing macvim window            |
+| `b`       | `bundle install`                                   | with some extra smart to improve speed            |
+| `be`      | `bundle exec`                                      | be rake, or be something else                     |
+| `rdm`     | `rake db:migrate db:test:prepare`                  | get your database in check                        |
+| `la`      | ...                                                | shows a pretty graph of your git commits          |
+| `amend`   | `git commit --amend`                               | Edit the last commit                              |
+
+Have a look at `rc/gitconfig` and `config/global.sh` for more information.
 
 ## Credits
 
