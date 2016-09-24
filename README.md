@@ -119,8 +119,9 @@ Here are the ones I use on a daily basis:
 | `rdm`     | `rake db:migrate db:test:prepare`                  | get your database in check                        |
 | `la`      | ...                                                | shows a pretty graph of your git commits          |
 | `amend`   | `git commit --amend`                               | Edit the last commit                              |
+| `psg`     | `ps aux grep`                                      | But without grep itself and with highlighting     |
 
-Have a look at `rc/gitconfig` and `config/global.sh` for more information.
+Have a look at `rc/gitconfig` and `config/global.sh` for more commands.
 
 ## Credits
 

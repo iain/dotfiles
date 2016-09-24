@@ -49,7 +49,7 @@ alias rr='mkdir -p tmp && touch tmp/restart.txt'
 alias cu='bundle exec cucumber -r features'
 alias wip='cu --profile wip'
 alias specdoc='time rspec -fd'
-alias s='rspec --require ~/.dotfiles/script/rspec_focus --order default --color --tty'
+alias rspec_focus='_spring rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
 alias be='bundle exec'
 alias irb='pry'
 alias guard='bundle exec guard'
@@ -84,13 +84,39 @@ alias push='git push'
 alias po='powder open'
 
 
-function r() {
-  if [ -f "./script/rails" ]; then
-    ./script/rails $*
+# uses spring if there is a binstub, otherwise, just use bundle exec
+function _spring() {
+  if [ -f "./bin/spring" ]; then
+    ./bin/spring $*
   else
-    ./bin/rails $*
+    bundle exec $*
   fi
 }
+
+function r() {
+  _spring rails $*
+}
+
+# the following overrides existing ruby commands to hook up into Spring
+# this might not be to your liking.
+
+function spring() {
+  if [ -f "./bin/spring" ]; then
+    ./bin/spring $*
+  else
+    bundle exec $*
+  fi
+}
+
+
+function rspec() {
+  _spring rspec $*
+}
+
+function rake() {
+  _spring rake $*
+}
+
 # checks to see if bundler is installed, if it isn't it will install it
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec
@@ -136,6 +162,8 @@ function psr {
   ps aux | grep -v "Pow" | grep "[$FIRST]$REST"
 }
 
+# this disables `git commit -m` if you want to get rid of your crappy commit message habit.
+
 # function git {
 #   args="$@";
 #   if [[ -z $(grep "commit" <<< "$args") ]]; then
@@ -149,3 +177,7 @@ function psr {
 #     fi
 #   fi
 # }
+
+# Use VIM for reading manpages.
+export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
+export SKIP=AuthorEmail,AuthorName
