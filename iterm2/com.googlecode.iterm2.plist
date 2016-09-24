@@ -828,6 +828,8 @@
 	<string>1</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/Documents</string>
+	<key>NSNavPanelExpandedSizeForOpenMode</key>
+	<string>{712, 448}</string>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
@@ -874,9 +876,11 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>796 148 748 391 0 0 1680 1027 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>177 739 606 456 0 0 1920 1200 </string>
+	<string>134 590 606 456 0 0 1680 1050 </string>
+	<key>NSWindow Frame SharedPreferences</key>
+	<string>397 464 796 473 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1920 1200 0 0 1920 1177 </string>
+	<string>226 141 1675 1036 0 0 1920 1177 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1521,11 +1525,11 @@
 			<key>Name</key>
 			<string>ZSH</string>
 			<key>Non Ascii Font</key>
-			<string>DejaVuSansMono 15</string>
+			<string>Hack-Regular 15</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>DejaVuSansMono 15</string>
+			<string>Hack-Regular 15</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1699,7 +1703,7 @@
 			<key>Visual Bell</key>
 			<false/>
 			<key>Window Type</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>Working Directory</key>
 			<string>/Users/iain</string>
 		</dict>
@@ -3251,8 +3255,12 @@
 			<string>/Users/iain</string>
 		</dict>
 	</array>
+	<key>NoSyncConfirmBeta</key>
+	<true/>
 	<key>NoSyncHaveShownPromoWithId_4</key>
 	<true/>
+	<key>NoSyncInstallationId</key>
+	<string>36624CB7-8D63-488F-A8EC-9B79C8722ABC</string>
 	<key>NoSyncLastTipTime</key>
 	<real>477719496.33530098</real>
 	<key>NoSyncNeverRemindPrefsChangesCopy</key>
@@ -3335,7 +3343,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/iain/.dotfiles/iterm2</string>
+	<string>~/.dotfiles/iterm2</string>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -3353,15 +3361,17 @@
 	<key>SUFeedAlternateAppNameKey</key>
 	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/testing3.xml</string>
+	<string>https://iterm2.com/appcasts/testing.xml?shard=99</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-04-03T18:48:31Z</date>
+	<date>2016-09-24T01:03:58Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
 	<false/>
+	<key>ShowFullScreenTabBar</key>
+	<true/>
 	<key>ShowPaneTitles</key>
 	<false/>
 	<key>SmartPlacement</key>
@@ -3412,7 +3422,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>2.9.20160313</string>
+	<string>3.0.10</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
