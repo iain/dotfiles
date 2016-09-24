@@ -25,7 +25,7 @@ Plugin 'Syntastic'
 Plugin 'tpope/vim-fugitive'
 
 " Colorschemes
-Plugin 'wgibbs/vim-irblack'
+Plugin 'twerth/ir_black'
 Plugin 'vim-scripts/tir_black'
 
 " Syntax & Language Support
@@ -44,6 +44,9 @@ Plugin 'elixir-lang/vim-elixir'
 Plugin 'pangloss/vim-javascript'
 Plugin 'isRuslan/vim-es6'
 Plugin 'mxw/vim-jsx'
+Plugin 'digitaltoad/vim-pug'
+Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-rails'
 
 " Other
 Plugin 'csexton/trailertrash.vim'
@@ -53,14 +56,13 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-vinegar'
 Plugin 'michaeljsmith/vim-indent-object'
-Plugin 'guns/vim-clojure-static'
+Plugin 'janko-m/vim-test'
 Plugin 'luochen1990/rainbow'
-Plugin 'thoughtbot/vim-rspec'
+Plugin 'jlanzarotta/bufexplorer'
 
 " Always last
 Plugin 'Lokaltog/vim-powerline'
@@ -85,12 +87,13 @@ filetype plugin indent on
 if has("gui_macvim")
   set antialias                      " Pretty
   set guioptions=Ace                 " No menubar, toolbar or scrollbars, as minimal as possible
-  set guifont=Dejavu\ Sans\ Mono:h15 " Get Dejavu Sans mono here: http://dejavu-fonts.org/
-  colorscheme ir_black               " Pastel colors
+  set guifont=Hack:h15               " Get Hack here: http://sourcefoundry.org/hack/
+  colorscheme ir_dark                " Pastel colors
   set fuoptions=maxvert,maxhorz      " Fixes Full Screen on OSX
   " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
   "   defaults write org.vim.MacVim MMNativeFullScreen 0
   " Press Ctrl+Cmd+F to go full screen
+
 else
   colorscheme tir_black " Use Terminal version of ir_black
 end
@@ -98,7 +101,7 @@ end
 set vb t_vb=               " Turn off beep
 set lazyredraw             " Don't redraw during macro execution
 set synmaxcol=512          " Stop syntax highlighting for long lines
-set relativenumber         " Relative line numbering
+" set relativenumber         " Relative line numbering
 set number                 " Relative line numbering
 set nowrap                 " No wrapping by default
 set scrolloff=4            " Keep a few lines above and below current line
@@ -127,8 +130,9 @@ set tabstop=2
 set smartcase
 set hlsearch
 
-let ruby_no_expensive = 1 " Differentiate between do..end and class..end is slow
-let ruby_operators = 0    " Highlight Ruby operators
+let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is slow
+let g:ruby_operators = 1    " Highlight Ruby operators
+let g:ruby_indent_block_style = 'do'
 
 let g:netrw_nobeval = 1
 
@@ -196,12 +200,12 @@ nnoremap <S-k> kJ
 nnoremap <cr> :nohlsearch<cr>
 
 " highlight the 100th character
-highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%101v', 100)
+" highlight ColorColumn ctermbg=magenta
+" call matchadd('ColorColumn', '\%101v', 100)
 
 " In normal mode, space will start command mode.
-nnoremap <space> :
-vnoremap <space> :
+nnoremap <space> :e 
+vnoremap <space> :e 
 
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :BufExplorer<cr>
@@ -213,10 +217,8 @@ cnoremap %% <C-R>=expand('%:h').'/'<cr>
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 
-" A common typo is ":E" when actually meaning ":e" and not ":Explore" or
-" ":Errors".
+" A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
 cnoreabbrev E e
-
 
 " Insert hex keys
 inoremap <silent> <F12> <ESC>:r ! ruby -r securerandom -e "print SecureRandom.hex(32)"<CR>kJ
@@ -287,7 +289,7 @@ endfunction
 " Convert local variable to RSpec let block
 function! PromoteToLet()
   :normal! dd
-  :exec '?^\s*describe\|context\|RSpec\.describe\>'
+  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
   :normal! p
   :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
   :normal ==
@@ -386,12 +388,20 @@ let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
+" let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
+let g:syntastic_ruby_mri_exec = '~/.rubies/ruby-2.3.1/bin/ruby'
+let g:syntastic_enable_elixir_checker = 1
 
-" vim-rspec configuration
-let g:rspec_runner = "os_x_iterm2"
-let g:rspec_command = "bundle exec rspec {spec}"
-map <Leader>t :w<cr>:call RunCurrentSpecFile()<cr>
-map <Leader>T :w<cr>:call RunNearestSpec()<cr>
-map <Leader>l :w<cr>:call RunLastSpec()<cr>
-map <Leader>r :w<cr>:call RunAllSpecs()<cr>
+" Map prev and back mac shortcuts to traverse buffers
+map <D-[> :bprevious<cr>
+map <D-]> :bnext<cr>
+
+" vim-test configuration
+let test#strategy = "iterm"
+" let g:test#preserve_screen = 1
+let test#ruby#rspec#executable = 'rspec_focus'
+nmap <silent> <leader>t :w<CR>:TestFile<CR>
+nmap <silent> <leader>T :w<CR>:TestNearest<CR>
+nmap <silent> <leader>l :w<CR>:TestSuite --only-failures<CR>
+nmap <silent> <leader>r :w<CR>:TestSuite<CR>
+nmap <silent> <leader>g :TestVisit<CR>

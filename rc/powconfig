@@ -4,7 +4,7 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Use chruby if available
 if [ -f /usr/local/share/chruby/chruby.sh ]; then
   source /usr/local/share/chruby/chruby.sh
-  chruby 2.3.0
+  chruby 2.3.1
 fi
 
 # Don't stop, timeout is 7 days

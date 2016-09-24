@@ -29,3 +29,8 @@ for PARENT_DIR in ${PROJECT_PARENT_DIRS[@]} ; do
     done
   fi
 done
+
+# https://www.npmjs.com/package/n
+if [[ -d "$HOME/.node-n" ]]; then
+  export N_PREFIX="$HOME/.node-n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+fi

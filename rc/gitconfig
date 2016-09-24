@@ -42,13 +42,8 @@
   autosetuprebase = always
 [http]
 	postBuffer = 100m
-[url "git://github.com/"]
-  # Read-only
-  insteadOf = gh:
-[url "git@github.com:"]
-  # With write access
-  insteadOf = wgh:
-[url "git@heroku.com:"]
-  insteadOf = heroku:
 [credential]
   helper = osxkeychain
+[color "diff"]
+  old = red strike
+  new = green italic

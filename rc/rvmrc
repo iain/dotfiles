@@ -1,7 +1,0 @@
-rvm_gemset_create_on_use_flag=1
-rvm_pretty_print_flag=1
-rvm_make_flags=( -j 4 )
-rvm_project_rvmrc_default=1
-rvm_trust_rvmrcs_flag=1
-rvm_project_rvmrc=1
-rvm_install_on_use_flag=1
