@@ -4,6 +4,9 @@
 set nocompatible
 filetype off
 
+" hacky way of disabling cucumber syntastic, it's too damn slow
+let g:loaded_syntastic_cucumber_cucumber_checker = 1
+
 let needsToInstallBundles=0
 if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
   echo "\nInstalling Vim dependencies... Please be patient!\n"
@@ -64,8 +67,9 @@ Plugin 'janko-m/vim-test'
 Plugin 'luochen1990/rainbow'
 Plugin 'jlanzarotta/bufexplorer'
 
-" Always last
-Plugin 'Lokaltog/vim-powerline'
+" " Always last
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
 
 call vundle#end()
 filetype plugin indent on
@@ -142,8 +146,6 @@ set balloondelay=100000
 setlocal balloonexpr=
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
-
-let g:Powerline_symbols = 'fancy' " Use fancy symbols in vim-powerline
 
 set formatprg=par\ -w80\ -q
 
@@ -381,16 +383,18 @@ nmap <Leader>a: :call DoAlignRubyHashes()<cr>
 vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 
 " Syntastic configuration
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+let g:syntastic_echo_current_error = 1
 " let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
 let g:syntastic_ruby_mri_exec = '~/.rubies/ruby-2.3.1/bin/ruby'
 let g:syntastic_enable_elixir_checker = 1
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "W"
+
+let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{W:%w}]'
 
 " Map prev and back mac shortcuts to traverse buffers
 map <D-[> :bprevious<cr>
@@ -398,10 +402,24 @@ map <D-]> :bnext<cr>
 
 " vim-test configuration
 let test#strategy = "iterm"
-" let g:test#preserve_screen = 1
+let g:test#preserve_screen = 1
 let test#ruby#rspec#executable = 'rspec_focus'
+let test#ruby#cucumber#executable = 'cucumber_focus'
 nmap <silent> <leader>t :w<CR>:TestFile<CR>
 nmap <silent> <leader>T :w<CR>:TestNearest<CR>
 nmap <silent> <leader>l :w<CR>:TestSuite --only-failures<CR>
 nmap <silent> <leader>r :w<CR>:TestSuite<CR>
 nmap <silent> <leader>g :TestVisit<CR>
+
+set laststatus=2
+set statusline=\ %f     " filename
+set statusline+=%*\ %#warningmsg#
+set statusline+=%m      " modified flag
+set statusline+=%*      " reset styles
+set statusline+=\ %r    " read only flag
+set statusline+=%=      " go right
+set statusline+=%y      " filetype
+set statusline+=\ %v,   " cursor column
+set statusline+=%l/%L   " cursor line/total lines
+set statusline+=\ %#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
