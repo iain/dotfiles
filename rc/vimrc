@@ -395,6 +395,7 @@ let g:syntastic_error_symbol = "✗"
 let g:syntastic_warning_symbol = "W"
 
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{W:%w}]'
+let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
 
 " Map prev and back mac shortcuts to traverse buffers
 map <D-[> :bprevious<cr>
