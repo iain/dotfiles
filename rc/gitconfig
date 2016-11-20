@@ -24,6 +24,7 @@
   wtf = "!git commit -m \"$(curl -s whatthecommit.com/index.txt)\""
   scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
   ready = rebase -i @{u}
+  initial-commit = commit --allow-empty --message \"Initial Commit\"
 [color]
   ui = true
   diff = auto
