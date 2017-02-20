@@ -63,8 +63,17 @@ Delete (or move) your `~/.vim` directory to let it install.
 
 ### Fonts
 
-I'm using the [Hack font](http://sourcefoundry.org/hack/). If this one is not to
-your liking, [here are a bunch more](https://github.com/powerline/fonts).
+Get a couple of really good Terminal fonts with powerline support baked in:
+
+```
+git clone https://github.com/powerline/fonts.git ~/fonts
+cd ~/fonts
+./install
+cd
+rm -r ~/fonts
+```
+
+My personal preference is "Hack".
 
 ### Aliases
 

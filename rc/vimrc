@@ -91,7 +91,7 @@ filetype plugin indent on
 if has("gui_macvim")
   set antialias                      " Pretty
   set guioptions=Ace                 " No menubar, toolbar or scrollbars, as minimal as possible
-  set guifont=Hack:h14               " Get Hack here: http://sourcefoundry.org/hack/
+  set guifont=Hack\ Regular:h15      " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
   colorscheme ir_dark                " Pastel colors
   set fuoptions=maxvert,maxhorz      " Fixes Full Screen on OSX
   " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
