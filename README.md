@@ -80,31 +80,30 @@ My personal preference is "Hack".
 There are a lot of aliases in my dotfiles.
 Here are the ones I use on a daily basis:
 
-
-| Alias     | Command                                            | Description                                       |
-| --------- | -------------------------------------------------- | ------------------------------------------------- |
-| `l`       | `ls -FhAlo`                                        | List only things that are not the same everywhere |
-| `st`      | `git status`                                       |                                                   |
-| `aa`      | `git add --all && git status -sb`                  | Add all files and show them                       |
-| `c`       | `git commit`                                       |                                                   |
-| `p`       | `git push`                                         |                                                   |
-| `gf`      | `git fetch --all && git status`                    | Get everything locally, safe to run whenever      |
-| `up`      | `git pull --ff-only`                               | git pull only if it's ~straight~ fast forward     |
-| `upstash` | `git stash && git pull --ff-only && git stash pop` | yeah....                                          |
-| `unstage` | `git reset HEAD --`                                | filenames autocomplete after this                 |
-| `co`      | `git checkout`                                     |                                                   |
-| `d`       | `git diff`                                         | what changes are unstaged?                        |
-| `dc`      | `git diff --cached`                                | what changes are staged for commit?               |
-| `m`       | `macvim --remote-silent`                           | opens a file in existing macvim window            |
-| `b`       | `bundle install`                                   | with some extra smart to improve speed            |
-| `be`      | `bundle exec`                                      | be rake, or be something else                     |
-| `rdm`     | `rake db:migrate db:test:prepare`                  | get your database in check                        |
-| `la`      | ...                                                | shows a pretty graph of your git commits          |
-| `amend`   | `git commit --amend`                               | Edit the last commit                              |
-| `psg`     | `ps aux grep`                                      | But without grep itself and with highlighting     |
+| Alias     | Command                             | Description                                       |
+| --------- | ----------------------------------- | ------------------------------------------------- |
+| `l`       | `ls -FhAlo`                         | List only things that are not the same everywhere |
+| `st`      | `git status`                        |                                                   |
+| `aa`      | `git add --all && git status -sb`   | Add all files and show them                       |
+| `c`       | `git commit`                        |                                                   |
+| `p`       | `git push`                          |                                                   |
+| `gf`      | `git fetch --all && git status`     | Get everything locally, safe to run whenever      |
+| `up`      | `git pull --ff-only`                | git pull only if it's ~straight~ fast forward     |
+| `upstash` | `git stash && up && git stash pop`  | yeah....                                          |
+| `unstage` | `git reset HEAD --`                 | filenames autocomplete after this                 |
+| `co`      | `git checkout`                      |                                                   |
+| `d`       | `git diff`                          | what changes are unstaged?                        |
+| `dc`      | `git diff --cached`                 | what changes are staged for commit?               |
+| `m`       | `macvim --remote-silent`            | opens a file in existing macvim window            |
+| `b`       | function...                         | smart bundle install and bundle exec (optionally) |
+| `r`       | `rails`                             | Uses Spring or Bundler if available               |
+| `rdm`     | `rake db:migrate db:test:prepare`   | get your database in check                        |
+| `la`      | function...                         | shows a pretty graph of your git commits          |
+| `ll`      | function...                         | shows a pretty graph of this branch only          |
+| `amend`   | `git commit --amend`                | Edit the last commit                              |
+| `psg`     | `ps aux | grep`                     | But without grep itself and with highlighting     |
 
 Have a look at `rc/gitconfig` and `config/global.sh` for more commands.
-
 
 ### Ruby
 
@@ -121,7 +120,12 @@ Then don't forget to add the version to `~/.dotfiles/config/personal.sh`
 chruby 2.3.1
 ```
 
-Both bash and zsh are configured to detect chruby, rbenv or rvm. Specifying which version to use is left up to you.
+Both bash and zsh are configured to detect chruby, rbenv or rvm. Specifying
+which version to use is left up to you.
+
+Common Ruby commands are wrapped in a function to be smart enough to use Spring
+or Bundler when possible. This means you can just type `rspec` and it will use
+`spring rspec` if that is available.
 
 ## Credits
 

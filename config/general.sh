@@ -138,7 +138,6 @@ function spring() {
   fi
 }
 
-
 function rspec() {
   _spring rspec $*
 }
