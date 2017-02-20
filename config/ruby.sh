@@ -1,8 +1,19 @@
-source /usr/local/share/chruby/chruby.sh
-chruby 2.3.1
+# Load a Ruby version manager
+if [[ -a /usr/local/share/chruby/chruby.sh ]]; then
+  source /usr/local/share/chruby/chruby.sh
+elif which rbenv > /dev/null; then
+  eval "$(rbenv init - zsh --no-rehash)";
+elif [ -s ~/.rvm/scripts/rvm ]; then
+  source ~/.rvm/scripts/rvm
+  __rvm_project_rvmrc
+fi
 
 # Setting the editor of choice
-export EDITOR='mvim'
+if which mvim > /dev/null; then
+  export EDITOR='mvim'
+else
+  export EDITOR='vim'
+fi
 export GIT_EDITOR='vim'
 export VISUAL=$EDITOR
 export SVN_EDITOR=$EDITOR
@@ -19,9 +30,8 @@ export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 # Ruby aliases
 alias rdm='rake db:migrate db:test:prepare'
 alias rr='mkdir -p tmp && touch tmp/restart.txt'
-# alias cu='bundle exec cucumber -r features'
-alias wip='cu --profile wip'
-alias specdoc='time rspec -fd'
+alias cu='cucumber'
+alias wip='cucumber --profile wip'
 alias rspec_focus='_spring rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
 alias be='bundle exec'
 alias irb='pry'
@@ -33,8 +43,10 @@ alias po='powder open'
 function _spring() {
   if [ -f "./bin/spring" ]; then
     ./bin/spring $*
-  else
+  elif [ -f "Gemfile" ]; then
     bundle exec $*
+  else
+    command $*
   fi
 }
 
@@ -67,11 +79,9 @@ function cucumber() {
 }
 alias cucumber_focus="cucumber -p all"
 
-# checks to see if bundler is installed, if it isn't it will install it
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec
 function b() {
-  gem which bundler > /dev/null 2>&1 || gem install bundler --no-ri --no-rdoc
   bundle check || bundle install -j4
   if [ $1 ]; then
     bundle exec $*

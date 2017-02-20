@@ -3,7 +3,7 @@
 > In Unix-like operating systems, any file or folder that starts with a dot character (for example, /home/user/.config), commonly called a dot file or dotfile, is to be treated as hidden.
 > A convention arose of using dotfile in the user's home directory to store per-user configuration or informational text.
 
-Here are the settings I use.
+Here are the settings I use. There are installation scripts for most things, so getting them should be easy.
 
 ## Installation
 
@@ -14,7 +14,7 @@ These are the steps for installing the essentials.
 3. Install [Homebrew](http://brew.sh/)
 4. Install some of the most often used programs:
 
-        brew install zsh git par the_silver_searcher tree
+        brew install zsh antigen git par the_silver_searcher tree
 
 5. Install the dotfiles:
 
@@ -34,16 +34,13 @@ These are the steps for installing the essentials.
 
 7. Configure Git to use your own name:
 
-    Add and change these lines to `~/.dotfiles/config/personal.sh`:
+    Add these `~/.dotfiles/config/personal.sh` and update them to your liking.
 
         export GIT_AUTHOR_NAME="Your Name"
         export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
-        export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
-        export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
 
 
 ## Config
-
 
 | Directory | Description                |
 | --------- | -------------------------- |
@@ -54,39 +51,15 @@ These are the steps for installing the essentials.
 | script    | private helper scripts     |
 
 
+`~/.dotfiles/config/personal.sh` is where I add aliases that don't make sense
+for the rest of the world, and where I modify $PATH, depending on what I
+install.
+
 ### Vim
 
 Vim will automatically install itself when you start Vim for the first time.
 
 Delete (or move) your `~/.vim` directory to let it install.
-
-### Personal Configuration
-
-You can put configuration options that are personal, like custom paths, and
-other environment variables in one of these files:
-
-* `config/personal.sh` (will be loaded in both Bash and ZSH)
-* `config/personal.zsh` (ZSH specific configuration)
-* `config/personal.bash` (Bash specific configuration)
-
-### Project aliases
-
-This scripts adds aliases for your project directories, but you'll have to tell
-it where your projects can be found. There are however differences in ZSH and
-Bash syntax. Use the personal configuration files as mentioned above to set
-them.
-
-For ZSH:
-
-    PROJECT_PARENT_DIRS+=("$HOME/Work")
-    PROJECT_PARENT_DIRS+=("$HOME/Personal")
-
-For Bash:
-
-    PROJECT_PARENT_DIRS[0]="$HOME/Work"
-    PROJECT_PARENT_DIRS[0]="$HOME/Personal"
-
-Add as many directories as you like.
 
 ### Fonts
 
@@ -123,9 +96,26 @@ Here are the ones I use on a daily basis:
 
 Have a look at `rc/gitconfig` and `config/global.sh` for more commands.
 
+
+### Ruby
+
+For installing Ruby, I prefer `ruby-install` and `chruby`.
+
+```
+$ brew install chruby ruby-install
+$ ruby-install ruby 2.3.1
+```
+
+Then don't forget to add the version to `~/.dotfiles/config/personal.sh`
+
+``` shell
+chruby 2.3.1
+```
+
+Both bash and zsh are configured to detect chruby, rbenv or rvm. Specifying which version to use is left up to you.
+
 ## Credits
 
-Thanks everybody who puts their dotfiles online. I copied a lot from
-practically every repository.
+Thanks everybody who puts their dotfiles online. I copied a bunch from practically every repository.
 
 Feel free to use this or fork this. Additions are very welcome!
