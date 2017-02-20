@@ -25,6 +25,7 @@
   scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
   ready = rebase -i @{u}
   initial-commit = commit --allow-empty --message \"Initial Commit\"
+  delete-merged-branches = "!git branch --color=never --merged | grep -v master | grep -v '*' | xargs git branch -d"
 [color]
   ui = true
   diff = auto
@@ -42,7 +43,7 @@
 [branch]
   autosetuprebase = always
 [http]
-	postBuffer = 100m
+  postBuffer = 100m
 [credential]
   helper = osxkeychain
 [color "diff"]
