@@ -53,7 +53,7 @@ Plugin 'tpope/vim-rails'
 
 " Other
 Plugin 'csexton/trailertrash.vim'
-Plugin 'edsono/vim-matchit'
+Plugin 'adelarsq/vim-matchit'
 Plugin 'godlygeek/tabular'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
