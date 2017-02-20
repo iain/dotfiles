@@ -1,12 +1,16 @@
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+export PATH="/usr/local/bin:$PATH"
 export PATH=$HOME/.dotfiles/bin:$PATH
 
 # =============================================================================
 # General config
 # =============================================================================
 
+if which gls > /dev/null; then
+  alias ls='gls --group-directories-first --color=auto'
+fi
 alias l='ls -FhAlo'
 alias ltr='ls -lt'
 alias lth='l -t|head'
