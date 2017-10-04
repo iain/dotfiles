@@ -1,111 +1,107 @@
 " This vimrc automatically installs everything it needs.
 " To install, or reinstall, remove ~/.vim directory and open Vim.
 
-set nocompatible
+if &compatible
+  set nocompatible
+endif
+
 filetype off
 
-" hacky way of disabling cucumber syntastic, it's too damn slow
-let g:loaded_syntastic_cucumber_cucumber_checker = 1
-
 let needsToInstallBundles=0
-if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
+if !filereadable(expand("~/.vim/autoload/plug.vim"))
   echo "\nInstalling Vim dependencies... Please be patient!\n"
   silent !mkdir -p ~/.vim/tmp
   silent !mkdir -p ~/.vim/swap
   silent !mkdir -p ~/.vim/undo
-  silent !mkdir -p ~/.vim/bundle
   silent !mkfifo ~/.vim/commands-fifo
-  silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  " silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   let needsToInstallBundles=1
 endif
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
 " Do these first, because other plugins depend on them
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'Syntastic'
-Plugin 'tpope/vim-fugitive'
+Plug 'VundleVim/Vundle.vim'
+" Plug 'Syntastic'
+Plug 'tpope/vim-fugitive'
+Plug 'w0rp/ale'
 
 " Colorschemes
-Plugin 'twerth/ir_black'
-Plugin 'vim-scripts/tir_black'
+Plug 'twerth/ir_black'
+Plug 'nanotech/jellybeans.vim'
 
 " Syntax & Language Support
-Plugin 'hail2u/vim-css3-syntax'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'othree/html5-syntax.vim'
-Plugin 'slim-template/vim-slim'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-cucumber'
-Plugin 'tpope/vim-haml'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'vim-scripts/VimClojure'
-Plugin 'Keithbsmiley/rspec.vim'
-Plugin 'elixir-lang/vim-elixir'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-rails'
 
-Plugin 'pangloss/vim-javascript'
-Plugin 'isRuslan/vim-es6'
-Plugin 'mxw/vim-jsx'
-Plugin 'digitaltoad/vim-pug'
-Plugin 'guns/vim-clojure-static'
-Plugin 'tpope/vim-rails'
+" Miscellany
+Plug 'csexton/trailertrash.vim'
+Plug 'adelarsq/vim-matchit'
+Plug 'godlygeek/tabular'
+Plug 'kien/ctrlp.vim'
+Plug 'mileszs/ack.vim'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'janko-m/vim-test'
+Plug 'luochen1990/rainbow'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-rhubarb' " Gbrowse
 
-" Other
-Plugin 'csexton/trailertrash.vim'
-Plugin 'adelarsq/vim-matchit'
-Plugin 'godlygeek/tabular'
-Plugin 'kien/ctrlp.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-vinegar'
-Plugin 'michaeljsmith/vim-indent-object'
-Plugin 'janko-m/vim-test'
-Plugin 'luochen1990/rainbow'
-Plugin 'jlanzarotta/bufexplorer'
+" Under consideration
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-eunuch'
+Plug 'mbbill/undotree'
+Plug 'vim-scripts/Enter-Indent'
+Plug 'rking/vim-detailed'
 
-" " Always last
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
-
-call vundle#end()
-filetype plugin indent on
+call plug#end()
 
 if needsToInstallBundles == 1
   echo "\nInstalling plugins.\n"
-  :PluginInstall
+  :PlugInstall
   echo "\nInstalled.\n"
 endif
 
+
+" Trying to get rid of SEGVs
+" https://github.com/junegunn/vim-plug/wiki/faq#vim-caught-deadly-signal-segv
+" let g:plug_threads = 1
+
 filetype plugin indent on
-
-
 
 " ==========================
 " SETTINGS
 " ==========================
 
-if has("gui_macvim")
-  set antialias                      " Pretty
-  set guioptions=Ace                 " No menubar, toolbar or scrollbars, as minimal as possible
-  set guifont=Hack\ Regular:h15      " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
-  colorscheme ir_dark                " Pastel colors
-  set fuoptions=maxvert,maxhorz      " Fixes Full Screen on OSX
-  " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
-  "   defaults write org.vim.MacVim MMNativeFullScreen 0
-  " Press Ctrl+Cmd+F to go full screen
+" theme settings
+let g:jellybeans_use_gui_italics = 0
+" let g:jellybeans_overrides = { 'background': { 'guibg': '000000' } }
+let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '232323' } }
+let g:jellybeans_background_color = '232323'
 
-  " Those balloon things are annoying as hell
-  set noballooneval
-  set balloondelay=100000
-  setlocal balloonexpr=
-else
-  colorscheme tir_black " Use Terminal version of ir_black
-end
+colorscheme jellybeans
 
+set antialias                 " Pretty
+set guioptions=Ace            " No menubar, toolbar or scrollbars, as minimal as possible
+set guifont=Hack\ Regular:h13 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
+set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
+" If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
+"   defaults write org.vim.MacVim MMNativeFullScreen 0
+" Press Ctrl+Cmd+F to go full screen
+
+" Turn off balloons
+set noballooneval
+set balloondelay=100000
+setlocal balloonexpr=
+
+set t_Co=256               " 256-bit color
 set vb t_vb=               " Turn off beep
 set lazyredraw             " Don't redraw during macro execution
 set synmaxcol=512          " Stop syntax highlighting for long lines
@@ -127,10 +123,10 @@ set noesckeys              " Get rid of the delay when hitting esc!
 set gdefault               " assume the /g flag on :s substitutions to replace all matches in a line
 
 " Indenting always 2 spaces, sorry Python
+set smartindent
 set cindent
 set expandtab
 set shiftwidth=2
-set smartindent
 set softtabstop=2
 set tabstop=2
 
@@ -138,20 +134,32 @@ set tabstop=2
 set smartcase
 set hlsearch
 
+" also use jsx syntax in .js files
+let g:jsx_ext_required = 0
+
 let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is slow
 let g:ruby_operators = 1    " Highlight Ruby operators
 let g:ruby_indent_block_style = 'do'
 
-let g:netrw_nobeval = 1
+" let g:netrw_nobeval = 1
 
-let g:ackprg = 'ag --nogroup --nocolor --column'
+" The Silver Searcher, source: https://robots.thoughtbot.com/faster-grepping-in-vim
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+  let g:ackprg = 'ag --nogroup --nocolor --column'
+  " Use K to search for word at current cursor
+  " nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+  " bind \ (backward slash) to grep shortcut
+  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+  nnoremap \ :Ag<SPACE>
+endif
 
 set formatprg=par\ -w80\ -q
-
-
-" ==========================
-" AUTOCOMMANDS
-" ==========================
 
 " When editing a file, always jump to the last known cursor position.
 autocmd BufReadPost *
@@ -160,35 +168,7 @@ autocmd BufReadPost *
       \ endif
 
 " Format xml files
-au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
-
-
-" Add rainbows and unicorns
-let g:rainbow_active = 1
-
-
-let g:rainbow_conf = {
-      \   'guifgs': ['lightblue', 'lightmagenta', 'cyan', 'lightyellow'],
-      \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-      \   'operators': '_,_',
-      \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-      \   'separately': {
-      \       '*': {},
-      \       'tex': {
-      \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-      \       },
-      \       'lisp': {
-      \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-      \       },
-      \       'vim': {
-      \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-      \       },
-      \       'html': {
-      \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-      \       },
-      \       'css': 0,
-      \   }
-      \}
+" au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 " ==========================
 " GENERAL KEY MAPPINGS
@@ -206,6 +186,8 @@ vmap <F2> :w !pbcopy<cr><cr>
 " in insert mode, jj goes to normal mode
 " if you ever need to type jj for real, type it slowly, like on old school mobile phones
 inoremap jj <ESC>
+inoremap jk <ESC>
+map <C-C> <ESC>
 
 " Directly switch between open splitted windows
 map <C-J> <C-W>j
@@ -336,47 +318,9 @@ function! EnableCucumberTables()
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>AlignCucumberTables()<cr>a
 endfunction
 au FileType cucumber call EnableCucumberTables()
+au FileType markdown call EnableCucumberTables()
 
-" Automatically align multiline hashes in Ruby (Ruby 1.9 syntax only).
 function! AlignRubyHashes()
-  " Only look for lines that start with a simple keyword, colon, space, and
-  " ending in a comma.
-  let p = '^\s*\w\+:\s.*,$'
-
-  " Don't do anything if there is no Tabularize, or there is no surrounding
-  " line that can be aligned with.
-  if exists(':Tabularize') && (getline(line('.')) =~# '^\s*\w\+:\s$') && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    " save current position because later command moves the cursor
-    let currentLine = line(".")
-    let currentCol = col(".")
-
-    call DoAlignRubyHashes()
-
-    " Since the current line cannot be aligned yet when it is too short, find
-    " a line to compare it with. This is either the previous line or the next
-    " line.
-    if (getline(currentLine-1) =~ p)
-      let compareLine = currentLine - 1
-    else
-      let compareLine = currentLine + 1
-    endif
-
-    " Calculate how many spaces to add.
-    let positionOfValues = strlen(matchstr(getline(compareLine), '^.*:\s\+'))
-    let missingSpaces = (positionOfValues - currentCol) + 1
-
-    " Add missing spaces
-    if missingSpaces > 0
-      exe currentLine.'s/$/'.repeat(' ', missingSpaces)
-    endif
-
-    " Set the cursor to the proper position
-    call cursor(currentLine, currentCol + missingSpaces)
-
-  endif
-endfunction
-
-function! DoAlignRubyHashes()
   let p = '^\s*\w\+:\s.*,$'
 
   " Calculate the range to act. Default Tabularize doesn't do this properly,
@@ -400,49 +344,136 @@ endfunction
 
 " Align after colons, but only the first one in the line,
 " In normal mode, determine range automatically
-nmap <Leader>a: :call DoAlignRubyHashes()<cr>
+nmap <Leader>a: :call AlignRubyHashes()<cr>
 " In visual mode, the range is already fixed
 vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 
-" Syntastic configuration
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_echo_current_error = 1
-" let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
-let g:syntastic_ruby_mri_exec = '~/.rubies/ruby-2.3.1/bin/ruby'
-let g:syntastic_enable_elixir_checker = 1
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_warning_symbol = "W"
+" linters and syntax checkers:
+let g:ale_sign_error   = ' •' " has U+2009 as space
+let g:ale_sign_warning = ' •'
+let g:ale_sign_column_always = 1
+hi link ALEErrorSign    Error
+hi link ALEWarningSign  Warning
+hi Error   cterm=bold gui=bold guibg=#232323 guifg=DarkRed
+hi Warning cterm=bold gui=bold
 
-let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{W:%w}]'
-let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
+let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
+let g:ale_ruby_rubocop_options = '-c ~/.dotfiles/rubocop/default.yml'
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+" let g:ale_lint_on_text_changed = 'normal'
+" Only run on save
+" let g:ale_lint_on_text_changed = 'never'
+" if you don't want linters to run on opening a file
+" let g:ale_lint_on_enter = 0
 
 " Map prev and back mac shortcuts to traverse buffers
 map <D-[> :bprevious<cr>
 map <D-]> :bnext<cr>
+
+nmap <silent> <D-k> <Plug>(ale_previous)
+nmap <silent> <D-j> <Plug>(ale_next)
 
 " vim-test configuration
 let test#strategy = "iterm"
 let g:test#preserve_screen = 1
 let test#ruby#rspec#executable = 'rspec_focus'
 let test#ruby#cucumber#executable = 'cucumber_focus'
-nmap <silent> <leader>t :w<CR>:TestFile<CR>
-nmap <silent> <leader>T :w<CR>:TestNearest<CR>
-nmap <silent> <leader>l :w<CR>:TestSuite --only-failures<CR>
-nmap <silent> <leader>r :w<CR>:TestSuite<CR>
+let test#elixir#exunit#options = '--stale'
+let test#elixir#exunit#options = {
+  \ 'suite':   '--stale',
+\}
+nmap <silent> <leader>t :up<CR>:TestFile<CR>
+nmap <silent> <leader>T :up<CR>:TestNearest<CR>
+nmap <silent> <leader>l :up<CR>:TestSuite --only-failures<CR>
+nmap <silent> <leader>r :up<CR>:TestSuite<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 
+" status line (using lightline)
 set laststatus=2
-set statusline=\ %f     " filename
-set statusline+=%*\ %#warningmsg#
-set statusline+=%m      " modified flag
-set statusline+=%*      " reset styles
-set statusline+=\ %r    " read only flag
-set statusline+=%=      " go right
-set statusline+=%y      " filetype
-set statusline+=\ %v,   " cursor column
-set statusline+=%l/%L   " cursor line/total lines
-set statusline+=\ %#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'jellybeans',
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'filename' ] ],
+      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'LightlineModified',
+      \   'readonly': 'LightlineReadonly',
+      \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename',
+      \   'fileformat': 'LightlineFileformat',
+      \   'filetype': 'LightlineFiletype',
+      \   'fileencoding': 'LightlineFileencoding',
+      \   'mode': 'LightlineMode',
+      \ },
+      \ 'component_expand': {
+      \   'syntastic': 'ALEGetStatusLine',
+      \ },
+      \ 'component_type': {
+      \   'syntastic': 'error',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+function! LightlineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
+endfunction
+
+" \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? @% : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+    let branch = fugitive#head()
+    return branch !=# '' ? ' '.branch : ''
+  endif
+  return ''
+endfunction
+
+function! LightlineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightlineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+" Add rainbows and unicorns
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+  \  'guifgs':  [ '#ea8986', '#a4c38c', '#ffc68d', '#a7cae3', '#e8cefb', '#00a7a0' ],
+  \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
+  \  'operators': '_,_',
+  \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+  \  'separately': {
+  \    '*': {},
+  \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
+  \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
+  \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+  \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+  \    'css': 0,
+  \  }
+  \}
