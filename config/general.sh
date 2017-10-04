@@ -15,10 +15,12 @@ alias l='ls -FhAlo'
 alias ltr='ls -lt'
 alias lth='l -t|head'
 alias lh='ls -Shl | less'
-alias tf='tail -f -n 100'
+alias tf='tail -f -n 200'
 alias less='less -R' # color codes in less
 alias m='mvim --remote-silent' # open file in existing mvim
 alias grep='grep --colour=always'
+alias ag='ag --path-to-ignore ~/.agignore'
+alias h='/usr/local/bin/heroku'
 
 # Use VIM for reading manpages.
 export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
@@ -73,6 +75,7 @@ unstage() {
 # Load a Ruby version manager
 if [[ -a /usr/local/share/chruby/chruby.sh ]]; then
   source /usr/local/share/chruby/chruby.sh
+  source /usr/local/share/chruby/auto.sh
 elif which rbenv > /dev/null; then
   eval "$(rbenv init - zsh --no-rehash)";
 elif [ -s ~/.rvm/scripts/rvm ]; then
@@ -104,7 +107,8 @@ alias rdm='rake db:migrate db:test:prepare'
 alias rr='mkdir -p tmp && touch tmp/restart.txt'
 alias cu='cucumber'
 alias wip='cucumber --profile wip'
-alias pening='cucumber --profile pending'
+alias dry_run="cucumber --profile all --dry-run"
+alias pending='cucumber --profile pending'
 alias rspec_focus='_spring rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
 alias be='bundle exec'
 alias irb='pry'
@@ -149,7 +153,20 @@ function rake() {
 function cucumber() {
   _spring cucumber $*
 }
-alias cucumber_focus="cucumber -p all"
+
+function cucumber_focus() {
+  ag "@focus" **/*.feature --max-count 1 --files-with-matches --silent --literal 2>&1 > /dev/null
+  if [ $? -eq 0 ]; then
+    cucumber --profile all --tag @focus $*
+  else
+    ag "@wip" **/*.feature --max-count 1 --files-with-matches --silent --literal 2>&1 > /dev/null
+    if [ $? -eq 0 ]; then
+      cucumber --profile wip $*
+    else
+      cucumber --profile all $*
+    fi
+  fi
+}
 
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec

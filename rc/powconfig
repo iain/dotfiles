@@ -1,16 +1,17 @@
-# Use rbenv if available
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# Use chruby if available
-if [ -f /usr/local/share/chruby/chruby.sh ]; then
+# Ruby version managers...
+if [[ -a /usr/local/share/chruby/chruby.sh ]]; then
   source /usr/local/share/chruby/chruby.sh
-  chruby 2.3.1
+elif which rbenv > /dev/null; then
+  eval "$(rbenv init -)";
+elif [ -s ~/.rvm/scripts/rvm ]; then
+  source ~/.rvm/scripts/rvm
+  __rvm_project_rvmrc
 fi
 
 # Don't stop, timeout is 7 days
-export POW_TIMEOUT=7*24*60*60
+# export POW_TIMEOUT=7*24*60*60
 
-export POW_WORKERS=8
+export POW_WORKERS=2
 
 # POW_BIN: the path to the pow binary. (This should be correctly configured for you.)
 # POW_DST_PORT: the public port Pow expects to be forwarded or otherwise proxied for incoming HTTP requests. Defaults to 80.

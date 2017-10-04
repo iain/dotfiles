@@ -36,3 +36,8 @@ begin
   AwesomePrint.pry!
 rescue LoadError
 end
+
+begin
+  require "addressable"
+rescue LoadError
+end

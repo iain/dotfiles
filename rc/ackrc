@@ -8,6 +8,7 @@
 --ignore-dir=log
 --ignore-dir=tmp
 --ignore-dir=coverage
+--ignore-file=match:.svg
 
 # Some files not usually covered by ack.
 --type-set=haml=.haml
