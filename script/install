@@ -2,6 +2,10 @@
 set -e
 set -u
 
+echo "Installing homebrew apps"
+brew tap Homebrew/bundle
+brew bundle
+
 mydir=`pwd`
 backup="$HOME/.dotfiles-backup-`date +%s`"
 

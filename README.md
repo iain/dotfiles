@@ -12,19 +12,17 @@ These are the steps for installing the essentials.
 1. Install [iTerm2](http://www.iterm2.com/)
 2. Install [MacVIM](http://macvim-dev.github.io/macvim/)
 3. Install [Homebrew](http://brew.sh/)
-4. Install some of the most often used programs:
-
-        brew install zsh antigen git par the_silver_searcher tree
-
-5. Install the dotfiles:
+4. Install the dotfiles and homebrew apps.
 
         git clone https://github.com/iain/dotfiles.git ~/.dotfiles
         cd ~/.dotfiles
         ./script/install
 
-    (This will backup any previous dotfiles you have.)
+    This will backup any previous dotfiles you have.
+    Also, check `Brewfile` to see which packages are going to be installed.
 
-6. Configure iTerm2:
+
+5. Configure iTerm2:
 
     * Open iTerm2.
     * Go to the Preferences (`⌘,`)
@@ -32,7 +30,7 @@ These are the steps for installing the essentials.
     * Fill in: `~/.dotfiles/iterm2`.
     * Restart iTerm2.
 
-7. Configure Git to use your own name:
+6. Configure Git to use your own name:
 
     Add these `~/.dotfiles/config/personal.sh` and update them to your liking.
 
@@ -111,13 +109,13 @@ For installing Ruby, I prefer `ruby-install` and `chruby`.
 
 ```
 $ brew install chruby ruby-install
-$ ruby-install ruby 2.3.1
+$ ruby-install ruby 2.4.2
 ```
 
 Then don't forget to add the version to `~/.dotfiles/config/personal.sh`
 
 ``` shell
-chruby 2.3.1
+chruby 2.4.2
 ```
 
 Both bash and zsh are configured to detect chruby, rbenv or rvm. Specifying
