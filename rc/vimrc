@@ -1,126 +1,109 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Iain's Vim configuration: ~/.vimrc
+"
 " This vimrc automatically installs everything it needs.
 " To install, or reinstall, remove ~/.vim directory and open Vim.
-
+"
 if &compatible
   set nocompatible
 endif
 
 filetype off
 
-let needsToInstallBundles=0
+let needsToInstallPlugins=0
 if !filereadable(expand("~/.vim/autoload/plug.vim"))
   echo "\nInstalling Vim dependencies... Please be patient!\n"
   silent !mkdir -p ~/.vim/tmp
   silent !mkdir -p ~/.vim/swap
   silent !mkdir -p ~/.vim/undo
   silent !mkfifo ~/.vim/commands-fifo
-  " silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  let needsToInstallBundles=1
+  let needsToInstallPlugins=1
 endif
 
 call plug#begin('~/.vim/plugged')
 
-" Do these first, because other plugins depend on them
-Plug 'VundleVim/Vundle.vim'
-" Plug 'Syntastic'
-Plug 'tpope/vim-fugitive'
-Plug 'w0rp/ale'
+Plug 'w0rp/ale'                           " Async Linter Engine
+Plug 'adelarsq/vim-matchit'               " % jumps between do/end etc
+Plug 'csexton/trailertrash.vim'           " hate trailing whitespace
+Plug 'godlygeek/tabular'                  " vertically align stuff
+Plug 'itchyny/lightline.vim'              " fancy statusbar
+Plug 'janko-m/vim-test'                   " quickly run tests in terminal
+Plug 'jlanzarotta/bufexplorer'            " lists open bufffers like netrw
+Plug 'kien/ctrlp.vim'                     " fuzzy search files
+Plug 'luochen1990/rainbow'                " rainbow parenthesis
+Plug 'michaeljsmith/vim-indent-object'    " defines textobjects based on indent-level
+Plug 'mileszs/ack.vim'                    " search contents of files with ack or ag
+Plug 'sheerun/vim-polyglot'               " contains a ton of syntax plugins
+Plug 'tomtom/tcomment_vim'                " quickly comment/uncomment code
+Plug 'tpope/vim-fugitive'                 " git integration
+Plug 'tpope/vim-rails'                    " rails integration
+Plug 'tpope/vim-rhubarb'                  " open file in github.com
+Plug 'tpope/vim-sensible'                 " sensible defaults
+Plug 'tpope/vim-unimpaired'               " handy toggles
+Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
+Plug 'tpope/vim-repeat'                   " improved repeat button .
+Plug 'tpope/vim-surround'                 " quickly change quotes/parens
 
-" Colorschemes
-Plug 'twerth/ir_black'
-Plug 'nanotech/jellybeans.vim'
+" Under evaluation
+" Plug 'mbbill/undotree'                    " shows your undotree
+" Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
+" Plug 'tpope/vim-eunuch'                   " unix commands like :Move
+" Plug 'tpope/vim-abolish'                  " abbreviations and case modifier
+" Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
 
-" Syntax & Language Support
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-rails'
-
-" Miscellany
-Plug 'csexton/trailertrash.vim'
-Plug 'adelarsq/vim-matchit'
-Plug 'godlygeek/tabular'
-Plug 'kien/ctrlp.vim'
-Plug 'mileszs/ack.vim'
-Plug 'tomtom/tcomment_vim'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vinegar'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'janko-m/vim-test'
-Plug 'luochen1990/rainbow'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-rhubarb' " Gbrowse
-
-" Under consideration
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-eunuch'
-Plug 'mbbill/undotree'
-Plug 'vim-scripts/Enter-Indent'
-Plug 'rking/vim-detailed'
+Plug 'nanotech/jellybeans.vim' " colorscheme
+" Plug 'twerth/ir_black'       " old colorscheme
 
 call plug#end()
 
-if needsToInstallBundles == 1
+if needsToInstallPlugins == 1
   echo "\nInstalling plugins.\n"
   :PlugInstall
   echo "\nInstalled.\n"
 endif
 
-
-" Trying to get rid of SEGVs
-" https://github.com/junegunn/vim-plug/wiki/faq#vim-caught-deadly-signal-segv
-" let g:plug_threads = 1
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim and Macvim (not neovim)
+"
 filetype plugin indent on
 
-" ==========================
-" SETTINGS
-" ==========================
+" for neovim, change these directories
+set backupdir=~/.vim/tmp/  " Keep backups in a central location
+set directory=~/.vim/swap/ " Keep swap files in a central location
+set undodir=~/.vim/undo    " Where to store undo history
 
-" theme settings
-let g:jellybeans_use_gui_italics = 0
-" let g:jellybeans_overrides = { 'background': { 'guibg': '000000' } }
-let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '232323' } }
-let g:jellybeans_background_color = '232323'
+set t_Co=256  " 256-bit color
+set vb t_vb=  " Turn off beeping
 
-colorscheme jellybeans
+" Remove tooltips
+set noballooneval
+set balloondelay=100000
+setlocal balloonexpr=
 
-set antialias                 " Pretty
+" set antialias                 " Turn on antialias
 set guioptions=Ace            " No menubar, toolbar or scrollbars, as minimal as possible
-set guifont=Hack\ Regular:h13 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
+set guifont=Hack\ Regular:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
 set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
 " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
 "   defaults write org.vim.MacVim MMNativeFullScreen 0
 " Press Ctrl+Cmd+F to go full screen
 
-" Turn off balloons
-set noballooneval
-set balloondelay=100000
-setlocal balloonexpr=
 
-set t_Co=256               " 256-bit color
-set vb t_vb=               " Turn off beep
-set lazyredraw             " Don't redraw during macro execution
-set synmaxcol=512          " Stop syntax highlighting for long lines
-" set relativenumber         " Relative line numbering
-set number                 " Relative line numbering
-set nowrap                 " No wrapping by default
-set scrolloff=4            " Keep a few lines above and below current line
-set equalalways            " create equally sized splits
-set splitbelow splitright  " split placement
-" set wildmode=longest,list  " Makes completion in command mode like bash
-set history=10000          " Keep a lot of stuff in history
-set backup                 " Make backups
-set backupdir=~/.vim/tmp/  " Keep backups in a central location
-set directory=~/.vim/swap/ " Keep swap files in a central location
-set undofile               " Keep undo history even after closing Vim
-set undodir=~/.vim/undo    " Where to store undo history
-set timeoutlen=500         " Don't wait so long for ambiguous leader keys
-set noesckeys              " Get rid of the delay when hitting esc!
-set gdefault               " assume the /g flag on :s substitutions to replace all matches in a line
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jellybean Colorscheme
+"
+let g:jellybeans_use_gui_italics = 0
+let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' } }
+let g:jellybeans_background_color = '151515'
+colorscheme jellybeans
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Formatting configuration
+"
+set smartcase
+set hlsearch
 
 " Indenting always 2 spaces, sorry Python
 set smartindent
@@ -130,64 +113,20 @@ set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 
-" Search
-set smartcase
-set hlsearch
-
-" also use jsx syntax in .js files
-let g:jsx_ext_required = 0
-
-let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is slow
-let g:ruby_operators = 1    " Highlight Ruby operators
-let g:ruby_indent_block_style = 'do'
-
-" let g:netrw_nobeval = 1
-
-" The Silver Searcher, source: https://robots.thoughtbot.com/faster-grepping-in-vim
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-  let g:ackprg = 'ag --nogroup --nocolor --column'
-  " Use K to search for word at current cursor
-  " nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-  " bind \ (backward slash) to grep shortcut
-  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-  nnoremap \ :Ag<SPACE>
+if executable('par')
+  set formatprg=par\ -w80\ -q
 endif
 
-set formatprg=par\ -w80\ -q
 
-" When editing a file, always jump to the last known cursor position.
-autocmd BufReadPost *
-      \ if line("'\"") > 1 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
-
-" Format xml files
-" au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
-
-" ==========================
-" GENERAL KEY MAPPINGS
-" ==========================
-
-" Rename :W to :w
-command! W :w
-
-" Use OSX pbpaste/pbcopy for F1/F2, for use in terminal
-nmap <F1> :set paste<cr>:r !pbpaste<cr>:set nopaste<cr>
-imap <F1> <Esc>:set paste<cr>:r !pbpaste<cr>:set nopaste<cr>
-nmap <F2> :.w !pbcopy<cr><cr>
-vmap <F2> :w !pbcopy<cr><cr>
-
-" in insert mode, jj goes to normal mode
-" if you ever need to type jj for real, type it slowly, like on old school mobile phones
-inoremap jj <ESC>
-inoremap jk <ESC>
-map <C-C> <ESC>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Window configuration
+"
+set number                 " Line numbering
+set nowrap                 " No wrapping by default
+set scrolloff=4            " Keep a few lines above and below current line
+set equalalways            " create equally sized splits
+set splitbelow splitright  " split placement
+" set relativenumber       " Relative line numbering
 
 " Directly switch between open splitted windows
 map <C-J> <C-W>j
@@ -195,45 +134,8 @@ map <C-H> <C-W>h
 map <C-L> <C-W>l
 map <C-K> <C-W>k
 
-" pressing j or k in a long wrapped will put cursor down/up one visual line
-nnoremap j gj
-nnoremap k gk
-
-" Shift+K becomes similar to Shift+J
-nnoremap <S-k> kJ
-
-" Remap return to clear search highlight
-nnoremap <cr> :nohlsearch<cr>
-
-" highlight the 100th character
-" highlight ColorColumn ctermbg=magenta
-" call matchadd('ColorColumn', '\%101v', 100)
-
-" In normal mode, space will start command mode.
-nnoremap <space> :e 
-vnoremap <space> :e 
-
-" Buffer Explorer opens with Ctrl+B
-nnoremap <C-B> :BufExplorer<cr>
-
 " %% will become the directory of the current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
-
-" Hooks up smart tab autocomplete behavior mentioned above
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-n>
-
-" A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
-cnoreabbrev E e
-
-" Insert hex keys
-inoremap <silent> <F12> <ESC>:r ! ruby -r securerandom -e "print SecureRandom.hex(32)"<CR>kJ
-
-" ==========================
-" LEADER KEYS
-" ==========================
-
-let mapleader = ","
 
 " Map ,e and ,v to open files in the same directory as the current file
 map <leader>e :edit %%
@@ -242,9 +144,87 @@ map <leader>m :vsplit %%
 map <leader>n :split %%
 
 
-" Custom functions
-map <leader>p :call PromoteToLet()<cr>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntax configuration
+"
+set lazyredraw     " Don't redraw during macro execution
+set synmaxcol=512  " Stop syntax highlighting for long lines
 
+let g:jsx_ext_required = 0  " also use jsx syntax in .js files
+let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is slow
+let g:ruby_operators = 1    " Highlight Ruby operators
+let g:ruby_indent_block_style = 'do'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General key remapping
+"
+let mapleader = ","
+
+" Allow :W to save
+command! W :w
+
+" A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
+cnoreabbrev E e
+
+" in insert mode, jj or jk goes to normal mode
+" if you ever need to type jj for real, type it slowly, like on old school mobile phones
+inoremap jj <ESC>
+inoremap jk <ESC>
+map <C-C> <ESC>
+
+" Shift+K becomes similar to Shift+J
+nnoremap <S-k> kJ
+
+" Remap return to clear search highlight
+nnoremap <cr> :nohlsearch<cr>
+
+" Open notes file
+map <Leader>q :split ~/Dropbox/notes.md<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Buffer configuration
+"
+set history=10000           " Keep a lot of stuff in history
+set backup                  " Make backups
+set undofile                " Keep undo history even after closing Vim
+set backupdir=~/.nvim/tmp/  " Keep backups in a central location
+set directory=~/.nvim/swap/ " Keep swap files in a central location
+set undodir=~/.nvim/undo    " Where to store undo history
+set timeoutlen=500          " Don't wait so long for ambiguous leader keys
+set gdefault                " assume the /g flag on :s substitutions to replace all matches in a line
+
+" Buffer Explorer opens with Ctrl+B
+nnoremap <C-B> :BufExplorer<cr>
+
+" When editing a file, always jump to the last known cursor position.
+autocmd BufReadPost *
+      \ if line("'\"") > 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autocomplete
+"
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <s-tab> <c-n>
+
+" Smart tab autocomplete behavior
+function! InsertTabWrapper()
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-p>"
+  endif
+endfunction
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vertical alignment configuration (using tabular)
+"
 " Align = signs
 nmap <Leader>a= :Tabularize /=<cr>
 vmap <Leader>a= :Tabularize /=<cr>gv
@@ -263,43 +243,6 @@ nmap <Leader>ac :Tabularize /#<cr>
 nmap <Leader>a{ :Tabularize /{<cr>
 vmap <Leader>a{ :Tabularize /{<cr>gv
 vmap <Leader>a{ :Tabularize /{<cr>gv
-
-" Fugitive (Git)
-map <Leader><Leader>c :Gcommit<cr>
-map <Leader><Leader>b :Gblame<cr>
-map <Leader><Leader>s :Gstatus<cr>
-map <Leader><Leader>w :Gwrite<cr>
-map <Leader><Leader>p :Git push<cr>
-map <Leader><Leader>f :Git fetch<cr>
-map <Leader><Leader>u :Git up<cr>
-
-" Open notes file
-map <Leader>q :split ~/Dropbox/notes.md<cr>
-
-
-
-" ==========================
-" FUNCTIONS
-" ==========================
-
-" Smart tab autocomplete behavior
-function! InsertTabWrapper()
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<c-p>"
-  endif
-endfunction
-
-" Convert local variable to RSpec let block
-function! PromoteToLet()
-  :normal! dd
-  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
-  :normal! p
-  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
-  :normal ==
-endfunction
 
 " Aligns tables in cucumber, from tim pope: https://gist.github.com/tpope/287147
 function! s:AlignCucumberTables()
@@ -348,13 +291,36 @@ nmap <Leader>a: :call AlignRubyHashes()<cr>
 " In visual mode, the range is already fixed
 vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 
-" linters and syntax checkers:
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rainbow parenthesis configuration
+"
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+  \  'guifgs':  [ '#ea8986', '#a4c38c', '#ffc68d', '#a7cae3', '#e8cefb', '#00a7a0' ],
+  \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
+  \  'operators': '_,_',
+  \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+  \  'separately': {
+  \    '*': {},
+  \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
+  \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
+  \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+  \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+  \    'css': 0,
+  \  }
+  \}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Linter configuration (using Ale plugin)
+"
 let g:ale_sign_error   = ' •' " has U+2009 as space
 let g:ale_sign_warning = ' •'
 let g:ale_sign_column_always = 1
 hi link ALEErrorSign    Error
 hi link ALEWarningSign  Warning
-hi Error   cterm=bold gui=bold guibg=#232323 guifg=DarkRed
+hi Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
 hi Warning cterm=bold gui=bold
 
 let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
@@ -374,7 +340,10 @@ map <D-]> :bnext<cr>
 nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-test configuration
+"
 let test#strategy = "iterm"
 let g:test#preserve_screen = 1
 let test#ruby#rspec#executable = 'rspec_focus'
@@ -389,7 +358,19 @@ nmap <silent> <leader>l :up<CR>:TestSuite --only-failures<CR>
 nmap <silent> <leader>r :up<CR>:TestSuite<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 
-" status line (using lightline)
+" Map ,p to promot variable assignment to let in rspec
+map <leader>p :call PromoteToLet()<cr>
+function! PromoteToLet()
+  :normal! dd
+  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
+  :normal! p
+  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
+  :normal ==
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Status line configuration (using lightline)
+"
 set laststatus=2
 set noshowmode
 let g:lightline = {
@@ -461,19 +442,21 @@ function! LightlineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-" Add rainbows and unicorns
-let g:rainbow_active = 1
-let g:rainbow_conf = {
-  \  'guifgs':  [ '#ea8986', '#a4c38c', '#ffc68d', '#a7cae3', '#e8cefb', '#00a7a0' ],
-  \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
-  \  'operators': '_,_',
-  \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-  \  'separately': {
-  \    '*': {},
-  \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
-  \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
-  \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-  \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-  \    'css': 0,
-  \  }
-  \}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ack configuration, use the silver searcher when available
+"
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+  let g:ackprg = 'ag --nogroup --nocolor --column'
+  " Use K to search for word at current cursor
+  " nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+  " bind \ (backward slash) to grep shortcut
+  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+  nnoremap \ :Ag<SPACE>
+endif
