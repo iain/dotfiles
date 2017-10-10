@@ -119,6 +119,33 @@ endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General key remapping
+"
+let mapleader = ","
+
+" Allow :W to save
+command! W :w
+
+" A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
+cnoreabbrev E e
+
+" in insert mode, jj or jk goes to normal mode
+" if you ever need to type jj for real, type it slowly, like on old school mobile phones
+inoremap jj <ESC>
+inoremap jk <ESC>
+map <C-C> <ESC>
+
+" Shift+K becomes similar to Shift+J
+nnoremap <S-k> kJ
+
+" Remap return to clear search highlight
+nnoremap <cr> :nohlsearch<cr>
+
+" Open notes file
+map <Leader>q :split ~/Dropbox/notes.md<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Window configuration
 "
 set number                 " Line numbering
@@ -155,32 +182,6 @@ let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is sl
 let g:ruby_operators = 1    " Highlight Ruby operators
 let g:ruby_indent_block_style = 'do'
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General key remapping
-"
-let mapleader = ","
-
-" Allow :W to save
-command! W :w
-
-" A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
-cnoreabbrev E e
-
-" in insert mode, jj or jk goes to normal mode
-" if you ever need to type jj for real, type it slowly, like on old school mobile phones
-inoremap jj <ESC>
-inoremap jk <ESC>
-map <C-C> <ESC>
-
-" Shift+K becomes similar to Shift+J
-nnoremap <S-k> kJ
-
-" Remap return to clear search highlight
-nnoremap <cr> :nohlsearch<cr>
-
-" Open notes file
-map <Leader>q :split ~/Dropbox/notes.md<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Buffer configuration
