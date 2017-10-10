@@ -188,9 +188,6 @@ map <Leader>q :split ~/Dropbox/notes.md<cr>
 set history=10000           " Keep a lot of stuff in history
 set backup                  " Make backups
 set undofile                " Keep undo history even after closing Vim
-set backupdir=~/.nvim/tmp/  " Keep backups in a central location
-set directory=~/.nvim/swap/ " Keep swap files in a central location
-set undodir=~/.nvim/undo    " Where to store undo history
 set timeoutlen=500          " Don't wait so long for ambiguous leader keys
 set gdefault                " assume the /g flag on :s substitutions to replace all matches in a line
 
