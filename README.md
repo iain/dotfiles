@@ -66,7 +66,7 @@ Get a couple of really good Terminal fonts with powerline support baked in:
 ```
 git clone https://github.com/powerline/fonts.git ~/fonts
 cd ~/fonts
-./install
+./install.sh
 cd
 rm -r ~/fonts
 ```
