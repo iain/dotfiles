@@ -59,7 +59,8 @@ alias aa='git add --all && git status -sb'
 alias d='git diff'
 alias dc='git diff --cached'
 alias gf='git fetch --all && git status'
-alias po='powder open'
+alias gpb='git-publish-branch'
+alias gpr='hub pull-request'
 
 # unstage and by making it a function it will autocomplete files
 unstage() {
@@ -73,15 +74,15 @@ unstage() {
 # =============================================================================
 
 # Load a Ruby version manager
-if [[ -a /usr/local/share/chruby/chruby.sh ]]; then
-  source /usr/local/share/chruby/chruby.sh
-  source /usr/local/share/chruby/auto.sh
-elif which rbenv > /dev/null; then
-  eval "$(rbenv init - zsh --no-rehash)";
-elif [ -s ~/.rvm/scripts/rvm ]; then
-  source ~/.rvm/scripts/rvm
-  __rvm_project_rvmrc
-fi
+# if [[ -a /usr/local/share/chruby/chruby.sh ]]; then
+#   source /usr/local/share/chruby/chruby.sh
+#   source /usr/local/share/chruby/auto.sh
+# elif which rbenv > /dev/null; then
+#   eval "$(rbenv init - zsh --no-rehash)";
+# elif [ -s ~/.rvm/scripts/rvm ]; then
+#   source ~/.rvm/scripts/rvm
+#   __rvm_project_rvmrc
+# fi
 
 # Setting the editor of choice
 if which mvim > /dev/null; then
