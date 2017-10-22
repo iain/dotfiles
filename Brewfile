@@ -36,6 +36,7 @@ brew "tree"
 brew "par"
 brew "watch"
 brew "coreutils"
+brew "libmaxminddb"
 
 # programming tools
 brew "cloc"
@@ -47,6 +48,3 @@ brew "hub"
 
 brew "sl"
 brew "cowsay"
-
-tap "ValeLint/vale"
-brew "vale"
