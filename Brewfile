@@ -12,13 +12,14 @@ brew "vim"
 brew "git"
 
 # programming languages
-brew "chruby"
-brew "ruby-install"
+cask "java"
+# brew "chruby"
+# brew "ruby-install"
+brew "ruby"
 brew "erlang"
 brew "elixir"
 brew "go"
-cask "java"
-brew "node@6"
+# brew "node@6"
 
 # databases
 brew "sqlite"
@@ -28,7 +29,8 @@ brew "redis",          restart_service: :changed
 brew "elasticsearch",  restart_service: :changed
 
 # additional tools
-brew "the_silver_searcher"
+brew "the_silver_searcher" # deprecated in favor or ripgrep
+brew "ripgrep"
 brew "nmap"
 brew "wget"
 brew "siege"
