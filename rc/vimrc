@@ -41,19 +41,26 @@ Plug 'tpope/vim-rails'                    " rails integration
 Plug 'tpope/vim-rhubarb'                  " open file in github.com
 Plug 'tpope/vim-sensible'                 " sensible defaults
 Plug 'tpope/vim-unimpaired'               " handy toggles
-Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
 Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-surround'                 " quickly change quotes/parens
 
+
+" Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
+
+Plug 'justinmk/vim-dirvish' " netrw replacer
+
 " Under evaluation
-" Plug 'mbbill/undotree'                    " shows your undotree
+Plug 'mbbill/undotree'                    " shows your undotree
 " Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
-" Plug 'tpope/vim-eunuch'                   " unix commands like :Move
+Plug 'tpope/vim-eunuch'                   " unix commands like :Move
 " Plug 'tpope/vim-abolish'                  " abbreviations and case modifier
 " Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
+" Plug 'airblade/vim-gitgutter'               " git change signs in the gutter
 
 Plug 'nanotech/jellybeans.vim' " colorscheme
 " Plug 'twerth/ir_black'       " old colorscheme
+" Plug 'fenetikm/falcon'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 call plug#end()
 
@@ -62,6 +69,22 @@ if needsToInstallPlugins == 1
   :PlugInstall
   echo "\nInstalled.\n"
 endif
+
+let g:dirvish_mode = ':sort ,^.*[\/],'
+" autocmd FileType dirvish silent keeppatterns g@\v/\.[^\/]+/?$@d _
+autocmd FileType dirvish silent set nocursorline
+
+augroup my_dirvish_events
+  autocmd!
+
+  autocmd FileType dirvish map <buffer> % :edit <C-R>=expand('%:h').'/'<cr>
+  autocmd FileType dirvish map <buffer> d :!mkdir -p <C-R>=expand('%:h').'/'<cr>
+  autocmd FileType dirvish map <buffer> D :!rm -r <C-R>=expand('<cfile>')<cr>
+  autocmd FileType dirvish map <buffer> r :!mv <C-R>=expand('<cfile>')<cr> <C-R>=expand('<cfile>')<cr>
+
+  " autocmd FileType dirvish silent keeppatterns g@\v/\.[^\/]+/?$@d _
+
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim and Macvim (not neovim)
@@ -89,6 +112,8 @@ set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
 "   defaults write org.vim.MacVim MMNativeFullScreen 0
 " Press Ctrl+Cmd+F to go full screen
 
+
+au BufNewFile,BufRead *.template set filetype=yaml
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Jellybean Colorscheme
@@ -321,13 +346,14 @@ hi link ALEWarningSign  Warning
 hi Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
 hi Warning cterm=bold gui=bold
 
+"  ale#statusline#Count()
 let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
-let g:ale_ruby_rubocop_options = '-c ~/.dotfiles/rubocop/default.yml'
+let g:ale_ruby_rubocop_options = '-c ~/.dotfiles/rubocop.yml'
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 " let g:ale_lint_on_text_changed = 'normal'
 " Only run on save
-" let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_text_changed = 'never'
 " if you don't want linters to run on opening a file
 " let g:ale_lint_on_enter = 0
 
@@ -389,7 +415,7 @@ let g:lightline = {
       \   'mode': 'LightlineMode',
       \ },
       \ 'component_expand': {
-      \   'syntastic': 'ALEGetStatusLine',
+      \   'syntastic': 'ale#statusline#Count',
       \ },
       \ 'component_type': {
       \   'syntastic': 'error',
