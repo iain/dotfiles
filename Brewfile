@@ -19,12 +19,12 @@ brew "ruby"
 brew "erlang"
 brew "elixir"
 brew "go"
-# brew "node@6"
+brew "node@6"
 
 # databases
 brew "sqlite"
 brew "memcached",      restart_service: :changed
-brew "postgresql",     restart_service: :changed
+brew "postgresql@9.6", restart_service: :changed
 brew "redis",          restart_service: :changed
 brew "elasticsearch",  restart_service: :changed
 
