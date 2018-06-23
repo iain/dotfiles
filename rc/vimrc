@@ -33,7 +33,6 @@ Plug 'jlanzarotta/bufexplorer'            " lists open bufffers like netrw
 Plug 'kien/ctrlp.vim'                     " fuzzy search files
 Plug 'luochen1990/rainbow'                " rainbow parenthesis
 Plug 'michaeljsmith/vim-indent-object'    " defines textobjects based on indent-level
-Plug 'mileszs/ack.vim'                    " search contents of files with ack or ag
 Plug 'sheerun/vim-polyglot'               " contains a ton of syntax plugins
 Plug 'tomtom/tcomment_vim'                " quickly comment/uncomment code
 Plug 'tpope/vim-fugitive'                 " git integration
@@ -44,23 +43,23 @@ Plug 'tpope/vim-unimpaired'               " handy toggles
 Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-surround'                 " quickly change quotes/parens
 
-
 " Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
-
 Plug 'justinmk/vim-dirvish' " netrw replacer
 
 " Under evaluation
 Plug 'mbbill/undotree'                    " shows your undotree
-" Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
 Plug 'tpope/vim-eunuch'                   " unix commands like :Move
+" Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
 " Plug 'tpope/vim-abolish'                  " abbreviations and case modifier
 " Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
-" Plug 'airblade/vim-gitgutter'               " git change signs in the gutter
+" Plug 'airblade/vim-gitgutter'             " git change signs in the gutter
 
 Plug 'nanotech/jellybeans.vim' " colorscheme
 " Plug 'twerth/ir_black'       " old colorscheme
 " Plug 'fenetikm/falcon'
-Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'dracula/vim', { 'as': 'dracula' }
+
+Plug 'jremmen/vim-ripgrep'
 
 call plug#end()
 
@@ -165,6 +164,8 @@ nnoremap <S-k> kJ
 
 " Remap return to clear search highlight
 nnoremap <cr> :nohlsearch<cr>
+" Restore return to default for quickfix window
+autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
@@ -468,19 +469,11 @@ endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Ack configuration, use the silver searcher when available
+" Ripgrep configuration
 "
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  " ag is fast enough that CtrlP doesn't need to cache
+set wildignore+=*/.git/*,*/tmp/*,*.swp
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching = 0
-  let g:ackprg = 'ag --nogroup --nocolor --column'
-  " Use K to search for word at current cursor
-  " nnoremap <silent> K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-  " bind \ (backward slash) to grep shortcut
-  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-  nnoremap \ :Ag<SPACE>
 endif
