@@ -121,7 +121,7 @@ let g:jellybeans_use_gui_italics = 0
 let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' } }
 let g:jellybeans_background_color = '151515'
 colorscheme jellybeans
-
+set fillchars+=vert:\  " space as vertical split character
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Formatting configuration
