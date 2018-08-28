@@ -19,7 +19,7 @@ brew "ruby"
 brew "erlang"
 brew "elixir"
 brew "go"
-brew "node@6"
+brew "node"
 
 # databases
 brew "sqlite"
@@ -29,7 +29,6 @@ brew "redis",          restart_service: :changed
 brew "elasticsearch",  restart_service: :changed
 
 # additional tools
-brew "the_silver_searcher" # deprecated in favor or ripgrep
 brew "ripgrep"
 brew "nmap"
 brew "wget"
