@@ -342,10 +342,23 @@ let g:rainbow_conf = {
 let g:ale_sign_error   = ' •' " has U+2009 as space
 let g:ale_sign_warning = ' •'
 let g:ale_sign_column_always = 1
-hi link ALEErrorSign    Error
-hi link ALEWarningSign  Warning
-hi Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
-hi Warning cterm=bold gui=bold
+
+highlight Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
+highlight Warning cterm=bold gui=bold guibg=#FF0000
+
+" highlight ALEError guibg=#FF0000
+" highlight ALEErrorLine guibg=#FF0000
+highlight ALEErrorSign ctermfg=9 ctermbg=15 guifg=#C30500
+" highlight ALEStyleError guibg=#FF0000
+
+" highlight ALEInfo guibg=#FF0000
+" highlight ALEInfoLine guibg=#FF0000
+
+" highlight ALEStyleWarning guibg=#FF0000
+highlight ALEWarning gui=undercurl guisp=#7777dd
+" highlight ALEWarning guibg=#151566 gui=undercurl
+" highlight ALEWarningLine guibg=#FF0000
+highlight ALEWarningSign ctermfg=11 ctermbg=15 guifg=#7777dd
 
 "  ale#statusline#Count()
 let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
