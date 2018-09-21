@@ -1198,7 +1198,7 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 76 599 519 0 0 1920 1178 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>2206 382 958 451 1920 -48 3360 1868 </string>
+	<string>2542 529 918 512 1920 -48 3360 1868 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>155 594 592 584 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
@@ -2059,13 +2059,25 @@
 					<key>partial</key>
 					<false/>
 					<key>regex</key>
-					<string>^\s+\d+\) (.*)$</string>
+					<string>^\s*\d+\) (.*)$</string>
 				</dict>
 				<dict>
 					<key>action</key>
-					<string>BellTrigger</string>
+					<string>CaptureTrigger</string>
 					<key>regex</key>
-					<string>^\s+\d+\) (.*)$</string>
+					<string>^\s*Scenario: (.*)$</string>
+				</dict>
+				<dict>
+					<key>action</key>
+					<string>CaptureTrigger</string>
+					<key>regex</key>
+					<string>^\s*Background: (.*)$</string>
+				</dict>
+				<dict>
+					<key>action</key>
+					<string>CaptureTrigger</string>
+					<key>regex</key>
+					<string>^\s*Feature: (.*)$</string>
 				</dict>
 			</array>
 			<key>Unlimited Scrollback</key>

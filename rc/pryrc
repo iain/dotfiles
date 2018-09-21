@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
 alias q exit
 
-Pry.config.editor = 'mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
+Pry.config.editor = %(mvim -f --nomru -c "au VimLeave * !open -a iTerm")
 
-require 'ostruct'
-require 'thread'
-require 'date'
-require 'fileutils'
-require 'net/http'
-require 'json'
-require 'yaml'
-require 'pathname'
-require 'time'
-require 'securerandom'
-require 'open-uri'
+require "date"
+require "fileutils"
+require "json"
+require "net/http"
+require "open-uri"
+require "ostruct"
+require "pathname"
+require "securerandom"
+require "time"
+require "yaml"
 
 Thread.abort_on_exception = true
 
-Pry.config.prompt = proc do |obj, level, _|
-  "\e[90m(#{obj})>\e[0m "
-end
+# iTerm2 integration
+Pry.config.prompt = proc { |obj, _level, _|
+  "\e]1337;SetMark\a \e[0;30m(#{obj})>\e[0m "
+}
 
 if defined?(Rails)
   begin

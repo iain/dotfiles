@@ -18,6 +18,8 @@ if [[ -a /usr/local/share/antigen/antigen.zsh ]]; then
 
   antigen apply
 
+  PROMPT=" $PROMPT"
+
 else
 
   echo "\e[0;31mError: Missing antigen. To install: \e[0;34mbrew install antigen\e[0;00m"
