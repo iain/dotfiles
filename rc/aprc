@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+AwesomePrint.defaults = {
+  indent:         -2,
+  index:          false,
+  limit:          true,
+  raw:            true,
+  ruby19_syntax:  true,
+  sort_keys:      true,
+}

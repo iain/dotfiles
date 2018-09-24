@@ -1,17 +1,15 @@
-alias q exit
 IRB.conf[:PROMPT_MODE] = :SIMPLE
 
-require 'ostruct'
-require 'thread'
-require 'date'
-require 'fileutils'
-require 'net/http'
-require 'json'
-require 'yaml'
-require 'pathname'
-require 'time'
-require 'securerandom'
-require 'open-uri'
+require "date"
+require "fileutils"
+require "json"
+require "net/http"
+require "open-uri"
+require "ostruct"
+require "pathname"
+require "securerandom"
+require "time"
+require "yaml"
 
 Thread.abort_on_exception = true
 
