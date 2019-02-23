@@ -15,8 +15,11 @@ require "yaml"
 Thread.abort_on_exception = true
 
 # iTerm2 integration
+# Pry.config.prompt = proc { |obj, _level, _|
+#   "\e]1337;SetMark\a \e[0;30m(#{obj})>\e[0m "
+# }
 Pry.config.prompt = proc { |obj, _level, _|
-  "\e]1337;SetMark\a \e[0;30m(#{obj})>\e[0m "
+  "\e[0;30m(#{obj})>\e[0m "
 }
 
 if defined?(Rails)

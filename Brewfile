@@ -30,6 +30,7 @@ brew "elasticsearch",  restart_service: :changed
 
 # additional tools
 brew "ripgrep"
+brew "jq"
 brew "nmap"
 brew "wget"
 brew "siege"
@@ -42,7 +43,7 @@ brew "libmaxminddb"
 # programming tools
 brew "cloc"
 brew "graphviz"
-brew "heroku"
+# brew "heroku"
 brew "awscli"
 brew "ghi"
 brew "hub"

@@ -42,13 +42,14 @@ Plug 'tpope/vim-sensible'                 " sensible defaults
 Plug 'tpope/vim-unimpaired'               " handy toggles
 Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-surround'                 " quickly change quotes/parens
+Plug 'tpope/vim-eunuch'                   " unix commands like :Move
+Plug 'fatih/vim-go'
 
 " Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
 Plug 'justinmk/vim-dirvish' " netrw replacer
 
 " Under evaluation
 Plug 'mbbill/undotree'                    " shows your undotree
-Plug 'tpope/vim-eunuch'                   " unix commands like :Move
 " Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
 " Plug 'tpope/vim-abolish'                  " abbreviations and case modifier
 " Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
@@ -141,6 +142,7 @@ if executable('par')
   set formatprg=par\ -w80\ -q
 endif
 
+au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General key remapping
@@ -170,6 +172,7 @@ autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
 
+map <Leader>w :!touch tmp/restart.txt<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Window configuration
@@ -362,7 +365,7 @@ highlight ALEWarningSign ctermfg=11 ctermbg=15 guifg=#7777dd
 
 "  ale#statusline#Count()
 let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
-let g:ale_ruby_rubocop_options = '-c ~/.dotfiles/rubocop.yml'
+
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 " let g:ale_lint_on_text_changed = 'normal'
@@ -377,6 +380,7 @@ map <D-]> :bnext<cr>
 
 nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
+nmap <silent> <D-r> :ALEFix rubocop<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

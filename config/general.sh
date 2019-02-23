@@ -2,7 +2,13 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 export PATH="/usr/local/bin:$PATH"
-export PATH=$HOME/.dotfiles/bin:$PATH
+export PATH="/usr/local/opt/node/bin:$PATH"
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/lib/ruby/gems/2.6.0/bin:$PATH"
+export PATH="$HOME/.dotfiles/bin:$PATH"
+
 
 # =============================================================================
 # General config
@@ -38,6 +44,14 @@ function psr {
   REST=`echo ruby | sed -e 's/^.\(.*\)/\1/'`
   ps aux | grep -v "Pow" | grep "[$FIRST]$REST"
 }
+
+export RIPGREP_CONFIG_PATH=~/.ripgreprc
+
+export SKIP=AuthorEmail,AuthorName
+export JAVA_HOME="/Library/Java/Home"
+
+export CLICOLOR=1
+export LS_COLORS='no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;35:*.rb=00;31'
 
 # =============================================================================
 # Git config
