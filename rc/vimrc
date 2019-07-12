@@ -394,10 +394,10 @@ let test#elixir#exunit#options = '--stale'
 let test#elixir#exunit#options = {
   \ 'suite':   '--stale',
 \}
-nmap <silent> <leader>t :up<CR>:TestFile<CR>
-nmap <silent> <leader>T :up<CR>:TestNearest<CR>
-nmap <silent> <leader>l :up<CR>:TestSuite --only-failures<CR>
-nmap <silent> <leader>r :up<CR>:TestSuite<CR>
+nmap <silent> <leader>t :up<CR>:TestLast<CR>
+nmap <silent> <leader>T :up<CR>:TestFile<CR>
+nmap <silent> <leader>r :up<CR>:TestNearest<CR>
+nmap <silent> <leader>R :up<CR>:TestSuite --only-failures<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 
 " Map ,p to promot variable assignment to let in rspec

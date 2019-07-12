@@ -43,3 +43,5 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # }
 
 true
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

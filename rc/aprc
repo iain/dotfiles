@@ -2,7 +2,7 @@
 AwesomePrint.defaults = {
   indent:         -2,
   index:          false,
-  limit:          true,
+  limit:          16,
   raw:            false,
   ruby19_syntax:  true,
   sort_keys:      false,

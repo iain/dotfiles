@@ -174,11 +174,11 @@ function cucumber() {
 }
 
 function cucumber_focus() {
-  ag "@focus" **/*.feature --max-count 1 --files-with-matches --silent --literal 2>&1 > /dev/null
+  rg "@focus" **/*.feature --max-count 1 --files-with-matches 2>&1 > /dev/null
   if [ $? -eq 0 ]; then
     cucumber --profile all --tag @focus $*
   else
-    ag "@wip" **/*.feature --max-count 1 --files-with-matches --silent --literal 2>&1 > /dev/null
+    rg "@wip" **/*.feature --max-count 1 --files-with-matches 2>&1 > /dev/null
     if [ $? -eq 0 ]; then
       cucumber --profile wip $*
     else
@@ -194,4 +194,9 @@ function b() {
   if [ $1 ]; then
     bundle exec $*
   fi
+}
+
+function dockerimplode {
+  docker stop $(docker ps -a -q)
+  docker system prune -a
 }
