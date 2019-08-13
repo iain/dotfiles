@@ -23,7 +23,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'w0rp/ale'                           " Async Linter Engine
+Plug 'dense-analysis/ale'                 " Async Linter Engine
 Plug 'adelarsq/vim-matchit'               " % jumps between do/end etc
 Plug 'csexton/trailertrash.vim'           " hate trailing whitespace
 Plug 'godlygeek/tabular'                  " vertically align stuff
@@ -381,6 +381,18 @@ map <D-]> :bnext<cr>
 nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
 nmap <silent> <D-r> :ALEFix rubocop<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fugitive (Git) (follow the <Leader><Leader>)
+"
+map <Leader><Leader>c :Gcommit<cr>
+map <Leader><Leader>b :Gblame<cr>
+map <Leader><Leader>s :Gstatus<cr>
+map <Leader><Leader>w :Gwrite<cr>
+map <Leader><Leader>p :Git push<cr>
+map <Leader><Leader>f :Git fetch<cr>
+map <Leader><Leader>u :Git up<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
