@@ -1132,9 +1132,9 @@
 	<key>Hotkey</key>
 	<true/>
 	<key>HotkeyChar</key>
-	<integer>167</integer>
+	<integer>105</integer>
 	<key>HotkeyCode</key>
-	<integer>10</integer>
+	<integer>34</integer>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
 	<key>HotkeyModifiers</key>
@@ -1186,17 +1186,23 @@
 	</data>
 	<key>NSTableView Supports v2 KeyBingingTable</key>
 	<true/>
+	<key>NSWindow Frame SUAutomaticUpdateAlert</key>
+	<string>652 754 616 174 0 0 1920 1178 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>530 478 620 392 0 0 1680 1028 </string>
+	<key>NSWindow Frame SessionsPreferences</key>
+	<string>269 126 606 469 0 0 1920 1178 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>506 499 928 394 0 0 1680 1028 </string>
+	<string>643 725 918 423 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1680 1028 0 0 1680 1028 </string>
+	<string>0 0 1920 1178 0 0 1920 1178 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
 			<key>ASCII Anti Aliased</key>
 			<true/>
+			<key>ASCII Ligatures</key>
+			<false/>
 			<key>Allow Title Reporting</key>
 			<false/>
 			<key>Ambiguous Double Width</key>
@@ -1879,7 +1885,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>Hack-Regular 15</string>
+			<string>Hack-Regular 16</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Toolbelt</key>
@@ -3707,6 +3713,10 @@
 	<string>E8C144A1-38C3-4367-AA5F-5518CDFA1C6F</string>
 	<key>NoSyncLastTipTime</key>
 	<real>572645250.16972804</real>
+	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
+	<true/>
+	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
+	<integer>0</integer>
 	<key>NoSyncPermissionToShowTip</key>
 	<true/>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
@@ -3787,6 +3797,36 @@
 		<string>0070</string>
 		<string>0071</string>
 	</array>
+	<key>NoSyncToolbeltProportions</key>
+	<dict>
+		<key>proportions</key>
+		<array>
+			<dict>
+				<key>heightAsFraction</key>
+				<real>0.42170212765957449</real>
+				<key>name</key>
+				<string>Captured Output</string>
+			</dict>
+			<dict>
+				<key>heightAsFraction</key>
+				<real>0.14042553191489363</real>
+				<key>name</key>
+				<string>Recent Directories</string>
+			</dict>
+			<dict>
+				<key>heightAsFraction</key>
+				<real>0.18765957446808509</real>
+				<key>name</key>
+				<string>Jobs</string>
+			</dict>
+			<dict>
+				<key>heightAsFraction</key>
+				<real>0.25021276595744679</real>
+				<key>name</key>
+				<string>Command History</string>
+			</dict>
+		</array>
+	</dict>
 	<key>NotFirstRun</key>
 	<true/>
 	<key>OnlyWhenMoreTabs</key>
@@ -3865,7 +3905,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-02-21T21:26:52Z</date>
+	<date>2019-08-20T14:34:53Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SavePasteHistory</key>
@@ -3903,7 +3943,6 @@
 	<key>ToolbeltTools</key>
 	<array>
 		<string>Captured Output</string>
-		<string>Recent Directories</string>
 		<string>Jobs</string>
 		<string>Command History</string>
 	</array>
@@ -3943,7 +3982,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.2.7</string>
+	<string>3.2.9</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
