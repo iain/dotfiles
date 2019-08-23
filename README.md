@@ -59,6 +59,14 @@ Vim will automatically install itself when you start Vim for the first time.
 
 Delete (or move) your `~/.vim` directory to let it install.
 
+To get new versions of your plugins after the first install:
+
+```
+:PlugUpgrade
+:PlugUpdate
+:PlugClean
+```
+
 ### Fonts
 
 Get a couple of really good Terminal fonts with powerline support baked in:
@@ -105,21 +113,15 @@ Have a look at `rc/gitconfig` and `config/global.sh` for more commands.
 
 ### Ruby
 
-For installing Ruby, I prefer `ruby-install` and `chruby`.
+These days I use whatever Ruby version is specified by Homebrew. I don't bother
+with having multiple versions of Ruby anymore. If a project requires a specific
+Ruby version I use Docker.
+
+Installing Ruby via Homebrew is as simple as
 
 ```
-$ brew install chruby ruby-install
-$ ruby-install ruby 2.4.2
+$ brew install ruby
 ```
-
-Then don't forget to add the version to `~/.dotfiles/config/personal.sh`
-
-``` shell
-chruby 2.4.2
-```
-
-Both bash and zsh are configured to detect chruby, rbenv or rvm. Specifying
-which version to use is left up to you.
 
 Common Ruby commands are wrapped in a function to be smart enough to use Spring
 or Bundler when possible. This means you can just type `rspec` and it will use
