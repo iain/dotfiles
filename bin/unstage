@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+git reset HEAD -- $*
+echo
+git status

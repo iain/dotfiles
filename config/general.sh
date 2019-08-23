@@ -76,17 +76,6 @@ alias gf='git fetch --all && git status'
 alias gpb='git-publish-branch'
 alias gpr='hub pull-request'
 
-# unstage and by making it a function it will autocomplete files
-unstage() {
-  git reset HEAD -- $*
-  echo
-  git status
-}
-
-git-delete-squashed-branches() {
-  git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
-}
-
 # =============================================================================
 # Ruby config
 # =============================================================================
@@ -171,20 +160,6 @@ function rake() {
 
 function cucumber() {
   _spring cucumber $*
-}
-
-function cucumber_focus() {
-  rg "@focus" **/*.feature --max-count 1 --files-with-matches 2>&1 > /dev/null
-  if [ $? -eq 0 ]; then
-    cucumber --profile all --tag @focus $*
-  else
-    rg "@wip" **/*.feature --max-count 1 --files-with-matches 2>&1 > /dev/null
-    if [ $? -eq 0 ]; then
-      cucumber --profile wip $*
-    else
-      cucumber --profile all $*
-    fi
-  fi
 }
 
 # checks to see if your bundle is complete, runs bundle install if it isn't
