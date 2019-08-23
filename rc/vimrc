@@ -45,8 +45,7 @@ Plug 'tpope/vim-surround'                 " quickly change quotes/parens
 Plug 'tpope/vim-eunuch'                   " unix commands like :Move
 Plug 'fatih/vim-go'
 
-" Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
-Plug 'justinmk/vim-dirvish' " netrw replacer
+Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
 
 " Under evaluation
 Plug 'mbbill/undotree'                    " shows your undotree
@@ -69,22 +68,6 @@ if needsToInstallPlugins == 1
   :PlugInstall
   echo "\nInstalled.\n"
 endif
-
-let g:dirvish_mode = ':sort ,^.*[\/],'
-" autocmd FileType dirvish silent keeppatterns g@\v/\.[^\/]+/?$@d _
-autocmd FileType dirvish silent set nocursorline
-
-augroup my_dirvish_events
-  autocmd!
-
-  autocmd FileType dirvish map <buffer> % :edit <C-R>=expand('%:h').'/'<cr>
-  autocmd FileType dirvish map <buffer> d :!mkdir -p <C-R>=expand('%:h').'/'<cr>
-  autocmd FileType dirvish map <buffer> D :!rm -r <C-R>=expand('<cfile>')<cr>
-  autocmd FileType dirvish map <buffer> r :!mv <C-R>=expand('<cfile>')<cr> <C-R>=expand('<cfile>')<cr>
-
-  " autocmd FileType dirvish silent keeppatterns g@\v/\.[^\/]+/?$@d _
-
-augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim and Macvim (not neovim)
@@ -165,7 +148,7 @@ map <C-C> <ESC>
 nnoremap <S-k> kJ
 
 " Remap return to clear search highlight
-nnoremap <cr> :nohlsearch<cr>
+nnoremap <silent><cr> :nohlsearch<cr>:ALELint<cr>
 " Restore return to default for quickfix window
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
