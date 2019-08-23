@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # to install:
 #
@@ -43,10 +44,11 @@ brew "libmaxminddb"
 # programming tools
 brew "cloc"
 brew "graphviz"
-# brew "heroku"
 brew "awscli"
-brew "ghi"
-brew "hub"
+# brew "heroku"
+# brew "ghi"
+# brew "hub"
 
+# fun
 brew "sl"
 brew "cowsay"
