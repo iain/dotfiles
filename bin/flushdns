@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eux
+sudo killall -HUP mDNSResponder
