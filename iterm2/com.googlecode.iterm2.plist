@@ -2089,38 +2089,8 @@
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
-							</dict>
-						</dict>
-					</dict>
-					<dict>
-						<key>class</key>
-						<string>iTermStatusBarBatteryComponent</string>
-						<key>configuration</key>
-						<dict>
-							<key>knobs</key>
-							<dict>
-								<key>base: compression resistance</key>
-								<integer>1</integer>
-								<key>base: priority</key>
-								<real>5</real>
-								<key>shared text color</key>
-								<dict>
-									<key>Alpha Component</key>
-									<real>1</real>
-									<key>Blue Component</key>
-									<real>0.63</real>
-									<key>Color Space</key>
-									<string>sRGB</string>
-									<key>Green Component</key>
-									<real>0.86142857142857143</real>
-									<key>Red Component</key>
-									<real>0.90000000000000002</real>
-								</dict>
-							</dict>
-							<key>layout advanced configuration dictionary value</key>
-							<dict>
-								<key>algorithm</key>
-								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -2144,15 +2114,17 @@
 									<key>Color Space</key>
 									<string>sRGB</string>
 									<key>Green Component</key>
-									<real>0.90000000000000002</real>
+									<real>0.83250000000000002</real>
 									<key>Red Component</key>
-									<real>0.7071428571428573</real>
+									<real>0.90000000000000002</real>
 								</dict>
 							</dict>
 							<key>layout advanced configuration dictionary value</key>
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -2172,19 +2144,21 @@
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.78428571428571425</real>
+									<real>0.63</real>
 									<key>Color Space</key>
 									<string>sRGB</string>
 									<key>Green Component</key>
 									<real>0.90000000000000002</real>
 									<key>Red Component</key>
-									<real>0.63</real>
+									<real>0.76500000000000001</real>
 								</dict>
 							</dict>
 							<key>layout advanced configuration dictionary value</key>
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -2206,11 +2180,11 @@
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.90000000000000002</real>
+									<real>0.69750000000000001</real>
 									<key>Color Space</key>
 									<string>sRGB</string>
 									<key>Green Component</key>
-									<real>0.78428571428571436</real>
+									<real>0.90000000000000002</real>
 									<key>Red Component</key>
 									<real>0.63</real>
 								</dict>
@@ -2219,6 +2193,8 @@
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -2248,15 +2224,17 @@
 									<key>Color Space</key>
 									<string>sRGB</string>
 									<key>Green Component</key>
-									<real>0.63</real>
+									<real>0.90000000000000002</real>
 									<key>Red Component</key>
-									<real>0.70714285714285685</real>
+									<real>0.63</real>
 								</dict>
 							</dict>
 							<key>layout advanced configuration dictionary value</key>
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -2280,7 +2258,77 @@
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.86142857142857154</real>
+									<real>0.90000000000000002</real>
+									<key>Color Space</key>
+									<string>sRGB</string>
+									<key>Green Component</key>
+									<real>0.69750000000000001</real>
+									<key>Red Component</key>
+									<real>0.63</real>
+								</dict>
+							</dict>
+							<key>layout advanced configuration dictionary value</key>
+							<dict>
+								<key>algorithm</key>
+								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
+							</dict>
+						</dict>
+					</dict>
+					<dict>
+						<key>class</key>
+						<string>iTermStatusBarBatteryComponent</string>
+						<key>configuration</key>
+						<dict>
+							<key>knobs</key>
+							<dict>
+								<key>ShowPercentage</key>
+								<integer>1</integer>
+								<key>ShowTime</key>
+								<integer>1</integer>
+								<key>base: priority</key>
+								<real>5</real>
+								<key>shared text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.90000000000000002</real>
+									<key>Color Space</key>
+									<string>sRGB</string>
+									<key>Green Component</key>
+									<real>0.63</real>
+									<key>Red Component</key>
+									<real>0.76500000000000001</real>
+								</dict>
+							</dict>
+							<key>layout advanced configuration dictionary value</key>
+							<dict>
+								<key>algorithm</key>
+								<integer>0</integer>
+							</dict>
+						</dict>
+					</dict>
+					<dict>
+						<key>class</key>
+						<string>iTermStatusBarClockComponent</string>
+						<key>configuration</key>
+						<dict>
+							<key>knobs</key>
+							<dict>
+								<key>base: compression resistance</key>
+								<integer>1</integer>
+								<key>base: priority</key>
+								<real>5</real>
+								<key>format</key>
+								<string>M/dd h:mm</string>
+								<key>shared text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.83250000000000002</real>
 									<key>Color Space</key>
 									<string>sRGB</string>
 									<key>Green Component</key>
@@ -2293,6 +2341,8 @@
 							<dict>
 								<key>algorithm</key>
 								<integer>0</integer>
+								<key>font</key>
+								<string>.AppleSystemUIFont 12</string>
 							</dict>
 						</dict>
 					</dict>
@@ -3986,9 +4036,9 @@
 	<key>NoSyncInstallationId</key>
 	<string>E8C144A1-38C3-4367-AA5F-5518CDFA1C6F</string>
 	<key>NoSyncLastTipTime</key>
-	<real>572645250.16972804</real>
+	<real>588275229.79532599</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>1</integer>
+	<integer>3</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -4798,6 +4848,7 @@
 		<string>0069</string>
 		<string>0070</string>
 		<string>0071</string>
+		<string>0072</string>
 	</array>
 	<key>NoSyncToolbeltProportions</key>
 	<dict>
@@ -4805,25 +4856,19 @@
 		<array>
 			<dict>
 				<key>heightAsFraction</key>
-				<real>0.42170212765957449</real>
+				<real>0.44430272108843538</real>
 				<key>name</key>
 				<string>Captured Output</string>
 			</dict>
 			<dict>
 				<key>heightAsFraction</key>
-				<real>0.14042553191489363</real>
-				<key>name</key>
-				<string>Recent Directories</string>
-			</dict>
-			<dict>
-				<key>heightAsFraction</key>
-				<real>0.18765957446808509</real>
+				<real>0.2223639455782313</real>
 				<key>name</key>
 				<string>Jobs</string>
 			</dict>
 			<dict>
 				<key>heightAsFraction</key>
-				<real>0.25021276595744679</real>
+				<real>0.33333333333333331</real>
 				<key>name</key>
 				<string>Command History</string>
 			</dict>
@@ -4907,7 +4952,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-08-23T17:25:58Z</date>
+	<date>2019-08-28T17:55:11Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SavePasteHistory</key>
