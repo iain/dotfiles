@@ -50,3 +50,5 @@
   helper = osxkeychain
 [pager]
   branch = false
+[commit]
+  gpgsign = true

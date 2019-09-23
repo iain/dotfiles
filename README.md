@@ -127,6 +127,22 @@ Common Ruby commands are wrapped in a function to be smart enough to use Spring
 or Bundler when possible. This means you can just type `rspec` and it will use
 `spring rspec` if that is available.
 
+## Git commit signing
+
+To get git commit signing and verified commits in Github:
+
+1. Download and install GPG Suite from https://gpgtools.org/
+2. When launching you'll be asked to generate a new key pair. Do that.
+4. You'll be asked to upload the key. Optional, I think, but I did it.
+5. Right-Click on your newly generated key, choose "Copy". Your public key is now in your clipboard.
+5. On github, go to your settings: https://github.com/settings/gpg/new
+6. Click button "New GPG key"
+7. Paste your public key, you copied it in step 4.
+8. On the overview of your GPG keys on github, you'll see your "Key ID". Copy that.
+9. Add the Key ID to your Git settings:  e.g. $ git config --global user.signingkey 3AA5C34371567BD2
+10. Tell git to sign all future commits: $ git config --global commit.gpgsign true
+11. Upon the next commit that you make, GPG suite will ask you for the password you entered in step 2.
+
 ## Credits
 
 Thanks everybody who puts their dotfiles online. I copied a bunch from practically every repository.
