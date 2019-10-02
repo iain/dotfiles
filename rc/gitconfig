@@ -28,6 +28,7 @@
   delete-merged-branches = "!git branch --color=never --merged | grep -v master | grep -v '*' | xargs git branch -d"
   serve = daemon --verbose --export-all --base-path=.git --reuseaddr --strict-paths .git/
   delete-squashed-branches = "!git-delete-squashed-branches"
+  cleanup = "!git-cleanup"
 [color]
   ui = true
   diff = auto
