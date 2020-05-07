@@ -327,7 +327,10 @@ let g:rainbow_conf = {
 let g:ale_sign_error   = ' •' " has U+2009 as space
 let g:ale_sign_warning = ' •'
 let g:ale_sign_column_always = 1
-let g:ale_ruby_ruby_executable = '/usr/local/opt/ruby/bin/ruby'
+" use homebrew ruby if it exists:
+if filereadable(expand("/usr/local/opt/ruby/bin/ruby"))
+  let g:ale_ruby_ruby_executable = '/usr/local/opt/ruby/bin/ruby'
+endif
 
 highlight Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
 highlight Warning cterm=bold gui=bold guibg=#FF0000
