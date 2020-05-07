@@ -1,3 +1,12 @@
+# https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
+if type brew &>/dev/null; then
+  # FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+  # brew prefix is a little slow, so here's the direct version instead:
+  FPATH=/usr/local/share/zsh/site-functions:$FPATH
+  autoload -Uz compinit
+  compinit
+fi
+
 if [[ -a /usr/local/share/antigen/antigen.zsh ]]; then
 
   source /usr/local/share/antigen/antigen.zsh

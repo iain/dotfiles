@@ -43,8 +43,8 @@ Plug 'tpope/vim-unimpaired'               " handy toggles
 Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-surround'                 " quickly change quotes/parens
 Plug 'tpope/vim-eunuch'                   " unix commands like :Move
-Plug 'fatih/vim-go'
-
+Plug 'jremmen/vim-ripgrep'                " Ripgrep integratipon via :Rg
+Plug 'fatih/vim-go'                       " Additional golang support
 Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
 
 " Under evaluation
@@ -54,12 +54,11 @@ Plug 'mbbill/undotree'                    " shows your undotree
 " Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
 " Plug 'airblade/vim-gitgutter'             " git change signs in the gutter
 
-Plug 'nanotech/jellybeans.vim' " colorscheme
-" Plug 'twerth/ir_black'       " old colorscheme
-" Plug 'fenetikm/falcon'
-" Plug 'dracula/vim', { 'as': 'dracula' }
-
-Plug 'jremmen/vim-ripgrep'
+" Some colorschemes
+Plug 'nanotech/jellybeans.vim'
+Plug 'twerth/ir_black'
+Plug 'fenetikm/falcon'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 call plug#end()
 
@@ -90,7 +89,7 @@ setlocal balloonexpr=
 " set antialias                 " Turn on antialias
 set guioptions=Ace            " No menubar, toolbar or scrollbars, as minimal as possible
 set guifont=Hack\ Regular:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
-set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
+" set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
 " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
 "   defaults write org.vim.MacVim MMNativeFullScreen 0
 " Press Ctrl+Cmd+F to go full screen
@@ -328,6 +327,7 @@ let g:rainbow_conf = {
 let g:ale_sign_error   = ' •' " has U+2009 as space
 let g:ale_sign_warning = ' •'
 let g:ale_sign_column_always = 1
+let g:ale_ruby_ruby_executable = '/usr/local/opt/ruby/bin/ruby'
 
 highlight Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
 highlight Warning cterm=bold gui=bold guibg=#FF0000

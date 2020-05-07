@@ -14,13 +14,12 @@ brew "git"
 
 # programming languages
 cask "java"
-# brew "chruby"
-# brew "ruby-install"
-brew "ruby"
-brew "erlang"
-brew "elixir"
-brew "go"
-brew "node"
+brew "asdf"
+# brew "ruby"
+# brew "erlang"
+# brew "elixir"
+# brew "go"
+# brew "node"
 
 # databases
 brew "sqlite"
@@ -31,25 +30,26 @@ brew "redis",          restart_service: :changed
 # brew "elasticsearch",  restart_service: :changed
 
 # additional tools
-brew "ripgrep"
+brew "awscli"
+brew "bat"
+brew "cloc"
+brew "coreutils"
+brew "fd"
+brew "graphviz"
+brew "heroku"
 brew "jq"
+brew "libmaxminddb"
 brew "nmap"
-brew "wget"
+brew "par"
+brew "ripgrep"
 brew "siege"
 brew "tree"
-brew "par"
 brew "watch"
-brew "coreutils"
-brew "libmaxminddb"
-
-# programming tools
-brew "cloc"
-brew "graphviz"
-brew "awscli"
-# brew "heroku"
+brew "wget"
 # brew "ghi"
 # brew "hub"
 
 # fun
 brew "sl"
 brew "cowsay"
+brew "gti"

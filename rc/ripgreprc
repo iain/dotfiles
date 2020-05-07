@@ -1,1 +1,4 @@
 --max-columns=2050
+--type-not=svg
+--type-not=log
+--type-not=xml

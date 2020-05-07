@@ -4,4 +4,5 @@ set -euxo pipefail
 git fetch --prune
 git delete-squashed-branches
 git delete-merged-branches
-git gc --aggressive
+git prune
+git gc # --aggressive

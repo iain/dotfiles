@@ -18,9 +18,9 @@ Thread.abort_on_exception = true
 # Pry.config.prompt = proc { |obj, _level, _|
 #   "\e]1337;SetMark\a \e[0;30m(#{obj})>\e[0m "
 # }
-Pry.config.prompt = proc { |obj, _level, _|
-  "\e[0;30m(#{obj})>\e[0m "
-}
+# Pry.config.prompt = proc { |obj, _level, _|
+#   "\e[0;30m(#{obj})>\e[0m "
+# }
 
 if defined?(Rails)
   begin

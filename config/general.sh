@@ -1,14 +1,20 @@
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-export PATH="/usr/local/bin:$PATH"
-export PATH="/usr/local/opt/node/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/opt/openssl/bin:$PATH"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="/usr/local/lib/ruby/gems/2.6.0/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
+# Ruby 2.7.x from Homebrew:
+# export PATH="/usr/local/opt/ruby/bin:$PATH"
+# export PATH="/usr/local/lib/ruby/gems/2.7.0/bin:$PATH"
+
+# Other Homebrew packages:
+# export PATH="/usr/local/opt/node/bin:$PATH"
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+
+# source $(brew --prefix asdf)/asdf.sh
+# brew prefix is a little slow, so here's the direct version instead:
+source /usr/local/opt/asdf/asdf.sh
 
 # =============================================================================
 # General config
@@ -105,30 +111,28 @@ export GEMEDITOR=$EDITOR
 
 # Ruby Optimalizations
 # export RUBY_HEAP_MIN_SLOTS=1100000 (obsolete in Ruby 2.1)
-export RUBY_GC_HEAP_INIT_SLOTS=1100000
-export RUBY_GC_MALLOC_LIMIT=110000000
-export RUBY_HEAP_FREE_MIN=20000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+# export RUBY_GC_HEAP_INIT_SLOTS=1100000
+# export RUBY_GC_MALLOC_LIMIT=110000000
+# export RUBY_HEAP_FREE_MIN=20000
+# export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+# export MALLOC_ARENA_MAX=2
 
 # Ruby aliases
-alias rdm='rake db:migrate db:test:prepare'
 alias rr='mkdir -p tmp && touch tmp/restart.txt'
 alias cu='cucumber'
 alias wip='cucumber --profile wip'
 alias dry_run="cucumber --profile all --dry-run"
 alias pending='cucumber --profile pending'
-alias rspec_focus='_spring rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
+alias rspec_focus='_bundle_exec rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
 alias be='bundle exec'
 alias irb='pry'
-alias guard='bundle exec guard'
-alias fs='foreman start'
-alias po='powder open'
+# alias guard='bundle exec guard'
+# alias fs='foreman start'
+# alias po='powder open'
 
-# uses spring if there is a binstub, otherwise, just use bundle exec
-function _spring() {
-  if [ -f "./bin/spring" ]; then
-    ./bin/spring $*
-  elif [ -f "Gemfile" ]; then
+# uses bundle exec if there is a Gemfile, otherwise real command
+function _bundle_exec() {
+  if [ -f "Gemfile" ]; then
     bundle exec $*
   else
     command $*
@@ -136,30 +140,22 @@ function _spring() {
 }
 
 function r() {
-  _spring rails $*
+  _bundle_exec rails $*
 }
 
 # the following overrides existing ruby commands to hook up into Spring
 # this might not be to your liking.
 
-function spring() {
-  if [ -f "./bin/spring" ]; then
-    ./bin/spring $*
-  else
-    bundle exec $*
-  fi
-}
-
 function rspec() {
-  _spring rspec $*
+  _bundle_exec rspec $*
 }
 
 function rake() {
-  _spring rake $*
+  _bundle_exec rake $*
 }
 
 function cucumber() {
-  _spring cucumber $*
+  _bundle_exec cucumber $*
 }
 
 # checks to see if your bundle is complete, runs bundle install if it isn't

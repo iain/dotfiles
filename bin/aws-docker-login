@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+account_id=$(aws sts get-caller-identity --profile production | jq ".Account" | tr -d '"')
+aws ecr get-login-password --profile production | docker login --username AWS --password-stdin $account_id.dkr.ecr.us-east-1.amazonaws.com
