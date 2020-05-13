@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 Pry.config.editor = %(mvim -f --nomru -c "au VimLeave * !open -a iTerm")
 
 require "date"
@@ -14,13 +15,14 @@ require "yaml"
 
 Thread.abort_on_exception = true
 
-# iTerm2 integration
-# Pry.config.prompt = proc { |obj, _level, _|
-#   "\e]1337;SetMark\a \e[0;30m(#{obj})>\e[0m "
-# }
-# Pry.config.prompt = proc { |obj, _level, _|
-#   "\e[0;30m(#{obj})>\e[0m "
-# }
+Pry.config.prompt = Pry::Prompt.new(
+  "custom",
+  "my custom prompt",
+  [
+    proc { |obj, _level, _| "\e]1337;SetMark\a\e[2;30m #{obj.to_s[0, 32]} │ \e[0m" },
+    proc { |obj, _level, _| "\e[2;30m #{(" " * "#{obj.to_s[0, 32]}".size)} │ \e[0m" },
+  ]
+)
 
 if defined?(Rails)
   begin

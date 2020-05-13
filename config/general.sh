@@ -10,6 +10,7 @@ export PATH="$HOME/.dotfiles/bin:$PATH"
 # Other Homebrew packages:
 # export PATH="/usr/local/opt/node/bin:$PATH"
 export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 
 # source $(brew --prefix asdf)/asdf.sh
