@@ -3968,6 +3968,7 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
+		<string>3.3.9</string>
 		<string>3.3.5</string>
 		<string>3.3.8</string>
 		<string>3.3.4</string>
@@ -3983,6 +3984,8 @@
 		<key>topLeft</key>
 		<string>{455, 676}</string>
 	</dict>
+	<key>NoSyncHaveUsedCopyMode</key>
+	<true/>
 	<key>NoSyncInstallUtilitiesPackage</key>
 	<true/>
 	<key>NoSyncInstallUtilitiesPackage_selection</key>
@@ -3990,9 +3993,9 @@
 	<key>NoSyncInstallationId</key>
 	<string>C5E81755-7BB0-46E1-866A-953FF1ADF6CD</string>
 	<key>NoSyncLastTipTime</key>
-	<real>603214922.26541805</real>
+	<real>610488529.36161399</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>48</integer>
+	<integer>77</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -4721,25 +4724,37 @@
 	<real>590527803.51149404</real>
 	<key>NoSyncTipsToNotShow</key>
 	<array>
-		<string>0004</string>
-		<string>0000</string>
 		<string>0010</string>
-		<string>0014</string>
-		<string>0007</string>
-		<string>0003</string>
-		<string>0013</string>
-		<string>0016</string>
-		<string>0006</string>
-		<string>0002</string>
-		<string>000</string>
-		<string>0012</string>
-		<string>0009</string>
-		<string>0005</string>
-		<string>0001</string>
-		<string>0011</string>
+		<string>0026</string>
 		<string>0015</string>
+		<string>0004</string>
+		<string>0009</string>
+		<string>0024</string>
+		<string>0013</string>
+		<string>0002</string>
+		<string>0018</string>
+		<string>0007</string>
+		<string>0022</string>
+		<string>0011</string>
+		<string>0000</string>
+		<string>0027</string>
+		<string>0016</string>
+		<string>0005</string>
+		<string>0020</string>
+		<string>0025</string>
+		<string>0014</string>
+		<string>0003</string>
+		<string>0019</string>
 		<string>0008</string>
+		<string>0023</string>
+		<string>0012</string>
+		<string>0001</string>
+		<string>000</string>
 		<string>0017</string>
+		<string>0006</string>
+		<string>0028</string>
+		<string>0021</string>
+		<string>0029</string>
 	</array>
 	<key>NoSyncToolbeltProportions</key>
 	<dict>
@@ -4824,6 +4839,8 @@
 	</dict>
 	<key>PrefsCustomFolder</key>
 	<string>~/.dotfiles/iterm2</string>
+	<key>PreserveWindowSizeWhenTabBarVisibilityChanges</key>
+	<false/>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -4843,13 +4860,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-02-13T18:08:11Z</date>
+	<date>2020-05-12T14:23:52Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
 	<integer>2737997238</integer>
 	<key>SUUpdateRelaunchingMarker</key>
-	<true/>
+	<false/>
 	<key>SavePasteHistory</key>
 	<true/>
 	<key>Selection Respects Soft Boundaries</key>
@@ -4871,7 +4888,7 @@
 	<key>SplitPaneDimmingAmount</key>
 	<real>0.20416666567325592</real>
 	<key>StretchTabsToFillBar</key>
-	<false/>
+	<true/>
 	<key>SwitchTabModifier</key>
 	<integer>4</integer>
 	<key>SwitchWindowModifier</key>
@@ -4879,9 +4896,11 @@
 	<key>TabStyle</key>
 	<integer>1</integer>
 	<key>TabStyleWithAutomaticOption</key>
-	<integer>6</integer>
+	<integer>5</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
+	<key>TabsHaveCloseButton</key>
+	<false/>
 	<key>ThreeFingerEmulates</key>
 	<false/>
 	<key>TimeBetweenTips</key>
@@ -4932,7 +4951,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.8</string>
+	<string>3.3.9</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

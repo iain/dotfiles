@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 Pry.config.editor = %(mvim -f --nomru -c "au VimLeave * !open -a iTerm")
 
@@ -15,12 +16,14 @@ require "yaml"
 
 Thread.abort_on_exception = true
 
+_iterm2_mark = "\e]1337;SetMark\a"
+
 Pry.config.prompt = Pry::Prompt.new(
   "custom",
   "my custom prompt",
   [
-    proc { |obj, _level, _| "\e]1337;SetMark\a\e[2;30m #{obj.to_s[0, 32]} │ \e[0m" },
-    proc { |obj, _level, _| "\e[2;30m #{(" " * "#{obj.to_s[0, 32]}".size)} │ \e[0m" },
+    proc { |obj, _level, _| "\e[2;30m #{obj.to_s[0, 32]} │ \e[0m" },
+    proc { |obj, _level, _| "\e[2;30m #{(" " * obj.to_s[0, 32].size)} │ \e[0m" },
   ]
 )
 
@@ -38,9 +41,11 @@ begin
   require "awesome_print"
   AwesomePrint.pry!
 rescue LoadError
+  # noop
 end
 
 begin
   require "addressable"
 rescue LoadError
+  # noop
 end
