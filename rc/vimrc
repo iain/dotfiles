@@ -59,6 +59,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'twerth/ir_black'
 Plug 'fenetikm/falcon'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 
 call plug#end()
 
@@ -103,7 +104,6 @@ au BufNewFile,BufRead *.template set filetype=yaml
 let g:jellybeans_use_gui_italics = 0
 let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' } }
 let g:jellybeans_background_color = '151515'
-colorscheme jellybeans
 set fillchars+=vert:\  " space as vertical split character
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -414,7 +414,7 @@ endfunction
 set laststatus=2
 set noshowmode
 let g:lightline = {
-      \ 'colorscheme': 'jellybeans',
+      \ 'colorscheme': 'one',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'filename' ] ],
@@ -491,4 +491,36 @@ if executable('rg')
   set grepprg=rg\ --color=never
   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching = 0
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Switching
+"
+function! LightMode()
+  set background=light
+  let g:lightline.colorscheme='one'
+  colorscheme onehalflight
+endfunction
+
+function! DarkMode()
+  set background=dark
+  let g:lightline.colorscheme='jellybeans'
+  colorscheme jellybeans
+endfunction
+
+
+func! ChangeBackground()
+  if (v:os_appearance == 1)
+    call DarkMode()
+  else
+    call LightMode()
+  endif
+  redraw!
+endfunc
+
+if has("gui_macvim")
+  au OSAppearanceChanged * call ChangeBackground()
+  call ChangeBackground()
+else
+  call DarkMode()
 endif
