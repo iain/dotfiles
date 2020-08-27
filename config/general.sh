@@ -33,7 +33,7 @@ alias less='less -R' # color codes in less
 alias m='mvim --remote-silent' # open file in existing mvim
 alias grep='grep --colour=always'
 alias ag='ag --path-to-ignore ~/.agignore'
-alias h='/usr/local/bin/heroku'
+alias time='/usr/bin/time' # time keyword is kinda crappy
 
 # Use VIM for reading manpages.
 export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
@@ -162,7 +162,7 @@ function cucumber() {
 # checks to see if your bundle is complete, runs bundle install if it isn't
 # if any arguments have been passed it will run it with bundle exec
 function b() {
-  bundle check || bundle install -j4
+  bundle check || bundle install
   if [ $1 ]; then
     bundle exec $*
   fi
