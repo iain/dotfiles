@@ -27,7 +27,7 @@ brew "memcached",      restart_service: :changed
 brew "postgresql@10",  restart_service: :changed
 brew "redis",          restart_service: :changed
 # disabled because openjdk issues
-# brew "elasticsearch",  restart_service: :changed
+brew "elasticsearch",  restart_service: :changed
 
 # additional tools
 brew "awscli"
