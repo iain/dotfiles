@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+docker ps -a -q | xargs docker stop
