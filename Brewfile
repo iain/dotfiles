@@ -13,7 +13,7 @@ brew "vim"
 brew "git"
 
 # programming languages
-cask "java"
+# cask "java"
 brew "asdf"
 # brew "ruby"
 # brew "erlang"
