@@ -18,6 +18,8 @@ if [[ -a /usr/local/share/antigen/antigen.zsh ]]; then
   antigen bundle aws
   antigen bundle zsh-users/zsh-syntax-highlighting
   antigen bundle zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
+  antigen bundle docker
+  antigen bundle docker-compose
   # too slow when pasting commands into terminal
   # antigen bundle https://github.com/zsh-users/zsh-autosuggestions.git
   # bindkey '^ ' autosuggest-accept
