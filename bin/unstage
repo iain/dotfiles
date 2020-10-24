@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-git reset HEAD -- $*
+git restore --staged -- $*
 echo
 git status
