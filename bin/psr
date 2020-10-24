@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# grep for a process, this ps aux | grep, but without finding itself
+
+set -euo pipefail
+
+FIRST=`echo ruby | sed -e 's/^\(.\).*/\1/'`
+REST=`echo ruby | sed -e 's/^.\(.*\)/\1/'`
+ps aux | grep -v "Pow" | grep --color=always "[$FIRST]$REST"
