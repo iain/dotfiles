@@ -39,15 +39,11 @@ else
 
 fi
 
-source ~/.dotfiles/config/general.sh
-source ~/.dotfiles/config/tab_title.zsh
-source ~/.dotfiles/config/personal.sh
-
-export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
-export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source ~/.dotfiles/config/personal.sh
+source ~/.dotfiles/config/general.sh
 
 true

@@ -4,6 +4,7 @@
   attributesfile = /Users/iain/.gitattributes
 [alias]
   added = diff --cached --name-only
+  current = rev-parse HEAD
   initial-commit = commit --allow-empty --message \"Initial Commit\"
   new = ls-files --others --exclude-standard
   newauthor = commit --amend --reset-author -C HEAD
@@ -31,15 +32,13 @@
   autosetuprebase = always
 [http]
   postBuffer = 100m
-[credential]
-  helper = osxkeychain
 [pager]
   branch = false
 [log]
   date = format:%Y-%m-%d %H:%M
 [format]
   pretty = format:%C(auto,yellow) %h%C(auto,magenta)% %C(auto,blue)%>(17,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% d
-[commit]
-  gpgsign = true
 [init]
   defaultBranch = main
+[credential]
+  helper = osxkeychain

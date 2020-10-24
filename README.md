@@ -3,42 +3,14 @@
 > In Unix-like operating systems, any file or folder that starts with a dot character (for example, /home/user/.config), commonly called a dot file or dotfile, is to be treated as hidden.
 > A convention arose of using dotfile in the user's home directory to store per-user configuration or informational text.
 
-Here are the settings I use. There are installation scripts for most things, so getting them should be easy.
+Here are the settings I use. There are installation scripts for most things, so
+getting them should be easy.
 
-## Installation
+Feel free to adopt anything you like from these settings. However, I recommend
+you make your own, and only add things you understand and like, so you build
+your own toolchain.
 
-These are the steps for installing the essentials.
-
-1. Install [iTerm2](http://www.iterm2.com/)
-2. Install [MacVIM](http://macvim-dev.github.io/macvim/)
-3. Install [Homebrew](http://brew.sh/)
-4. Install the dotfiles and homebrew apps.
-
-        git clone https://github.com/iain/dotfiles.git ~/.dotfiles
-        cd ~/.dotfiles
-        ./script/install
-
-    This will backup any previous dotfiles you have.
-    Also, check `Brewfile` to see which packages are going to be installed.
-
-
-5. Configure iTerm2:
-
-    * Open iTerm2.
-    * Go to the Preferences (`⌘,`)
-    * In the General tab, check `Load preferences from a custom folder or URL`.
-    * Fill in: `~/.dotfiles/iterm2`.
-    * Restart iTerm2.
-
-6. Configure Git to use your own name:
-
-    Add these `~/.dotfiles/config/personal.sh` and update them to your liking.
-
-        export GIT_AUTHOR_NAME="Your Name"
-        export GIT_AUTHOR_EMAIL="yourname@yourdomain.com"
-
-
-## Config
+## Project Structure
 
 | Directory | Description                |
 | --------- | -------------------------- |
@@ -49,85 +21,56 @@ These are the steps for installing the essentials.
 | script    | private helper scripts     |
 
 
-`~/.dotfiles/config/personal.sh` is where I add aliases that don't make sense
-for the rest of the world, and where I modify $PATH, depending on what I
-install.
+I put all personal and private configuration in `config/personal.sh`, which is
+ignored by git, so it doesn't accidentally end up on the internet.
 
-### Vim
+## Installation
 
-Vim will automatically install itself when you start Vim for the first time.
+### Pre-requisites
 
-Delete (or move) your `~/.vim` directory to let it install.
+Download and install the following applications manually:
 
-To get new versions of your plugins after the first install:
+* [iTerm2](http://www.iterm2.com/)
+* [MacVIM](http://macvim-dev.github.io/macvim/)
+* [Homebrew](http://brew.sh/)
 
-```
-:PlugUpgrade
-:PlugUpdate
-:PlugClean
-```
+### Code
 
-### Fonts
+To install dotfiles:
 
-Get a couple of really good Terminal fonts with powerline support baked in:
-
-```
-git clone https://github.com/powerline/fonts.git ~/fonts
-cd ~/fonts
-./install.sh
-cd
-rm -r ~/fonts
+```zsh
+git clone https://github.com/iain/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./script/install
 ```
 
-My personal preference is "Hack".
+This will backup any previous dotfiles you have.
 
-### Aliases
+### Homebrew
 
-There are a lot of aliases in my dotfiles.
-Here are the ones I use on a daily basis:
+To install all the neat little homebrew tools listed in `Brewfile`:
 
-| Alias     | Command                             | Description                                       |
-| --------- | ----------------------------------- | ------------------------------------------------- |
-| `l`       | `ls -FhAlo`                         | List only things that are not the same everywhere |
-| `st`      | `git status`                        |                                                   |
-| `aa`      | `git add --all && git status -sb`   | Add all files and show them                       |
-| `c`       | `git commit`                        |                                                   |
-| `p`       | `git push`                          |                                                   |
-| `gf`      | `git fetch --all && git status`     | Get everything locally, safe to run whenever      |
-| `up`      | `git pull --ff-only`                | git pull only if it's ~straight~ fast forward     |
-| `upstash` | `git stash && up && git stash pop`  | yeah....                                          |
-| `unstage` | `git reset HEAD --`                 | filenames autocomplete after this                 |
-| `co`      | `git checkout`                      |                                                   |
-| `d`       | `git diff`                          | what changes are unstaged?                        |
-| `dc`      | `git diff --cached`                 | what changes are staged for commit?               |
-| `m`       | `macvim --remote-silent`            | opens a file in existing macvim window            |
-| `b`       | function...                         | smart bundle install and bundle exec (optionally) |
-| `r`       | `rails`                             | Uses Spring or Bundler if available               |
-| `rdm`     | `rake db:migrate db:test:prepare`   | get your database in check                        |
-| `la`      | function...                         | shows a pretty graph of your git commits          |
-| `ll`      | function...                         | shows a pretty graph of this branch only          |
-| `amend`   | `git commit --amend`                | Edit the last commit                              |
-| `psg`     | `ps aux | grep`                     | But without grep itself and with highlighting     |
-
-Have a look at `rc/gitconfig` and `config/global.sh` for more commands.
-
-### Ruby
-
-These days I use whatever Ruby version is specified by Homebrew. I don't bother
-with having multiple versions of Ruby anymore. If a project requires a specific
-Ruby version I use Docker.
-
-Installing Ruby via Homebrew is as simple as
-
-```
-$ brew install ruby
+```zsh
+brew tap Homebrew/bundle
+brew bundle
 ```
 
-Common Ruby commands are wrapped in a function to be smart enough to use Spring
-or Bundler when possible. This means you can just type `rspec` and it will use
-`spring rspec` if that is available.
+### iTerm
 
-## Git commit signing
+To configure iTerm:
+
+1. Open iTerm2.
+2. Go to the Preferences (`⌘,`)
+3. In the General tab, check `Load preferences from a custom folder or URL`.
+4. Fill in: `~/.dotfiles/iterm2`.
+5. Restart iTerm2.
+
+### Git
+
+To configure git, you need to tell Git who you are, and configure commit signing
+(highly recommended).
+
+In this setup, make sure you use the same name and email as in GitHub.
 
 To get git commit signing and verified commits in Github:
 
@@ -137,11 +80,187 @@ To get git commit signing and verified commits in Github:
 5. Right-Click on your newly generated key, choose "Copy". Your public key is now in your clipboard.
 5. On github, go to your settings: https://github.com/settings/gpg/new
 6. Click button "New GPG key"
-7. Paste your public key, you copied it in step 4.
-8. On the overview of your GPG keys on github, you'll see your "Key ID". Copy that.
-9. Add the Key ID to your Git settings:  e.g. $ git config --global user.signingkey 3AA5C34371567BD2
-10. Tell git to sign all future commits: $ git config --global commit.gpgsign true
-11. Upon the next commit that you make, GPG suite will ask you for the password you entered in step 2.
+7. Paste your public key, you copied it in step 5.
+8. On the overview of your GPG keys on github, you'll see your "Key ID". Copy that to your clipboard.
+
+Open `~/.gitconfig` and add the following, replacing values:
+
+```toml
+[credential]
+  helper = osxkeychain
+[commit]
+  gpgsign = true
+[user]
+  name = xxx
+  email = xxx@xxx.xxx
+  signingkey = XXXXXXXXXXXXXXXX
+```
+
+The `signingkey` is the "Key ID" you copied in step 8.
+
+Upon the next commit that you make, GPG suite will ask you for the password you
+entered in step 2.
+
+### asdf
+
+I use [asdf](https://asdf-vm.com/) these days to install programming languages.
+
+Here is how to install ruby (replace `latest` with an older version if you like):
+
+```zsh
+asdf plugin add ruby
+asdf install ruby latest
+asdf global ruby latest
+```
+
+Python and most other languages work the same, except [NodeJS](https://github.com/asdf-vm/asdf-nodejs).
+
+```zsh
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+asdf install nodejs latest
+asdf global nodejs latest
+```
+
+To update all plugins, when new versions come out:
+
+```zsh
+asdf plugin update --all
+```
+
+### Fonts
+
+Get a couple of really good Terminal fonts with powerline support baked in:
+
+```zsh
+# clone
+git clone https://github.com/powerline/fonts.git --depth=1
+
+# install
+cd fonts
+./install.sh
+
+# cleanup
+cd ..
+rm -rf fonts/
+```
+
+## Documentation
+
+Below is extra documentation on what's configured in the dotfiles. Or at least,
+some of the highlights.
+
+### Vim
+
+Vim is my editor of choice, I use it for all my coding needs.
+
+All configuration is done in `~/.vimrc` and it will self-install automatically
+the first time you start it. Delete (or move) your `~/.vim` directory to let it
+(re)install.
+
+To get new versions of your plugins after the first install:
+
+```
+:PlugUpgrade
+:PlugUpdate
+:PlugClean
+```
+
+The vim configuration should work on the terminal and macvim. I prefer the
+macvim version, mainly because font rendering is delegated to macOS, making it
+quite a bit faster.
+
+The config works both in dark mode and light mode and switches based on your OS setting.
+
+My personal preference is "Hack".
+
+### Aliases && Commands
+
+There are a lot of aliases and commands in my dotfiles.
+
+Configuration in `~/.dotfiles/config/general.sh` and bin files in `~/.dotfiles/bin`.
+
+| Command       | Description                          |
+| -------       | ------------------------------------ |
+| `flushdns`    | flush DNS cache (macOS only)         |
+| `imgcat`      | show image in terminal (iTerm only)  |
+| `l`           | alias of `ls -FhAlo`                 |
+| `m`           | opens file in existing macvim window |
+| `psg`         | find running process quickly         |
+| `ssh-copy-id` | copy your SSH key to remote server   |
+| `tf`          | alias of `tail -f -n 200`            |
+
+Other:
+
+* `ls` is replaced by GNU version if gnu tools are installed on macOS.
+* Replaced `grep` with `rg`
+* `aws-docker-login` for logging docker into AWS ECR.
+* `docker-stop-all` stops all running docker containers
+* `docker-implode` deletes all docker image caches, run from time to time to get lots of disk space back
+
+### Git
+
+I deprecated `git checkout` in favor of `git switch` and `git restore`. `git
+checkout` still works, just has a 30 second penalty.
+
+Configuration for git is found in `~/.gitconfig` and `~/.dotfiles/config/git.sh`
+
+Here are some of the highlights:
+
+| Command   | Description                                            |
+| --------- | -----------------------------------                    |
+| `aa`      | short for `git add --all && git status -s`             |
+| `amend`   | short for `git commit --amend`                         |
+| `c`       | short for `git commit`                                 |
+| `current` | show the SHA of the current commit                     |
+| `d`       | short for `git diff`                                   |
+| `dc`      | short for `git diff --cached`                          |
+| `g12`     | First 12 chars of current git commit                   |
+| `gf`      | short for `git fetch --all && git status`              |
+| `gpb`     | Publish your branch without having to type branch name |
+| `gpr`     | Quickly make a draft PR in GitHub                      |
+| `p`       | short for `git push`                                   |
+| `re`      | short for `git restore`                                |
+| `s`       | short for `git status -s`                              |
+| `st`      | short for `git status`                                 |
+| `sw`      | short for `git switch`                                 |
+| `unstage` | short for `git restore --cached --`                    |
+| `up`      | short for `git pull --ff-only`                         |
+| `upstash` | short for `git stash && up && git stash pop`           |
+
+Other:
+
+* Local changes will be rebased
+* I regularly perform `git-cleanup`, which wraps the following tasks:
+    * `git fetch --all --prune` - removes information about old remote branches
+    * `git-delete-merged-branches` - removes branches that have been merged in
+    * `git-delete-squashed-branches` - removes branches that have been squashed in GitHub
+    * `git prune` - remove dangling objects
+    * `git gc --aggressive --auto` - clean up files and optimize repository
+* Only run the cleanup scripts from a clean default branch!
+* All commands should be compatible with whatever default branch you have (see `git-default-branch`)
+* Default branch for new repos is `main` instead of `master`.
+* Read the `~/.gitconfig` file for more neat aliases.
+
+### Ruby
+
+The configuration for ruby is found in `~/.dotfiles/config/ruby.sh`
+
+Here are some of the aliases:
+
+| Command   | Description                                  |
+| --------- | -----------------------------------          |
+| `b`       | short for `bundle install`                   |
+| `be`      | short for `bundle exec`                      |
+| `psr`     | finds ruby processes                         |
+| `r`       | short for `rails`                            |
+| `rdm`     | will run migrations for development and test |
+| `wip`     | short for `cucumber --profile wip`           |
+
+Other:
+
+* Rails, Rake, Cucumber, RSpec will use Spring automatically if it's available and binstubbed.
+* `rspec_focus` and `cucumber_focus` are for running a subset of tests and are setup to be used together with vim-test
 
 ## Credits
 

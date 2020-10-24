@@ -18,18 +18,12 @@
 # export MALLOC_ARENA_MAX=2
 
 # Ruby aliases
-alias rr='mkdir -p tmp && touch tmp/restart.txt'
-alias cu='cucumber'
-alias wip='cucumber --profile wip'
-alias dry_run="cucumber --profile all --dry-run"
-alias pending='cucumber --profile pending'
-alias rspec_focus='_bundle_exec rspec --require ~/.dotfiles/script/rspec_focus --order default --color'
+alias r='rails'
 alias b='bundle install'
 alias be='bundle exec'
-# alias irb='pry'
-# alias guard='bundle exec guard'
-# alias fs='foreman start'
-# alias po='powder open'
+alias cu='cucumber'
+alias rr='mkdir -p tmp && touch tmp/restart.txt'
+alias wip='cucumber --profile wip'
 
 # uses spring if available,
 # otherwise bundle exec
@@ -42,10 +36,6 @@ function _bundle_exec() {
   else
     command $*
   fi
-}
-
-function r() {
-  _bundle_exec rails $*
 }
 
 function rails() {
@@ -65,4 +55,8 @@ function rake() {
 
 function cucumber() {
   _bundle_exec cucumber $*
+}
+
+function rspec_focus() {
+  _bundle_exec rspec --require ~/.dotfiles/script/rspec_focus --order default --color $*
 }

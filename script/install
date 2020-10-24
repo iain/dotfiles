@@ -1,10 +1,5 @@
 #!/bin/sh
-set -e
-set -u
-
-echo "Installing homebrew apps"
-brew tap Homebrew/bundle
-brew bundle
+set -euo pipefail
 
 mydir=`pwd`
 backup="$HOME/.dotfiles-backup-`date +%s`"

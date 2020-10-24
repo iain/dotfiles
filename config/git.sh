@@ -1,3 +1,5 @@
+export GPG_TTY=`tty`
+
 alias aa='git add --all && git status -s'
 alias amend='git commit --amend'
 alias c='git commit'
@@ -25,7 +27,7 @@ function git {
     echo "- git switch     # for branches, create with -c"
     echo "- git restore    # for files"
     echo "Waiting \033[0;36m10 seconds\033[0;0m as punishment"
-    sleep 10
+    sleep 30
     command git $*
   fi
   command git $*

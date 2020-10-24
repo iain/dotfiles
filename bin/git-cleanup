@@ -5,4 +5,4 @@ git fetch --prune
 git delete-squashed-branches
 git delete-merged-branches
 git prune
-git gc # --aggressive
+git gc --aggressive --auto
