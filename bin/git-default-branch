@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+default_branch=$(git symbolic-ref -q refs/remotes/origin/HEAD || git config init.defaultBranch)
+echo $(echo $default_branch | sed 's@^refs/remotes/origin/@@')

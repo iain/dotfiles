@@ -1,7 +1,3 @@
-# =============================================================================
-# Git config
-# =============================================================================
-
 alias aa='git add --all && git status -s'
 alias amend='git commit --amend'
 alias c='git commit'
@@ -19,7 +15,7 @@ alias re='git restore'
 alias s='git status -s'
 alias st='git status'
 alias sw='git switch'
-alias up='git up'
+alias up='git pull --ff-only'
 alias upstash='git stash && git pull --ff-only && git stash pop'
 
 # Trying to lose the habit of using `git checkout`, by disabling it.

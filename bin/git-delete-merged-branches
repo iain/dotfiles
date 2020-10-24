@@ -1,0 +1,6 @@
+#!/bin/bash
+set -uo pipefail
+default_branch=$(git-default-branch)
+git branch --color=never --merged | grep -v $default_branch | grep -v '*' | xargs git branch -d
+# the above errors out when no branches needed to be deleted, but that is okay for us
+true

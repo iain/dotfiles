@@ -1,34 +1,18 @@
 [core]
   excludesfile = ~/.dotfiles/config/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  attributesfile = /Users/iain/.gitattributes
 [alias]
-  co = checkout
-  st = status
-  ci = commit
-  up = pull --ff-only
-  br = branch
-  df = diff
-  lg = log -p
-  aa = add --all
-  unstage = reset HEAD
-  new = ls-files --others --exclude-standard
   added = diff --cached --name-only
-  today = log --stat --since='1 Day Ago' --graph --pretty=oneline --abbrev-commit --date=relative
-  plre = pull --rebase
-  ff = merge --ff-only
-  newauthor = commit --amend --reset-author -C HEAD
-  poes = push
-  l = "!source ~/.dotfiles/script/githelpers && pretty_git_log"
-  la = !git l --all
-  hp = "!source ~/.dotfiles/script/githelpers && show_git_head"
-  wtf = "!git commit -m \"$(curl -s whatthecommit.com/index.txt)\""
-  scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
-  ready = rebase -i @{u}
   initial-commit = commit --allow-empty --message \"Initial Commit\"
-  delete-merged-branches = "!git branch --color=never --merged | grep -v master | grep -v '*' | xargs git branch -d"
+  new = ls-files --others --exclude-standard
+  newauthor = commit --amend --reset-author -C HEAD
+  ready = rebase -i @{u}
+  scoreboard = "!git log | grep '^Author' | sort | uniq -ci | sort -r"
   serve = daemon --verbose --export-all --base-path=.git --reuseaddr --strict-paths .git/
-  delete-squashed-branches = "!git-delete-squashed-branches"
-  cleanup = "!git-cleanup"
+  today = log --stat --since='1 Day Ago' --graph --pretty=oneline --abbrev-commit --date=relative
+  wtf = !git commit -m \"$(curl --silent --fail http://whatthecommit.com/index.txt)\"
+  yolo = !git add -A && git wtf
 [color]
   ui = true
   diff = auto
@@ -39,8 +23,8 @@
 [diff]
   renames = copies
   tool = opendiff
-[diff "ruby"]
-  funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+[diff "rspec"]
+  xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 [push]
   default = upstream
 [branch]
@@ -51,6 +35,10 @@
   helper = osxkeychain
 [pager]
   branch = false
+[log]
+  date = format:%Y-%m-%d %H:%M
+[format]
+  pretty = format:%C(auto,yellow) %h%C(auto,magenta)% %C(auto,blue)%>(17,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% d
 [commit]
   gpgsign = true
 [init]
