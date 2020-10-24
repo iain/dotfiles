@@ -1,4 +1,9 @@
+--hidden
+--max-columns-preview
 --max-columns=2050
---type-not=svg
+--max-filesize=5M
+--mmap
+--no-ignore-vcs
 --type-not=log
+--type-not=svg
 --type-not=xml

@@ -1,0 +1,6 @@
+!.circleci/
+cassettes/
+coverage/
+log/
+node_modules/
+tmp/
