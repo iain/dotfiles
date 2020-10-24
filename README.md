@@ -85,7 +85,7 @@ To get git commit signing and verified commits in Github:
 
 Open `~/.gitconfig` and add the following, replacing values:
 
-```toml
+```gitconfig
 [credential]
   helper = osxkeychain
 [commit]
