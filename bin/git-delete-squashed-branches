@@ -1,4 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done || true
+default_branch=$(git symbolic-ref -q refs/remotes/origin/HEAD || echo 'main')
+git switch -q $(echo $default_branch | sed 's@^refs/remotes/origin/@@')
+git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base $default_branch $branch) && [[ $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done || true
