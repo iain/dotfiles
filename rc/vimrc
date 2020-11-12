@@ -89,7 +89,7 @@ setlocal balloonexpr=
 
 " set antialias                 " Turn on antialias
 set guioptions=Ace            " No menubar, toolbar or scrollbars, as minimal as possible
-set guifont=Hack\ Regular:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
+set guifont=Menlo\ for\ Powerline:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
 " set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
 " If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
 "   defaults write org.vim.MacVim MMNativeFullScreen 0
