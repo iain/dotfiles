@@ -1,4 +1,5 @@
 !.circleci/
+.git/
 cassettes/
 coverage/
 log/
