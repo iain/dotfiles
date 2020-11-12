@@ -26,9 +26,8 @@ function git {
     echo "\033[0;31mStop using 'git checkout'.\033[0;0m Instead, use these:"
     echo "- git switch     # for branches, create with -c"
     echo "- git restore    # for files"
-    echo "Waiting \033[0;36m10 seconds\033[0;0m as punishment"
+    echo "Waiting \033[0;36m30 seconds\033[0;0m as punishment"
     sleep 30
-    command git $*
   fi
   command git $*
 }
