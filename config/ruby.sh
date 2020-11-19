@@ -28,3 +28,5 @@ alias be='bundle exec'
 alias cu='cucumber'
 alias rr='mkdir -p tmp && date > tmp/restart.txt'
 alias wip='cucumber --profile wip'
+
+export CUCUMBER_PUBLISH_QUIET=true
