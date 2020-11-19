@@ -4,4 +4,5 @@ cassettes/
 coverage/
 log/
 node_modules/
+packs/
 tmp/
