@@ -58,6 +58,20 @@ export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nm
 # export SKIP=AuthorEmail,AuthorName
 export JAVA_HOME="/Library/Java/Home"
 
+# ps aux | grep, but without finding the grep process
+function psg() {
+  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
+  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
+  ps aux | grep --color=always "[$FIRST]$REST"
+}
+
+# like psg, but only ruby processes
+function psr() {
+  FIRST=`echo ruby | sed -e 's/^\(.\).*/\1/'`
+  REST=`echo ruby | sed -e 's/^.\(.*\)/\1/'`
+  ps aux | grep -v "Pow" | grep --color=always "[$FIRST]$REST"
+}
+
 # import other configs:
 source "$HOME/.dotfiles/config/git.sh"
 source "$HOME/.dotfiles/config/ruby.sh"
