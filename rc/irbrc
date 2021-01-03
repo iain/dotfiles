@@ -1,24 +1,7 @@
-IRB.conf[:PROMPT_MODE] = :SIMPLE
-
-require "date"
-require "fileutils"
-require "json"
-require "net/http"
-require "open-uri"
-require "ostruct"
-require "pathname"
-require "securerandom"
-require "time"
-require "yaml"
-
-Thread.abort_on_exception = true
+# frozen_string_literals: true
 
 begin
-  require 'letters'
+  require 'irbtools'
 rescue LoadError
-end
-
-begin
-  require "awesome_print"
-rescue LoadError
+  puts "# gem install irbtools terminal-notifier"
 end
