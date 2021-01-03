@@ -40,5 +40,12 @@
   pretty = format:%C(auto,yellow) %h%C(auto,magenta)% %C(auto,blue)%>(17,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% d
 [init]
   defaultBranch = main
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [credential]
   helper = osxkeychain
+[commit]
+  gpgsign = true
