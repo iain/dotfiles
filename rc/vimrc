@@ -23,42 +23,33 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'dense-analysis/ale'                 " Async Linter Engine
 Plug 'adelarsq/vim-matchit'               " % jumps between do/end etc
 Plug 'csexton/trailertrash.vim'           " hate trailing whitespace
+Plug 'dense-analysis/ale'                 " Async Linter Engine
+Plug 'fatih/vim-go'                       " Additional golang support
 Plug 'godlygeek/tabular'                  " vertically align stuff
 Plug 'itchyny/lightline.vim'              " fancy statusbar
 Plug 'janko-m/vim-test'                   " quickly run tests in terminal
 Plug 'jlanzarotta/bufexplorer'            " lists open bufffers like netrw
+Plug 'jremmen/vim-ripgrep'                " Ripgrep integratipon via :Rg
 Plug 'kien/ctrlp.vim'                     " fuzzy search files
 Plug 'luochen1990/rainbow'                " rainbow parenthesis
+Plug 'mbbill/undotree'                    " shows your undotree
 Plug 'michaeljsmith/vim-indent-object'    " defines textobjects based on indent-level
 Plug 'sheerun/vim-polyglot'               " contains a ton of syntax plugins
-Plug 'tomtom/tcomment_vim'                " quickly comment/uncomment code
+Plug 'tpope/vim-commentary'               " quickly comment/uncomment code
+Plug 'tpope/vim-eunuch'                   " unix commands like :Move
 Plug 'tpope/vim-fugitive'                 " git integration
 Plug 'tpope/vim-rails'                    " rails integration
+Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-rhubarb'                  " open file in github.com
 Plug 'tpope/vim-sensible'                 " sensible defaults
-Plug 'tpope/vim-unimpaired'               " handy toggles
-Plug 'tpope/vim-repeat'                   " improved repeat button .
 Plug 'tpope/vim-surround'                 " quickly change quotes/parens
-Plug 'tpope/vim-eunuch'                   " unix commands like :Move
-Plug 'jremmen/vim-ripgrep'                " Ripgrep integratipon via :Rg
-Plug 'fatih/vim-go'                       " Additional golang support
+Plug 'tpope/vim-unimpaired'               " handy toggles
 Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
-
-" Under evaluation
-Plug 'mbbill/undotree'                    " shows your undotree
-" Plug 'rking/vim-detailed'                 " supposedly more detailed syntax highlighting
-" Plug 'tpope/vim-abolish'                  " abbreviations and case modifier
-" Plug 'vim-scripts/Enter-Indent'           " fixes indentation off open/close tags
-" Plug 'airblade/vim-gitgutter'             " git change signs in the gutter
 
 " Some colorschemes
 Plug 'nanotech/jellybeans.vim'
-Plug 'twerth/ir_black'
-Plug 'fenetikm/falcon'
-Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 
 call plug#end()
@@ -87,15 +78,9 @@ set noballooneval
 set balloondelay=100000
 setlocal balloonexpr=
 
-" set antialias                 " Turn on antialias
-set guioptions=Ace            " No menubar, toolbar or scrollbars, as minimal as possible
-set guifont=Hack:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
-" set guifont=Menlo\ for\ Powerline:h15 " Get Hack here: http://sourcefoundry.org/hack/ or https://github.com/powerline/fonts
-" set fuoptions=maxvert,maxhorz " Fixes Full Screen on OSX
-" If you are on OSX Lion, and you hate Lion's native full screen, turn it off for macvim:
-"   defaults write org.vim.MacVim MMNativeFullScreen 0
-" Press Ctrl+Cmd+F to go full screen
-
+set antialias        " Turn on antialias
+set guioptions=Ace   " No menubar, toolbar or scrollbars, as minimal as possible
+set guifont=Hack:h15 " https://sourcefoundry.org/hack/
 
 au BufNewFile,BufRead *.template set filetype=yaml
 
@@ -103,8 +88,8 @@ au BufNewFile,BufRead *.template set filetype=yaml
 " Jellybean Colorscheme
 "
 let g:jellybeans_use_gui_italics = 0
-let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' } }
-let g:jellybeans_background_color = '151515'
+let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '1e1e1e' } }
+let g:jellybeans_background_color = '1e1e1e'
 set fillchars+=vert:\  " space as vertical split character
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -521,7 +506,9 @@ endfunc
 
 if has("gui_macvim")
   au OSAppearanceChanged * call ChangeBackground()
-  call ChangeBackground()
+  " Issue with macvim's vim binary
+  " call ChangeBackground()
+  call DarkMode()
 else
   call DarkMode()
 endif
