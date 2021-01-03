@@ -78,7 +78,7 @@ set noballooneval
 set balloondelay=100000
 setlocal balloonexpr=
 
-set antialias        " Turn on antialias
+" set antialias        " Turn on antialias
 set guioptions=Ace   " No menubar, toolbar or scrollbars, as minimal as possible
 set guifont=Hack:h15 " https://sourcefoundry.org/hack/
 
@@ -88,8 +88,8 @@ au BufNewFile,BufRead *.template set filetype=yaml
 " Jellybean Colorscheme
 "
 let g:jellybeans_use_gui_italics = 0
-let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '1e1e1e' } }
-let g:jellybeans_background_color = '1e1e1e'
+let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '161616' } }
+let g:jellybeans_background_color = '161616'
 set fillchars+=vert:\  " space as vertical split character
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
