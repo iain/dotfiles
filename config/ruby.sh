@@ -30,3 +30,13 @@ alias rr='mkdir -p tmp && date > tmp/restart.txt'
 alias wip='cucumber --profile wip'
 
 export CUCUMBER_PUBLISH_QUIET=true
+
+function rc() {
+  if [ -f "./bin/console" ]; then
+    ./bin/console
+  elif [ -f "./bin/rails" ]; then
+    ./bin/rails console
+  else
+    irb
+  fi
+}
