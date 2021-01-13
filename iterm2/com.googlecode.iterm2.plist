@@ -11,7 +11,7 @@
 	<key>Command</key>
 	<string></string>
 	<key>CompactMinimalTabBarHeight</key>
-	<real>50</real>
+	<real>38</real>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>Jellybeans</key>
@@ -908,7 +908,7 @@
 		</dict>
 	</dict>
 	<key>DarkThemeHasBlackTitlebar</key>
-	<false/>
+	<true/>
 	<key>Default Bookmark Guid</key>
 	<string>25EFFC7F-78A0-4F95-8436-9FB709D8A060</string>
 	<key>DimBackgroundWindows</key>
@@ -920,6 +920,8 @@
 	<key>ExtraSpaceBeforeCompactTopTabBar</key>
 	<real>0.0</real>
 	<key>HapticFeedbackForEsc</key>
+	<false/>
+	<key>HideActivityIndicator</key>
 	<false/>
 	<key>HideMenuBarInFullscreen</key>
 	<false/>
@@ -1086,12 +1088,16 @@
 			<true/>
 			<key>Background Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.070588235294117646</real>
+				<real>0.082352941176470587</real>
+				<key>Color Space</key>
+				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.070588235294117646</real>
+				<real>0.086274509803921567</real>
 				<key>Red Component</key>
-				<real>0.070588235294117646</real>
+				<real>0.086274509803921567</real>
 			</dict>
 			<key>Background Image Location</key>
 			<string></string>
@@ -1539,7 +1545,7 @@
 			<key>Shortcut</key>
 			<string></string>
 			<key>Silence Bell</key>
-			<false/>
+			<true/>
 			<key>Smart Cursor Color</key>
 			<false/>
 			<key>Sync Title</key>
@@ -1586,6 +1592,10 @@
 	<true/>
 	<key>SeparateStatusBarsPerPane</key>
 	<false/>
+	<key>ShowFullScreenTabBar</key>
+	<true/>
+	<key>ShowNewOutputIndicator</key>
+	<true/>
 	<key>ShowPaneTitles</key>
 	<false/>
 	<key>SoundForEsc</key>
@@ -1601,7 +1611,7 @@
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>TabsHaveCloseButton</key>
-	<false/>
+	<true/>
 	<key>UseBorder</key>
 	<false/>
 	<key>UseLionStyleFullscreen</key>
@@ -1610,6 +1620,8 @@
 	<false/>
 	<key>WindowNumber</key>
 	<false/>
+	<key>findMode_iTerm</key>
+	<integer>0</integer>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
