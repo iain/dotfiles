@@ -1,22 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-Pry.config.editor = %(mvim -f --nomru -c "au VimLeave * !open -a iTerm")
-
-require "date"
-require "fileutils"
-require "json"
-require "net/http"
-require "open-uri"
-require "ostruct"
-require "pathname"
-require "securerandom"
-require "time"
-require "yaml"
-
-Thread.abort_on_exception = true
-
-_iterm2_mark = "\e]1337;SetMark\a"
+Pry.config.editor = "vim"
 
 Pry.config.prompt = Pry::Prompt.new(
   "custom",
@@ -27,25 +12,14 @@ Pry.config.prompt = Pry::Prompt.new(
   ]
 )
 
-if defined?(Rails)
-  begin
-    require "rails/console/app"
-    require "rails/console/helpers"
-  rescue LoadError
-    require "console_app"
-    require "console_with_helpers"
-  end
+if defined?(PryByebug)
+  Pry.commands.alias_command 'c', 'continue'
+  Pry.commands.alias_command 's', 'step'
+  Pry.commands.alias_command 'n', 'next'
+  Pry.commands.alias_command 'f', 'finish'
 end
 
-begin
-  require "awesome_print"
-  AwesomePrint.pry!
-rescue LoadError
-  # noop
-end
-
-begin
-  require "addressable"
-rescue LoadError
-  # noop
+# Hit Enter to repeat last command
+Pry::Commands.command /^$/, "repeat last command" do
+  pry_instance.run_command Pry.history.to_a.last
 end

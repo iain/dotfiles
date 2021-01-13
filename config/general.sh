@@ -43,16 +43,15 @@ fi
 
 # Use vim everywhere:
 alias m='mvim --remote-silent' # open file in existing mvim
-if which mvim > /dev/null; then
-  export EDITOR='mvim'
-else
-  export EDITOR='vim'
-fi
-export GIT_EDITOR='vim'
-export VISUAL=$EDITOR
+
+export EDITOR='vim'
+export GIT_EDITOR=$EDITOR
 export SVN_EDITOR=$EDITOR
-export BUNDLER_EDITOR=$EDITOR
-export GEMEDITOR=$EDITOR
+
+export VISUAL='mvim'
+export BUNDLER_EDITOR=$VISUAL
+export GEMEDITOR=$VISUAL
+
 export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
 # export SKIP=AuthorEmail,AuthorName
