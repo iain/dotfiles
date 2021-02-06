@@ -46,4 +46,11 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 source ~/.dotfiles/config/personal.sh
 source ~/.dotfiles/config/general.sh
 
+# asdf config must be all the way at the bottom
+# source $(brew --prefix asdf)/asdf.sh
+# brew prefix is a little slow, so here's the direct version instead:
+if [ -f "/usr/local/opt/asdf/asdf.sh" ]; then
+  source /usr/local/opt/asdf/asdf.sh
+fi
+
 true

@@ -496,7 +496,7 @@ endfunction
 
 
 func! ChangeBackground()
-  if (v:os_appearance == 1)
+  if system("defaults read -g AppleInterfaceStyle") == "Dark\n"
     call DarkMode()
   else
     call LightMode()
@@ -507,8 +507,8 @@ endfunc
 if has("gui_macvim")
   au OSAppearanceChanged * call ChangeBackground()
   " Issue with macvim's vim binary
-  " call ChangeBackground()
-  call DarkMode()
+  call ChangeBackground()
+  " call DarkMode()
 else
   call DarkMode()
 endif
