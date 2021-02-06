@@ -1,0 +1,13 @@
+#!/bin/bash
+set -uo pipefail
+
+function __prefer_binstub() {
+  if [ -f "./bin/$1" ]; then
+    ./bin/$@
+  else
+    command $@
+  fi
+}
+
+# Used by vim-test to run tests in iTerm via AppleScript
+__prefer_binstub rspec --require ~/.dotfiles/script/rspec_focus --order default --color $*

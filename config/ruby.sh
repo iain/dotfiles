@@ -17,11 +17,6 @@ function sidekiq()  { __prefer_binstub sidekiq  $@ }
 function spring()   { __prefer_binstub spring   $@ }
 function yarn()     { __prefer_binstub yarn     $@ }
 
-# Used by vim-test to run tests in iTerm via AppleScript
-function rspec_focus() {
-  __prefer_binstub rspec --require ~/.dotfiles/script/rspec_focus --order default --color $*
-}
-
 alias r='rails'
 alias b='bundle install'
 alias be='bundle exec'
