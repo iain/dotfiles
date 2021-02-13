@@ -1,23 +1,32 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-Pry.config.editor = "vim"
+Pry.config.editor = "nvim"
+
+__prompt_prefix = proc { |obj, level, _|
+  if level == 0
+    ""
+  else
+    r = obj.to_s
+    r.size > 32 ? r[0, 31] + "… " : r + " "
+  end
+}
 
 Pry.config.prompt = Pry::Prompt.new(
-  "custom",
-  "my custom prompt",
+  "box",
+  "Because ASCII box-drawing is still cool in #{Time.now.year}!",
   [
-    proc { |obj, _level, _| "\e[2;30m #{obj.to_s[0, 32]} │ \e[0m" },
-    proc { |obj, _level, _| "\e[2;30m #{(" " * obj.to_s[0, 32].size)} │ \e[0m" },
+    proc { |obj, level, pry|
+      prefix = __prompt_prefix[obj, level]
+      pry.config.output_prefix = "\e[0;90m#{" " * prefix.size}╛ \e[0m"
+      "\e[0;90m#{prefix}╕ \e[0m"
+    },
+    proc { |obj, level, _|
+      prefix = __prompt_prefix[obj, level]
+      "\e[0;90m#{" " * prefix.size}│ \e[0m"
+    },
   ]
 )
-
-if defined?(PryByebug)
-  Pry.commands.alias_command 'c', 'continue'
-  Pry.commands.alias_command 's', 'step'
-  Pry.commands.alias_command 'n', 'next'
-  Pry.commands.alias_command 'f', 'finish'
-end
 
 # Hit Enter to repeat last command
 Pry::Commands.command /^$/, "repeat last command" do
