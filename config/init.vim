@@ -45,8 +45,6 @@ set undofile
 silent !mkdir -p ~/.local/share/nvim/tmp
 set backupdir=~/.local/share/nvim/tmp
 
-set shell=/bin/zsh
-
 if executable('par')
   set formatprg=par\ -w80\ -q
 endif
@@ -202,11 +200,11 @@ nmap <silent> <D-r> :ALEFix rubocop<CR>
 " vim-test configuration
 "
 let test#strategy = "neovim"
-let g:test#preserve_screen = 1
-let test#ruby#rspec#executable = 'rspec_focus'
-let test#ruby#cucumber#executable = 'cucumber_focus'
+" let g:test#preserve_screen = 1
+" let test#ruby#rspec#executable = 'rspec_focus'
+" let test#ruby#cucumber#executable = 'cucumber_focus'
 " let test#ruby#minitest#options = '--color'
-let test#neovim#term_position = "30"
+" let test#neovim#term_position = "30"
 let test#elixir#exunit#options = '--stale'
 let test#elixir#exunit#options = {
   \ 'suite':   '--stale',
@@ -231,7 +229,7 @@ map <Leader><Leader>u :Git up<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Status line configuration (using lightline)
 "
-set laststatus=2
+" set laststatus=2
 set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'jellybeans',
@@ -403,15 +401,17 @@ let g:rainbow_conf = {
 
 " normal
 let g:terminal_color_0  = '#a3a3a3' " black
-let g:terminal_color_1  = '#e98885' " red
-let g:terminal_color_2  = '#a3c38b' " green
+" let g:terminal_color_1  = '#e98885' " red
+let g:terminal_color_1  = '#cf6a4c' " red
+" let g:terminal_color_2  = '#a3c38b' " green
+let g:terminal_color_2  = '#99ad6a' " green
 let g:terminal_color_3  = '#ffc68d' " yellow
 let g:terminal_color_4  = '#a6cae2' " blue
 let g:terminal_color_5  = '#e7cdfb' " magenta
 let g:terminal_color_6  = '#00a69f' " cyan
-let g:terminal_color_7  = '#e4e4e4' " white
+let g:terminal_color_7  = '#888888' " white
 " bright
-let g:terminal_color_8  = '#c8c8c8' " black
+let g:terminal_color_8  = '#888888' " black
 let g:terminal_color_9  = '#ffb2b0' " red
 let g:terminal_color_10 = '#c8e2b9' " green
 let g:terminal_color_11 = '#ffe1af' " yellow
@@ -421,3 +421,7 @@ let g:terminal_color_14 = '#0bbdb6' " cyan
 let g:terminal_color_15 = '#feffff' " white
 
 
+map <leader>c :split term://smart-console<cr>i
+map <leader>x :split term://ruby -v<cr>i
+
+set shell=zsh-for-neovim

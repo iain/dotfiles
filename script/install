@@ -1,24 +1,29 @@
-#!/bin/sh
-set -euo pipefail
+#!/usr/bin/env ruby
 
-mydir=`pwd`
-backup="$HOME/.dotfiles-backup-`date +%s`"
+require "fileutils"
 
-# Backup the stuff and create symlinks
-for f in $mydir/rc/*; do
+def symlink(from, to)
+  # print "Installing #{from} to #{to}... "
+  from = File.expand_path("../#{from}", __dir__)
+  to = File.expand_path(to)
+  FileUtils.mkdir_p(File.dirname(to))
+  if File.exist?(to)
+    if FileUtils.identical?(from, to)
+      # noop
+      puts "Skipping #{to}"
+    else
+      backup = "#{to}.bak"
+      puts "Making backup of #{to} in #{backup}"
+      FileUtils.copy_file(to, backup)
+      FileUtils.ln_sf(from, to, verbose: true)
+    end
+  else
+    FileUtils.ln_s(from, to, verbose: true)
+  end
+end
 
-  file=`basename $f`
-  dest="$HOME/.$file"
-  source="$mydir/rc/$file"
+Dir["rc/*"].each do |f|
+  symlink f, "~/.#{File.basename(f)}"
+end
 
-  if [[ -f $dest || -d $dest ]]; then
-    mkdir -p $backup
-    echo "Making backup of $dest in $backup"
-    cp -R $dest $backup/$file
-  fi
-  echo "Symlinking: .$file"
-  ln -fs $source $dest
-
-done
-
-echo "Done."
+symlink "config/init.vim", "~/.config/nvim/init.vim"
