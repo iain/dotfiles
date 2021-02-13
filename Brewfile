@@ -20,6 +20,7 @@ brew "awscli"
 brew "bat"
 brew "cloc"
 brew "coreutils"
+brew "ctags"
 brew "fd"
 brew "fzf"
 brew "gh"
@@ -44,10 +45,10 @@ brew "gti"
 brew "sl"
 
 # databases
-brew "memcached",      restart_service: :changed
-brew "postgresql",     restart_service: :changed
-brew "redis",          restart_service: :changed
+brew "memcached",  restart_service: :changed
+brew "postgresql", restart_service: :changed
+brew "redis",      restart_service: :changed
 brew "sqlite"
 
 tap "elastic/tap"
-brew "elastic/tap/elasticsearch-oss",  restart_service: :changed
+brew "elastic/tap/elasticsearch-full", restart_service: :changed

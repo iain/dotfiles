@@ -4,5 +4,15 @@ set -euxo pipefail
 git fetch --prune
 git delete-squashed-branches
 git delete-merged-branches
-git prune
-git gc --aggressive --auto
+
+# Verifies the connectivity and validity of the objects in the database
+git fsck --full
+
+# Manage reflog information
+git reflog expire --expire=now --all
+
+# Pack unpacked objects in a repository
+git repack -a -d -l
+
+# Cleanup unnecessary files and optimize the local repository and prune all unreachable objects from the object database
+git gc --prune=now --aggressive

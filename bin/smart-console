@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ -f "./bin/console" ]; then
+	./bin/console
+elif [ -f "./bin/rails" ]; then
+	./bin/rails console
+elif which pry > /dev/null; then
+	pry
+else
+	irb
+fi

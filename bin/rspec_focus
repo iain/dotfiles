@@ -10,4 +10,4 @@ function __prefer_binstub() {
 }
 
 # Used by vim-test to run tests in iTerm via AppleScript
-__prefer_binstub rspec --require ~/.dotfiles/script/rspec_focus --order default --color $*
+__prefer_binstub rspec --color --format documentation --fail-fast=10 $*
