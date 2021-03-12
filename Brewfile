@@ -7,6 +7,7 @@ brew "asdf"
 brew "git"
 brew "luajit", args: ["HEAD"]
 brew "neovim", args: ["HEAD"]
+brew "macvim"
 brew "gnupg"
 brew "rubyfmt"
 brew "perl"
