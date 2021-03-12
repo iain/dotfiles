@@ -1,4 +1,5 @@
 !.circleci/
+.ctags
 .git/
 cassettes/
 coverage/

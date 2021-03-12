@@ -1,6 +1,6 @@
 #!/bin/zsh
+
 source ~/.dotfiles/config/general.sh
 source ~/.dotfiles/config/personal.sh
 source /usr/local/opt/asdf/asdf.sh
 zsh $*
-

@@ -17,6 +17,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-cucumber'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-projectionist'
@@ -169,8 +170,8 @@ let g:ale_sign_warning = "\uf444 "
 let g:ale_sign_error = "\uf05e "
 " let g:ale_sign_error   = ' !' " has U+2009 as space
 " let g:ale_sign_warning = ' •'
-let g:ale_sign_column_always = 1
-set signcolumn=yes
+" let g:ale_sign_column_always = 1
+" set signcolumn=yes
 if filereadable(expand("~/.asdf/shims/ruby"))
   let g:ale_ruby_ruby_executable = expand("~/.asdf/shims/ruby")
 endif
@@ -196,25 +197,6 @@ nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
 nmap <silent> <D-r> :ALEFix rubocop<CR>
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-test configuration
-"
-let test#strategy = "neovim"
-" let g:test#preserve_screen = 1
-" let test#ruby#rspec#executable = 'rspec_focus'
-" let test#ruby#cucumber#executable = 'cucumber_focus'
-" let test#ruby#minitest#options = '--color'
-" let test#neovim#term_position = "30"
-let test#elixir#exunit#options = '--stale'
-let test#elixir#exunit#options = {
-  \ 'suite':   '--stale',
-\}
-nmap <silent> <leader>t :up<CR>:TestLast<CR>
-nmap <silent> <leader>T :up<CR>:TestFile<CR>
-nmap <silent> <leader>r :up<CR>:TestNearest<CR>
-nmap <silent> <leader>R :up<CR>:TestSuite --only-failures<CR>
-nmap <silent> <leader>g :TestVisit<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fugitive (Git) (follow the <Leader><Leader>)
@@ -399,15 +381,16 @@ let g:rainbow_conf = {
   \  }
   \}
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" terminal colors
+"
 
 " normal
-let g:terminal_color_0  = '#a3a3a3' " black
-" let g:terminal_color_1  = '#e98885' " red
+let g:terminal_color_0  = '#888888' " black
 let g:terminal_color_1  = '#cf6a4c' " red
-" let g:terminal_color_2  = '#a3c38b' " green
 let g:terminal_color_2  = '#99ad6a' " green
-let g:terminal_color_3  = '#ffc68d' " yellow
-let g:terminal_color_4  = '#a6cae2' " blue
+let g:terminal_color_3  = '#fabb6e' " yellow
+let g:terminal_color_4  = '#8197bf' " blue
 let g:terminal_color_5  = '#e7cdfb' " magenta
 let g:terminal_color_6  = '#00a69f' " cyan
 let g:terminal_color_7  = '#888888' " white
@@ -419,10 +402,48 @@ let g:terminal_color_11 = '#ffe1af' " yellow
 let g:terminal_color_12 = '#bddff7' " blue
 let g:terminal_color_13 = '#fce2ff' " magenta
 let g:terminal_color_14 = '#0bbdb6' " cyan
-let g:terminal_color_15 = '#feffff' " white
+let g:terminal_color_15 = '#e8e8d3' " white
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" terminal commands
+"
 
 map <leader>c :split term://smart-console<cr>i
 map <leader>x :split term://ruby -v<cr>i
 
 set shell=zsh-for-neovim
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-test configuration
+"
+let test#strategy = "neovim"
+" let g:test#preserve_screen = 1
+
+let test#ruby#rspec#executable    = 'devc ./bin/rspec'
+let test#ruby#cucumber#executable = 'devc ./bin/cucumber'
+let test#ruby#minitest#executable = 'devc bundle exec rake test'
+let test#ruby#rails#executable    = 'devc ./bin/rails test'
+
+" let test#neovim#term_position = "30"
+let test#elixir#exunit#options = '--stale'
+let test#elixir#exunit#options = {
+  \ 'suite':   '--stale',
+\}
+nmap <silent> <leader>t :up<CR>:TestLast<CR>
+nmap <silent> <leader>T :up<CR>:TestFile<CR>
+nmap <silent> <leader>r :up<CR>:TestNearest<CR>
+nmap <silent> <leader>R :up<CR>:TestSuite --only-failures<CR>
+nmap <silent> <leader>g :TestVisit<CR>
+
+" Map ,p to promot variable assignment to let in rspec
+map <leader>p :call PromoteToLet()<cr>
+function! PromoteToLet()
+  :normal! dd
+  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
+  :normal! p
+  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
+  :normal ==
+endfunction
+
+set tags=./.ctags;

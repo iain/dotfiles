@@ -19,7 +19,7 @@ Pry.config.prompt = Pry::Prompt.new(
     proc { |obj, level, pry|
       prefix = __prompt_prefix[obj, level]
       pry.config.output_prefix = "\e[0;90m#{" " * prefix.size}╛ \e[0m"
-      "\e[0;90m#{prefix}╕ \e[0m"
+      "\e[0;90m#{prefix}> \e[0m"
     },
     proc { |obj, level, _|
       prefix = __prompt_prefix[obj, level]

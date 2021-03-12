@@ -1,6 +1,9 @@
 #!/bin/bash
 
-if [ -f "./bin/console" ]; then
+if [ -d ".devcontainer" ]; then
+	cd .devcontainer
+	docker-compose exec app /bin/bash -l
+elif [ -f "./bin/console" ]; then
 	./bin/console
 elif [ -f "./bin/rails" ]; then
 	./bin/rails console

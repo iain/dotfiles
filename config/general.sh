@@ -1,6 +1,6 @@
 # ls
 export CLICOLOR=1
-export LS_COLORS='no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;35:*.rb=00;31'
+export LS_COLORS='no=00:fi=00:di=00;36:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;35:*.rb=00;31'
 if which gls > /dev/null; then
   alias ls='gls --group-directories-first --color=auto'
 fi
@@ -23,9 +23,10 @@ if  [ -f /usr/bin/time ]; then
   alias time='/usr/bin/time'
 fi
 
-alias v='vimr .'
+alias m='mvim --remote-silent'
+alias v='mvim --remote-tab-silent .'
 
-export MANPAGER="col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
+export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
 # ps aux | grep, but without finding the grep process
 function psg() {

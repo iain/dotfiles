@@ -1,14 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Iain's Vim configuration: ~/.vimrc
-"
-" This vimrc automatically installs everything it needs.
-" To install, or reinstall, remove ~/.vim directory and open Vim.
-"
-if &compatible
-  set nocompatible
-endif
-
-filetype off
+set nocompatible
 
 let needsToInstallPlugins=0
 if !filereadable(expand("~/.vim/autoload/plug.vim"))
@@ -16,42 +6,40 @@ if !filereadable(expand("~/.vim/autoload/plug.vim"))
   silent !mkdir -p ~/.vim/tmp
   silent !mkdir -p ~/.vim/swap
   silent !mkdir -p ~/.vim/undo
-  silent !mkfifo ~/.vim/commands-fifo
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   let needsToInstallPlugins=1
 endif
 
 call plug#begin('~/.vim/plugged')
-
-Plug 'adelarsq/vim-matchit'               " % jumps between do/end etc
-Plug 'csexton/trailertrash.vim'           " hate trailing whitespace
-Plug 'dense-analysis/ale'                 " Async Linter Engine
-Plug 'fatih/vim-go'                       " Additional golang support
-Plug 'godlygeek/tabular'                  " vertically align stuff
-Plug 'itchyny/lightline.vim'              " fancy statusbar
-Plug 'janko-m/vim-test'                   " quickly run tests in terminal
-Plug 'jlanzarotta/bufexplorer'            " lists open bufffers like netrw
-Plug 'jremmen/vim-ripgrep'                " Ripgrep integratipon via :Rg
-Plug 'kien/ctrlp.vim'                     " fuzzy search files
-Plug 'luochen1990/rainbow'                " rainbow parenthesis
-Plug 'mbbill/undotree'                    " shows your undotree
-Plug 'michaeljsmith/vim-indent-object'    " defines textobjects based on indent-level
-Plug 'sheerun/vim-polyglot'               " contains a ton of syntax plugins
-Plug 'tpope/vim-commentary'               " quickly comment/uncomment code
-Plug 'tpope/vim-eunuch'                   " unix commands like :Move
-Plug 'tpope/vim-fugitive'                 " git integration
-Plug 'tpope/vim-rails'                    " rails integration
-Plug 'tpope/vim-repeat'                   " improved repeat button .
-Plug 'tpope/vim-rhubarb'                  " open file in github.com
-Plug 'tpope/vim-sensible'                 " sensible defaults
-Plug 'tpope/vim-surround'                 " quickly change quotes/parens
-Plug 'tpope/vim-unimpaired'               " handy toggles
-Plug 'tpope/vim-vinegar'                  " handy shortcuts for netrw
-
-" Some colorschemes
+Plug 'csexton/trailertrash.vim'
+Plug 'dense-analysis/ale'
+Plug 'fatih/vim-go'
+Plug 'godlygeek/tabular'
+Plug 'itchyny/lightline.vim'
+Plug 'janko-m/vim-test'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'jremmen/vim-ripgrep'
+Plug 'junegunn/vim-easy-align'
+Plug 'kien/ctrlp.vim'
+Plug 'luochen1990/rainbow'
+Plug 'maximbaz/lightline-ale'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'nanotech/jellybeans.vim'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
-
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-cucumber'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
 call plug#end()
 
 if needsToInstallPlugins == 1
@@ -60,62 +48,60 @@ if needsToInstallPlugins == 1
   echo "\nInstalled.\n"
 endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim and Macvim (not neovim)
-"
-filetype plugin indent on
+set backupdir=~/.vim/tmp/
+set directory=~/.vim/swap/
+set undodir=~/.vim/undo/
 
-" for neovim, change these directories
-set backupdir=~/.vim/tmp/  " Keep backups in a central location
-set directory=~/.vim/swap/ " Keep swap files in a central location
-set undodir=~/.vim/undo    " Where to store undo history
+set backup
+set history=10000
+set hlsearch
+set lazyredraw
+set nowrap
+set nonumber
+set nocursorline
+set scrolloff=4
+set smartcase
+set splitbelow splitright
+set synmaxcol=512
+set timeoutlen=500
+set undofile
+set gdefault
 
-set t_Co=256  " 256-bit color
-set vb t_vb=  " Turn off beeping
-
-" Remove tooltips
-set noballooneval
-set balloondelay=100000
-setlocal balloonexpr=
-
-" set antialias        " Turn on antialias
-set guioptions=Ace   " No menubar, toolbar or scrollbars, as minimal as possible
-set guifont=Hack:h15 " https://sourcefoundry.org/hack/
-
-au BufNewFile,BufRead *.template set filetype=yaml
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Jellybean Colorscheme
+" Visual
 "
 let g:jellybeans_use_gui_italics = 0
-let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '161616' } }
-let g:jellybeans_background_color = '161616'
-set fillchars+=vert:\  " space as vertical split character
+colorscheme jellybeans
+
+set guifont=Hack\ Nerd\ Font:h15
+set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
+set vb t_vb= " Turn off beeping
+
+" narrow split separator
+set fillchars+=vert:│
+hi VertSplit ctermbg=NONE guibg=NONE
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Formatting configuration
-"
-set smartcase
-set hlsearch
-
-" Indenting always 2 spaces, sorry Python
-set smartindent
-set cindent
-set expandtab
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-
-if executable('par')
-  set formatprg=par\ -w80\ -q
-endif
-
-au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General key remapping
+" Key Config
 "
 let mapleader = ","
+
+" Insert mode:
+inoremap <C-h> <Esc><c-w>h
+inoremap <C-j> <Esc><c-w>j
+inoremap <C-k> <Esc><c-w>k
+inoremap <C-l> <Esc><c-w>l
+" Visual mode:
+vnoremap <C-h> <Esc><c-w>h
+vnoremap <C-j> <Esc><c-w>j
+vnoremap <C-k> <Esc><c-w>k
+vnoremap <C-l> <Esc><c-w>l
+" Normal mode:
+nnoremap <C-h> <c-w>h
+nnoremap <C-j> <c-w>j
+nnoremap <C-k> <c-w>k
+nnoremap <C-l> <c-w>l
 
 " Allow :W to save
 command! W :w
@@ -142,22 +128,6 @@ map <Leader>q :split ~/Dropbox/notes.md<cr>
 
 map <Leader>w :!touch tmp/restart.txt<cr>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Window configuration
-"
-set number                 " Line numbering
-set nowrap                 " No wrapping by default
-set scrolloff=4            " Keep a few lines above and below current line
-set equalalways            " create equally sized splits
-set splitbelow splitright  " split placement
-" set relativenumber       " Relative line numbering
-
-" Directly switch between open splitted windows
-map <C-J> <C-W>j
-map <C-H> <C-W>h
-map <C-L> <C-W>l
-map <C-K> <C-W>k
-
 " %% will become the directory of the current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
@@ -167,41 +137,10 @@ map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntax configuration
-"
-set lazyredraw     " Don't redraw during macro execution
-set synmaxcol=512  " Stop syntax highlighting for long lines
-
-let g:jsx_ext_required = 0  " also use jsx syntax in .js files
-let g:ruby_no_expensive = 0 " Differentiate between do..end and class..end is slow
-let g:ruby_operators = 1    " Highlight Ruby operators
-let g:ruby_indent_block_style = 'do'
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Buffer configuration
-"
-set history=10000           " Keep a lot of stuff in history
-set backup                  " Make backups
-set undofile                " Keep undo history even after closing Vim
-set timeoutlen=500          " Don't wait so long for ambiguous leader keys
-set gdefault                " assume the /g flag on :s substitutions to replace all matches in a line
-
-" Buffer Explorer opens with Ctrl+B
-nnoremap <C-B> :BufExplorer<cr>
-
-" When editing a file, always jump to the last known cursor position.
-autocmd BufReadPost *
-      \ if line("'\"") > 1 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocomplete
 "
+set tags=./.ctags;
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 
@@ -215,7 +154,124 @@ function! InsertTabWrapper()
   endif
 endfunction
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Linter configuration (using Ale plugin)
+"
 
+" Use Ruby from ASDF if available
+if filereadable(expand("~/.asdf/shims/ruby"))
+  let g:ale_ruby_ruby_executable = expand("~/.asdf/shims/ruby")
+endif
+
+" Always open sign column, so no sudden shifts
+let g:ale_sign_column_always = 1
+set signcolumn=yes
+
+" Using Nerd Font icons from https://www.nerdfonts.com/
+let g:ale_sign_warning = "\uf444 "
+let g:ale_sign_error = "\uf05e "
+
+" Color the sign column
+highlight SignColumn ctermfg=9 ctermbg=233 guibg=#151515
+highlight ALEWarning ctermbg=52 gui=undercurl guisp=#660000
+highlight ALEWarningSign ctermfg=9 ctermbg=233 guifg=#7777dd
+highlight ALEErrorSign ctermfg=196 ctermbg=233 guifg=#C30500
+
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+" Use Cmd+k / Cmd+j to jump between linter failures
+nmap <silent> <D-k> <Plug>(ale_previous)
+nmap <silent> <D-j> <Plug>(ale_next)
+
+" Use Cmd+r to fix ruby linter errors
+nmap <silent> <D-r> :ALEFix rubocop<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Status line configuration (using lightline)
+"
+" set laststatus=2
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'jellybeans',
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'active': {
+      \   'left':  [ [ 'mode', 'paste' ], [ 'filename' ], [ 'githead' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ], [ 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'LightlineModified',
+      \   'readonly': 'LightlineReadonly',
+      \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename',
+      \   'fileformat': 'LightlineFileformat',
+      \   'filetype': 'LightlineFiletype',
+      \   'fileencoding': 'LightlineFileencoding',
+      \   'mode': 'LightlineMode',
+      \   'gitbranch': 'FugitiveHead',
+      \ },
+      \ 'component_expand': {
+      \   'linter_checking': 'lightline#ale#checking',
+      \   'linter_infos': 'lightline#ale#infos',
+      \   'linter_warnings': 'lightline#ale#warnings',
+      \   'linter_errors': 'lightline#ale#errors',
+      \   'linter_ok': 'lightline#ale#ok',
+      \ },
+      \ 'component_type': {
+      \   'linter_checking': 'right',
+      \   'linter_infos': 'right',
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_ok': 'right',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+function! LightlineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
+endfunction
+
+" \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? @% : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+" using ale results in the lightline using nerd fonts icons https://www.nerdfonts.com/
+let g:lightline#ale#indicator_checking = "\uf110 "
+let g:lightline#ale#indicator_infos = "\uf129 "
+let g:lightline#ale#indicator_warnings = "\uf071 "
+let g:lightline#ale#indicator_errors = "\uf05e "
+let g:lightline#ale#indicator_ok = "\uf00c"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ripgrep configuration
+"
+set wildignore+=*/.git/*,*/tmp/*,*.swp
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching = 0
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vertical alignment configuration (using tabular)
@@ -286,13 +342,13 @@ nmap <Leader>a: :call AlignRubyHashes()<cr>
 " In visual mode, the range is already fixed
 vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rainbow parenthesis configuration
 "
+" let g:terminal_ansi_colors = [ '#888888', '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f', '#888888', '#888888', '#ffb2b0', '#c8e2b9', '#ffe1af', '#bddff7', '#fce2ff', '#0bbdb6', '#e8e8d3' ]
 let g:rainbow_active = 1
 let g:rainbow_conf = {
-  \  'guifgs':  [ '#ea8986', '#a4c38c', '#ffc68d', '#a7cae3', '#e8cefb', '#00a7a0' ],
+  \  'guifgs':  [ '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f' ],
   \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
   \  'operators': '_,_',
   \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
@@ -306,54 +362,37 @@ let g:rainbow_conf = {
   \  }
   \}
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Linter configuration (using Ale plugin)
+" vim-test configuration
 "
-let g:ale_sign_error   = ' •' " has U+2009 as space
-let g:ale_sign_warning = ' •'
-let g:ale_sign_column_always = 1
-" use homebrew ruby if it exists:
-if filereadable(expand("/usr/local/opt/ruby/bin/ruby"))
-  let g:ale_ruby_ruby_executable = '/usr/local/opt/ruby/bin/ruby'
-endif
+" let test#strategy = "iterm"
+let test#strategy = "vimterminal"
+let g:test#preserve_screen = 1
+let test#vim#term_position = "belowright"
+let test#ruby#rspec#executable    = 'devc ./bin/rspec -fd'
+let test#ruby#cucumber#executable = 'devc ./bin/cucumber'
+let test#ruby#minitest#executable = 'devc bundle exec rake test'
+let test#ruby#rails#executable    = 'devc ./bin/rails test'
 
-highlight Error   cterm=bold gui=bold guibg=#151515 guifg=DarkRed
-highlight Warning cterm=bold gui=bold guibg=#FF0000
+let test#elixir#exunit#options = '--stale'
+let test#elixir#exunit#options = {
+  \ 'suite':   '--stale',
+\}
+nmap <silent> <leader>t :up<CR>:TestLast<CR>
+nmap <silent> <leader>T :up<CR>:TestFile<CR>
+nmap <silent> <leader>r :up<CR>:TestNearest<CR>
+nmap <silent> <leader>R :up<CR>:TestSuite --only-failures<CR>
+nmap <silent> <leader>g :TestVisit<CR>
 
-" highlight ALEError guibg=#FF0000
-" highlight ALEErrorLine guibg=#FF0000
-highlight ALEErrorSign ctermfg=9 ctermbg=15 guifg=#C30500
-" highlight ALEStyleError guibg=#FF0000
-
-" highlight ALEInfo guibg=#FF0000
-" highlight ALEInfoLine guibg=#FF0000
-
-" highlight ALEStyleWarning guibg=#FF0000
-highlight ALEWarning gui=undercurl guisp=#7777dd
-" highlight ALEWarning guibg=#151566 gui=undercurl
-" highlight ALEWarningLine guibg=#FF0000
-highlight ALEWarningSign ctermfg=11 ctermbg=15 guifg=#7777dd
-
-"  ale#statusline#Count()
-let g:ale_statusline_format = ['⨉ %d', 'w %d', 'OK']
-
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-" let g:ale_lint_on_text_changed = 'normal'
-" Only run on save
-let g:ale_lint_on_text_changed = 'never'
-" if you don't want linters to run on opening a file
-" let g:ale_lint_on_enter = 0
-
-" Map prev and back mac shortcuts to traverse buffers
-map <D-[> :bprevious<cr>
-map <D-]> :bnext<cr>
-
-nmap <silent> <D-k> <Plug>(ale_previous)
-nmap <silent> <D-j> <Plug>(ale_next)
-nmap <silent> <D-r> :ALEFix rubocop<CR>
-
+" Map ,p to promote variable assignment to let in rspec
+map <leader>p :call PromoteToLet()<cr>
+function! PromoteToLet()
+  :normal! dd
+  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
+  :normal! p
+  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
+  :normal ==
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fugitive (Git) (follow the <Leader><Leader>)
@@ -367,148 +406,19 @@ map <Leader><Leader>f :Git fetch<cr>
 map <Leader><Leader>u :Git up<cr>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-test configuration
-"
-let test#strategy = "iterm"
-let g:test#preserve_screen = 1
-let test#ruby#rspec#executable = 'rspec_focus'
-let test#ruby#cucumber#executable = 'cucumber_focus'
-let test#elixir#exunit#options = '--stale'
-let test#elixir#exunit#options = {
-  \ 'suite':   '--stale',
-\}
-nmap <silent> <leader>t :up<CR>:TestLast<CR>
-nmap <silent> <leader>T :up<CR>:TestFile<CR>
-nmap <silent> <leader>r :up<CR>:TestNearest<CR>
-nmap <silent> <leader>R :up<CR>:TestSuite --only-failures<CR>
-nmap <silent> <leader>g :TestVisit<CR>
-
-" Map ,p to promot variable assignment to let in rspec
-map <leader>p :call PromoteToLet()<cr>
-function! PromoteToLet()
-  :normal! dd
-  :exec '?^\s*describe\|fdescribe\|fcontext\|context\|RSpec\.describe\>'
-  :normal! p
-  :.s/\(\w\+\)\s\+=\s\+\(.*\)$/let(:\1) { \2 }/
-  :normal ==
-endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Status line configuration (using lightline)
+" terminal configuration
 "
-set laststatus=2
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ 'mode_map': { 'c': 'NORMAL' },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'filename' ] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'modified': 'LightlineModified',
-      \   'readonly': 'LightlineReadonly',
-      \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \   'fileformat': 'LightlineFileformat',
-      \   'filetype': 'LightlineFiletype',
-      \   'fileencoding': 'LightlineFileencoding',
-      \   'mode': 'LightlineMode',
-      \ },
-      \ 'component_expand': {
-      \   'syntastic': 'ale#statusline#Count',
-      \ },
-      \ 'component_type': {
-      \   'syntastic': 'error',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
 
-function! LightlineModified()
-  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
+" Jellybeans colors
+let g:terminal_ansi_colors = [ '#888888', '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f', '#888888', '#888888', '#ffb2b0', '#c8e2b9', '#ffe1af', '#bddff7', '#fce2ff', '#0bbdb6', '#e8e8d3' ]
 
-function! LightlineReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
-endfunction
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-v><Esc> <Esc>
 
-" \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-function! LightlineFilename()
-  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft == 'unite' ? unite#get_status_string() :
-        \  &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ '' != expand('%:t') ? @% : '[No Name]') .
-        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
-endfunction
-
-function! LightlineFugitive()
-  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
-    let branch = fugitive#head()
-    return branch !=# '' ? ' '.branch : ''
-  endif
-  return ''
-endfunction
-
-function! LightlineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightlineFileencoding()
-  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
-endfunction
-
-function! LightlineMode()
-  return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Ripgrep configuration
-"
-set wildignore+=*/.git/*,*/tmp/*,*.swp
-if executable('rg')
-  set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching = 0
-endif
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Color Switching
-"
-function! LightMode()
-  set background=light
-  let g:lightline.colorscheme='one'
-  colorscheme onehalflight
-endfunction
-
-function! DarkMode()
-  set background=dark
-  let g:lightline.colorscheme='jellybeans'
-  colorscheme jellybeans
-endfunction
-
-
-func! ChangeBackground()
-  if system("defaults read -g AppleInterfaceStyle") == "Dark\n"
-    call DarkMode()
-  else
-    call LightMode()
-  endif
-  redraw!
-endfunc
-
-if has("gui_macvim")
-  au OSAppearanceChanged * call ChangeBackground()
-  " Issue with macvim's vim binary
-  call ChangeBackground()
-  " call DarkMode()
-else
-  call DarkMode()
-endif
+" Terminal mode:
+tnoremap <C-h> <c-\><c-n><c-w>h
+tnoremap <C-j> <c-\><c-n><c-w>j
+tnoremap <C-k> <c-\><c-n><c-w>k
+tnoremap <C-l> <c-\><c-n><c-w>l
