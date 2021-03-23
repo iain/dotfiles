@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -eu
+
+# time ripper-tags -R -- . $(bundle list --paths)
+time ripper-tags -R -f .ctags -- .

@@ -27,3 +27,7 @@ Dir["rc/*"].each do |f|
 end
 
 symlink "config/init.vim", "~/.config/nvim/init.vim"
+
+symlink "config/starship.toml", "~/.config/starship.toml"
+
+symlink "config/config.fish", "~/.config/fish/config.fish"

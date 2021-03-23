@@ -67,6 +67,7 @@ set timeoutlen=500
 set undofile
 set gdefault
 
+au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Visual
@@ -81,6 +82,7 @@ set vb t_vb= " Turn off beeping
 " narrow split separator
 set fillchars+=vert:│
 hi VertSplit ctermbg=NONE guibg=NONE
+" set linespace=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key Config
@@ -122,6 +124,8 @@ nnoremap <S-k> kJ
 nnoremap <silent><cr> :nohlsearch<cr>:ALELint<cr>
 " Restore return to default for quickfix window
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+
+nnoremap <C-B> :BufExplorer<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>

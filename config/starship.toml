@@ -1,0 +1,69 @@
+add_newline = false
+
+# [line_break]
+# disabled = true
+
+[directory]
+style = "blue"
+read_only = " "
+
+[status]
+style = "red"
+disabled = false
+symbol = "✖ "
+
+[character]
+success_symbol = "[❯](blue)"
+error_symbol = "[❯](red)"
+
+[git_branch]
+# symbol = " "
+symbol = ""
+style = "green"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "purple"
+
+[rust]
+symbol = " "
+
+[swift]
+symbol = "ﯣ "
+
+[ruby]
+symbol = " "
+style = "red dimmed"
+format = "[$symbol($version )]($style)"
+
+[aws]
+symbol = " "
+style = "yellow dimmed"
+disabled = true
+
+[nodejs]
+symbol = " "
+style = "purple dimmed"
+format = "[$symbol($version )]($style)"
+
+[package]
+symbol = " "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[python]
+symbol = " "
+
+[docker]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "

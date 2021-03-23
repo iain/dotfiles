@@ -1,9 +1,9 @@
-export GPG_TTY=`tty`
+export GPG_TTY=(tty)
 
 alias aa='git add --all && git status -s'
 alias amend='git commit --amend'
 alias c='git commit'
-alias cdb='base=$(git rev-parse --show-cdup) && cd $base'
+alias cdb='cd (git rev-parse --show-cdup)'
 alias d='git diff'
 alias dc='git diff --cached'
 alias g12='git rev-parse HEAD | cut -c 1-12'
@@ -21,16 +21,16 @@ alias up='git pull --ff-only'
 alias upstash='git stash && git pull --ff-only && git stash pop'
 
 # Trying to lose the habit of using `git checkout`, by disabling it.
-function git {
-  if [ "$1" = "checkout" ]; then
+function git
+  if [ "$1" = "checkout" ]
     echo "\033[0;31mStop using 'git checkout'.\033[0;0m Instead, use these:"
     echo "- git switch     # for branches, create with -c"
     echo "- git restore    # for files"
-    echo "Waiting \033[0;36m30 seconds\033[0;0m as punishment"
-    sleep 30
-  fi
-  command git $*
-}
+    echo "Waiting \033[0;36m10 seconds\033[0;0m as punishment"
+    sleep 10
+  end
+  command git $argv
+end
 
 # things that might be handy, but I'm not currently using
 
