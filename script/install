@@ -8,9 +8,10 @@ def symlink(from, to)
   to = File.expand_path(to)
   FileUtils.mkdir_p(File.dirname(to))
   if File.exist?(to)
-    if FileUtils.identical?(from, to)
-      # noop
-      puts "Skipping #{to}"
+    if File.directory?(from) || File.directory?(to)
+      puts "Skipping #{to}, because I don't want to compare whole directories"
+    elsif FileUtils.identical?(from, to)
+      puts "Skipping #{to}, files are identical"
     else
       backup = "#{to}.bak"
       puts "Making backup of #{to} in #{backup}"
@@ -31,3 +32,7 @@ symlink "config/init.vim", "~/.config/nvim/init.vim"
 symlink "config/starship.toml", "~/.config/starship.toml"
 
 symlink "config/config.fish", "~/.config/fish/config.fish"
+
+symlink "config/fish/functions", "~/.config/fish/functions"
+
+symlink "config/auto_dark_mode.py", "/Users/iain/Library/ApplicationSupport/iTerm2/Scripts/AutoLaunch/auto_dark_mode.py"

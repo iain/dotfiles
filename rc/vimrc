@@ -25,6 +25,7 @@ Plug 'luochen1990/rainbow'
 Plug 'maximbaz/lightline-ale'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nanotech/jellybeans.vim'
+Plug 'rakr/vim-one'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-bundler'
@@ -69,20 +70,6 @@ set gdefault
 
 au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Visual
-"
-let g:jellybeans_use_gui_italics = 0
-colorscheme jellybeans
-
-set guifont=Hack\ Nerd\ Font:h15
-set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
-set vb t_vb= " Turn off beeping
-
-" narrow split separator
-set fillchars+=vert:│
-hi VertSplit ctermbg=NONE guibg=NONE
-" set linespace=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key Config
@@ -176,10 +163,9 @@ let g:ale_sign_warning = "\uf444 "
 let g:ale_sign_error = "\uf05e "
 
 " Color the sign column
-highlight SignColumn ctermfg=9 ctermbg=233 guibg=#151515
 highlight ALEWarning ctermbg=52 gui=undercurl guisp=#660000
-highlight ALEWarningSign ctermfg=9 ctermbg=233 guifg=#7777dd
-highlight ALEErrorSign ctermfg=196 ctermbg=233 guifg=#C30500
+highlight ALEWarningSign ctermfg=9 ctermbg=NONE guifg=#7777dd
+highlight ALEErrorSign ctermfg=196 ctermbg=NONE guifg=#C30500
 
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
@@ -426,3 +412,54 @@ tnoremap <C-h> <c-\><c-n><c-w>h
 tnoremap <C-j> <c-\><c-n><c-w>j
 tnoremap <C-k> <c-\><c-n><c-w>k
 tnoremap <C-l> <c-\><c-n><c-w>l
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Visual
+"
+set guifont=Hack\ Nerd\ Font:h15
+set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
+set vb t_vb= " Turn off beeping
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Switching
+"
+let g:jellybeans_use_gui_italics = 0
+let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' }, 'VertSplit': { 'guibg': '151515' } }
+
+function AfterColorChange()
+  set fillchars+=vert:│
+  highlight Normal ctermbg=NONE
+  highlight SignColumn ctermfg=9 ctermbg=NONE guibg=NONE
+  highlight VertSplit ctermbg=NONE guibg=NONE
+  call lightline#enable()
+endfunction
+
+function LightMode()
+  let g:lightline.colorscheme='one'
+  colorscheme one
+  set background=light
+  call AfterColorChange()
+endfunction
+
+function DarkMode()
+  let g:lightline.colorscheme='jellybeans'
+  colorscheme jellybeans
+  set background=dark
+  call AfterColorChange()
+endfunction
+
+function ChangeBackground()
+  if system("dark-mode status") == "off\n"
+    call LightMode()
+  else
+    call DarkMode()
+  endif
+  redraw!
+endfunc
+
+if has("gui_macvim")
+  au OSAppearanceChanged * call ChangeBackground()
+endif
+
+call ChangeBackground()

@@ -3,10 +3,10 @@ set -euo pipefail
 
 echo -e "\033[2mMigrating for development =====================================\033[0m"
 
-RAILS_ENV=development RACK_ENV=development APP_ENV=development time bundle exec rake db:migrate
+COMPILE_MODE=true RAILS_ENV=development RACK_ENV=development APP_ENV=development time ./bin/rake db:migrate
 
 echo -e "\033[2mMigrating for test ============================================\033[0m"
 
-RAILS_ENV=test RACK_ENV=test APP_ENV=test time bundle exec rake db:migrate
+COMPILE_MODE=true RAILS_ENV=test RACK_ENV=test APP_ENV=test time ./bin/rake db:migrate
 
 echo -e "\033[2mDone ==========================================================\033[0m"

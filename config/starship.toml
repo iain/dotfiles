@@ -23,8 +23,17 @@ style = "green"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-format = '([$all_status$ahead_behind]($style) )'
+format = '([$all_status](yellow)[$ahead_behind]($style) )'
 style = "purple"
+deleted = " "
+modified = " "
+staged = " "
+stashed = " $count "
+untracked = "ﱐ "
+ahead = "↑"
+behind = "↓"
+diverged = "↕"
+conflicted = "[ﲅ ](red)"
 
 [rust]
 symbol = " "
@@ -44,7 +53,7 @@ disabled = true
 
 [nodejs]
 symbol = " "
-style = "purple dimmed"
+style = "cyan dimmed"
 format = "[$symbol($version )]($style)"
 
 [package]

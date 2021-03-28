@@ -1,10 +1,16 @@
 # ls
 export CLICOLOR=1
-export LS_COLORS='no=00:fi=00:di=00;36:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;35:*.rb=00;31'
 if which gls > /dev/null; then
   alias ls='gls --group-directories-first --color=auto'
 fi
-alias l='ls -FhAlo'
+
+if which exa > /dev/null; then
+  export EXA_COLORS="da=30:ur=37:gr=37:tr=37:uu=33"
+  alias l='exa --long --group-directories-first --git --all --grid --time-style=long-iso'
+else
+  export LS_COLORS='no=00:fi=00:di=00;36:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;35:*.rb=00;31'
+  alias l='ls -FhAlo'
+fi
 
 # pagers
 alias tf='tail -f -n 200'
