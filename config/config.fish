@@ -21,7 +21,7 @@ set -Ux VISUAL         "mvim"
 set -Ux BUNDLER_EDITOR $VISUAL
 set -Ux GEMEDITOR      $VISUAL
 set -Ux VIM_APP_DIR    "/usr/local/opt/macvim"
-set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma" -c "nmap q :q<cr>' -"
+set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
 # ls
 set -Ux CLICOLOR 1
@@ -53,8 +53,8 @@ set -Ux GPG_TTY (tty)
 
 # git abbreviations
 abbr -a aa    "git add --all"
-abbr -a amend "git commit --amend"
-abbr -a c     "git commit"
+abbr -a amend "git commit -v --amend"
+abbr -a c     "git commit -v"
 abbr -a co    "git checkout"
 abbr -a d     "git diff"
 abbr -a dc    "git diff --cached"
