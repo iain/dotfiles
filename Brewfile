@@ -58,6 +58,7 @@ brew "zoxide"
 
 # fun
 brew "cowsay"
+brew "fortune"
 brew "gti"
 brew "sl"
 

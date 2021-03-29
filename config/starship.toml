@@ -1,15 +1,30 @@
 add_newline = false
-
-# [line_break]
-# disabled = true
+format = """
+$username\
+$hostname\
+$shlvl\
+$directory\
+${custom.tim}\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$env_var\
+$jobs\
+$battery\
+$time\
+$status\
+$shell\
+$character"""
 
 [directory]
 style = "blue"
 read_only = " "
 
 [status]
-style = "red"
 disabled = false
+style = "red"
 symbol = "✖ "
 
 [character]
@@ -21,6 +36,7 @@ error_symbol = "[❯](red)"
 symbol = ""
 style = "green"
 format = "[$symbol$branch]($style) "
+truncation_length = 24
 
 [git_status]
 format = '([$all_status](yellow)[$ahead_behind]($style) )'
@@ -35,44 +51,9 @@ behind = "↓"
 diverged = "↕"
 conflicted = "[ﲅ ](red)"
 
-[rust]
-symbol = " "
-
-[swift]
-symbol = "ﯣ "
-
-[ruby]
-symbol = " "
-style = "red dimmed"
-format = "[$symbol($version )]($style)"
-
-[aws]
-symbol = " "
-style = "yellow dimmed"
-disabled = true
-
-[nodejs]
-symbol = " "
-style = "cyan dimmed"
-format = "[$symbol($version )]($style)"
-
-[package]
-symbol = " "
-
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[python]
-symbol = " "
-
-[docker]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
+[custom.tim]
+disabled = false
+command = "~/.dotfiles/bin/git-time-since-last-commit"
+style = "black dimmed"
+when = "true"
+files = [".git"]

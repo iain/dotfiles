@@ -1,17 +1,16 @@
 # encodings
-set -Ux LANG     "en_US.UTF-8"
-set -Ux LANGUAGE "en_US.UTF-8"
-set -Ux LC_ALL   "en_US.UTF-8"
-set -Ux LC_CTYPE "en_US.UTF-8"
+set -gx LANG     "en_US.UTF-8"
+set -gx LANGUAGE "en_US.UTF-8"
+set -gx LC_ALL   "en_US.UTF-8"
+set -gx LC_CTYPE "en_US.UTF-8"
 
 # setting $PATH
-set -Ux PATH $PATH "/usr/local/sbin"
-set -Ux PATH $PATH "/usr/local/bin"
-set -Ux PATH $PATH "/usr/local/opt/openssl/bin"
-set -Ux PATH $PATH "/usr/local/opt/postgresql/bin"
-set -Ux PATH $PATH "$HOME/.dotfiles/bin"
-
-set -Ux JAVA_HOME "/Library/Java/Home"
+set -gx PATH $PATH "/usr/local/sbin"
+set -gx PATH $PATH "/usr/local/bin"
+set -gx PATH $PATH "/usr/local/opt/openssl/bin"
+set -gx PATH $PATH "/usr/local/opt/postgresql/bin"
+set -gx PATH $PATH "$HOME/.dotfiles/bin"
+set -gx JAVA_HOME "/Library/Java/Home"
 
 # configur prefered editor
 set -Ux EDITOR         "vim"
@@ -70,7 +69,8 @@ abbr -a re    "git restore"
 abbr -a s     "git status -s"
 abbr -a st    "git status"
 abbr -a sw    "git switch"
-abbr -a up    "git pull"
+abbr -a up    "git pull --ff-only"
+abbr -a unstage "git restore --staged --"
 
 # ruby abbreviations
 abbr -a b  "bundle"
@@ -81,12 +81,12 @@ abbr -a r  "rails"
 # stop cucumber spam
 set -x CUCUMBER_PUBLISH_QUIET "true"
 
-starship init fish | source
+# starship init fish | source
 zoxide init fish | source
 source /usr/local/opt/asdf/asdf.fish
 
 # ignored file, might not be there
 # this is where I put secret tokens
-if [ -f ~/.dotfiles/config/personal.fish ]
-	source ~/.dotfiles/config/personal.fish
+if [ -f ~/.dotfiles/config/fish/personal.fish ]
+	source ~/.dotfiles/config/fish/personal.fish
 end

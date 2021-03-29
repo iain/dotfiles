@@ -33,9 +33,6 @@
 [push]
   default = current
   followTags = true
-[pull]
-  rebase = true
-  ff = only
 [fetch]
   prune = true
   prunteTags = true

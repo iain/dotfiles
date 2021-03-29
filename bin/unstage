@@ -1,6 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-git restore --staged -- $*
-echo
-git status

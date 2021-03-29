@@ -1,0 +1,123 @@
+format = """
+$shlvl\
+$kubernetes\
+$docker_context\
+$package\
+$cmake\
+$dart\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$kotlin\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vagrant\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$env_var\
+$crystal\
+$cmd_duration\
+$line_break\
+$lua\
+$jobs\
+$battery"""
+add_newline = false
+
+[line_break]
+disabled = true
+
+[character]
+disabled = true
+
+[status]
+disabled = true
+
+[directory]
+disabled = true
+
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[rust]
+symbol = " "
+style = "red dimmed"
+format = "[$symbol($version )]($style)"
+
+[swift]
+symbol = "ﯣ "
+style = "blue dimmed"
+format = "[$symbol($version )]($style)"
+
+[ruby]
+symbol = " "
+style = "red dimmed"
+format = "[$symbol($version )]($style)"
+
+[aws]
+symbol = " "
+style = "yellow dimmed"
+disabled = true
+
+[nodejs]
+symbol = " "
+style = "cyan dimmed"
+format = "[$symbol($version )]($style)"
+
+[package]
+symbol = " "
+style = "black "
+format = "[$symbol($version )]($style)"
+
+[perl]
+symbol = " "
+style = "blue dimmed"
+format = "[$symbol($version )]($style)"
+
+[php]
+symbol = " "
+style = "purple dimmed"
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "yellow dimmed"
+format = "[$symbol($version )]($style)"
+
+[docker]
+symbol = " "
+style = "blue dimmed"
+format = "[$symbol($version )]($style)"
+
+[elixir]
+symbol = " "
+style = "purple dimmed"
+format = "[$symbol($version )]($style)"
+
+[elm]
+symbol = " "
+style = "blue dimmed"
+format = "[$symbol($version )]($style)"
+
