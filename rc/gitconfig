@@ -1,3 +1,5 @@
+[user]
+  useConfigOnly = true
 [core]
   excludesfile = ~/.dotfiles/config/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
@@ -19,6 +21,8 @@
   diff = auto
   status = auto
   branch = auto
+[status]
+  showStash = true
 [help]
   autocorrect = 1
 [diff]
@@ -27,9 +31,21 @@
 [diff "rspec"]
   xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 [push]
-  default = upstream
+  default = current
+  followTags = true
+[pull]
+  rebase = true
+  ff = only
+[fetch]
+  prune = true
+  prunteTags = true
+[rebase]
+  autostash = true
 [branch]
   autosetuprebase = always
+[merge]
+  verifySignatures = true
+  log = true
 [http]
   postBuffer = 100m
 [pager]
@@ -40,6 +56,8 @@
   pretty = format:%C(auto,yellow) %h%C(auto,magenta)% %C(auto,blue)%>(17,trunc)%ad %C(auto,green)%<(7,trunc)%aN%C(auto,reset)%s%C(auto,red)% gD% d
 [init]
   defaultBranch = main
+[tag]
+  gpgSign = true
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
@@ -48,4 +66,5 @@
 [credential]
   helper = osxkeychain
 [commit]
-  gpgsign = true
+  gpgSign = true
+  verbose = true

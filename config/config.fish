@@ -53,8 +53,8 @@ set -Ux GPG_TTY (tty)
 
 # git abbreviations
 abbr -a aa    "git add --all"
-abbr -a amend "git commit -v --amend"
-abbr -a c     "git commit -v"
+abbr -a amend "git commit --amend"
+abbr -a c     "git commit"
 abbr -a co    "git checkout"
 abbr -a d     "git diff"
 abbr -a dc    "git diff --cached"
@@ -70,7 +70,7 @@ abbr -a re    "git restore"
 abbr -a s     "git status -s"
 abbr -a st    "git status"
 abbr -a sw    "git switch"
-abbr -a up    "git pull --ff-only --rebase --autostash"
+abbr -a up    "git pull"
 
 # ruby abbreviations
 abbr -a b  "bundle"
