@@ -1,22 +1,19 @@
 add_newline = false
 format = """
+$jobs\
 $username\
 $hostname\
 $shlvl\
 $directory\
-${custom.tim}\
-$git_branch\
-$git_commit\
-$git_state\
-$git_status\
-$hg_branch\
-$env_var\
-$jobs\
-$battery\
-$time\
-$status\
 $shell\
+${custom.git}\
+$cmd_duration\
+$status\
 $character"""
+
+[jobs]
+symbol = " "
+style = "dimmed purple"
 
 [directory]
 style = "blue"
@@ -31,29 +28,6 @@ symbol = "✖ "
 success_symbol = "[❯](blue)"
 error_symbol = "[❯](red)"
 
-[git_branch]
-# symbol = " "
-symbol = ""
-style = "green"
-format = "[$symbol$branch]($style) "
-truncation_length = 24
-
-[git_status]
-format = '([$all_status](yellow)[$ahead_behind]($style) )'
-style = "purple"
-deleted = " "
-modified = " "
-staged = " "
-stashed = " $count "
-untracked = "ﱐ "
-ahead = "↑"
-behind = "↓"
-diverged = "↕"
-conflicted = "[ﲅ ](red)"
-
-[custom.tim]
-disabled = false
-command = "~/.dotfiles/bin/git-time-since-last-commit"
-style = "black dimmed"
+[custom.git]
+command = "~/.dotfiles/bin/git-prompt"
 when = "true"
-files = [".git"]

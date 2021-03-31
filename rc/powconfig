@@ -1,5 +1,0 @@
-# vi: ft=bash
-
-# https://github.com/puma/puma-dev#advanced-configuration
-export WORKERS=0
-export THREADS=16

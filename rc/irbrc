@@ -3,5 +3,5 @@
 begin
   require 'irbtools'
 rescue LoadError
-  puts "# gem install irbtools terminal-notifier"
+  # no problem
 end

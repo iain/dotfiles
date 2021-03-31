@@ -43,8 +43,8 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source ~/.dotfiles/config/general.sh
-source ~/.dotfiles/config/personal.sh
+source ~/.dotfiles/config/zsh/general.sh
+source ~/.dotfiles/config/zsh/personal.sh
 
 # asdf config must be all the way at the bottom
 # source $(brew --prefix asdf)/asdf.sh

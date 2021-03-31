@@ -4,6 +4,8 @@
   excludesfile = ~/.dotfiles/config/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
   attributesfile = ~/.gitattributes
+  splitIndex = true
+  untrackedCache = true
 [alias]
   added = diff --cached --name-only
   current = rev-parse HEAD

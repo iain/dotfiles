@@ -1,1 +1,0 @@
-git show -s --format='%ar' | sed 's/ second.*/s/' | sed 's/ minute.*/m/' | sed 's/ hour.*/h/' | sed 's/ day.*/d/' | sed 's/ week.*/w/' | sed 's/ month.*/mo/' | sed 's/ year.*/y/'

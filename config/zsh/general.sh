@@ -49,5 +49,5 @@ function psr() {
 }
 
 # import other configs:
-source "$HOME/.dotfiles/config/git.sh"
-source "$HOME/.dotfiles/config/ruby.sh"
+source "$HOME/.dotfiles/config/zsh/git.sh"
+source "$HOME/.dotfiles/config/zsh/ruby.sh"

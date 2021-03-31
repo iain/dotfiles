@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -eu
+
+reset="\033[0;0m"
+gray="\033[0;90m"
+red="\033[0;31m"
+green="\033[0;32m"
+yellow="\033[0;33m"
+blue="\033[0;34m"
+magenta="\033[0;35m"
+cyan="\033[0;36m"
+white="\033[0;37m"
+
+branch=`git branch --show-current`
+# subdir=`git rev-parse --show-prefix`
+basedir=`git rev-parse --show-toplevel`
+g="$basedir/.git"
+# normal or no for untracked files
+status=`git status --show-stash --no-renames --long --untracked-files=no --ignore-submodules=all --ignored=no`
+
+echo -ne $gray
+git show -s --format='%ar' | tr '\n' ' ' | sed 's/ second.*/s/' | sed 's/ minute.*/m/' | sed 's/ hour.*/h/' | sed 's/ day.*/d/' | sed 's/ week.*/w/' | sed 's/ month.*/mo/' | sed 's/ year.*/y/'
+
+echo -n ' '
+# echo $status
+
+if [ -z $branch ]; then
+  echo -ne $red
+  branch=`git rev-list -n 1 --abbrev-commit HEAD`
+elif echo $status | grep -q 'working tree clean'; then
+  echo -ne $green
+elif echo $status | grep -q 'nothing to commit (use -u to show untracked files)'; then
+  echo -ne $green
+else
+  echo -ne $yellow
+fi
+
+echo -n $branch
+
+if [ -d "$g/rebase-apply" ]; then
+  if [ -f "$g/rebase-apply/rebasing" ]; then
+    echo -ne " $red[REBASE]"
+  elif [ -f "$g/rebase-apply/applying" ]; then
+    echo -ne " $red[AM]"
+  else
+    echo -ne " $red[AM/REBASE]"
+  fi
+elif [ -f "$g/MERGE_HEAD" ]; then
+  echo -ne " $red[MERGING]"
+elif [ -f "$g/CHERRY_PICK_HEAD" ]; then
+  echo -ne " $red[CHERRY-PICKING]"
+elif [ -f "$g/REVERT_HEAD" ]; then
+  echo -ne " $red[REVERTING]"
+elif [ -f "$g/BISECT_LOG" ]; then
+  echo -ne " $red[BISECTING]"
+fi
+
+if echo $status | grep -q 'have diverged'; then
+  echo -ne " ${magenta}↕"
+elif echo $status | grep -q 'Your branch is ahead'; then
+  echo -ne " ${magenta}↑"
+elif echo $status | grep -q "Your branch is behind"; then
+  echo -ne " ${magenta}↓"
+fi
+
+if echo $status | grep -q 'Your stash currently'; then
+  echo -ne " ${gray} "
+  echo -n $status | grep 'Your stash currently' | sed 's/.*stash currently has \([0-9]*\) entr.*/\1/' | tr '\n' ' ' | sed 's/ *$//'
+fi
+
+# if [ -z $subdir ]; then
+#   echo -n ""
+# else
+#   echo -ne " $blue$subdir"
+# fi
+
+# echo -ne ${gray}❯
+
+echo -ne $reset

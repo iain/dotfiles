@@ -1,5 +1,4 @@
 /config/fish/personal.fish
-/config/personal.bash
-/config/personal.sh
-/config/personal.zsh
+/config/zsh/personal.sh
+/config/zsh/personal.zsh
 Brewfile.lock.json

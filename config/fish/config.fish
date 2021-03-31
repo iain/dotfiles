@@ -81,7 +81,7 @@ abbr -a r  "rails"
 # stop cucumber spam
 set -x CUCUMBER_PUBLISH_QUIET "true"
 
-# starship init fish | source
+starship init fish | source
 zoxide init fish | source
 source /usr/local/opt/asdf/asdf.fish
 
