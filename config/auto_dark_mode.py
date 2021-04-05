@@ -6,9 +6,9 @@ import iterm2
 async def changeTheme(theme_parts, connection):
     # Themes have space-delimited attributes, one of which will be light or dark.
     if "dark" in theme_parts:
-        preset = await iterm2.ColorPreset.async_get(connection, "iain")
+        preset = await iterm2.ColorPreset.async_get(connection, "GruvboxDark")
     else:
-        preset = await iterm2.ColorPreset.async_get(connection, "OneHalfLight")
+        preset = await iterm2.ColorPreset.async_get(connection, "GruvboxLight")
 
     # Update the list of all profiles and iterate over them.
     profiles=await iterm2.PartialProfile.async_query(connection)

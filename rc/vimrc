@@ -15,14 +15,12 @@ Plug 'csexton/trailertrash.vim'
 Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
-Plug 'itchyny/lightline.vim'
 Plug 'janko-m/vim-test'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/vim-easy-align'
 Plug 'kien/ctrlp.vim'
 Plug 'luochen1990/rainbow'
-Plug 'maximbaz/lightline-ale'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nanotech/jellybeans.vim'
 Plug 'rakr/vim-one'
@@ -41,6 +39,9 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+
+Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
 call plug#end()
 
 if needsToInstallPlugins == 1
@@ -179,81 +180,6 @@ nmap <silent> <D-r> :ALEFix rubocop<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Status line configuration (using lightline)
-"
-" set laststatus=2
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'jellybeans',
-      \ 'mode_map': { 'c': 'NORMAL' },
-      \ 'active': {
-      \   'left':  [ [ 'mode', 'paste' ], [ 'filename' ], [ 'githead' ] ],
-      \   'right': [ [ 'lineinfo' ], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ], [ 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'modified': 'LightlineModified',
-      \   'readonly': 'LightlineReadonly',
-      \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \   'fileformat': 'LightlineFileformat',
-      \   'filetype': 'LightlineFiletype',
-      \   'fileencoding': 'LightlineFileencoding',
-      \   'mode': 'LightlineMode',
-      \   'gitbranch': 'FugitiveHead',
-      \ },
-      \ 'component_expand': {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_infos': 'lightline#ale#infos',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \   'linter_ok': 'lightline#ale#ok',
-      \ },
-      \ 'component_type': {
-      \   'linter_checking': 'right',
-      \   'linter_infos': 'right',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \   'linter_ok': 'right',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
-
-function! LightlineModified()
-  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! LightlineReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
-endfunction
-
-" \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-function! LightlineFilename()
-  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft == 'unite' ? unite#get_status_string() :
-        \  &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ '' != expand('%:t') ? @% : '[No Name]') .
-        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightlineMode()
-  return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-" using ale results in the lightline using nerd fonts icons https://www.nerdfonts.com/
-let g:lightline#ale#indicator_checking = "\uf110 "
-let g:lightline#ale#indicator_infos = "\uf129 "
-let g:lightline#ale#indicator_warnings = "\uf071 "
-let g:lightline#ale#indicator_errors = "\uf05e "
-let g:lightline#ale#indicator_ok = "\uf00c"
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Ripgrep configuration
 "
 set wildignore+=*/.git/*,*/tmp/*,*.swp
@@ -337,20 +263,20 @@ vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 "
 " let g:terminal_ansi_colors = [ '#888888', '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f', '#888888', '#888888', '#ffb2b0', '#c8e2b9', '#ffe1af', '#bddff7', '#fce2ff', '#0bbdb6', '#e8e8d3' ]
 let g:rainbow_active = 1
-let g:rainbow_conf = {
-  \  'guifgs':  [ '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f' ],
-  \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
-  \  'operators': '_,_',
-  \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-  \  'separately': {
-  \    '*': {},
-  \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
-  \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
-  \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-  \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-  \    'css': 0,
-  \  }
-  \}
+" let g:rainbow_conf = {
+"   \  'guifgs':  [ '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f' ],
+"   \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
+"   \  'operators': '_,_',
+"   \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+"   \  'separately': {
+"   \    '*': {},
+"   \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
+"   \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
+"   \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+"   \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
+"   \    'css': 0,
+"   \  }
+"   \}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-test configuration
@@ -426,30 +352,32 @@ set vb t_vb= " Turn off beeping
 "
 let g:jellybeans_use_gui_italics = 0
 let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' }, 'VertSplit': { 'guibg': '151515' } }
+let g:gruvbox_bold = 0
+let g:gruvbox_italic = 0
+let g:gruvbox_transparent_bg = 1
+let g:gruvbox_contrast_dark = 'hard'
+let g:gruvbox_contrast_light = 'hard'
 
-function AfterColorChange()
+function! AfterColorChange()
   set fillchars+=vert:│
   highlight Normal ctermbg=NONE
   highlight SignColumn ctermfg=9 ctermbg=NONE guibg=NONE
   highlight VertSplit ctermbg=NONE guibg=NONE
-  call lightline#enable()
 endfunction
 
-function LightMode()
-  let g:lightline.colorscheme='one'
-  colorscheme one
+function! LightMode()
+  colorscheme gruvbox
   set background=light
   call AfterColorChange()
 endfunction
 
-function DarkMode()
-  let g:lightline.colorscheme='jellybeans'
-  colorscheme jellybeans
+function! DarkMode()
+  colorscheme gruvbox
   set background=dark
   call AfterColorChange()
 endfunction
 
-function ChangeBackground()
+function! ChangeBackground()
   if system("dark-mode status") == "off\n"
     call LightMode()
   else

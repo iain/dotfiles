@@ -22,10 +22,12 @@ set -Ux GEMEDITOR      $VISUAL
 set -Ux VIM_APP_DIR    "/usr/local/opt/macvim"
 set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
 # ls
 set -Ux CLICOLOR 1
 set -Ux LS_COLORS "no=00:fi=00:di=34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=00;05;37;41:mi=00;05;37;41:ex=00;35:*.rb=00;31"
-set -Ux EXA_COLORS "da=30:ur=37:gr=37:tr=37:uu=33:di=34"
+set -Ux EXA_COLORS "da=37:ur=37:gr=37:tr=37:uu=33:di=34"
 if which -s gls
   alias ls="gls --group-directories-first --color=auto"
 end
@@ -81,7 +83,20 @@ abbr -a r  "rails"
 # stop cucumber spam
 set -x CUCUMBER_PUBLISH_QUIET "true"
 
-starship init fish | source
+# disable virtualenv prompt, it breaks starship
+set VIRTUAL_ENV_DISABLE_PROMPT 1
+set -gx STARSHIP_SHELL "fish"
+# Set up the session key that will be used to store logs
+set -gx STARSHIP_SESSION_KEY (random 10000000000000 9999999999999999)
+# starship init fish | source
+set async_prompt_functions starship_prompt fish-dark-mode
+
+# FZF.fish
+set fzf_preview_dir_cmd exa --all --color=always
+set fzf_fish_custom_keybindings
+bind \cy __fzf_search_git_log
+bind \cu __fzf_search_git_status
+
 zoxide init fish | source
 source /usr/local/opt/asdf/asdf.fish
 

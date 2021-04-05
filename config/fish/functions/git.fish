@@ -4,8 +4,8 @@ function git
     echo "Stop using 'git checkout'. Instead, use these:"
     echo "- git switch     # for branches, create with -c"
     echo "- git restore    # for files"
-    echo "Waiting 10 seconds as punishment"
-    sleep 10
+    echo "Waiting 2 seconds as punishment"
+    sleep 2
   end
   command git $argv
 end
