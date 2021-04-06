@@ -22,6 +22,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'kien/ctrlp.vim'
 Plug 'luochen1990/rainbow'
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'morhetz/gruvbox'
 Plug 'nanotech/jellybeans.vim'
 Plug 'rakr/vim-one'
 Plug 'sheerun/vim-polyglot'
@@ -39,9 +40,6 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-
-Plug 'morhetz/gruvbox'
-Plug 'chriskempson/base16-vim'
 call plug#end()
 
 if needsToInstallPlugins == 1
