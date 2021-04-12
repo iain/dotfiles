@@ -43,7 +43,6 @@
 [branch]
   autosetuprebase = always
 [merge]
-  ; verifySignatures = true
   log = true
 [http]
   postBuffer = 100m

@@ -40,6 +40,9 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 if needsToInstallPlugins == 1
@@ -126,6 +129,22 @@ map <leader>e :edit %%
 map <leader>v :view %%
 map <leader>m :vsplit %%
 map <leader>n :split %%
+
+" When editing a file, always jump to the last known cursor position.
+autocmd BufReadPost *
+      \ if line("'\"") > 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
+
+" Fix netrw Ctrl+L
+augroup netrw_mapping
+    autocmd!
+    autocmd filetype netrw call NetrwMapping()
+augroup END
+
+function! NetrwMapping()
+    noremap <buffer> <C-l> <c-w>l
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocomplete
@@ -285,7 +304,7 @@ let g:test#preserve_screen = 1
 let test#vim#term_position = "belowright"
 let test#ruby#rspec#executable    = 'devc ./bin/rspec -fd'
 let test#ruby#cucumber#executable = 'devc ./bin/cucumber'
-let test#ruby#minitest#executable = 'devc bundle exec rake test'
+let test#ruby#minitest#executable = 'devc ./bin/rake test'
 let test#ruby#rails#executable    = 'devc ./bin/rails test'
 
 let test#elixir#exunit#options = '--stale'
@@ -344,6 +363,17 @@ tnoremap <C-l> <c-\><c-n><c-w>l
 set guifont=Hack\ Nerd\ Font:h15
 set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
 set vb t_vb= " Turn off beeping
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Airline
+"
+
+let g:airline_theme = 'gruvbox'
+let g:airline#extensions#ale#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#branch#enabled = 0
+let g:airline#extensions#fugitiveline#enabled = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Switching

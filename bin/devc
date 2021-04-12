@@ -1,12 +1,11 @@
 #!/bin/bash
 
-if [ -d ".devcontainer" ]; then
+if [ -f ".devcontainer/run" ]; then
 	echo -n "Running in dev-container: "
 	echo $*
-	cd .devcontainer
-	docker-compose exec -- app $*
+	.devcontainer/run $*
 else
 	echo -n "Running locally: "
 	echo $*
-	exec $*
+	time exec $*
 fi

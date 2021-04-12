@@ -50,7 +50,7 @@ else
 end
 
 # workaround for GPG and Git
-set -Ux GPG_TTY (tty)
+set -gx GPG_TTY (tty)
 
 # git abbreviations
 abbr -a aa    "git add --all"
