@@ -1,16 +1,16 @@
 set nocompatible
 
-let needsToInstallPlugins=0
-if !filereadable(expand("~/.vim/autoload/plug.vim"))
-  echo "\nInstalling Vim dependencies... Please be patient!\n"
-  silent !mkdir -p ~/.vim/tmp
-  silent !mkdir -p ~/.vim/swap
-  silent !mkdir -p ~/.vim/undo
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  let needsToInstallPlugins=1
+" Install vim-plugged in needed
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/plugged')
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'ayu-theme/ayu-vim'
+Plug 'bogado/file-line'
 Plug 'csexton/trailertrash.vim'
 Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go'
@@ -22,10 +22,9 @@ Plug 'junegunn/vim-easy-align'
 Plug 'kien/ctrlp.vim'
 Plug 'luochen1990/rainbow'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'morhetz/gruvbox'
-Plug 'nanotech/jellybeans.vim'
-Plug 'rakr/vim-one'
+Plug 'segeljakt/vim-silicon'
 Plug 'sheerun/vim-polyglot'
+Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
@@ -40,16 +39,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 call plug#end()
-
-if needsToInstallPlugins == 1
-  echo "\nInstalling plugins.\n"
-  :PlugInstall
-  echo "\nInstalled.\n"
-endif
 
 set backupdir=~/.vim/tmp/
 set directory=~/.vim/swap/
@@ -63,12 +53,83 @@ set nowrap
 set nonumber
 set nocursorline
 set scrolloff=4
+set sidescrolloff=5
+set scrolljump=8        " Scroll 8 lines at a time at bottom/top
 set smartcase
 set splitbelow splitright
 set synmaxcol=512
 set timeoutlen=500
 set undofile
 set gdefault
+set autoread
+set ttyfast         " smoother changes
+set wildmenu
+set tabpagemax=50
+
+set list
+set listchars=                " Reset listchars
+set listchars+=tab:▸\         " Symbols to use for invisible characters
+set listchars+=trail:·        " trailing whitespace
+set listchars+=nbsp:•         " non-breaking space
+set listchars+=extends:→      " line continues beyond right of the screen
+
+set statusline=%f       "filename
+set statusline+=\ %h    "help file flag
+set statusline+=%q      "quickfix list or location
+set statusline+=%m      "modified flag
+set statusline+=%r      "read only flag
+set statusline+=%=      "left/right separator
+set statusline+=%y      "filetype
+set statusline+=\ %c,   "cursor column
+set statusline+=%l/%L   "cursor line/total lines
+set statusline+=\ %P    "percent through file
+set laststatus=2
+
+set backspace=indent,eol,start
+
+set formatoptions+=1          " Do not wrap after a one-letter word
+set formatoptions+=j          " Remove extra comment when joining lines
+set diffopt+=vertical         " Diff in vertical mode by default
+
+
+let &showbreak = '↳ '
+set breakindent
+set breakindentopt=sbr
+
+set modeline                  " always show modeline
+set modelines=2
+set shiftround                " round shifts to a multiple of shiftwidth
+set nojoinspaces              " prevent inserting two spaces after punctuation
+
+" For MacVim
+set noimd
+set imi=1
+set ims=-1
+
+digraphs .. 8230              " Ellipsis  (…) mapped to '..'
+
+" Folding
+set foldmethod=syntax
+" Sets the fold level: Folds with a higher level will be closed.  Setting
+" this option to zero will close all folds.  Higher numbers will close fewer
+" folds.
+" set foldlevel=1
+" set foldnestmax=10
+" set nofoldenable   " start with all folds open (toggle via zi)
+set foldlevel=9 " Start with all folds open
+set foldenable
+" set foldlevelstart=10         " Open most folds by default to
+" set foldnestmax=10            " 10 nested fold max
+
+set wildignore+=*.so
+set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
+set wildignore+=*.gif,*.jpg,*.png,*.log
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
+set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
+set wildignore+=*/public/assets/*
+set wildignore+=*.swp,*~,._*
+set wildignore+=.DS_Store
 
 au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
 
@@ -94,8 +155,12 @@ nnoremap <C-j> <c-w>j
 nnoremap <C-k> <c-w>k
 nnoremap <C-l> <c-w>l
 
-" Allow :W to save
-command! W :w
+" Common Command Typos
+command! Q  quit    " converts ... :Q  => :q
+command! W  write   " converts ... :W  => :w
+command! Wq wq      " converts ... :Wq => :wq
+command! Wn wn      " converts ... :Wn => :wn
+command! WN wN      " converts ... :WN => :wN
 
 " A common typo is ":E" when actually meaning ":e" and not ":Explore" or ":Errors".
 cnoreabbrev E e
@@ -146,6 +211,9 @@ function! NetrwMapping()
     noremap <buffer> <C-l> <c-w>l
 endfunction
 
+let g:netrw_cursor=0
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocomplete
 "
@@ -195,13 +263,19 @@ nmap <silent> <D-j> <Plug>(ale_next)
 " Use Cmd+r to fix ruby linter errors
 nmap <silent> <D-r> :ALEFix rubocop<CR>
 
+let g:ale_fixers = {
+  \ 'javascript': ['eslint', 'prettier'],
+  \ 'ruby': ['rubocop'],
+  \ '*': ['remove_trailing_lines', 'trim_whitespace']
+  \ }
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Ripgrep configuration
 "
 set wildignore+=*/.git/*,*/tmp/*,*.swp
 if executable('rg')
-  set grepprg=rg\ --color=never
+  set grepprg=rg\ --color=never\ --vimgrep\ --no-heading\ --smart-case
   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching = 0
 endif
@@ -278,22 +352,14 @@ vmap <Leader>a: :Tabularize/\(:.*\)\@<!:\zs/l1<cr>gv
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rainbow parenthesis configuration
 "
-" let g:terminal_ansi_colors = [ '#888888', '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f', '#888888', '#888888', '#ffb2b0', '#c8e2b9', '#ffe1af', '#bddff7', '#fce2ff', '#0bbdb6', '#e8e8d3' ]
 let g:rainbow_active = 1
-" let g:rainbow_conf = {
-"   \  'guifgs':  [ '#cf6a4c', '#99ad6a', '#fabb6e', '#8197bf', '#e7cdfb', '#00a69f' ],
-"   \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
-"   \  'operators': '_,_',
-"   \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-"   \  'separately': {
-"   \    '*': {},
-"   \    'tex': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'] },
-"   \    'vim': { 'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'] },
-"   \    'html': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-"   \    'eruby': { 'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'], },
-"   \    'css': 0,
-"   \  }
-"   \}
+let g:rainbow_conf = {
+  \  'guifgs':  [ '#ff9940', '#55b4d4', '#86b300', '#a37acc' ],
+  \  'ctermfgs': ['lightmagenta', 'lightblue', 'lightyellow', 'lightcyan'],
+  \  'operators': '_,_',
+  \  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+  \}
+map <F5> :RainbowLevelsToggle<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-test configuration
@@ -365,26 +431,21 @@ set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
 set vb t_vb= " Turn off beeping
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline
+" silicon
 "
 
-let g:airline_theme = 'gruvbox'
-let g:airline#extensions#ale#enabled = 1
-" let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#branch#enabled = 0
-let g:airline#extensions#fugitiveline#enabled = 0
+let g:silicon = {
+\ 'default-file-pattern': '~/Desktop/silicon-{time:%Y-%m-%d-%H%M%S}.png',
+\ }
+" \ 'theme': '/Users/coreyja/themer-theme/output/sublime-text/themer-sublime-text-dark.tmTheme',
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Switching
 "
-let g:jellybeans_use_gui_italics = 0
-let g:jellybeans_overrides = { 'SignColumn': { 'guibg': '151515' }, 'VertSplit': { 'guibg': '151515' } }
-let g:gruvbox_bold = 0
-let g:gruvbox_italic = 0
-let g:gruvbox_transparent_bg = 1
-let g:gruvbox_contrast_dark = 'hard'
-let g:gruvbox_contrast_light = 'hard'
+set termguicolors     " enable true colors support
+" let ayucolor="light"  " for light version of theme
+let ayucolor="mirage" " for mirage version of theme
+" let ayucolor="dark"   " for dark version of theme
 
 function! AfterColorChange()
   set fillchars+=vert:│
@@ -394,14 +455,16 @@ function! AfterColorChange()
 endfunction
 
 function! LightMode()
-  colorscheme gruvbox
   set background=light
+  let g:ayucolor='light'
+  colorscheme ayu
   call AfterColorChange()
 endfunction
 
 function! DarkMode()
-  colorscheme gruvbox
   set background=dark
+  let g:ayucolor='mirage'
+  colorscheme ayu
   call AfterColorChange()
 endfunction
 
@@ -412,7 +475,7 @@ function! ChangeBackground()
     call DarkMode()
   endif
   redraw!
-endfunc
+endfunction
 
 if has("gui_macvim")
   au OSAppearanceChanged * call ChangeBackground()

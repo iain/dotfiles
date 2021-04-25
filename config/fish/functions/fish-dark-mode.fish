@@ -1,8 +1,8 @@
 # switch fish color scheme when dark-mode is on
 function fish-dark-mode
-	if dark-mode status | grep off > /dev/null
-		theme_gruvbox light hard
+	if dark-mode status | grep -q off
+		set --universal ayu_variant light && ayu_load_theme > /dev/null
 	else
-		theme_gruvbox dark hard
+		set --universal ayu_variant mirage && ayu_load_theme > /dev/null
 	end
 end

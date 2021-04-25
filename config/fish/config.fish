@@ -75,13 +75,11 @@ abbr -a up    "git pull --ff-only"
 abbr -a unstage "git restore --staged --"
 
 # ruby abbreviations
-abbr -a b  "bundle"
-abbr -a be "bundle exec"
-abbr -a cu "cucumber"
-abbr -a r  "rails"
-
-# stop cucumber spam
-set -x CUCUMBER_PUBLISH_QUIET "true"
+abbr -a b   "bundle"
+abbr -a be  "bundle exec"
+abbr -a cu  "cucumber"
+abbr -a r   "rails"
+abbr -a wip "cucumber -p wip"
 
 # disable virtualenv prompt, it breaks starship
 set VIRTUAL_ENV_DISABLE_PROMPT 1
