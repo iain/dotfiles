@@ -33,6 +33,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-sensible'
@@ -49,7 +50,8 @@ set backup
 set history=10000
 set hlsearch
 set lazyredraw
-set nowrap
+
+
 set nonumber
 set nocursorline
 set scrolloff=4
@@ -91,7 +93,8 @@ set formatoptions+=1          " Do not wrap after a one-letter word
 set formatoptions+=j          " Remove extra comment when joining lines
 set diffopt+=vertical         " Diff in vertical mode by default
 
-
+set wrap
+set linebreak
 let &showbreak = '↳ '
 set breakindent
 set breakindentopt=sbr
@@ -108,18 +111,32 @@ set ims=-1
 
 digraphs .. 8230              " Ellipsis  (…) mapped to '..'
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding
-set foldmethod=syntax
+"
+" set foldmethod=syntax
+set foldmethod=indent
+let ruby_foldable_groups = 'def do'
+
+" automatically save and load folds
+" au BufWinLeave * mkview
+" au BufWinEnter * silent loadview
+
 " Sets the fold level: Folds with a higher level will be closed.  Setting
 " this option to zero will close all folds.  Higher numbers will close fewer
 " folds.
-" set foldlevel=1
+" set foldlevel=10
 " set foldnestmax=10
-" set nofoldenable   " start with all folds open (toggle via zi)
-set foldlevel=9 " Start with all folds open
-set foldenable
-" set foldlevelstart=10         " Open most folds by default to
-" set foldnestmax=10            " 10 nested fold max
+set nofoldenable   " start with all folds open (toggle via zi)
+" set foldlevel=9 " Start with all folds open
+" set foldenable
+" set foldlevelstart=0
+" set foldnestmax=10
+
+"" Enable folding based on syntax rules
+
+"" Map folding to Spacebar
+" nnoremap  za
 
 set wildignore+=*.so
 set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
@@ -138,6 +155,10 @@ au BufNewFile,BufRead *.go setlocal noet ts=8 sw=8 sts=8
 " Key Config
 "
 let mapleader = ","
+
+" Go up and down display lines in soft line breaks
+nnoremap j gj
+nnoremap k gk
 
 " Insert mode:
 inoremap <C-h> <Esc><c-w>h
@@ -240,6 +261,16 @@ if filereadable(expand("~/.asdf/shims/ruby"))
   let g:ale_ruby_ruby_executable = expand("~/.asdf/shims/ruby")
 endif
 
+" if filereadable(expand("~/.asdf/shims/rubocop"))
+"   let g:ale_ruby_rubocop_executable = expand("~/.asdf/shims/rubocop")
+" endif
+
+" Use `rubocop-daemon-wrapper` instead of `rubocop`
+" let g:ale_ruby_rubocop_executable = 'rubocop-daemon-wrapper-netcat'
+" ['brakeman', 'debride', 'rails_best_practices', 'reek', 'rubocop', 'ruby', 'solargraph', 'sorbet', 'standardrb']
+
+" let g:ale_ruby_rubocop_options = ''
+
 " Always open sign column, so no sudden shifts
 let g:ale_sign_column_always = 1
 set signcolumn=yes
@@ -255,19 +286,34 @@ highlight ALEErrorSign ctermfg=196 ctermbg=NONE guifg=#C30500
 
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
+" Set this variable to 1 to fix files when you save them.
+" let g:ale_fix_on_save = 1
 
 " Use Cmd+k / Cmd+j to jump between linter failures
 nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
 
 " Use Cmd+r to fix ruby linter errors
-nmap <silent> <D-r> :ALEFix rubocop<CR>
+nmap <silent> <D-r> :ALEFix<CR>
+
+let g:ale_linters = {
+  \ 'javascript':  ['eslint'],
+  \ 'json':        ['jsonlint'],
+  \ 'markdown':    ['prettier'],
+  \ 'ruby':        ['ruby', 'rubocop']
+  \ }
 
 let g:ale_fixers = {
-  \ 'javascript': ['eslint', 'prettier'],
-  \ 'ruby': ['rubocop'],
-  \ '*': ['remove_trailing_lines', 'trim_whitespace']
+  \ 'css':         ['prettier'],
+  \ 'javascript':  ['eslint', 'prettier'],
+  \ 'json':        ['jq'],
+  \ 'markdown':    ['prettier'],
+  \ 'ruby':        ['rubocop'],
+  \ 'yaml':        ['prettier'],
+  \ '*':           ['remove_trailing_lines', 'trim_whitespace']
   \ }
+
+let g:ale_ruby_rubocop_auto_correct_all = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -278,6 +324,20 @@ if executable('rg')
   set grepprg=rg\ --color=never\ --vimgrep\ --no-heading\ --smart-case
   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching = 0
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ripgrep configuration
+"
+if executable('par')
+  set formatprg=par\ -w80\ -q
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FZF fuzzy file finder configuration
+"
+if executable('fzf')
+  set rtp+=/usr/local/opt/fzf
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -365,13 +425,29 @@ map <F5> :RainbowLevelsToggle<cr>
 " vim-test configuration
 "
 " let test#strategy = "iterm"
-let test#strategy = "vimterminal"
+" let test#strategy = "vimux"
+" let test#strategy = "vimterminal"
 let g:test#preserve_screen = 1
-let test#vim#term_position = "belowright"
-let test#ruby#rspec#executable    = 'devc ./bin/rspec -fd'
-let test#ruby#cucumber#executable = 'devc ./bin/cucumber'
-let test#ruby#minitest#executable = 'devc ./bin/rake test'
-let test#ruby#rails#executable    = 'devc ./bin/rails test'
+let g:test#vim#term_position = "belowright"
+let g:test#ruby#rspec#executable    = 'rspec'
+let g:test#ruby#cucumber#executable = 'cucumber -p all'
+" let g:test#ruby#minitest#executable = 'rake test'
+" let g:test#ruby#rails#executable    = 'rails test'
+
+let g:test#project_root = "."
+let g:test#neovim#start_normal = 1 " If using neovim strategy
+let g:test#basic#start_normal = 1 " If using basic strategy
+
+
+function! CustomiTermStrategy(cmd)
+  " call s:execute_script('osx_iterm', a:cmd)
+  " let script_path = g:test#plugin_path . '/bin/' . a:name
+  let cmd = join([shellescape('osx_iterm'), shellescape(a:cmd)])
+  execute 'silent !'.cmd
+endfunction
+
+let g:test#custom_strategies = {'custom_iterm': function('CustomiTermStrategy')}
+let g:test#strategy = 'custom_iterm'
 
 let test#elixir#exunit#options = '--stale'
 let test#elixir#exunit#options = {
@@ -427,8 +503,10 @@ tnoremap <C-l> <c-\><c-n><c-w>l
 " Visual
 "
 set guifont=Hack\ Nerd\ Font:h15
+" set guifont=Comic\ Mono:h15
 set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
 set vb t_vb= " Turn off beeping
+set macthinstrokes
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " silicon
@@ -442,6 +520,7 @@ let g:silicon = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Switching
 "
+set t_Co=256
 set termguicolors     " enable true colors support
 " let ayucolor="light"  " for light version of theme
 let ayucolor="mirage" " for mirage version of theme
@@ -452,6 +531,7 @@ function! AfterColorChange()
   highlight Normal ctermbg=NONE
   highlight SignColumn ctermfg=9 ctermbg=NONE guibg=NONE
   highlight VertSplit ctermbg=NONE guibg=NONE
+  highlight Search guibg=NONE guifg=HotPink
 endfunction
 
 function! LightMode()
