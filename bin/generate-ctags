@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 # time ripper-tags -R -- . $(bundle list --paths)
-time ripper-tags -R -f .ctags -- .
+time ripper-tags --recursive --tag-file .ctags -- .

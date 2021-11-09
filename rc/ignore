@@ -1,10 +1,11 @@
 !.circleci/
 .ctags
 .git/
+ace/
 cassettes/
 coverage/
 log/
 node_modules/
 packs/
 tmp/
-ace/
+vendor/

@@ -9,10 +9,9 @@ set -gx PATH $PATH "/usr/local/sbin"
 set -gx PATH $PATH "/usr/local/bin"
 set -gx PATH $PATH "/usr/local/opt/openssl/bin"
 set -gx PATH $PATH "/usr/local/opt/postgresql/bin"
-set -gx PATH $PATH "$HOME/.dotfiles/bin"
 set -gx JAVA_HOME "/Library/Java/Home"
 
-# configur prefered editor
+# configure my prefered editor
 set -Ux EDITOR         "vim"
 set -Ux GIT_EDITOR     $EDITOR
 set -Ux SVN_EDITOR     $EDITOR
@@ -53,6 +52,7 @@ end
 set -gx GPG_TTY (tty)
 
 # git abbreviations
+abbr -a a     "git add --all"
 abbr -a aa    "git add --all"
 abbr -a amend "git commit --amend"
 abbr -a c     "git commit"
@@ -80,6 +80,10 @@ abbr -a be  "bundle exec"
 abbr -a cu  "cucumber"
 abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
+abbr -a of  "rspec --only-failures"
+
+abbr -a ms "tmuxinator start"
+abbr -a mx "tmuxinator stop"
 
 # disable virtualenv prompt, it breaks starship
 set VIRTUAL_ENV_DISABLE_PROMPT 1
@@ -95,7 +99,6 @@ set fzf_fish_custom_keybindings
 bind \cy __fzf_search_git_log
 bind \cu __fzf_search_git_status
 
-zoxide init fish | source
 source /usr/local/opt/asdf/asdf.fish
 
 # ignored file, might not be there
@@ -103,3 +106,8 @@ source /usr/local/opt/asdf/asdf.fish
 if [ -f ~/.dotfiles/config/fish/personal.fish ]
 	source ~/.dotfiles/config/fish/personal.fish
 end
+
+zoxide init fish | source
+
+# personal files in bin are always highest priority
+set -gx PATH "$HOME/.dotfiles/bin" $PATH
