@@ -451,8 +451,8 @@ map <F5> :RainbowLevelsToggle<cr>
 "
 let g:test#preserve_screen = 1
 let g:test#vim#term_position = "belowright"
-let g:test#ruby#rspec#executable    = 'rspec'
-let g:test#ruby#cucumber#executable = 'cucumber -p all'
+let g:test#ruby#rspec#executable    = './bin/rspec -fd'
+let g:test#ruby#cucumber#executable = './bin/cucumber -p all'
 " let g:test#ruby#minitest#executable = 'rake test'
 " let g:test#ruby#rails#executable    = 'rails test'
 
