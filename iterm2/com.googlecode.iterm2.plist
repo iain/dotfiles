@@ -2822,7 +2822,7 @@
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>/usr/local/bin/fish</string>
+			<string>/opt/homebrew/bin/fish</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>
