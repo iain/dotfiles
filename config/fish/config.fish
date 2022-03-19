@@ -5,12 +5,10 @@ set -gx LANGUAGE "en_US.UTF-8"
 set -gx LC_ALL   "en_US.UTF-8"
 set -gx LC_CTYPE "en_US.UTF-8"
 
-# setting $PATH
+# Homebrew setup
 set -gx PATH "/opt/homebrew/bin" $PATH
-# set -gx PATH $PATH "/usr/local/sbin"
-# set -gx PATH $PATH "/usr/local/bin"
-# set -gx PATH $PATH "/usr/local/opt/openssl/bin"
-# set -gx PATH $PATH "/usr/local/opt/postgresql/bin"
+set -gx CPATH "/opt/homebrew/include"
+set -gx LIBRARY_PATH "/opt/homebrew/lib"
 set -gx JAVA_HOME "/Library/Java/Home"
 
 # configure my prefered editor
@@ -20,7 +18,6 @@ set -Ux SVN_EDITOR     $EDITOR
 set -Ux VISUAL         "mvim"
 set -Ux BUNDLER_EDITOR $VISUAL
 set -Ux GEMEDITOR      $VISUAL
-# set -Ux VIM_APP_DIR    "/usr/local/opt/macvim"
 set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
