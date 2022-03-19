@@ -1,3 +1,4 @@
+
 # encodings
 set -gx LANG     "en_US.UTF-8"
 set -gx LANGUAGE "en_US.UTF-8"
@@ -5,10 +6,11 @@ set -gx LC_ALL   "en_US.UTF-8"
 set -gx LC_CTYPE "en_US.UTF-8"
 
 # setting $PATH
-set -gx PATH $PATH "/usr/local/sbin"
-set -gx PATH $PATH "/usr/local/bin"
-set -gx PATH $PATH "/usr/local/opt/openssl/bin"
-set -gx PATH $PATH "/usr/local/opt/postgresql/bin"
+set -gx PATH "/opt/homebrew/bin" $PATH
+# set -gx PATH $PATH "/usr/local/sbin"
+# set -gx PATH $PATH "/usr/local/bin"
+# set -gx PATH $PATH "/usr/local/opt/openssl/bin"
+# set -gx PATH $PATH "/usr/local/opt/postgresql/bin"
 set -gx JAVA_HOME "/Library/Java/Home"
 
 # configure my prefered editor
@@ -18,7 +20,7 @@ set -Ux SVN_EDITOR     $EDITOR
 set -Ux VISUAL         "mvim"
 set -Ux BUNDLER_EDITOR $VISUAL
 set -Ux GEMEDITOR      $VISUAL
-set -Ux VIM_APP_DIR    "/usr/local/opt/macvim"
+# set -Ux VIM_APP_DIR    "/usr/local/opt/macvim"
 set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
@@ -99,7 +101,7 @@ set fzf_fish_custom_keybindings
 bind \cy __fzf_search_git_log
 bind \cu __fzf_search_git_status
 
-source /usr/local/opt/asdf/asdf.fish
+source /opt/homebrew/opt/asdf/asdf.fish
 
 # ignored file, might not be there
 # this is where I put secret tokens

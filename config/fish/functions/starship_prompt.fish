@@ -9,5 +9,5 @@ function starship_prompt
 	# Account for changes in variable name between v2.7 and v3.0
 	set -l starship_duration "$CMD_DURATION$cmd_duration"
 	echo -n " "
-	"/usr/local/bin/starship" prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
+	"/opt/homebrew/bin/starship" prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
