@@ -1,0 +1,8 @@
+{
+  "codeLens.enable": true,
+  "solargraph.useBundler": false,
+  "solargraph.commandPath": "~/.asdf/shims/solargraph",
+  "solargraph.formatting": true,
+  "solargraph.diagnostics": false,
+  "solargraph.checkGemVersion": true
+}
