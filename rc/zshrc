@@ -7,9 +7,9 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-if [[ -a /usr/local/share/antigen/antigen.zsh ]]; then
+if [[ -a /opt/homebrew/share/antigen/antigen.zsh ]]; then
 
-  source /usr/local/share/antigen/antigen.zsh
+  source /opt/homebrew/share/antigen/antigen.zsh
 
   antigen use oh-my-zsh
 
@@ -56,5 +56,6 @@ fi
 GPG_TTY=$(tty)
 export GPG_TTY
 
-true
 export PATH="/opt/homebrew/bin:$PATH"
+
+true

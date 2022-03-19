@@ -27,6 +27,7 @@ brew "bat"
 brew "coreutils"
 brew "ctags"
 brew "dark-mode"
+brew "direnv"
 brew "dust"
 brew "exa"
 brew "fd"
@@ -66,6 +67,10 @@ brew "cowsay"
 brew "fortune"
 brew "gti"
 brew "sl"
+
+brew "h2o"
+brew "mkcert"
+brew "nss"
 
 # databases
 brew "memcached",  restart_service: :changed
