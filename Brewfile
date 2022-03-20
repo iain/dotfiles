@@ -8,7 +8,7 @@ brew "asdf"
 brew "git"
 brew "luajit", args: ["HEAD"]
 brew "neovim", args: ["HEAD"]
-brew "macvim"
+# brew "macvim"
 brew "rubyfmt"
 brew "perl"
 
@@ -16,9 +16,8 @@ brew "perl"
 tap "homebrew/cask-fonts"
 cask "font-hack-nerd-font"
 cask "font-fira-code-nerd-font"
-cask "font-ubuntu-nerd-font"
-cask "font-ubuntu-mono-nerd-font"
-cask "font-3270-nerd-font"
+cask "font-hasklig"
+cask "font-inter"
 
 # tools
 brew "awscli"

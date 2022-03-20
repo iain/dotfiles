@@ -11,6 +11,9 @@ set -gx CPATH "/opt/homebrew/include"
 set -gx LIBRARY_PATH "/opt/homebrew/lib"
 set -gx JAVA_HOME "/Library/Java/Home"
 
+# Macvim binaries
+set -gx PATH "/Applications/MacVim.app/Contents/bin/" $PATH
+
 # configure my prefered editor
 set -Ux EDITOR         "vim"
 set -Ux GIT_EDITOR     $EDITOR
@@ -30,7 +33,7 @@ if which -s gls
   alias ls="gls --group-directories-first --color=auto"
 end
 if which -s exa
-  alias l="exa --long --group-directories-first --git --all --grid --time-style=long-iso"
+  alias l="exa --long --group-directories-first --git --all --time-style=long-iso"
 else
   alias l="ls -FhAlo"
 end
