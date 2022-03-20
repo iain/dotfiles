@@ -1,0 +1,8 @@
+bundler
+foreman
+gem-release
+irbtools
+pry
+ripper-tags
+rubocop
+rubocop-daemon
