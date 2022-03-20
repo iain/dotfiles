@@ -1,8 +1,9 @@
-set nocompatible
-
 let mapleader = ","
 
-source ~/.config/vim/nvim.vim
+if !has('nvim')
+  source ~/.config/vim/_nvim-defaults.vim
+endif
+
 source ~/.config/vim/_plug.vim
 source ~/.config/vim/ale.vim
 source ~/.config/vim/autocomplete.vim
@@ -14,4 +15,7 @@ source ~/.config/vim/netrw.vim
 source ~/.config/vim/search.vim
 source ~/.config/vim/test.vim
 source ~/.config/vim/visual.vim
-source ~/.config/vim/macvim.vim
+
+if has("gui_macvim")
+  source ~/.config/vim/macvim.vim
+endif

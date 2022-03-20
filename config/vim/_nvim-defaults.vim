@@ -1,5 +1,6 @@
-" nvim defaults carrying over
+" Make vim start out with the same defaults as neovim
 
+set nocompatible
 set autoindent
 set autoread
 set background=dark
