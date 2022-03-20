@@ -14,9 +14,9 @@ brew "perl"
 
 # hack font with icons
 tap "homebrew/cask-fonts"
-cask "font-hack-nerd-font"
 cask "font-fira-code-nerd-font"
-cask "font-hasklig"
+cask "font-hack-nerd-font"
+cask "font-hasklug-nerd-font"
 cask "font-inter"
 
 # tools
