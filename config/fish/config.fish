@@ -10,6 +10,18 @@ set -gx PATH "/opt/homebrew/bin" $PATH
 set -gx CPATH "/opt/homebrew/include"
 set -gx LIBRARY_PATH "/opt/homebrew/lib"
 set -gx JAVA_HOME "/Library/Java/Home"
+set -gx HOMEBREW_NO_ENV_HINTS "1"
+
+if which -s pry
+  set -gx HOMEBREW_PRY "1"
+end
+
+if which -s bat
+  set -gx HOMEBREW_BAT "1"
+end
+
+
+set -gx NODE_OPTIONS "--max_old_space_size=10240"
 
 # Macvim binaries
 set -gx PATH "/Applications/MacVim.app/Contents/bin/" $PATH
