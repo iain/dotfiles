@@ -1,4 +1,3 @@
-
 # encodings
 set -gx LANG     "en_US.UTF-8"
 set -gx LANGUAGE "en_US.UTF-8"
@@ -34,8 +33,6 @@ set -Ux VISUAL         "mvim"
 set -Ux BUNDLER_EDITOR $VISUAL
 set -Ux GEMEDITOR      $VISUAL
 set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
-
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 # ls
 set -Ux CLICOLOR 1
@@ -125,3 +122,5 @@ zoxide init fish | source
 
 # personal files in bin are always highest priority
 set -gx PATH "$HOME/.dotfiles/bin" $PATH
+
+# test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
