@@ -15,3 +15,4 @@ export BUNDLER_EDITOR=$VISUAL
 export GEMEDITOR=$VISUAL
 
 export JAVA_HOME="/Library/Java/Home"
+. "$HOME/.cargo/env"

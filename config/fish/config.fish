@@ -19,6 +19,7 @@ if which -s bat
   set -gx HOMEBREW_BAT "1"
 end
 
+set -gx PATH "$HOME/.cargo/bin" $PATH
 
 set -gx NODE_OPTIONS "--max_old_space_size=10240"
 
