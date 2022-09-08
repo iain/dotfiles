@@ -86,6 +86,8 @@ abbr -a sw    "git switch"
 abbr -a up    "git pull --ff-only"
 abbr -a unstage "git restore --staged --"
 
+abbr -a v "vimr -n"
+
 # ruby abbreviations
 abbr -a b   "bundle"
 abbr -a be  "bundle exec"
@@ -93,6 +95,7 @@ abbr -a cu  "cucumber"
 abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
 abbr -a of  "rspec --only-failures"
+abbr -a rdm "rails db:migrate"
 
 abbr -a ms "tmuxinator start"
 abbr -a mx "tmuxinator stop"

@@ -9,7 +9,7 @@ set updatetime=300
 set timeoutlen=500
 set synmaxcol=512
 
-set number
+set nonumber
 " set relativenumber
 set nocursorline
 set scrolloff=4

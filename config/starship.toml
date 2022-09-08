@@ -1,5 +1,6 @@
 add_newline = false
 format = """
+$aws\
 $jobs\
 $username\
 $hostname\
@@ -18,6 +19,20 @@ style = "dimmed purple"
 [directory]
 style = "blue"
 read_only = " "
+
+[aws]
+symbol = " "
+format = '[$symbol($profile)(:$region) ]($style)'
+style = "yellow"
+# [aws.region_aliases]
+# ap-southeast-2 = "au"
+# us-east-1 = "va"
+# us-east-2 = "va"
+# [aws.profile_aliases]
+# CompanyGroupFrobozzOnCallAccess = 'Frobozz'
+# identity = 'id'
+# production = 'prod'
+# staging = 'stg'
 
 [status]
 disabled = false

@@ -1,7 +1,9 @@
 set t_Co=256
 set termguicolors     " enable true colors support
 " let ayucolor="light"  " for light version of theme
-let ayucolor="mirage" " for mirage version of theme
+let g:ayucolor="mirage" " for mirage version of theme
+set background=dark
+let &background = "dark"
 " let ayucolor="dark"   " for dark version of theme
 
 function! AfterColorChange()
@@ -10,19 +12,28 @@ function! AfterColorChange()
   highlight SignColumn ctermfg=9 ctermbg=NONE guibg=NONE
   highlight VertSplit ctermbg=NONE guibg=NONE
   highlight Search guibg=NONE guifg=HotPink
+  set termguicolors
 endfunction
 
 function! LightMode()
   set background=light
-  let g:ayucolor='light'
+  let g:ayucolor="light"
   colorscheme ayu
+  " colorscheme nofrils-acme
+  " colorscheme shoji_niji
+  " colorscheme shoji_shiro
   call AfterColorChange()
 endfunction
 
 function! DarkMode()
+  let g:ayucolor="mirage"
   set background=dark
-  let g:ayucolor='mirage'
   colorscheme ayu
+  " colorscheme nofrils-dark
+  " colorscheme elly
+  " colorscheme farout
+  " colorscheme yami
+  " colorscheme darktheme
   call AfterColorChange()
 endfunction
 
@@ -40,3 +51,9 @@ if has("gui_macvim")
 endif
 
 call ChangeBackground()
+
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
+
+noremap <C-s> :call ShojiToggle()<return>

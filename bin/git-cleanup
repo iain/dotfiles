@@ -6,7 +6,7 @@ git delete-squashed-branches
 git delete-merged-branches
 
 # Verifies the connectivity and validity of the objects in the database
-git fsck --full
+# git fsck --full
 
 # Manage reflog information
 git reflog expire --expire=now --all

@@ -25,7 +25,6 @@ Plug 'segeljakt/vim-silicon'
 Plug 'sheerun/vim-polyglot'            " Syntax highlighting for all
 Plug 'thiagoalessio/rainbow_levels.vim'
 Plug 'tpope/vim-apathy'
-Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'            " auto commenting
 Plug 'tpope/vim-cucumber'              " cucumber support
 Plug 'tpope/vim-eunuch'                " unix commands
@@ -40,5 +39,13 @@ Plug 'tpope/vim-surround'              " modify surroundings, like quotes, brack
 Plug 'tpope/vim-unimpaired'            " toggling options
 Plug 'tpope/vim-vinegar'               " improving interaction with NetRW
 Plug 'vim-ruby/vim-ruby'
+
+Plug 'robertmeta/nofrils'
+Plug 'ulwlu/elly.vim'
+Plug 'fcpg/vim-farout'
+Plug 'danishprakash/vim-yami'
+Plug 'kamykn/dark-theme.vim'
+" Plug 'haystackandroid/shoji'
+Plug 'wsniper/vim-color-theme-protect-eyes'
 
 call plug#end()

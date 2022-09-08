@@ -1,7 +1,7 @@
 let g:test#preserve_screen          = 1
 let g:test#vim#term_position        = "belowright"
 let g:test#ruby#rspec#executable    = './bin/rspec -fd'
-let g:test#ruby#cucumber#executable = './bin/cucumber -p all'
+let g:test#ruby#cucumber#executable = './bin/cucumber'
 let g:test#ruby#minitest#executable = './bin/rake test'
 let g:test#ruby#rails#executable    = './bin/rails test'
 
