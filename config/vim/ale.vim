@@ -63,12 +63,12 @@ highlight ALEErrorSign ctermfg=196 ctermbg=NONE guifg=#C30500
 
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
-" Set this variable to 1 to fix files when you save them.
-" let g:ale_fix_on_save = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Rubocop:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ruby_indent_assignment_style = 'variable'
 
 let g:ale_ruby_rubocop_auto_correct_all = 1
 

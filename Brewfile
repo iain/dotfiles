@@ -72,9 +72,9 @@ brew "mkcert"
 brew "nss"
 
 # databases
-brew "memcached",  restart_service: :changed
-brew "postgresql", restart_service: :changed
-brew "redis",      restart_service: :changed
+brew "memcached",     restart_service: :changed
+brew "postgresql@14", restart_service: :changed
+brew "redis",         restart_service: :changed
 brew "sqlite"
 
 # tap "elastic/tap"

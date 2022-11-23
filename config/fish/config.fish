@@ -114,7 +114,8 @@ set fzf_fish_custom_keybindings
 bind \cy __fzf_search_git_log
 bind \cu __fzf_search_git_status
 
-source /opt/homebrew/opt/asdf/asdf.fish
+# source /opt/homebrew/opt/asdf/asdf.fish
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
 # ignored file, might not be there
 # this is where I put secret tokens

@@ -15,7 +15,7 @@ your own toolchain.
 | Directory | Description                |
 | --------- | -------------------------- |
 | bin       | executables                |
-| config    | zsh and bash configuration |
+| config    | zsh and fish configuration |
 | iterm2    | iterm2 configuration       |
 | rc        | all the dotfiles           |
 | script    | private helper scripts     |
@@ -65,42 +65,6 @@ To configure iTerm:
 4. Fill in: `~/.dotfiles/iterm2`.
 5. Restart iTerm2.
 
-### Git
-
-To configure git, you need to tell Git who you are, and configure commit signing
-(highly recommended).
-
-In this setup, make sure you use the same name and email as in GitHub.
-
-To get git commit signing and verified commits in Github:
-
-1. Download and install GPG Suite from https://gpgtools.org/
-2. When launching you'll be asked to generate a new key pair. Do that.
-4. You'll be asked to upload the key. Optional, I think, but I did it.
-5. Right-Click on your newly generated key, choose "Copy". Your public key is now in your clipboard.
-5. On github, go to your settings: https://github.com/settings/gpg/new
-6. Click button "New GPG key"
-7. Paste your public key, you copied it in step 5.
-8. On the overview of your GPG keys on github, you'll see your "Key ID". Copy that to your clipboard.
-
-Open `~/.gitconfig` and add the following, replacing values:
-
-```gitconfig
-[credential]
-  helper = osxkeychain
-[commit]
-  gpgsign = true
-[user]
-  name = xxx
-  email = xxx@xxx.xxx
-  signingkey = XXXXXXXXXXXXXXXX
-```
-
-The `signingkey` is the "Key ID" you copied in step 8.
-
-Upon the next commit that you make, GPG suite will ask you for the password you
-entered in step 2.
-
 ### asdf
 
 I use [asdf](https://asdf-vm.com/) these days to install programming languages.
@@ -115,13 +79,6 @@ asdf global ruby latest
 
 Python and most other languages work the same, except [NodeJS](https://github.com/asdf-vm/asdf-nodejs).
 
-```zsh
-asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
-asdf install nodejs latest
-asdf global nodejs latest
-```
-
 To update all plugins, when new versions come out:
 
 ```zsh
@@ -130,20 +87,7 @@ asdf plugin update --all
 
 ### Fonts
 
-Get a couple of really good Terminal fonts with powerline support baked in:
-
-```zsh
-# clone
-git clone https://github.com/powerline/fonts.git --depth=1
-
-# install
-cd fonts
-./install.sh
-
-# cleanup
-cd ..
-rm -rf fonts/
-```
+Should be installed via Homebrew.
 
 ## Documentation
 
@@ -152,27 +96,7 @@ some of the highlights.
 
 ### Vim
 
-Vim is my editor of choice, I use it for all my coding needs.
-
-All configuration is done in `~/.vimrc` and it will self-install automatically
-the first time you start it. Delete (or move) your `~/.vim` directory to let it
-(re)install.
-
-To get new versions of your plugins after the first install:
-
-```
-:PlugUpgrade
-:PlugUpdate
-:PlugClean
-```
-
-The vim configuration should work on the terminal and macvim. I prefer the
-macvim version, mainly because font rendering is delegated to macOS, making it
-quite a bit faster.
-
-The config works both in dark mode and light mode and switches based on your OS setting.
-
-My personal preference is "Hack".
+Configured to be in `~/.config/vim/` to mirror nvim's config.
 
 ### Aliases && Commands
 
@@ -199,9 +123,6 @@ Other:
 * `docker-implode` deletes all docker image caches, run from time to time to get lots of disk space back
 
 ### Git
-
-I deprecated `git checkout` in favor of `git switch` and `git restore`. `git
-checkout` still works, just has a 30 second penalty.
 
 Configuration for git is found in `~/.gitconfig` and `~/.dotfiles/config/git.sh`
 
