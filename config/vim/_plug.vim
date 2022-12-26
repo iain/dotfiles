@@ -41,7 +41,7 @@ Plug 'tpope/vim-vinegar'               " improving interaction with NetRW
 Plug 'vim-ruby/vim-ruby'
 
 Plug 'robertmeta/nofrils'
-Plug 'ulwlu/elly.vim'
+" Plug 'ulwlu/elly.vim'
 Plug 'fcpg/vim-farout'
 Plug 'danishprakash/vim-yami'
 Plug 'kamykn/dark-theme.vim'

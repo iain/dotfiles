@@ -11,7 +11,7 @@
 	<key>AutoHideTmuxClientSession</key>
 	<true/>
 	<key>Command</key>
-	<string></string>
+	<string>/opt/homebrew/bin/nu</string>
 	<key>CompactMinimalTabBarHeight</key>
 	<real>38</real>
 	<key>Custom Color Presets</key>

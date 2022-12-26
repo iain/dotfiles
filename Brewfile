@@ -4,10 +4,11 @@
 # main
 brew "antigen"
 brew "fish"
+brew "nushell"
 brew "asdf"
 brew "git"
-brew "luajit", args: ["HEAD"]
-brew "neovim", args: ["HEAD"]
+brew "luajit" # , args: ["HEAD"]
+brew "neovim" # , args: ["HEAD"]
 # brew "macvim"
 brew "rubyfmt"
 brew "perl"
