@@ -6,6 +6,7 @@ set -gx LC_CTYPE "en_US.UTF-8"
 
 # Homebrew setup
 set -gx PATH "/opt/homebrew/bin" $PATH
+set -gx PATH "/opt/homebrew/sbin" $PATH
 set -gx CPATH "/opt/homebrew/include"
 set -gx LIBRARY_PATH "/opt/homebrew/lib"
 set -gx JAVA_HOME "/Library/Java/Home"
@@ -64,27 +65,28 @@ end
 set -gx GPG_TTY (tty)
 
 # git abbreviations
-abbr -a a     "git add --all"
-abbr -a aa    "git add --all"
-abbr -a amend "git commit --amend"
-abbr -a c     "git commit"
-abbr -a co    "git checkout"
-abbr -a d     "git diff"
-abbr -a dc    "git diff --cached"
-abbr -a g     "git"
-abbr -a g12   "git rev-parse HEAD | cut -c 1-12"
-abbr -a gf    "git fetch --all"
-abbr -a gl    "git log"
-abbr -a glp   "git log -p"
-abbr -a gpb   "git-publish-branch"
-abbr -a gpr   "gh pr create --draft --assignee @me --fill"
-abbr -a p     "git push"
-abbr -a re    "git restore"
-abbr -a s     "git status -s"
-abbr -a st    "git status"
-abbr -a sw    "git switch"
-abbr -a up    "git pull --ff-only"
+abbr -a a       "git add --all"
+abbr -a aa      "git add --all"
+abbr -a amend   "git commit --amend"
+abbr -a c       "git commit"
+abbr -a co      "git checkout"
+abbr -a d       "git diff"
+abbr -a dc      "git diff --cached"
+abbr -a g       "git"
+abbr -a g12     "git rev-parse HEAD | cut -c 1-12"
+abbr -a gf      "git fetch --all"
+abbr -a gl      "git log"
+abbr -a glp     "git log -p"
+abbr -a gpb     "git-publish-branch"
+abbr -a gpr     "gh pr create --draft --assignee @me --fill"
+abbr -a gr      "git recent"
+abbr -a p       "git push"
+abbr -a re      "git restore"
+abbr -a s       "git status -s"
+abbr -a st      "git status"
+abbr -a sw      "git switch"
 abbr -a unstage "git restore --staged --"
+abbr -a up      "git pull --ff-only"
 
 abbr -a v "vimr -n"
 
@@ -129,3 +131,8 @@ zoxide init fish | source
 set -gx PATH "$HOME/.dotfiles/bin" $PATH
 
 # test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+# 1password integration
+if [ -f ~/.config/op/plugins.sh ]
+  source ~/.config/op/plugins.sh
+end

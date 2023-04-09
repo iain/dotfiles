@@ -23,5 +23,5 @@ nnoremap L $
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 " Open notes file
-map <Leader>q :split ~/Dropbox/notes.md<cr>
+map <Leader>q :split ~/Documents/notes.md<cr>
 map <Leader>w :!touch tmp/restart.txt<cr>

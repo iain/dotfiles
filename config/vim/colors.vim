@@ -30,7 +30,6 @@ function! DarkMode()
   set background=dark
   colorscheme ayu
   " colorscheme nofrils-dark
-  " colorscheme elly
   " colorscheme farout
   " colorscheme yami
   " colorscheme darktheme
