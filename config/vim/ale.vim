@@ -19,12 +19,19 @@ let g:ale_fix_on_save = 0
 " Linters:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+let js_fixers = ['prettier', 'eslint']
+
 let g:ale_linters = {
-  \ 'javascript':  ['eslint'],
-  \ 'json':        ['jsonlint'],
-  \ 'markdown':    ['prettier'],
-  \ 'eruby':       ['erblint'],
-  \ 'ruby':        ['ruby', 'rubocop']
+  \ 'css':             ['prettier'],
+  \ 'eruby':           ['erblint'],
+  \ 'javascript':      js_fixers,
+  \ 'javascript.jsx':  js_fixers,
+  \ 'json':            ['jsonlint'],
+  \ 'markdown':        ['prettier'],
+  \ 'ruby':            ['ruby', 'rubocop'],
+  \ 'typescript':      js_fixers,
+  \ 'typescriptreact': js_fixers,
+  \ '*': ['remove_trailing_lines', 'trim_whitespace']
   \ }
 
 let g:ale_fixers = {
@@ -45,6 +52,10 @@ let g:ale_fixers = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:ale_sign_column_always = 1
+
+" let g:ale_virtualtext_cursor = ''
+" let g:ale_virtualtext_cursor = 'current'
+" let g:ale_virtualtext_cursor = 'disabled'
 
 if has("nvim-0.5.0") || has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
