@@ -4,6 +4,13 @@
 require "securerandom"
 require "base64"
 
+begin
+  require "amazing_print"
+  AmazingPrint.pry!
+rescue LoadError
+  # ok
+end
+
 Pry.config.editor = "nvim"
 
 __prompt_prefix = proc { |obj, level, _|

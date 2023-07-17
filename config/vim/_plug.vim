@@ -39,11 +39,15 @@ Plug 'tpope/vim-surround'              " modify surroundings, like quotes, brack
 Plug 'tpope/vim-unimpaired'            " toggling options
 Plug 'tpope/vim-vinegar'               " improving interaction with NetRW
 Plug 'vim-ruby/vim-ruby'
+Plug 'godlygeek/tabular'
 
 Plug 'robertmeta/nofrils'
 Plug 'fcpg/vim-farout'
 Plug 'danishprakash/vim-yami'
 Plug 'kamykn/dark-theme.vim'
 Plug 'wsniper/vim-color-theme-protect-eyes'
+" Plug 'nightsense/shoji'
+Plug 'giulioungaretti/shoji'
+Plug 'jlcrochet/vim-rbs'
 
 call plug#end()

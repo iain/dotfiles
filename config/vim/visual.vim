@@ -10,8 +10,9 @@ set timeoutlen=500
 set synmaxcol=512
 
 set number
+" set nonumber
 " set relativenumber
-set nocursorline
+set cursorline
 set scrolloff=4
 set sidescrolloff=5
 set scrolljump=8      " Scroll 8 lines at a time at bottom/top

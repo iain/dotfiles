@@ -3,8 +3,8 @@
 # frozen_string_literal: true
 
 begin
-  require "awesome_print"
-  AwesomePrint.defaults = {
+  require "amazing_print"
+  AmazingPrint.defaults = {
     indent:         -2,
     index:          false,
     limit:          64,

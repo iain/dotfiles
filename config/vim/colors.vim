@@ -22,6 +22,7 @@ function! LightMode()
   " colorscheme nofrils-acme
   " colorscheme shoji_niji
   " colorscheme shoji_shiro
+  " colorscheme wildcharm
   call AfterColorChange()
 endfunction
 
@@ -29,6 +30,7 @@ function! DarkMode()
   let g:ayucolor="mirage"
   set background=dark
   colorscheme ayu
+  " colorscheme wildcharm
   " colorscheme nofrils-dark
   " colorscheme farout
   " colorscheme yami
@@ -37,6 +39,10 @@ function! DarkMode()
 endfunction
 
 function! ChangeBackground()
+  set termguicolors
+  " call DarkMode()
+  " redraw!
+
   if system("dark-mode status") == "off\n"
     call LightMode()
   else
@@ -55,4 +61,4 @@ let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
-" noremap <C-s> :call ShojiToggle()<return>
+noremap <C-s> :call ShojiToggle()<return>

@@ -5,9 +5,9 @@ $jobs\
 $username\
 $hostname\
 $shlvl\
+${custom.git}\
 $directory\
 $shell\
-${custom.git}\
 $cmd_duration\
 $status\
 $character"""

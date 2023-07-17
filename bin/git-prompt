@@ -20,10 +20,6 @@ g="$basedir/.git"
 # normal or no for untracked files
 status=`git status --show-stash --no-renames --long --untracked-files=normal --ignore-submodules=all --ignored=no`
 
-echo -ne $gray
-git show -s --format='%ar' | tr '\n' ' ' | sed 's/ second.*/s/' | sed 's/ minute.*/m/' | sed 's/ hour.*/h/' | sed 's/ day.*/d/' | sed 's/ week.*/w/' | sed 's/ month.*/mo/' | sed 's/ year.*/y/'
-
-echo -n ' '
 # echo $status
 
 if [ -z $branch ]; then
@@ -77,5 +73,9 @@ fi
 # fi
 
 # echo -ne ${gray}❯
+
+echo -ne $gray
+echo -n ' '
+git show -s --format='%ar' | tr '\n' ' ' | sed 's/ second.*/s/' | sed 's/ minute.*/m/' | sed 's/ hour.*/h/' | sed 's/ day.*/d/' | sed 's/ week.*/w/' | sed 's/ month.*/mo/' | sed 's/ year.*/y/'
 
 echo -ne $reset
