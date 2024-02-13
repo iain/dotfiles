@@ -20,7 +20,7 @@
   today = log --stat --since='1 Day Ago' --graph --pretty=oneline --abbrev-commit --date=relative
   wtf = !git commit -m \"$(curl --silent --fail http://whatthecommit.com/index.txt)\"
   yolo = !git add -A && git wtf
-  recent = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
+  recent = branch --sort=-committerdate --no-column --format=\"%(committerdate:relative)%09%(refname:short)\"
   staash = stash --all
   blaame = blame -w -C -C -C
 [color]
