@@ -39,7 +39,7 @@ Download and install the following applications manually:
 To install dotfiles:
 
 ```zsh
-git clone https://github.com/iain/dotfiles.git ~/.dotfiles
+git clone git@github.com:iain/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./script/install
 ```

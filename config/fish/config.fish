@@ -116,8 +116,9 @@ set fzf_fish_custom_keybindings
 bind \cy __fzf_search_git_log
 bind \cu __fzf_search_git_status
 
-# source /opt/homebrew/opt/asdf/asdf.fish
-source /opt/homebrew/opt/asdf/libexec/asdf.fish
+if [ -f /opt/homebrew/opt/asdf/libexec/asdf.fish ]
+  source /opt/homebrew/opt/asdf/libexec/asdf.fish
+end
 
 # ignored file, might not be there
 # this is where I put secret tokens
@@ -125,8 +126,8 @@ if [ -f ~/.dotfiles/config/fish/personal.fish ]
 	source ~/.dotfiles/config/fish/personal.fish
 end
 
-zoxide init fish | source
-direnv hook fish | source
+if which -s zoxide; zoxide init fish | source; end
+if which -s direnv; direnv hook fish | source; end
 
 # personal files in bin are always highest priority
 set -gx PATH "$HOME/.dotfiles/bin" $PATH
@@ -136,4 +137,12 @@ set -gx PATH "$HOME/.dotfiles/bin" $PATH
 # 1password integration
 if [ -f ~/.config/op/plugins.sh ]
   source ~/.config/op/plugins.sh
+end
+
+# postgresql@16
+if [ -f /opt/homebrew/opt/postgresql@16/bin/psql ]
+  fish_add_path /opt/homebrew/opt/postgresql@16/bin
+  set -gx LDFLAGS "-L/opt/homebrew/opt/postgresql@16/lib"
+  set -gx CPPFLAGS "-I/opt/homebrew/opt/postgresql@16/include"
+  set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/postgresql@16/lib/pkgconfig"
 end
