@@ -15,4 +15,5 @@ git reflog expire --expire=now --all
 git repack -a -d -l
 
 # Cleanup unnecessary files and optimize the local repository and prune all unreachable objects from the object database
-git gc --prune=now --aggressive
+# git gc --prune=now --aggressive
+git gc --prune=now

@@ -1,6 +1,7 @@
 !.circleci/
 .ctags
 .git/
+.ruby-lsp/
 ace/
 cassettes/
 coverage/

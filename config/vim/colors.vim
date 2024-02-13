@@ -27,7 +27,7 @@ function! LightMode()
 endfunction
 
 function! DarkMode()
-  let g:ayucolor="mirage"
+  let ayucolor="mirage"
   set background=dark
   colorscheme ayu
   " colorscheme wildcharm
@@ -61,4 +61,4 @@ let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
-noremap <C-s> :call ShojiToggle()<return>
+" noremap <C-s> :call ShojiToggle()<return>

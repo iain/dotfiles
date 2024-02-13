@@ -5,12 +5,13 @@
 begin
   require "amazing_print"
   AmazingPrint.defaults = {
-    indent:         -2,
-    index:          false,
-    limit:          64,
-    raw:            false,
-    ruby19_syntax:  true,
-    sort_keys:      false,
+    multiline:     false,
+    indent:        -2,
+    index:         false,
+    limit:         64,
+    raw:           false,
+    ruby19_syntax: true,
+    sort_keys:     false,
   }
 rescue LoadError
   # weird flex, but ok

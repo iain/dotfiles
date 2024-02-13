@@ -20,6 +20,8 @@
   wtf = !git commit -m \"$(curl --silent --fail http://whatthecommit.com/index.txt)\"
   yolo = !git add -A && git wtf
   recent = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
+  staash = stash --all
+  blaame = blame -w -C -C -C
 [color]
   ui = true
   diff = auto
@@ -45,6 +47,7 @@
   autostash = true
 [branch]
   autosetuprebase = always
+  sort = -committerdate
 [merge]
   log = true
   conflictstyle = diff3
@@ -76,5 +79,9 @@
   navigate = true
 [gpg]
   format = ssh
-[gpg "ssh"]
-  program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[blame]
+  ignoreRevsFile = .git-blame-ignore-revs
+[rerere]
+  enabled = true
+[column]
+  ui = auto

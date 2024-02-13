@@ -4,7 +4,7 @@
 # main
 brew "antigen"
 brew "fish"
-brew "nushell"
+# brew "nushell"
 brew "asdf"
 brew "git"
 brew "luajit" # , args: ["HEAD"]
@@ -18,6 +18,7 @@ tap "homebrew/cask-fonts"
 cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 cask "font-hasklug-nerd-font"
+cask "font-agave-nerd-font"
 cask "font-inter"
 
 # tools
