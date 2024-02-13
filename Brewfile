@@ -75,7 +75,7 @@ brew "nss"
 
 # databases
 brew "memcached",     restart_service: :changed
-brew "postgresql@14", restart_service: :changed
+brew "postgresql@16", restart_service: :changed
 brew "redis",         restart_service: :changed
 brew "sqlite"
 
