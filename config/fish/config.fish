@@ -126,6 +126,7 @@ if [ -f ~/.dotfiles/config/fish/personal.fish ]
 end
 
 zoxide init fish | source
+direnv hook fish | source
 
 # personal files in bin are always highest priority
 set -gx PATH "$HOME/.dotfiles/bin" $PATH

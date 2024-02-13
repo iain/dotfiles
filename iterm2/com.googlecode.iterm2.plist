@@ -4,6 +4,8 @@
 <dict>
 	<key>AlertsIndicateShortcuts</key>
 	<false/>
+	<key>AllowTabbarInTitlebarAccessoryBigSur</key>
+	<true/>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>AutoCommandHistory</key>
@@ -2530,7 +2532,7 @@
 	<key>HideActivityIndicator</key>
 	<true/>
 	<key>HideMenuBarInFullscreen</key>
-	<false/>
+	<true/>
 	<key>HideScrollbar</key>
 	<true/>
 	<key>HideTab</key>
@@ -5586,7 +5588,7 @@
 	<key>SeparateStatusBarsPerPane</key>
 	<false/>
 	<key>ShowFullScreenTabBar</key>
-	<true/>
+	<false/>
 	<key>ShowNewOutputIndicator</key>
 	<false/>
 	<key>ShowPaneTitles</key>
@@ -5597,6 +5599,8 @@
 	<true/>
 	<key>SplitPaneDimmingAmount</key>
 	<real>0.45104099111667473</real>
+	<key>StartDebugLoggingAutomatically</key>
+	<false/>
 	<key>StatusBarPosition</key>
 	<integer>1</integer>
 	<key>StretchTabsToFillBar</key>

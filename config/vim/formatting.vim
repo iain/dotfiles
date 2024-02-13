@@ -9,7 +9,7 @@ set formatoptions+=j  " Remove extra comment when joining lines
 
 " par is a utility that is really good at wrapping lines
 if executable('par')
-  set formatprg=par\ -w80\ -q
+  set formatprg=par\ -w110\ -q
 endif
 
 " Go up and down display lines in soft line breaks
