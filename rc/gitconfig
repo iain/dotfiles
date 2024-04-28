@@ -80,8 +80,8 @@
   navigate = true
 [gpg]
   format = ssh
-[blame]
-  ignoreRevsFile = .git-blame-ignore-revs
+; [blame]
+;   ignoreRevsFile = .git-blame-ignore-revs
 [rerere]
   enabled = true
 [column]

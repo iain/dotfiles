@@ -5,27 +5,21 @@ set -gx LC_ALL   "en_US.UTF-8"
 set -gx LC_CTYPE "en_US.UTF-8"
 
 # Homebrew setup
-set -gx PATH "/opt/homebrew/bin" $PATH
-set -gx PATH "/opt/homebrew/sbin" $PATH
+fish_add_path "/opt/homebrew/bin"
+fish_add_path "/opt/homebrew/sbin"
 set -gx CPATH "/opt/homebrew/include"
 set -gx LIBRARY_PATH "/opt/homebrew/lib"
 set -gx JAVA_HOME "/Library/Java/Home"
 set -gx HOMEBREW_NO_ENV_HINTS "1"
 
-if which -s pry
-  set -gx HOMEBREW_PRY "1"
-end
-
 if which -s bat
   set -gx HOMEBREW_BAT "1"
 end
 
-set -gx PATH "$HOME/.cargo/bin" $PATH
-
-set -gx NODE_OPTIONS "--max_old_space_size=10240"
+fish_add_path "$HOME/.cargo/bin"
 
 # Macvim binaries
-set -gx PATH "/Applications/MacVim.app/Contents/bin/" $PATH
+fish_add_path "/Applications/MacVim.app/Contents/bin/"
 
 # configure my prefered editor
 set -Ux EDITOR         "vim"
@@ -97,7 +91,7 @@ abbr -a cu  "cucumber"
 abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
 abbr -a of  "rspec --only-failures"
-abbr -a rdm "rails db:migrate"
+abbr -a rdm "rake db:migrate"
 
 abbr -a ms "tmuxinator start"
 abbr -a mx "tmuxinator stop"
@@ -123,21 +117,18 @@ end
 # ignored file, might not be there
 # this is where I put secret tokens
 if [ -f ~/.dotfiles/config/fish/personal.fish ]
-	source ~/.dotfiles/config/fish/personal.fish
+  source ~/.dotfiles/config/fish/personal.fish
 end
 
 if which -s zoxide; zoxide init fish | source; end
 if which -s direnv; direnv hook fish | source; end
 
-# personal files in bin are always highest priority
-set -gx PATH "$HOME/.dotfiles/bin" $PATH
-
 # test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 # 1password integration
-if [ -f ~/.config/op/plugins.sh ]
-  source ~/.config/op/plugins.sh
-end
+# if [ -f ~/.config/op/plugins.sh ]
+#   source ~/.config/op/plugins.sh
+# end
 
 # postgresql@16
 if [ -f /opt/homebrew/opt/postgresql@16/bin/psql ]
@@ -146,3 +137,13 @@ if [ -f /opt/homebrew/opt/postgresql@16/bin/psql ]
   set -gx CPPFLAGS "-I/opt/homebrew/opt/postgresql@16/include"
   set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/postgresql@16/lib/pkgconfig"
 end
+
+# pnpm
+set -gx PNPM_HOME "$HOME/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
+
+# personal files in bin are always highest priority
+fish_add_path "$HOME/.dotfiles/bin"

@@ -1,3 +1,6 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
 add_newline = false
 format = """
 $aws\
@@ -46,3 +49,8 @@ error_symbol = "[❯](red)"
 [custom.git]
 command = "~/.dotfiles/bin/git-prompt"
 when = "true"
+
+[ruby]
+symbol = ' '
+format = '[$symbol($version )]($style)'
+style = 'red'
