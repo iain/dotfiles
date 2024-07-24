@@ -37,8 +37,8 @@ set -Ux EXA_COLORS "da=37:ur=37:gr=37:tr=37:uu=33:di=34"
 if which -s gls
   alias ls="gls --group-directories-first --color=auto"
 end
-if which -s exa
-  alias l="exa --long --group-directories-first --git --all --time-style=long-iso"
+if which -s eza
+  alias l="eza --long --group-directories-first --git --all --time-style=long-iso"
 else
   alias l="ls -FhAlo"
 end

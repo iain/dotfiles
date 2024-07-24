@@ -21,5 +21,6 @@ if executable('rg')
 endif
 
 if executable('fzf')
-  set rtp+=/usr/local/opt/fzf
+  " set rtp+=/usr/local/opt/fzf
+  set rtp+=/opt/homebrew/opt/fzf
 endif
