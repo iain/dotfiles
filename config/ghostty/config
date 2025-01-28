@@ -1,0 +1,19 @@
+quit-after-last-window-closed = true
+copy-on-select = true
+theme = catppuccin-mocha
+
+shell-integration = fish
+macos-titlebar-style = tabs
+window-save-state = always
+
+keybind = super+r=clear_screen
+
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:bottom
+keybind = ctrl+k=goto_split:top
+keybind = ctrl+l=goto_split:right
+
+keybind = super+ctrl+h=resize_split:left,10
+keybind = super+ctrl+j=resize_split:down,10
+keybind = super+ctrl+k=resize_split:up,10
+keybind = super+ctrl+l=resize_split:right,10
