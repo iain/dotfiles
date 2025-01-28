@@ -1,8 +1,5 @@
 set t_Co=256
 set termguicolors     " enable true colors support
-" let ayucolor="light"  " for light version of theme
-let ayucolor="mirage" " for mirage version of theme
-" let ayucolor="dark"   " for dark version of theme
 
 function! AfterColorChange()
   set fillchars+=vert:│
@@ -14,15 +11,13 @@ endfunction
 
 function! LightMode()
   set background=light
-  let g:ayucolor='light'
-  colorscheme ayu
+  colorscheme catppuccin-latte
   call AfterColorChange()
 endfunction
 
 function! DarkMode()
   set background=dark
-  let g:ayucolor='mirage'
-  colorscheme ayu
+  colorscheme catppuccin-mocha
   call AfterColorChange()
 endfunction
 

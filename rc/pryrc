@@ -11,9 +11,9 @@ rescue LoadError
   # ok
 end
 
-Pry.config.editor = "nvim"
+Pry.config.editor = "vim"
 
-__prompt_prefix = proc { |obj, level, _|
+prompt_prefix = proc { |obj, level, _|
   if level == 0
     ""
   else
@@ -27,18 +27,18 @@ Pry.config.prompt = Pry::Prompt.new(
   "Because ASCII box-drawing is still cool in #{Time.now.year}!",
   [
     proc { |obj, level, pry|
-      prefix = __prompt_prefix[obj, level]
+      prefix = prompt_prefix[obj, level]
       pry.config.output_prefix = "\e[0;90m#{" " * prefix.size}╛ \e[0m"
       "\e[0;90m#{prefix}│❯ \e[0m"
     },
     proc { |obj, level, _|
-      prefix = __prompt_prefix[obj, level]
+      prefix = prompt_prefix[obj, level]
       "\e[0;90m#{" " * prefix.size}│  \e[0m"
     },
   ]
 )
 
 # Hit Enter to repeat last command
-Pry::Commands.command /^$/, "repeat last command" do
+Pry::Commands.command(/^$/, "repeat last command") do
   pry_instance.run_command Pry.history.to_a.last
 end

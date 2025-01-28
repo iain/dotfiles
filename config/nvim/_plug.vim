@@ -1,6 +1,6 @@
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  silent !sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -11,7 +11,7 @@ function! MyInstall()
   :PlugInstall
 endfunction
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.nvim/plugged')
 
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'ayu-theme/ayu-vim'               " colorscheme
@@ -53,5 +53,6 @@ Plug 'vim-ruby/vim-ruby'
 " Plug 'kyazdani42/nvim-web-devicons'
 " Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
 call plug#end()

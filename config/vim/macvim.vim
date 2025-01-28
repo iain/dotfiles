@@ -7,7 +7,7 @@
 " set guifont=FiraCode\ Nerd\ Font\ Mono\ Light:h12
 " set guifont=FiraCode\ Nerd\ Font\ Mono\ Light:h12
 " set guifont=-monospace-:h12
-set guifont=JetBrainsMonoNFM-Light:h13
+set guifont=JetBrainsMonoNFM-Light:h14
 
 
 set guioptions=Ace " No menubar, toolbar or scrollbars, as minimal as possible
