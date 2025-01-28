@@ -46,6 +46,7 @@ Plug 'fcpg/vim-farout'
 Plug 'danishprakash/vim-yami'
 Plug 'kamykn/dark-theme.vim'
 Plug 'wsniper/vim-color-theme-protect-eyes'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 " Plug 'nightsense/shoji'
 Plug 'giulioungaretti/shoji'
 Plug 'jlcrochet/vim-rbs'

@@ -18,7 +18,8 @@ endfunction
 function! LightMode()
   set background=light
   let g:ayucolor="light"
-  colorscheme ayu
+  " colorscheme ayu
+  colorscheme catppuccin_latte
   " colorscheme nofrils-acme
   " colorscheme shoji_niji
   " colorscheme shoji_shiro
@@ -29,7 +30,8 @@ endfunction
 function! DarkMode()
   let ayucolor="mirage"
   set background=dark
-  colorscheme ayu
+  " colorscheme ayu
+  colorscheme catppuccin_mocha
   " colorscheme wildcharm
   " colorscheme nofrils-dark
   " colorscheme farout
