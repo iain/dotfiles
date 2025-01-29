@@ -15,9 +15,8 @@ your own toolchain.
 | Directory | Description                |
 | --------- | -------------------------- |
 | bin       | executables                |
-| config    | zsh and fish configuration |
-| iterm2    | iterm2 configuration       |
 | rc        | all the dotfiles           |
+| config    | XDG config files           |
 | script    | private helper scripts     |
 
 
@@ -26,44 +25,28 @@ ignored by git, so it doesn't accidentally end up on the internet.
 
 ## Installation
 
-### Pre-requisites
-
 Download and install the following applications manually:
 
-* [iTerm2](http://www.iterm2.com/)
+* [Ghostty](https://ghostty.org/)
 * [MacVIM](http://macvim-dev.github.io/macvim/)
 * [Homebrew](http://brew.sh/)
 
-### Code
+Install Homebrew as specified on the website.
 
-To install dotfiles:
+Then install the github CLI:
 
-```zsh
-git clone git@github.com:iain/dotfiles.git ~/.dotfiles
+```
+brew install gh
+gh auth login
+```
+
+Get this repo:
+
+```
+gh repo clone iain/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 ./script/install
 ```
-
-This will backup any previous dotfiles you have.
-
-### Homebrew
-
-To install all the neat little homebrew tools listed in `Brewfile`:
-
-```zsh
-brew tap Homebrew/bundle
-brew bundle
-```
-
-### iTerm
-
-To configure iTerm:
-
-1. Open iTerm2.
-2. Go to the Preferences (`⌘,`)
-3. In the General tab, check `Load preferences from a custom folder or URL`.
-4. Fill in: `~/.dotfiles/iterm2`.
-5. Restart iTerm2.
 
 ### asdf
 
@@ -77,17 +60,11 @@ asdf install ruby latest
 asdf global ruby latest
 ```
 
-Python and most other languages work the same, except [NodeJS](https://github.com/asdf-vm/asdf-nodejs).
-
 To update all plugins, when new versions come out:
 
 ```zsh
 asdf plugin update --all
 ```
-
-### Fonts
-
-Should be installed via Homebrew.
 
 ## Documentation
 

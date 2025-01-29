@@ -2,6 +2,9 @@
 
 require "fileutils"
 
+`brew tap Homebrew/bundle`
+`brew bundle`
+
 def symlink(from, to)
   # print "Installing #{from} to #{to}... "
   from = File.expand_path("../#{from}", __dir__)
