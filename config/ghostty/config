@@ -1,11 +1,16 @@
-quit-after-last-window-closed = true
-copy-on-select = true
 theme = catppuccin-mocha
+cursor-style = block
 
-shell-integration = fish
+copy-on-select = true
+mouse-hide-while-typing = true
+
+# window
 macos-titlebar-style = tabs
+quit-after-last-window-closed = true
 window-save-state = always
+window-inherit-working-directory = true
 
+# keybinds
 keybind = super+r=clear_screen
 
 keybind = ctrl+h=goto_split:left
