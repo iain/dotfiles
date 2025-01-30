@@ -3,6 +3,7 @@
 
 add_newline = false
 format = """
+${custom.bottom}\
 $aws\
 $jobs\
 $username\
@@ -54,3 +55,7 @@ when = "true"
 symbol = ' '
 format = '[$symbol($version )]($style)'
 style = 'red'
+
+[custom.bottom]
+command = "tput cup 9999 0"
+when = "true"
