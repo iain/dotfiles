@@ -1,0 +1,13 @@
+#!/usr/bin/osascript
+
+on run argv
+  activate application "Ghostty"
+  tell application "System Events"
+    keystroke (item 1 of argv)
+    keystroke return
+  end tell
+
+  tell application "MacVim"
+    activate
+  end tell
+end run

@@ -9,6 +9,8 @@ macos-titlebar-style = tabs
 quit-after-last-window-closed = true
 window-save-state = always
 window-inherit-working-directory = true
+macos-titlebar-proxy-icon = hidden
+macos-non-native-fullscreen = visible-menu
 
 # keybinds
 keybind = super+r=clear_screen
