@@ -15,6 +15,7 @@ source ~/.config/vim/netrw.vim
 source ~/.config/vim/search.vim
 source ~/.config/vim/test.vim
 source ~/.config/vim/visual.vim
+source ~/.config/vim/ruby.vim
 
 if has("gui_macvim")
   source ~/.config/vim/macvim.vim

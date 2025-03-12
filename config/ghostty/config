@@ -5,12 +5,23 @@ copy-on-select = true
 mouse-hide-while-typing = true
 
 # window
-macos-titlebar-style = tabs
-quit-after-last-window-closed = true
 window-save-state = always
 window-inherit-working-directory = true
-macos-titlebar-proxy-icon = hidden
+quit-after-last-window-closed = true
+
+# macos
 macos-non-native-fullscreen = visible-menu
+macos-titlebar-proxy-icon = hidden
+macos-titlebar-style = tabs
+
+# macos icon
+macos-icon = custom-style
+# macos-icon-frame = beige
+# macos-icon-ghost-color = fefae0
+# macos-icon-screen-color = cb997e
+# macos-icon-frame = plastic
+macos-icon-ghost-color = 89b4fa
+macos-icon-screen-color = 1e1e2e
 
 # keybinds
 keybind = super+r=clear_screen

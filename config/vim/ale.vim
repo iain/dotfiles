@@ -8,6 +8,7 @@ nmap <silent> <D-j> <Plug>(ale_next)
 
 " Use Cmd+r to fix ruby linter errors
 nmap <silent> <D-r> :ALEFix<CR>
+nmap <silent> <D-R> :ALEFix sorbet<CR>
 
 " Use Enter to lint
 nnoremap <silent><cr> :nohlsearch<cr>:ALELint<cr>
@@ -28,7 +29,7 @@ let g:ale_linters = {
   \ 'javascript.jsx':  js_fixers,
   \ 'json':            ['jsonlint'],
   \ 'markdown':        ['prettier'],
-  \ 'ruby':            ['ruby', 'rubocop'],
+  \ 'ruby':            ['ruby', 'rubocop', 'sorbet'],
   \ 'typescript':      js_fixers,
   \ 'typescriptreact': js_fixers,
   \ '*': ['remove_trailing_lines', 'trim_whitespace']
@@ -81,19 +82,22 @@ let g:ale_set_quickfix = 0
 " Rubocop:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:ruby_indent_assignment_style = 'variable'
-
 let g:ale_ruby_rubocop_auto_correct_all = 1
+let g:ale_ruby_rubocop_options = "--server"
+
+let g:ale_ruby_sorbet_enable_watchman = 1
 
 " Use Ruby from ASDF if available
 if filereadable(expand("~/.asdf/shims/ruby"))
   let g:ale_ruby_ruby_executable = expand("~/.asdf/shims/ruby")
 endif
 
-if filereadable(expand("~/.dotfiles/bin/rubocop"))
-  let g:ale_ruby_rubocop_executable = expand("~/.dotfiles/bin/rubocop")
+if filereadable(expand("~/.asdf/shims/rubocop"))
+  let g:ale_ruby_rubocop_executable = expand("~/.asdf/shims/rubocop")
 endif
 
-" Use `rubocop-daemon-wrapper` instead of `rubocop`
-" let g:ale_ruby_rubocop_executable = 'rubocop-daemon-wrapper-netcat'
+if filereadable(expand("~/.asdf/shims/srb"))
+  let g:ale_ruby_sorbet_executable = expand("~/.asdf/shims/srb")
+endif
+
 " ['brakeman', 'debride', 'rails_best_practices', 'reek', 'rubocop', 'ruby', 'solargraph', 'sorbet', 'standardrb']

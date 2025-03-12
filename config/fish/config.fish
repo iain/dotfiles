@@ -25,7 +25,7 @@ fish_add_path "/Applications/MacVim.app/Contents/bin/"
 set -Ux EDITOR         "vim"
 set -Ux GIT_EDITOR     $EDITOR
 set -Ux SVN_EDITOR     $EDITOR
-set -Ux VISUAL         "mvim"
+set -Ux VISUAL         "vim"
 set -Ux BUNDLER_EDITOR $VISUAL
 set -Ux GEMEDITOR      $VISUAL
 set -Ux MANPAGER       "col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -c 'nmap q :q<cr>' -"
@@ -72,7 +72,7 @@ abbr -a gf      "git fetch --all"
 abbr -a gl      "git log"
 abbr -a glp     "git log -p"
 abbr -a gpb     "git-publish-branch"
-abbr -a gpr     "gh pr create --draft --assignee @me --fill"
+abbr -a gpr     "gh pr create --assignee @me --fill"
 abbr -a gr      "git recent"
 abbr -a p       "git push"
 abbr -a re      "git restore"
@@ -91,10 +91,12 @@ abbr -a cu  "cucumber"
 abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
 abbr -a of  "rspec --only-failures"
-abbr -a rdm "rake db:migrate"
+abbr -a rdm "rails db:migrate"
 
-abbr -a ms "tmuxinator start"
-abbr -a mx "tmuxinator stop"
+abbr -a tap "./bin/tapioca"
+abbr -a dsl "./bin/tapioca dsl"
+# abbr -a ms "tmuxinator start"
+# abbr -a mx "tmuxinator stop"
 
 # disable virtualenv prompt, it breaks starship
 set VIRTUAL_ENV_DISABLE_PROMPT 1
@@ -110,9 +112,19 @@ set fzf_fish_custom_keybindings
 bind \cy __fzf_search_git_log
 bind \cu __fzf_search_git_status
 
-if [ -f /opt/homebrew/opt/asdf/libexec/asdf.fish ]
-  source /opt/homebrew/opt/asdf/libexec/asdf.fish
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
 end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
 
 # ignored file, might not be there
 # this is where I put secret tokens
