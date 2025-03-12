@@ -9,7 +9,6 @@ fish_add_path "/opt/homebrew/bin"
 fish_add_path "/opt/homebrew/sbin"
 set -gx CPATH "/opt/homebrew/include"
 set -gx LIBRARY_PATH "/opt/homebrew/lib"
-set -gx JAVA_HOME "/Library/Java/Home"
 set -gx HOMEBREW_NO_ENV_HINTS "1"
 
 if which -s bat
