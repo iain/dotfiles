@@ -26,6 +26,9 @@ if which -s direnv; direnv hook fish | source; end
 # https://github.com/eth-p/bat-extras
 if which -s batman; batman --export-env | source; end
 
+# https://github.com/junegunn/fzf
+if which -s fzf; fzf --fish | source; end
+
 # https://github.com/eza-community/eza
 if which -s eza
   alias ls="eza --group-directories-first"
