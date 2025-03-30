@@ -28,6 +28,8 @@ if which -s direnv; direnv hook fish | source; end
 
 # https://github.com/eth-p/bat-extras
 if which -s batman; batman --export-env | source; end
+if which -s batpipe; eval (batpipe); end
+if which -s delta; set -gx BATDIFF_USE_DELTA "true"; end
 
 # https://github.com/junegunn/fzf
 if which -s fzf; fzf --fish | source; end

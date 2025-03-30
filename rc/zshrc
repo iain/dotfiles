@@ -26,6 +26,14 @@ if command -v fzf > /dev/null; then
   source <(fzf --zsh)
 fi
 
+if command -v batman > /dev/null; then
+  source <(batman --export-env)
+fi
+
+if command -v batpipe > /dev/null; then
+  eval "$(batpipe)"
+fi
+
 # https://asdf-vm.com/
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath) # append completions to fpath
