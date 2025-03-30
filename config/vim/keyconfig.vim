@@ -11,7 +11,7 @@ cnoreabbrev E e
 " in insert mode, jj or jk goes to normal mode
 " if you ever need to type jj for real, type it slowly, like on old school mobile phones
 inoremap jj <ESC>
-inoremap jk <ESC>
+" inoremap jk <ESC>
 map <C-C> <ESC>
 
 " Move to the start of line

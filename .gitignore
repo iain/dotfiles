@@ -2,3 +2,4 @@
 /config/zsh/personal.sh
 /config/zsh/personal.zsh
 Brewfile.lock.json
+tmp/

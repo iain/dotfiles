@@ -1,18 +1,26 @@
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
 
-export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/Applications/MacVim.app/Contents/bin/:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
+
+export CPATH="/opt/homebrew/include"
+export LIBRARY_PATH="/opt/homebrew/lib"
+export HOMEBREW_NO_ENV_HINTS="1"
 
 export EDITOR='vim'
 export GIT_EDITOR=$EDITOR
 export SVN_EDITOR=$EDITOR
 
-export VISUAL='mvim'
+export VISUAL='vim'
 export BUNDLER_EDITOR=$VISUAL
 export GEMEDITOR=$VISUAL
 
-export JAVA_HOME="/Library/Java/Home"
-# . "$HOME/.cargo/env"
+if [ -f /opt/homebrew/opt/postgresql@16/bin/psql ]; then
+  export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+  export LDFLAGS="-L/opt/homebrew/opt/postgresql@16/lib"
+  export CPPFLAGS="-I/opt/homebrew/opt/postgresql@16/include"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/postgresql@16/lib/pkgconfig"
+fi

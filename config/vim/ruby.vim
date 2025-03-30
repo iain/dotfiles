@@ -4,11 +4,12 @@
 
 " let g:ruby_indent_assignment_style = 'variable'
 " let g:ruby_indent_access_modifier_style = 'normal'
-let ruby_operators        = 1
-let ruby_pseudo_operators = 1
-let ruby_space_errors = 1
+let ruby_operators               = 1
+let ruby_pseudo_operators        = 1
+let ruby_space_errors            = 1
 let ruby_line_continuation_error = 1
 let ruby_global_variable_error   = 1
+let ruby_minlines                = 250
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sorbet
@@ -40,4 +41,3 @@ function! Sorbet()
 endfunction
 
 au FileType ruby call Sorbet()
-

@@ -1,5 +1,6 @@
-theme = catppuccin-mocha
-cursor-style = block
+theme = light:catppuccin-latte,dark:catppuccin-mocha
+font-family = JetBrainsMono Nerd Font Mono
+# background = 000000
 
 copy-on-select = true
 mouse-hide-while-typing = true

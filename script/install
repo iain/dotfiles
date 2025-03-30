@@ -2,7 +2,6 @@
 
 require "fileutils"
 
-`brew tap Homebrew/bundle`
 `brew bundle`
 
 def symlink(from, to)
@@ -30,7 +29,6 @@ Dir["rc/*"].each do |f|
   symlink f, "~/.#{File.basename(f)}"
 end
 
-symlink "config/auto_dark_mode.py", "/Users/iain/Library/ApplicationSupport/iTerm2/Scripts/AutoLaunch/auto_dark_mode.py"
 symlink "config/bundler",           "~/.bundle/config"
 symlink "config/fish/config.fish",  "~/.config/fish/config.fish"
 symlink "config/fish/functions",    "~/.config/fish/functions"

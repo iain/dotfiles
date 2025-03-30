@@ -1,59 +1,31 @@
-# https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
-if type brew &>/dev/null; then
-  # FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-  # brew prefix is a little slow, so here's the direct version instead:
-  FPATH=/usr/local/share/zsh/site-functions:$FPATH
-  autoload -Uz compinit
-  compinit
+# https://starship.rs/
+if command -v starship > /dev/null; then
+  eval "$(starship init zsh)"
 fi
 
-if [[ -a /opt/homebrew/share/antigen/antigen.zsh ]]; then
-
-  source /opt/homebrew/share/antigen/antigen.zsh
-
-  antigen use oh-my-zsh
-
-  antigen bundle gitfast
-  antigen bundle heroku
-  antigen bundle aws
-  antigen bundle zsh-users/zsh-syntax-highlighting
-  antigen bundle zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
-  antigen bundle docker
-  antigen bundle docker-compose
-  # too slow when pasting commands into terminal
-  # antigen bundle https://github.com/zsh-users/zsh-autosuggestions.git
-  # bindkey '^ ' autosuggest-accept
-  antigen bundle themes
-
-  antigen theme https://gist.github.com/88fa1befc0973f4acf4baf1bc9b511a0.git minimaliain
-
-  antigen apply
-
-  PROMPT=" $PROMPT"
-
+# https://github.com/eza-community/eza
+if command -v eza > /dev/null; then
+  alias ls='eza --group-directories-first'
+  alias l='eza --long --group-directories-first --git --all --time-style=iso'
 else
-
-  echo "\e[0;31mError: Missing antigen. To install: \e[0;34mbrew install antigen\e[0;00m"
-
-  PROMPT="$ "
-
+  alias l='ls -FhAlo'
 fi
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source ~/.dotfiles/config/zsh/general.sh
-source ~/.dotfiles/config/zsh/personal.sh
-
-# asdf config must be all the way at the bottom
-# source $(brew --prefix asdf)/asdf.sh
-# brew prefix is a little slow, so here's the direct version instead:
-if [ -f "/usr/local/opt/asdf/asdf.sh" ]; then
-  source /usr/local/opt/asdf/asdf.sh
+# https://github.com/ajeetdsouza/zoxide
+if command -v zoxide > /dev/null; then
+  eval "$(zoxide init zsh)"
 fi
 
-GPG_TTY=$(tty)
-export GPG_TTY
+# https://direnv.net/
+if command -v direnv > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
 
-true
+# https://asdf-vm.com/
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath) # append completions to fpath
+autoload -Uz compinit && compinit # initialise completions with ZSH's compinit
+
+# Aliases
+alias m='mvim'
+alias st='git status'
