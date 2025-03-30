@@ -1,3 +1,4 @@
+amazing_print
 bundler
 foreman
 gem-release
@@ -5,4 +6,4 @@ irbtools
 pry
 ripper-tags
 rubocop
-amazing_print
+solargraph

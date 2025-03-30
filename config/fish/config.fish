@@ -1,5 +1,8 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# in case some tools don't have a fallback to this
+set -gx XDG_CONFIG_HOME "$HOME/.config/"
+
 # https://asdf-vm.com/
 fish_add_path -m "$HOME/.asdf/shims"
 
@@ -31,8 +34,10 @@ if which -s fzf; fzf --fish | source; end
 
 # https://github.com/eza-community/eza
 if which -s eza
-  alias ls="eza --group-directories-first"
-  alias l="eza --long --group-directories-first --git --all --time-style=iso"
+  alias ls="eza --group-directories-first --icons=auto"
+  alias l="ls --git --all --time-style=iso"
+  alias ll="eza --long --git --all --time-style=iso"
+  set -gx EZA_CONFIG_DIR "$HOME/.config/eza/"
 else
   alias l="ls -FhAlo"
 end
