@@ -2,7 +2,6 @@
   useConfigOnly = true
   signingKey = ~/.ssh/id_ed25519.pub
 [core]
-  excludesfile = ~/.dotfiles/config/global_gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
   attributesfile = ~/.gitattributes
   splitIndex = true
