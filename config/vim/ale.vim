@@ -7,14 +7,16 @@ nmap <silent> <D-k> <Plug>(ale_previous)
 nmap <silent> <D-j> <Plug>(ale_next)
 
 " Use Cmd+r to fix ruby linter errors
-nmap <silent> <D-r> :ALEFix<CR>
-nmap <silent> <D-R> :ALEFix sorbet<CR>
+nmap <silent> <D-r> :ALEFix rubocop<CR>
+
+" hard reset of LSPs
+nmap <silent> <D-R> :ALEStopAllLSPs<CR>:ALELint<cr>
 
 " Use Enter to lint
 nnoremap <silent><cr> :nohlsearch<cr>:ALELint<cr>
 
 " Set this variable to 1 to fix files when you save them.
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Linters:
@@ -32,15 +34,16 @@ let g:ale_linters = {
   \ 'ruby':            ['ruby', 'rubocop', 'sorbet'],
   \ 'typescript':      js_fixers,
   \ 'typescriptreact': js_fixers,
+  \ 'slim':            ['slimlint'],
   \ '*': ['remove_trailing_lines', 'trim_whitespace']
   \ }
 
 let g:ale_fixers = {
   \ 'css':         ['prettier'],
-  \ 'javascript':  ['eslint', 'prettier'],
+  \ 'javascript':  ['prettier'],
   \ 'json':        ['jq'],
   \ 'markdown':    ['prettier'],
-  \ 'ruby':        ['rubocop'],
+  \ 'ruby':        ['remove_trailing_lines', 'trim_whitespace'],
   \ 'yaml':        ['prettier'],
   \ 'rust':        ['rustfmt'],
   \ 'go':          ['gofmt'],
@@ -100,4 +103,10 @@ if filereadable(expand("~/.asdf/shims/srb"))
   let g:ale_ruby_sorbet_executable = expand("~/.asdf/shims/srb")
 endif
 
-" ['brakeman', 'debride', 'rails_best_practices', 'reek', 'rubocop', 'ruby', 'solargraph', 'sorbet', 'standardrb']
+if filereadable(expand("~/.asdf/shims/stree"))
+  let g:ale_ruby_syntax_tree_executable = expand("~/.asdf/shims/stree")
+endif
+
+if filereadable(expand("~/.asdf/shims/solargraph"))
+  let g:ale_ruby_solargraph_executable = expand("~/.asdf/shims/solargraph")
+endif

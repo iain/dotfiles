@@ -40,6 +40,8 @@ Plug 'tpope/vim-unimpaired'            " toggling options
 Plug 'tpope/vim-vinegar'               " improving interaction with NetRW
 Plug 'vim-ruby/vim-ruby'
 Plug 'godlygeek/tabular'
+Plug 'slim-template/vim-slim'
+Plug 'jlcrochet/vim-rbs'
 
 Plug 'robertmeta/nofrils'
 Plug 'fcpg/vim-farout'
@@ -50,5 +52,7 @@ Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 " Plug 'nightsense/shoji'
 Plug 'giulioungaretti/shoji'
 Plug 'jlcrochet/vim-rbs'
+
+Plug 'junegunn/fzf'
 
 call plug#end()

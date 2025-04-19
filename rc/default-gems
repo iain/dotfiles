@@ -6,4 +6,6 @@ irbtools
 pry
 ripper-tags
 rubocop
+slim_lint
 solargraph
+syntax_tree

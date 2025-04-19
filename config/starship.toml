@@ -1,3 +1,19 @@
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$character"""
+
+# move the rest of the prompt to the right
+right_format = """$all"""
+
 [line_break]
 disabled = true
 
@@ -28,6 +44,7 @@ symbol = " "
 
 [directory]
 read_only = " 󰌾"
+style = "blue"
 
 [docker_context]
 symbol = " "
@@ -45,10 +62,20 @@ symbol = " "
 symbol = " "
 
 [git_branch]
-symbol = " "
+symbol = " "
+style="cyan"
+format='[$symbol$branch(:$remote_branch)]($style) '
 
 [git_commit]
 tag_symbol = '  '
+style="green"
+
+[git_status]
+style="purple"
+format = '([$all_status$ahead_behind]($style) )'
+ahead = '↑'
+diverged = '↕'
+behind = '↓'
 
 [golang]
 symbol = " "
@@ -93,7 +120,9 @@ symbol = "󰆥 "
 symbol = " "
 
 [nodejs]
-symbol = " "
+# symbol = " "
+symbol = " "
+style = "green"
 
 [ocaml]
 symbol = " "
@@ -165,6 +194,8 @@ symbol = "󰟔 "
 
 [ruby]
 symbol = " "
+style = "red"
+format = '[$symbol($version )]($style)'
 
 [rust]
 symbol = "󱘗 "

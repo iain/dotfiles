@@ -18,7 +18,13 @@ if [ -f /opt/homebrew/opt/postgresql@16/bin/psql ]
 end
 
 # https://starship.rs/
-if which -s starship; starship init fish | source; end
+if which -s starship
+  function starship_transient_prompt_func
+    starship module character
+  end
+  starship init fish | source
+  enable_transience
+end
 
 # https://github.com/ajeetdsouza/zoxide
 if which -s zoxide; zoxide init fish | source; end
@@ -37,8 +43,7 @@ if which -s fzf; fzf --fish | source; end
 # https://github.com/eza-community/eza
 if which -s eza
   alias ls="eza --group-directories-first --icons=auto"
-  alias l="ls --git --all --time-style=iso"
-  alias ll="eza --long --git --all --time-style=iso"
+  alias l="eza --group-directories-first --git --all --time-style=iso --long"
   set -gx EZA_CONFIG_DIR "$HOME/.config/eza/"
 else
   alias l="ls -FhAlo"
@@ -80,3 +85,5 @@ abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
 abbr -a of  "rspec --only-failures"
 abbr -a rdm "rails db:migrate"
+
+set -gx EDITOR "vim"
