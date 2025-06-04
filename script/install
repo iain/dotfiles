@@ -2,7 +2,8 @@
 
 require "fileutils"
 
-`brew bundle`
+puts "=== Installing homebrew bundle ==="
+system "brew bundle", exception: true
 
 def symlink(from, to)
   # print "Installing #{from} to #{to}... "
@@ -25,6 +26,8 @@ def symlink(from, to)
   end
 end
 
+puts "=== Installing symlinks ==="
+
 Dir["rc/*"].each do |f|
   symlink f, "~/.#{File.basename(f)}"
 end
@@ -36,5 +39,10 @@ symlink "config/nvim",              "~/.config/nvim"
 symlink "config/starship.toml",     "~/.config/starship.toml"
 symlink "config/vim",               "~/.config/vim"
 symlink "config/ghostty",           "~/.config/ghostty"
-symlink "config/eza",               "~/.config/eza"
 symlink "config/git",               "~/.config/git"
+
+FileUtils.mkdir_p "~/.vim/undo", verbose: true
+FileUtils.mkdir_p "~/.vim/swap", verbose: true
+FileUtils.mkdir_p "~/.vim/tmp",  verbose: true
+
+puts "=== Done! ==="
