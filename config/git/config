@@ -43,6 +43,8 @@
 [fetch]
   prune = true
   prunteTags = true
+[pull]
+  rebase = true
 [rebase]
   autostash = true
 [branch]
