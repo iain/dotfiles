@@ -18,7 +18,8 @@ function! CustomGhosttyStrategy(cmd)
 endfunction
 
 let g:test#custom_strategies = {'custom_ghostty': function('CustomGhosttyStrategy')}
-let g:test#strategy = 'custom_ghostty'
+" let g:test#strategy = 'custom_ghostty'
+let g:test#strategy = 'vimterminal'
 
 let test#elixir#exunit#options = '--stale'
 let test#elixir#exunit#options = {

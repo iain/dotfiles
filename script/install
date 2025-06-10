@@ -40,6 +40,9 @@ symlink "config/starship.toml",     "~/.config/starship.toml"
 symlink "config/vim",               "~/.config/vim"
 symlink "config/ghostty",           "~/.config/ghostty"
 symlink "config/git",               "~/.config/git"
+symlink "config/direnv",            "~/.config/direnv"
+symlink "config/bat",               "~/.config/bat"
+symlink "config/delta",             "~/.config/delta"
 
 FileUtils.mkdir_p "~/.vim/undo", verbose: true
 FileUtils.mkdir_p "~/.vim/swap", verbose: true

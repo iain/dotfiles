@@ -75,7 +75,7 @@ abbr -a s       "git status -s"
 abbr -a st      "git status"
 abbr -a sw      "git switch"
 abbr -a unstage "git restore --staged --"
-abbr -a up      "git pull --ff-only"
+abbr -a up      "git pull"
 
 # ruby abbreviations
 abbr -a b   "bundle"

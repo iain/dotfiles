@@ -75,8 +75,11 @@
   verbose = true
 [interactive]
   diffFilter = delta --color-only
+[include]
+  path = ~/.config/delta/themes/catppuccin.gitconfig
 [delta]
   navigate = true
+  features = catppuccin-mocha
 [gpg]
   format = ssh
 ; [blame]

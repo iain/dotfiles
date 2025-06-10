@@ -19,6 +19,14 @@ nnoremap H ^
 " Move to the end of line
 nnoremap L $
 
+" Map <Esc> to exit terminal mode
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-h> <C-w>h
+tnoremap <C-j> <C-w>j
+tnoremap <C-k> <C-w>k
+tnoremap <C-l> <C-w>l
+
+
 " Restore return to default for quickfix window
 autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
