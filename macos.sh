@@ -141,11 +141,60 @@ defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
 # ───────────────────────────────────────────────────
+# Finder (additional)
+# ───────────────────────────────────────────────────
+
+# Show hidden files
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
+# ───────────────────────────────────────────────────
+# Safari
+# ───────────────────────────────────────────────────
+
+# Show full URL in address bar
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# Enable Develop menu and Web Inspector
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+# Enable Web Inspector in all web views globally
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
+# ───────────────────────────────────────────────────
+# TextEdit
+# ───────────────────────────────────────────────────
+
+# Default to plain text
+defaults write com.apple.TextEdit RichText -int 0
+
+# Open and save as UTF-8
+defaults write com.apple.TextEdit PlainTextEncoding -int 4
+defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+# ───────────────────────────────────────────────────
+# Security
+# ───────────────────────────────────────────────────
+
+# Require password immediately after sleep or screensaver
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# ───────────────────────────────────────────────────
+# Spotlight
+# ───────────────────────────────────────────────────
+
+# Disable Spotlight keyboard shortcut (Cmd+Space) to free it for Raycast/Alfred
+# Note: re-enable in System Settings > Keyboard > Shortcuts if needed
+/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
+
+# ───────────────────────────────────────────────────
 # Apply changes
 # ───────────────────────────────────────────────────
 
 echo "Restarting affected apps..."
-for app in "Finder" "Dock" "SystemUIServer"; do
+for app in "Finder" "Dock" "SystemUIServer" "Safari"; do
   killall "$app" &>/dev/null || true
 done
 
