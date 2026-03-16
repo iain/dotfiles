@@ -25,6 +25,17 @@ end
 
 if command -q bat
   alias cat="bat"
+
+  # bat-extras
+  if command -q batman
+    alias man="batman"
+  end
+  if command -q batdiff
+    alias diff="batdiff"
+  end
+  if command -q batgrep
+    alias bgrep="batgrep"
+  end
 end
 
 if command -q zoxide
@@ -45,6 +56,7 @@ if command -q mise
 end
 
 if command -q rg
+  set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
   alias grep="rg"
 end
 

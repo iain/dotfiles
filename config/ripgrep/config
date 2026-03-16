@@ -1,0 +1,16 @@
+# Search behavior
+--smart-case
+--max-columns=200
+--max-columns-preview
+
+# Follow symbolic links
+--follow
+
+# Ignore
+--glob=!.git
+--glob=!node_modules
+--glob=!vendor/bundle
+--glob=!tmp
+--glob=!coverage
+--glob=!dist
+--glob=!build

@@ -1,0 +1,6 @@
+[global]
+warn_timeout = "10s"
+load_dotenv = true
+
+[whitelist]
+prefix = ["~/src", "~/iain"]

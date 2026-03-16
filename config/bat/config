@@ -1,0 +1,17 @@
+# Use the same theme as Ghostty
+--theme="Monokai Extended"
+
+# Show line numbers and git changes, no grid
+--style="numbers,changes,header-filename"
+
+# Use less as pager with sensible defaults
+--pager="less -FRX"
+
+# Wrap long lines instead of horizontal scrolling
+--wrap=auto
+
+# Map plain text extensions
+--map-syntax="*.conf:INI"
+--map-syntax="*.env:Bourne Again Shell (bash)"
+--map-syntax=".envrc:Bourne Again Shell (bash)"
+--map-syntax="Brewfile:Ruby"
