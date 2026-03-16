@@ -18,16 +18,19 @@ brew "ripgrep"             # fast grep replacement
 brew "tree"                # directory tree viewer
 
 # git
+brew "git"                 # Homebrew-managed git
 brew "gh"                  # GitHub CLI
 brew "git-delta"           # better git diff pager
 brew "git-filter-repo"     # rewrite/filter git history
 
 # data & text
 brew "jq"                  # JSON processor
+brew "yq"                  # YAML/XML/TOML processor
 brew "sd"                  # simpler sed replacement
 brew "wget"                # file downloader
 
 # diagnostics & benchmarking
+brew "btop"                # interactive system monitor
 brew "dust"                # intuitive disk usage viewer
 brew "entr"                # run commands on file changes
 brew "hyperfine"           # CLI benchmarking
@@ -36,6 +39,11 @@ brew "tokei"               # code statistics by language
 # databases
 brew "libpq"               # PostgreSQL client library
 brew "postgresql@18"       # PostgreSQL server
+
+# core utilities
+brew "coreutils"           # GNU core utilities
+brew "imagemagick"         # image manipulation toolkit
+brew "watch"               # run commands periodically
 
 # libraries
 brew "libyaml"             # YAML parsing (ruby dependency)
