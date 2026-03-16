@@ -1,4 +1,6 @@
 [settings]
+legacy_version_file = true
+experimental = true
 
 [settings.ruby]
 compile = false
