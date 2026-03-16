@@ -21,7 +21,13 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: #{$PROGRAM_NAME} [options]"
   opts.on("-n", "--dry-run", "Show what would be done without making changes") { options[:dry_run] = true }
+  opts.on("--[no-]macos", "Run macOS defaults (auto-detected on macOS)") { |v| options[:macos] = v }
+  opts.on("--[no-]brew", "Run brew bundle (auto-detected when Brewfile present)") { |v| options[:brew] = v }
 end.parse!
+
+# Auto-detect unless explicitly set via flags
+options[:macos] = RUBY_PLATFORM.include?("darwin") if options[:macos].nil?
+options[:brew]  = (DOTFILES_DIR / "Brewfile").file? if options[:brew].nil?
 
 dry_run = options[:dry_run]
 counts = { linked: 0, skipped: 0, backed_up: 0 }
@@ -104,4 +110,32 @@ if RC_SRC.directory?
   end
 end
 
-puts "\nDone. #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
+puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
+
+# Brew bundle
+if options[:brew]
+  brewfile = DOTFILES_DIR / "Brewfile"
+  puts "\nInstalling Homebrew packages from #{brewfile}..."
+  if dry_run
+    puts "  [dry-run] would run: brew bundle --file=#{brewfile}"
+  else
+    system("brew", "bundle", "--file=#{brewfile}") || warn("WARNING: brew bundle had errors")
+  end
+end
+
+# macOS defaults
+if options[:macos]
+  macos_script = DOTFILES_DIR / "macos.sh"
+  if macos_script.file?
+    puts "\nApplying macOS defaults from #{macos_script}..."
+    if dry_run
+      puts "  [dry-run] would run: bash #{macos_script}"
+    else
+      system("bash", macos_script.to_s) || warn("WARNING: macos.sh had errors")
+    end
+  else
+    puts "\nSkipping macOS defaults (#{macos_script} not found)."
+  end
+end
+
+puts "\nAll done."

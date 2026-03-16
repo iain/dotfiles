@@ -9,14 +9,17 @@ A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`, and Cl
 ## Install Script
 
 ```bash
-ruby install.rb        # symlink all config files
+ruby install.rb        # symlinks + brew bundle + macOS defaults
 ruby install.rb -n     # dry run — preview what would happen
+ruby install.rb --no-brew --no-macos  # symlinks only
 ```
 
-The script does three things:
+The script does five things:
 1. `config/*` → `~/.config/*` (preserving directory structure)
 2. `rc/*` → `~/.<name>` (adds dot prefix, e.g. `rc/vimrc` → `~/.vimrc`)
 3. `claude/*` → `~/.claude/*`
+4. `brew bundle` — installs Homebrew packages (auto-detected when `Brewfile` exists, skip with `--no-brew`)
+5. `macos.sh` — applies macOS defaults (auto-detected on macOS, skip with `--no-macos`)
 
 Files listed in `SKIP` (currently `config.local.example`) are excluded. Existing non-symlink files are backed up with `.backup` suffix.
 

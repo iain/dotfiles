@@ -17,27 +17,24 @@ git clone <repo-url> ~/iain/dotfiles
 cd ~/iain/dotfiles
 ```
 
-### 3. Install Packages
-
-```bash
-brew bundle
-```
-
-This installs Fish, Starship, vim, git-delta, fzf, ripgrep, eza, bat, zoxide, mise, direnv, Ghostty's font (JetBrains Mono Nerd Font), and everything else in the `Brewfile`.
-
-### 4. Symlink Config Files
+### 3. Install Everything
 
 ```bash
 ruby install.rb -n   # preview what will happen
 ruby install.rb      # do it
 ```
 
-This links:
-- `config/*` → `~/.config/*` (fish, git, vim, starship, mise, ghostty)
-- `rc/*` → `~/.<name>` (e.g. `rc/vimrc` → `~/.vimrc`)
-- `claude/*` → `~/.claude/*`
+This does three things in order:
+1. **Symlinks** config files into place (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`). Existing files are backed up with a `.backup` suffix.
+2. **`brew bundle`** — installs packages from the `Brewfile` (auto-detected when the file exists).
+3. **`macos.sh`** — applies macOS defaults (auto-detected on macOS).
 
-Existing files are backed up with a `.backup` suffix.
+Each step can be controlled with flags:
+
+```bash
+ruby install.rb --no-brew    # skip brew bundle
+ruby install.rb --no-macos   # skip macOS defaults
+```
 
 ### 5. Set Up Git Identity
 
@@ -88,5 +85,6 @@ rc/
 claude/
   commands/           — custom Claude Code slash commands
 Brewfile              — Homebrew packages and casks
-install.rb            — symlink installer (supports -n dry run)
+install.rb            — installer: symlinks, brew bundle, macOS defaults
+macos.sh              — macOS system preferences (run via install.rb or standalone)
 ```
