@@ -1,4 +1,4 @@
-set -gx XDG_CONFIG_HOME "$HOME/.config/"
+set -gx XDG_CONFIG_HOME "$HOME/.config"
 
 /opt/homebrew/bin/brew shellenv fish | source
 
@@ -9,34 +9,34 @@ fish_add_path /opt/homebrew/opt/libpq/bin
 if status is-interactive
   # Commands to run in interactive sessions can go here
   set -g fish_greeting
-  if which -s starship
+  if command -q starship
     starship init fish | source
   end
 end
 
-if which -s vim
+if command -q vim
   set -gx EDITOR "vim"
 end
 
-if which -s eza
+if command -q eza
   alias ls="eza --group-directories-first --icons=auto"
   alias l="eza --group-directories-first --git --all --time-style=iso --long"
 end
 
-if which -s bat
+if command -q bat
   alias cat="bat"
 end
 
-if which -s zoxide
+if command -q zoxide
   zoxide init fish | source
   alias cd="z"
 end
 
-if which -s fzf
+if command -q fzf
   fzf --fish | source
 end
 
-if which -s rg
+if command -q rg
   alias grep="rg"
 end
 
@@ -49,7 +49,6 @@ end
 
 
 # git abbreviations
-abbr -a a       "git add --all"
 abbr -a aa      "git add --all"
 abbr -a amend   "git commit --amend"
 abbr -a c       "git commit"
