@@ -36,6 +36,14 @@ if command -q fzf
   fzf --fish | source
 end
 
+if command -q direnv
+  direnv hook fish | source
+end
+
+if command -q mise
+  mise activate fish | source
+end
+
 if command -q rg
   alias grep="rg"
 end

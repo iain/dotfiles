@@ -24,6 +24,13 @@
 [core]
   protectNTFS = true
   protectHFS = true
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
+  dark = true
+  hyperlinks = true
 [gpg]
   format = ssh
 [gpg "ssh"]
