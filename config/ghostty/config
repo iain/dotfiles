@@ -1,0 +1,36 @@
+# appearance
+font-family = JetBrainsMono Nerd Font
+theme = Monokai Pro Spectrum
+cursor-style = block
+
+# behavior
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+scrollback-limit = 100000
+link-url = true
+
+# window
+maximize = true
+window-save-state = always
+window-inherit-working-directory = true
+quit-after-last-window-closed = true
+
+# macos
+macos-titlebar-style = tabs
+macos-titlebar-proxy-icon = hidden
+macos-option-as-alt = true
+
+# keybinds
+keybind = super+r=clear_screen
+
+# vim-style split navigation
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:bottom
+keybind = ctrl+k=goto_split:top
+keybind = ctrl+l=goto_split:right
+
+# vim-style split resizing
+keybind = super+ctrl+h=resize_split:left,10
+keybind = super+ctrl+j=resize_split:down,10
+keybind = super+ctrl+k=resize_split:up,10
+keybind = super+ctrl+l=resize_split:right,10
