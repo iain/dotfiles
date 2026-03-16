@@ -12,8 +12,8 @@ nmap <silent> <D-r> :ALEFix rubocop<CR>
 " hard reset of LSPs
 nmap <silent> <D-R> :ALEStopAllLSPs<CR>:ALELint<cr>
 
-" Use Enter to lint
-nnoremap <silent><cr> :nohlsearch<cr>:ALELint<cr>
+" Use Enter to clear search highlight and lint (not in quickfix/loclist)
+nnoremap <silent><expr><cr> &buftype ==# 'quickfix' ? "\<cr>" : ":nohlsearch\<cr>:ALELint\<cr>"
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1

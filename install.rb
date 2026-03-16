@@ -39,6 +39,8 @@ def symlink(src, dest, dry_run:, counts:)
       counts[:skipped] += 1
       return
     else
+      backup = Pathname.new("#{dest}.backup")
+      abort "ERROR: #{backup} already exists, not overwriting. Remove it manually and re-run." if backup.exist?
       puts "  #{dry_run ? "[dry-run] would remove" : "removing"} old symlink #{dest} -> #{dest.readlink}"
       dest.delete unless dry_run
     end

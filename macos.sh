@@ -7,8 +7,8 @@ set -euo pipefail
 
 echo "Applying macOS defaults..."
 
-# Close System Preferences to prevent it from overriding
-osascript -e 'tell application "System Preferences" to quit' 2>/dev/null || true
+# Close System Settings to prevent it from overriding
+osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
 
 # ───────────────────────────────────────────────────
 # General UI
