@@ -1,0 +1,34 @@
+let mapleader = ","
+
+if !has('nvim')
+  source ~/.config/vim/_nvim-defaults.vim
+endif
+
+source ~/.config/vim/_plug.vim
+" source ~/.config/vim/ale.vim
+" source ~/.config/vim/autocomplete.vim
+" source ~/.config/vim/colors.vim
+" source ~/.config/vim/formatting.vim
+" source ~/.config/vim/history.vim
+" source ~/.config/vim/keyconfig.vim
+" source ~/.config/vim/netrw.vim
+" source ~/.config/vim/search.vim
+" source ~/.config/vim/test.vim
+" source ~/.config/vim/visual.vim
+" source ~/.config/vim/ruby.vim
+
+source ~/.config/vim/ale.vim
+source ~/.config/vim/autocomplete.vim
+source ~/.config/vim/colors.vim
+source ~/.config/vim/formatting.vim
+source ~/.config/vim/history.vim
+source ~/.config/vim/keyconfig.vim
+source ~/.config/vim/macvim.vim
+source ~/.config/vim/netrw.vim
+source ~/.config/vim/search.vim
+source ~/.config/vim/test.vim
+source ~/.config/vim/visual.vim
+
+if has("gui_macvim")
+  source ~/.config/vim/macvim.vim
+endif
