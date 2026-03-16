@@ -1,0 +1,66 @@
+[include]
+  path = ~/.config/git/config.local
+[user]
+  useConfigOnly = true
+[push]
+  default = current
+  followTags = true
+  autoSetupRemote = true
+[fetch]
+  prune = true
+  pruneTags = true
+  fsckObjects = true
+[pull]
+  rebase = true
+[rebase]
+  autostash = true
+[branch]
+  autosetuprebase = always
+  sort = -committerdate
+[pager]
+  branch = false
+[tag]
+  gpgSign = true
+[core]
+  protectNTFS = true
+  protectHFS = true
+[gpg]
+  format = ssh
+[gpg "ssh"]
+  allowedSignersFile = ~/.config/git/allowed_signers
+[transfer]
+  fsckObjects = true
+[receive]
+  fsckObjects = true
+[init]
+  defaultBranch = main
+[rerere]
+  enabled = true
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  renames = true
+  renameLimit = 5000
+[merge]
+  conflictStyle = zdiff3
+[log]
+  date = iso
+[help]
+  autocorrect = prompt
+[column]
+  ui = auto
+[alias]
+  lg = log --oneline --graph --decorate
+  uncommit = reset --soft HEAD~1
+  amend = commit --amend --no-edit
+[credential]
+  helper = osxkeychain
+[commit]
+  gpgSign = true
+  verbose = true
+[credential "https://github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential
