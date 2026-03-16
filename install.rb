@@ -11,6 +11,8 @@ DOTFILES_DIR = Pathname.new(__dir__ || abort("Cannot determine script directory"
 CONFIG_SRC   = DOTFILES_DIR / "config"
 CONFIG_DEST  = Pathname.new(Dir.home) / ".config"
 RC_SRC       = DOTFILES_DIR / "rc"
+CLAUDE_SRC   = DOTFILES_DIR / "claude"
+CLAUDE_DEST  = Pathname.new(Dir.home) / ".claude"
 HOME         = Pathname.new(Dir.home)
 
 SKIP = %w[config.local.example].freeze
@@ -70,6 +72,21 @@ files.each do |relative|
   src  = CONFIG_SRC / relative
   dest = CONFIG_DEST / relative
   symlink(src, dest, dry_run: dry_run, counts: counts)
+end
+
+# claude/ files are symlinked into ~/.claude/
+if CLAUDE_SRC.directory?
+  claude_files = Dir.glob("**/*", base: CLAUDE_SRC).sort
+  claude_files.select! { |f| (CLAUDE_SRC / f).file? }
+
+  unless claude_files.empty?
+    puts "\n"
+    claude_files.each do |relative|
+      src  = CLAUDE_SRC / relative
+      dest = CLAUDE_DEST / relative
+      symlink(src, dest, dry_run: dry_run, counts: counts)
+    end
+  end
 end
 
 # rc/ files are symlinked into ~/ with a dot prefix (rc/vimrc -> ~/.vimrc)
