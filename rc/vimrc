@@ -1,6 +1,6 @@
 let mapleader = ","
 
-if !has('nvim')
+if !has('nvim') && filereadable(expand('~/.config/vim/_nvim-defaults.vim'))
   source ~/.config/vim/_nvim-defaults.vim
 endif
 
