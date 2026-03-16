@@ -1,0 +1,4 @@
+[settings]
+
+[settings.ruby]
+compile = false
