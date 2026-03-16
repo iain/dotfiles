@@ -1,3 +1,5 @@
+# Languages (ruby, node, python, etc.) are managed by mise, not Brew.
+
 # shell
 brew "fish"                # friendly interactive shell
 brew "starship"            # cross-shell prompt
@@ -18,6 +20,7 @@ brew "tree"                # directory tree viewer
 # git
 brew "gh"                  # GitHub CLI
 brew "git-delta"           # better git diff pager
+brew "git-filter-repo"     # rewrite/filter git history
 
 # data & text
 brew "jq"                  # JSON processor

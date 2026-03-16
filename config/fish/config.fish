@@ -36,6 +36,12 @@ if command -q bat
   if command -q batgrep
     alias bgrep="batgrep"
   end
+  if command -q batwatch
+    alias watch="batwatch"
+  end
+  if command -q prettybat
+    alias pretty="prettybat"
+  end
 end
 
 if command -q zoxide
@@ -44,6 +50,11 @@ if command -q zoxide
 end
 
 if command -q fzf
+  if command -q fd
+    set -gx FZF_DEFAULT_COMMAND "fd --type f --hidden --follow --exclude .git"
+    set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+    set -gx FZF_ALT_C_COMMAND "fd --type d --hidden --follow --exclude .git"
+  end
   fzf --fish | source
 end
 
