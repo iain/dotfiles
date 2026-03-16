@@ -148,21 +148,6 @@ defaults write com.apple.ActivityMonitor SortDirection -int 0
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # ───────────────────────────────────────────────────
-# Safari
-# ───────────────────────────────────────────────────
-
-# Show full URL in address bar
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
-
-# Enable Develop menu and Web Inspector
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-
-# Enable Web Inspector in all web views globally
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-
-# ───────────────────────────────────────────────────
 # TextEdit
 # ───────────────────────────────────────────────────
 
@@ -194,7 +179,7 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 # ───────────────────────────────────────────────────
 
 echo "Restarting affected apps..."
-for app in "Finder" "Dock" "SystemUIServer" "Safari"; do
+for app in "Finder" "Dock" "SystemUIServer"; do
   killall "$app" &>/dev/null || true
 done
 
