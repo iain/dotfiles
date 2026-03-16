@@ -38,8 +38,6 @@ set statusline+=%y      "filetype
 set statusline+=\ %c,   "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
-set laststatus=2
-
 set linebreak
 let &showbreak = '↳ '
 set breakindent
@@ -100,8 +98,6 @@ map <leader>n :split %%
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tabs:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set tabpagemax=50
 
 nnoremap <silent><D-S-{> :tabprevious<cr>
 nnoremap <silent><D-S-}> :tabnext<cr>

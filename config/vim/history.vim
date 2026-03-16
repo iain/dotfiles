@@ -1,5 +1,4 @@
 set directory=~/.vim/swap/
-set history=10000
 
 " Backup:
 set backupdir=~/.vim/tmp/

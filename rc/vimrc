@@ -9,3 +9,7 @@ source ~/.config/vim/_plug.vim
 for s:file in glob('~/.config/vim/[^_]*.vim', 0, 1)
   execute 'source' s:file
 endfor
+
+if has('gui_macvim')
+  source ~/.config/vim/_macvim.vim
+endif

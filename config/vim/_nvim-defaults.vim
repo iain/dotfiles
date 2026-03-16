@@ -33,8 +33,8 @@ set switchbuf="uselast"
 set tabpagemax=50
 set tags="./tags;,tags;./.ctags"
 set ttimeoutlen=50
-set ttyfast
 " set viewoptions' includes "unix,slash", excludes "options"
 " set viminfo' includes "!"
 set wildmenu
+set history=10000
 set wildoptions="pum,tagfile"

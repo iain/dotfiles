@@ -3,7 +3,6 @@ set nowrap
 set shiftround " round shifts to a multiple of shiftwidth
 set expandtab  " Tabs are spaces, not tabs
 
-set nojoinspaces      " prevent inserting two spaces after punctuation
 set formatoptions+=1  " Do not wrap after a one-letter word
 set formatoptions+=j  " Remove extra comment when joining lines
 

@@ -18,7 +18,7 @@ Plug 'janko-m/vim-test'                " Runs tests
 Plug 'jlanzarotta/bufexplorer'
 Plug 'jremmen/vim-ripgrep'             " Faster Grep
 " Plug 'junegunn/vim-easy-align'         " align code
-Plug 'kien/ctrlp.vim'
+Plug 'junegunn/fzf.vim'
 " Plug 'luochen1990/rainbow'
 Plug 'michaeljsmith/vim-indent-object' " Treat indentation as text object
 Plug 'segeljakt/vim-silicon'

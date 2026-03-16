@@ -12,7 +12,7 @@ cnoreabbrev E e
 " if you ever need to type jj for real, type it slowly, like on old school mobile phones
 inoremap jj <ESC>
 " inoremap jk <ESC>
-map <C-C> <ESC>
+imap <C-C> <ESC>
 
 " Move to the start of line
 nnoremap H ^

@@ -1,4 +1,3 @@
-set hlsearch
 set smartcase
 set gdefault
 
@@ -16,11 +15,12 @@ set wildignore+=.DS_Store
 
 if executable('rg')
   set grepprg=rg\ --color=never\ --vimgrep\ --no-heading\ --smart-case
-  " let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  " let g:ctrlp_use_caching = 0
 endif
 
 if executable('fzf')
-  " set rtp+=/usr/local/opt/fzf
   set rtp+=/opt/homebrew/opt/fzf
+  nnoremap <C-p> :Files<cr>
+  nnoremap <leader>f :Rg<cr>
 endif
+
+nnoremap <C-b> :BufExplorer<cr>

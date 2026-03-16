@@ -9,19 +9,8 @@ let g:test#project_root = "."
 let g:test#neovim#start_normal = 1 " If using neovim strategy
 let g:test#basic#start_normal = 1 " If using basic strategy
 
-
-function! CustomGhosttyStrategy(cmd)
-  " call s:execute_script('osx_iterm', a:cmd)
-  " let script_path = g:test#plugin_path . '/bin/' . a:name
-  let cmd = join([shellescape('osx_ghostty'), shellescape(a:cmd)])
-  execute 'silent !'.cmd
-endfunction
-
-let g:test#custom_strategies = {'custom_ghostty': function('CustomGhosttyStrategy')}
-" let g:test#strategy = 'custom_ghostty'
 let g:test#strategy = 'vimterminal'
 
-let test#elixir#exunit#options = '--stale'
 let test#elixir#exunit#options = {
   \ 'suite':   '--stale',
 \}
