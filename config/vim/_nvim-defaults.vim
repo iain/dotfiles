@@ -5,13 +5,13 @@ set autoindent
 set autoread
 set background=dark
 " set backspace="indent,eol,start"
-set belloff="all"
+set belloff=all
 " set complete' excludes "i"
 set cscopeverbose
-set display="lastline,msgsep"
+set display=lastline
 " set encoding' is UTF-8 (cf. 'fileencoding' for file-content encoding)
 " set fillchars' defaults (in effect) to "vert:│,fold:·,sep:│"
-set formatoptions="tcqj1"
+set formatoptions=tcqj1
 set nofsync
 " set nohidden
 set hlsearch
@@ -21,7 +21,7 @@ set langnoremap
 set nolangremap
 set laststatus=2
 " set listchars="tab:> ,trail:-,nbsp:+"
-set nrformats="bin,hex"
+set nrformats=bin,hex
 set ruler
 " set sessionoptions' includes "unix,slash", excludes "options"
 " set shortmess' includes "F", excludes "S"
@@ -29,12 +29,12 @@ set showcmd
 set sidescroll=1
 set smarttab
 set nostartofline
-set switchbuf="uselast"
+set switchbuf=uselast
 set tabpagemax=50
-set tags="./tags;,tags;./.ctags"
+set tags=./tags;,tags;./.ctags
 set ttimeoutlen=50
 " set viewoptions' includes "unix,slash", excludes "options"
 " set viminfo' includes "!"
 set wildmenu
 set history=10000
-set wildoptions="pum,tagfile"
+set wildoptions=pum,tagfile

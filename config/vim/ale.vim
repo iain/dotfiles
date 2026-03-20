@@ -23,15 +23,15 @@ let g:ale_fix_on_save = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:ale_linters = {
-  \ 'css':             ['prettier'],
+  \ 'css':             [],
   \ 'eruby':           ['erblint'],
-  \ 'javascript':      ['prettier', 'eslint'],
-  \ 'javascript.jsx':  ['prettier', 'eslint'],
+  \ 'javascript':      ['eslint'],
+  \ 'javascript.jsx':  ['eslint'],
   \ 'json':            ['jsonlint'],
-  \ 'markdown':        ['prettier'],
+  \ 'markdown':        [],
   \ 'ruby':            ['ruby', 'rubocop', 'sorbet'],
-  \ 'typescript':      ['prettier', 'eslint'],
-  \ 'typescriptreact': ['prettier', 'eslint'],
+  \ 'typescript':      ['eslint'],
+  \ 'typescriptreact': ['eslint'],
   \ 'slim':            ['slimlint'],
   \ '*': ['remove_trailing_lines', 'trim_whitespace']
   \ }

@@ -1,4 +1,4 @@
-" Install vim-plugged in needed
+" Install vim-plugged if needed
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -7,53 +7,57 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'tpope/vim-bundler'               " ruby bundler support
-Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'ayu-theme/ayu-vim'               " colorscheme
-Plug 'bogado/file-line'                " open file.ext:123 directly
-Plug 'csexton/trailertrash.vim'
-Plug 'dense-analysis/ale'              " linting
-" Plug 'fatih/vim-go'
-Plug 'janko-m/vim-test'                " Runs tests
-Plug 'jlanzarotta/bufexplorer'
-Plug 'jremmen/vim-ripgrep'             " Faster Grep
-" Plug 'junegunn/vim-easy-align'         " align code
-Plug 'junegunn/fzf.vim'
-" Plug 'luochen1990/rainbow'
-Plug 'michaeljsmith/vim-indent-object' " Treat indentation as text object
-Plug 'segeljakt/vim-silicon'
-Plug 'sheerun/vim-polyglot'            " Syntax highlighting for all
-" Plug 'thiagoalessio/rainbow_levels.vim'
-Plug 'tpope/vim-apathy'
-Plug 'tpope/vim-commentary'            " auto commenting
-Plug 'tpope/vim-cucumber'              " cucumber support
-Plug 'tpope/vim-eunuch'                " unix commands
-Plug 'tpope/vim-fugitive'              " Git integration
-Plug 'tpope/vim-projectionist'         " map related/alternate files
-Plug 'tpope/vim-rails'                 " Ruby on Rails integration
-Plug 'tpope/vim-rake'                  " Ruby integration
-Plug 'tpope/vim-repeat'                " repeat more things
-Plug 'tpope/vim-rhubarb'               " Github integration
-Plug 'tpope/vim-sensible'              " common defaults
-Plug 'tpope/vim-surround'              " modify surroundings, like quotes, brackets
-Plug 'tpope/vim-unimpaired'            " toggling options
-Plug 'tpope/vim-vinegar'               " improving interaction with NetRW
-Plug 'vim-ruby/vim-ruby'
-Plug 'godlygeek/tabular'
-Plug 'slim-template/vim-slim'
-Plug 'jlcrochet/vim-rbs'
-Plug 'iain/spectral'
+" Defaults
+Plug 'tpope/vim-sensible'              " universal set of vim defaults
 
-" Plug 'robertmeta/nofrils'
-" Plug 'fcpg/vim-farout'
-" Plug 'danishprakash/vim-yami'
-" Plug 'kamykn/dark-theme.vim'
-" Plug 'wsniper/vim-color-theme-protect-eyes'
-" Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-" " Plug 'nightsense/shoji'
-" Plug 'giulioungaretti/shoji'
-" Plug 'jlcrochet/vim-rbs'
+" Colorscheme
+Plug 'iain/spectral'                   " custom colorscheme
 
-Plug 'junegunn/fzf'
+" Editing
+Plug 'AndrewRadev/splitjoin.vim'       " switch between single-line and multi-line statements
+Plug 'godlygeek/tabular'               " align text by pattern
+Plug 'michaeljsmith/vim-indent-object' " treat indentation levels as text objects
+Plug 'tpope/vim-commentary'            " toggle comments with gc
+Plug 'tpope/vim-repeat'               " make . work with plugin mappings
+Plug 'tpope/vim-surround'             " add/change/delete surrounding quotes, brackets, tags
+Plug 'tpope/vim-unimpaired'           " paired bracket mappings for toggling and navigation
+
+" Navigation
+Plug 'bogado/file-line'                " open file:line (e.g. vim file.rb:42)
+Plug 'jlanzarotta/bufexplorer'        " browse and switch between open buffers
+Plug 'junegunn/fzf'                   " fuzzy finder binary
+Plug 'junegunn/fzf.vim'               " fuzzy finder vim integration
+Plug 'tpope/vim-projectionist'        " define alternate/related file mappings
+Plug 'tpope/vim-vinegar'              " enhance netrw file browser with -
+
+" Search
+Plug 'jremmen/vim-ripgrep'            " ripgrep integration for project-wide search
+
+" Git
+Plug 'tpope/vim-fugitive'             " git commands from within vim
+Plug 'tpope/vim-rhubarb'              " GitHub integration for fugitive (:GBrowse)
+
+" Linting and Fixing
+Plug 'dense-analysis/ale'             " asynchronous linting and fixing
+
+" Testing
+Plug 'janko-m/vim-test'               " run tests from within vim
+
+" Ruby and Rails
+Plug 'jlcrochet/vim-rbs'              " syntax highlighting for Ruby type signatures
+Plug 'slim-template/vim-slim'         " syntax highlighting for Slim templates
+Plug 'tpope/vim-cucumber'             " syntax and navigation for Cucumber features
+Plug 'tpope/vim-rails'                " Rails navigation, commands, and generators
+Plug 'tpope/vim-rake'                 " Rake navigation and commands for Ruby projects
+Plug 'vim-ruby/vim-ruby'              " enhanced Ruby syntax, indentation, and compilation
+
+" Language Support
+Plug 'sheerun/vim-polyglot'           " syntax and indentation for 100+ languages
+Plug 'tpope/vim-apathy'               " set path for include-based navigation per filetype
+
+" Utilities
+Plug 'csexton/trailertrash.vim'       " highlight and remove trailing whitespace
+Plug 'segeljakt/vim-silicon'          " generate code screenshots via Silicon
+Plug 'tpope/vim-eunuch'               " unix commands (:Rename, :Delete, :Mkdir, :SudoWrite)
 
 call plug#end()

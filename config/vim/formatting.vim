@@ -12,10 +12,10 @@ if executable('par')
 endif
 
 " Go up and down display lines in soft line breaks
-nmap j gj
-nmap k gk
-vmap j gj
-vmap k gk
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
 " Visual shifting (does not exit Visual mode)
 vnoremap < <gv
