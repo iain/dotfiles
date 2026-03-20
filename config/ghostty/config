@@ -7,7 +7,7 @@ background = 181818
 # behavior
 copy-on-select = clipboard
 mouse-hide-while-typing = true
-scrollback-limit = 100000
+# scrollback-limit = 100000
 link-url = true
 
 # window
