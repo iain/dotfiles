@@ -88,23 +88,27 @@ let g:ale_ruby_rubocop_options = "--server"
 
 let g:ale_ruby_sorbet_enable_watchman = 1
 
-" Use Ruby from ASDF if available
-if filereadable(expand("~/.local/share/mise/shims/ruby"))
-  let g:ale_ruby_ruby_executable = expand("~/.local/share/mise/shims/ruby")
-endif
+" Use tools from version manager shims if available
+let s:shim_dirs = [
+  \ '~/.local/share/mise/shims',
+  \ '~/.asdf/shims',
+  \ '~/.rbenv/shims',
+  \ ]
 
-if filereadable(expand("~/.local/share/mise/shims/rubocop"))
-  let g:ale_ruby_rubocop_executable = expand("~/.local/share/mise/shims/rubocop")
-endif
+let s:shim_tools = {
+  \ 'ruby':       'ale_ruby_ruby_executable',
+  \ 'rubocop':    'ale_ruby_rubocop_executable',
+  \ 'srb':        'ale_ruby_sorbet_executable',
+  \ 'stree':      'ale_ruby_syntax_tree_executable',
+  \ 'solargraph': 'ale_ruby_solargraph_executable',
+  \ }
 
-if filereadable(expand("~/.local/share/mise/shims/srb"))
-  let g:ale_ruby_sorbet_executable = expand("~/.local/share/mise/shims/srb")
-endif
-
-if filereadable(expand("~/.local/share/mise/shims/stree"))
-  let g:ale_ruby_syntax_tree_executable = expand("~/.local/share/mise/shims/stree")
-endif
-
-if filereadable(expand("~/.local/share/mise/shims/solargraph"))
-  let g:ale_ruby_solargraph_executable = expand("~/.local/share/mise/shims/solargraph")
-endif
+for [s:tool, s:setting] in items(s:shim_tools)
+  for s:dir in s:shim_dirs
+    let s:path = expand(s:dir . '/' . s:tool)
+    if filereadable(s:path)
+      let g:{s:setting} = s:path
+      break
+    endif
+  endfor
+endfor

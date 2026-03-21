@@ -13,7 +13,7 @@ set display=lastline
 " set fillchars' defaults (in effect) to "vert:│,fold:·,sep:│"
 set formatoptions=tcqj1
 set nofsync
-" set nohidden
+set hidden
 set hlsearch
 set incsearch
 set nojoinspaces
