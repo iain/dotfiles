@@ -48,9 +48,6 @@
   colorMoved = plain
   renames = true
   renameLimit = 5000
-  tool = difftastic
-[difftool]
-  prompt = false
 [difftool "difftastic"]
   cmd = difft "$LOCAL" "$REMOTE"
 [merge]
@@ -65,7 +62,9 @@
   lg = log --oneline --graph --decorate
   uncommit = reset --soft HEAD~1
   amend = commit --amend --no-edit
-  difft = difftool
+  difft = difftool --tool=difftastic --no-prompt
+  dlog = -c diff.external=difft log -p --ext-diff
+  dshow = -c diff.external=difft show --ext-diff
 [credential]
   helper = osxkeychain
 [commit]
