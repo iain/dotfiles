@@ -112,6 +112,19 @@ if RC_SRC.directory?
   end
 end
 
+# Create vim directories for swap, backup, and undo
+%w[swap tmp undo].each do |dir|
+  vim_dir = HOME / ".vim" / dir
+  if vim_dir.directory?
+    puts "  skip #{vim_dir} (already exists)"
+  elsif dry_run
+    puts "  [dry-run] would create #{vim_dir}"
+  else
+    FileUtils.mkdir_p(vim_dir)
+    puts "  created #{vim_dir}"
+  end
+end
+
 puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
 
 # Brew bundle
