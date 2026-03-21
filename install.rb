@@ -21,16 +21,20 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: #{$PROGRAM_NAME} [options]"
   opts.on("-n", "--dry-run", "Show what would be done without making changes") { options[:dry_run] = true }
+  opts.on("-y", "--yes", "Answer yes to all prompts") { options[:yes] = true }
   opts.on("--[no-]macos", "Run macOS defaults (auto-detected on macOS)") { |v| options[:macos] = v }
   opts.on("--[no-]brew", "Run brew bundle (auto-detected when Brewfile present)") { |v| options[:brew] = v }
+  opts.on("--[no-]fish", "Set fish as default shell") { |v| options[:fish] = v }
 end.parse!
-
-# Auto-detect unless explicitly set via flags
-options[:macos] = RUBY_PLATFORM.include?("darwin") if options[:macos].nil?
-options[:brew]  = (DOTFILES_DIR / "Brewfile").file? if options[:brew].nil?
 
 dry_run = options[:dry_run]
 counts = { linked: 0, skipped: 0, backed_up: 0 }
+
+def prompt?(question, options)
+  return true if options[:yes]
+  print "#{question} [y/N] "
+  $stdin.gets&.strip&.downcase == "y"
+end
 
 def symlink(src, dest, dry_run:, counts:)
   if dest.symlink?
@@ -128,7 +132,15 @@ end
 puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
 
 # Brew bundle
-if options[:brew]
+run_brew = if options.key?(:brew)
+  options[:brew]
+elsif (DOTFILES_DIR / "Brewfile").file?
+  prompt?("Install Homebrew packages?", options)
+else
+  false
+end
+
+if run_brew
   brewfile = DOTFILES_DIR / "Brewfile"
   puts "\nInstalling Homebrew packages from #{brewfile}..."
   if dry_run
@@ -139,7 +151,15 @@ if options[:brew]
 end
 
 # macOS defaults
-if options[:macos]
+run_macos = if options.key?(:macos)
+  options[:macos]
+elsif RUBY_PLATFORM.include?("darwin")
+  prompt?("Apply macOS defaults?", options)
+else
+  false
+end
+
+if run_macos
   macos_script = DOTFILES_DIR / "macos.sh"
   if macos_script.file?
     puts "\nApplying macOS defaults from #{macos_script}..."
@@ -150,6 +170,40 @@ if options[:macos]
     end
   else
     puts "\nSkipping macOS defaults (#{macos_script} not found)."
+  end
+end
+
+# Set fish as default shell
+fish_path = "/opt/homebrew/bin/fish"
+run_fish = if options.key?(:fish)
+  options[:fish]
+elsif File.executable?(fish_path) && ENV.fetch("SHELL", "") != fish_path
+  prompt?("Set fish as default shell?", options)
+else
+  false
+end
+
+if run_fish && File.executable?(fish_path)
+  shells = File.read("/etc/shells")
+  unless shells.include?(fish_path)
+    puts "\nAdding #{fish_path} to /etc/shells..."
+    if dry_run
+      puts "  [dry-run] would add #{fish_path} to /etc/shells"
+    else
+      system("sudo", "sh", "-c", "echo '#{fish_path}' >> /etc/shells") || warn("WARNING: could not add fish to /etc/shells")
+    end
+  end
+
+  current_shell = ENV.fetch("SHELL", "")
+  if current_shell != fish_path
+    puts "\nSetting fish as default shell..."
+    if dry_run
+      puts "  [dry-run] would run: chsh -s #{fish_path}"
+    else
+      system("chsh", "-s", fish_path) || warn("WARNING: could not set default shell")
+    end
+  else
+    puts "\n  skip default shell (already fish)"
   end
 end
 
