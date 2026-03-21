@@ -1,6 +1,8 @@
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 
-/opt/homebrew/bin/brew shellenv fish | source
+if test -x /opt/homebrew/bin/brew
+  /opt/homebrew/bin/brew shellenv fish | source
+end
 
 fish_add_path $HOME/.local/bin
 fish_add_path /Applications/MacVim.app/Contents/bin
@@ -35,9 +37,6 @@ if command -q bat
   end
   if command -q batgrep
     alias bgrep="batgrep"
-  end
-  if command -q batwatch
-    alias watch="batwatch"
   end
   if command -q prettybat
     alias pretty="prettybat"
