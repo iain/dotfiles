@@ -129,6 +129,50 @@ end
   end
 end
 
+# Create local config files if they don't exist
+git_local = CONFIG_DEST / "git" / "config.local"
+if git_local.exist?
+  puts "\n  skip #{git_local} (already exists)"
+else
+  puts "\nSetting up git identity (#{git_local})..."
+  if dry_run
+    puts "  [dry-run] would create #{git_local}"
+  else
+    print "  Git name: "
+    git_name = $stdin.gets&.strip || ""
+    print "  Git email: "
+    git_email = $stdin.gets&.strip || ""
+    print "  SSH signing key path [~/.ssh/id_ed25519.pub]: "
+    git_key = $stdin.gets&.strip
+    git_key = "~/.ssh/id_ed25519.pub" if git_key.nil? || git_key.empty?
+
+    FileUtils.mkdir_p(git_local.dirname)
+    git_local.write(<<~CONFIG)
+      [user]
+        email = #{git_email}
+        name = #{git_name}
+        signingKey = #{git_key}
+    CONFIG
+    puts "  created #{git_local}"
+  end
+end
+
+fish_local = CONFIG_DEST / "fish" / "config.local.fish"
+if fish_local.exist?
+  puts "  skip #{fish_local} (already exists)"
+else
+  if dry_run
+    puts "  [dry-run] would create #{fish_local}"
+  else
+    FileUtils.mkdir_p(fish_local.dirname)
+    fish_local.write(<<~CONFIG)
+      # Local fish config — secrets and machine-specific settings
+      # This file is not checked into git.
+    CONFIG
+    puts "  created #{fish_local}"
+  end
+end
+
 puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
 
 # Brew bundle
