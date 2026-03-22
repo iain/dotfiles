@@ -108,3 +108,8 @@ abbr -a r   "rails"
 abbr -a wip "cucumber -p wip"
 abbr -a of  "rspec --only-failures"
 abbr -a rdm "rails db:migrate"
+
+# Source local config for secrets and machine-specific settings
+if test -f ~/.config/fish/config.local.fish
+  source ~/.config/fish/config.local.fish
+end
