@@ -18,6 +18,7 @@ end
 
 if command -q vim
   set -gx EDITOR "vim"
+  set -gx VISUAL "$EDITOR"
 end
 
 if command -q eza
@@ -86,7 +87,7 @@ abbr -a co      "git checkout"
 abbr -a d       "git diff"
 abbr -a dc      "git diff --cached"
 abbr -a g       "git"
-abbr -a g12     "git rev-parse HEAD | cut -c 1-12"
+abbr -a g12     "git rev-parse --short=12 HEAD"
 abbr -a gf      "git fetch --all"
 abbr -a gl      "git log"
 abbr -a glp     "git log -p"

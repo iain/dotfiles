@@ -157,6 +157,25 @@ else
   end
 end
 
+ssh_config = HOME / ".ssh" / "config"
+if ssh_config.exist?
+  puts "  skip #{ssh_config} (already exists)"
+else
+  if dry_run
+    puts "  [dry-run] would create #{ssh_config}"
+  else
+    FileUtils.mkdir_p(ssh_config.dirname, mode: 0700)
+    ssh_config.write(<<~CONFIG)
+      Host *
+        AddKeysToAgent yes
+        UseKeychain yes
+        IdentityFile ~/.ssh/id_ed25519
+    CONFIG
+    FileUtils.chmod(0600, ssh_config)
+    puts "  created #{ssh_config}"
+  end
+end
+
 fish_local = CONFIG_DEST / "fish" / "config.local.fish"
 if fish_local.exist?
   puts "  skip #{fish_local} (already exists)"
@@ -175,10 +194,22 @@ end
 
 puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
 
+# Install Homebrew if missing
+unless system("command -v brew > /dev/null 2>&1")
+  if prompt?("Homebrew is not installed. Install it?", options)
+    puts "\nInstalling Homebrew..."
+    if dry_run
+      puts "  [dry-run] would install Homebrew"
+    else
+      system("bash", "-c", '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)') || warn("WARNING: Homebrew installation had errors")
+    end
+  end
+end
+
 # Brew bundle
 run_brew = if options.key?(:brew)
   options[:brew]
-elsif (DOTFILES_DIR / "Brewfile").file?
+elsif (DOTFILES_DIR / "Brewfile").file? && system("command -v brew > /dev/null 2>&1")
   prompt?("Install Homebrew packages?", options)
 else
   false

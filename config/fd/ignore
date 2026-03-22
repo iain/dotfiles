@@ -1,0 +1,7 @@
+.git
+node_modules
+vendor/bundle
+tmp
+coverage
+dist
+build
