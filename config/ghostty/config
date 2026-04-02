@@ -20,6 +20,7 @@ quit-after-last-window-closed = true
 macos-titlebar-style = tabs
 macos-titlebar-proxy-icon = hidden
 macos-option-as-alt = true
+macos-non-native-fullscreen = true
 
 # keybinds
 keybind = super+r=clear_screen
