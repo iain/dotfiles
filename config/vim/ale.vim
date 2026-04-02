@@ -32,6 +32,7 @@ let g:ale_linters = {
   \ 'ruby':            ['ruby', 'rubocop', 'sorbet'],
   \ 'typescript':      ['eslint'],
   \ 'typescriptreact': ['eslint'],
+  \ 'cucumber':        [],
   \ 'slim':            ['slimlint'],
   \ '*': ['remove_trailing_lines', 'trim_whitespace']
   \ }
