@@ -66,6 +66,12 @@ autocmd BufReadPost *
 
 " http://stackoverflow.com/questions/6427650/vim-in-tmux-background-color-changes-when-paging/15095377#15095377
 set t_ut=
+set fillchars+=vert:│
+
+" Transparent background in terminal
+autocmd ColorScheme * highlight Normal ctermbg=NONE
+autocmd ColorScheme * highlight SignColumn ctermbg=NONE guibg=NONE
+autocmd ColorScheme * highlight VertSplit ctermbg=NONE guibg=NONE
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splits:
