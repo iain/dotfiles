@@ -72,6 +72,9 @@ set fillchars+=vert:│
 autocmd ColorScheme * highlight Normal ctermbg=NONE
 autocmd ColorScheme * highlight SignColumn ctermbg=NONE guibg=NONE
 autocmd ColorScheme * highlight VertSplit ctermbg=NONE guibg=NONE
+highlight Normal ctermbg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit ctermbg=NONE guibg=NONE
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splits:

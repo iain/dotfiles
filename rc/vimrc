@@ -1,4 +1,6 @@
 let mapleader = ","
+" Defer to dedicated plugins which provide more than polyglot's bundled syntax
+let g:polyglot_disabled = ['ruby', 'slim', 'rbs', 'cucumber']
 
 if !has('nvim') && filereadable(expand('~/.config/vim/_nvim-defaults.vim'))
   source ~/.config/vim/_nvim-defaults.vim
