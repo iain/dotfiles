@@ -13,6 +13,13 @@ set number
 " set nonumber
 " set relativenumber
 set cursorline
+augroup ActiveWindowCursor
+  autocmd!
+  autocmd WinEnter * setlocal cursorline
+  autocmd WinLeave * setlocal nocursorline
+  autocmd WinEnter * if &cursorcolumn | setlocal cursorcolumn | endif
+  autocmd WinLeave * setlocal nocursorcolumn
+augroup END
 set scrolloff=4
 set sidescrolloff=5
 set scrolljump=8      " Scroll 8 lines at a time at bottom/top
