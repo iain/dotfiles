@@ -29,7 +29,12 @@ OptionParser.new do |opts|
 end.parse!
 
 dry_run = options[:dry_run]
-counts = { linked: 0, skipped: 0, backed_up: 0 }
+# `reported_dangling` is a per-run set of broken parent-symlink paths already
+# printed during a dry run, so we don't emit the same "would remove" line for
+# every file that lives inside the same dangling directory. Real runs are
+# naturally idempotent — the first removal makes the path a real directory,
+# so subsequent calls see nothing to clean up.
+counts = { linked: 0, skipped: 0, backed_up: 0, reported_dangling: [] }
 
 def prompt?(question, options)
   return true if options[:yes]
@@ -37,18 +42,12 @@ def prompt?(question, options)
   $stdin.gets&.strip&.downcase == "y"
 end
 
-# Tracks broken parent symlinks already reported during a dry run so we
-# don't print the same "would remove" line for every file inside it. Real
-# runs are naturally idempotent — the first removal makes the path a real
-# directory, so subsequent calls see nothing to clean up.
-DRY_RUN_REPORTED_DANGLING = []
-
 # Walks up from `dir` and removes any dangling symlinks in the ancestor
 # chain so `FileUtils.mkdir_p(dir)` can create real directories in their
 # place. Handles the case where an older version of this script symlinked
 # whole directories at paths that are now expected to be real directories
 # holding individual file symlinks.
-def clear_dangling_parent_symlinks(dir, dry_run:)
+def clear_dangling_parent_symlinks(dir, dry_run:, reported:)
   to_remove = []
   current = dir
   until current.directory?
@@ -59,8 +58,8 @@ def clear_dangling_parent_symlinks(dir, dry_run:)
 
   to_remove.reverse_each do |broken|
     if dry_run
-      next if DRY_RUN_REPORTED_DANGLING.include?(broken.to_s)
-      DRY_RUN_REPORTED_DANGLING << broken.to_s
+      next if reported.include?(broken.to_s)
+      reported << broken.to_s
       puts "  [dry-run] would remove dangling symlink #{broken} -> #{broken.readlink}"
     else
       puts "  removing dangling symlink #{broken} -> #{broken.readlink}"
@@ -91,7 +90,7 @@ def symlink(src, dest, dry_run:, counts:)
     counts[:backed_up] += 1
   end
 
-  clear_dangling_parent_symlinks(dest.dirname, dry_run: dry_run)
+  clear_dangling_parent_symlinks(dest.dirname, dry_run: dry_run, reported: counts[:reported_dangling])
 
   puts "  #{dry_run ? "[dry-run] would link" : "linked"} #{dest} -> #{src}"
   unless dry_run
@@ -125,6 +124,7 @@ end
 if RC_SRC.directory?
   rc_files = Dir.glob("*", base: RC_SRC).sort
   rc_files.select! { |f| (RC_SRC / f).file? }
+  rc_files.reject! { |f| SKIP.include?(f) }
 
   unless rc_files.empty?
     puts "\n"
@@ -139,7 +139,8 @@ end
 # bin/ files are symlinked into ~/.local/bin/ (which is on PATH via config.fish)
 if BIN_SRC.directory?
   bin_files = Dir.glob("*", base: BIN_SRC).sort
-  bin_files.select! { |f| (BIN_SRC / f).file? }
+  bin_files.select! { |f| (BIN_SRC / f).file? && File.executable?(BIN_SRC / f) }
+  bin_files.reject! { |f| SKIP.include?(f) }
 
   unless bin_files.empty?
     puts "\n"

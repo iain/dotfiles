@@ -44,7 +44,9 @@ fi
 
 run() {
   if [ "$dry_run" = 1 ]; then
-    printf '  [dry-run] %s\n' "$*"
+    printf '  [dry-run]'
+    printf ' %q' "$@"
+    printf '\n'
   else
     "$@"
   fi
@@ -77,7 +79,7 @@ gone_branches=$(git branch -vv | awk '
 merged_branches=""
 if git show-ref --verify --quiet "refs/heads/$default_branch"; then
   merged_branches=$(git branch --merged "$default_branch" --format='%(refname:short)' \
-    | grep -vx "$default_branch" || true)
+    | grep -vxF "$default_branch" || true)
 else
   echo "$PROG: warning: local $default_branch not found, skipping --merged check" >&2
 fi
@@ -124,7 +126,12 @@ while IFS= read -r branch; do
 
   wt=$(worktree_for "$branch")
   if [ -n "$wt" ]; then
-    if [ -n "$(git -C "$wt" status --porcelain 2>/dev/null)" ]; then
+    if ! status_out=$(git -C "$wt" status --porcelain); then
+      echo "$branch: failed to read worktree at $wt, skipping" >&2
+      skipped=$((skipped + 1))
+      continue
+    fi
+    if [ -n "$status_out" ]; then
       echo "$branch: worktree $wt has uncommitted changes, skipping"
       skipped=$((skipped + 1))
       continue
