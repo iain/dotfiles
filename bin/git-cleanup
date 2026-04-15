@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+#
+# git-cleanup — delete local branches that are safe to remove and clean up
+# any worktrees attached to them.
+#
+# A branch is considered removable when it is either:
+#   - marked [gone] (its upstream no longer exists), or
+#   - already merged into the repository default branch.
+#
+# Worktrees with uncommitted changes are skipped with a warning; the current
+# branch and the default branch are never deleted.
+
+set -euo pipefail
+
+PROG=$(basename "$0")
+
+usage() {
+  cat <<EOF
+Usage: $PROG [-n|--dry-run] [-h|--help]
+
+Delete local branches that are either [gone] or merged into the default
+branch, removing any attached worktrees first. Worktrees with uncommitted
+changes are skipped.
+
+Options:
+  -n, --dry-run   Show what would happen, make no changes.
+  -h, --help      Show this help.
+EOF
+}
+
+dry_run=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--dry-run) dry_run=1; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) printf '%s: unknown option: %s\n\n' "$PROG" "$1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "$PROG: not inside a git repository" >&2
+  exit 1
+fi
+
+run() {
+  if [ "$dry_run" = 1 ]; then
+    printf '  [dry-run] %s\n' "$*"
+  else
+    "$@"
+  fi
+}
+
+echo "Fetching from all remotes..."
+if ! git fetch --all --prune; then
+  echo "$PROG: warning: git fetch failed, continuing with existing state" >&2
+fi
+
+# Default branch from origin/HEAD; fall back to main.
+default_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||' || true)
+if [ -z "${default_branch:-}" ]; then
+  default_branch=main
+fi
+
+# Empty in detached HEAD — that's fine.
+current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)
+
+# [gone] branches from `git branch -vv`.
+gone_branches=$(git branch -vv | awk '
+  /\[[^]]*: gone\]/ {
+    sub(/^[+*]?[[:space:]]+/, "")
+    print $1
+  }
+')
+
+# Branches already merged into the default branch (skip if the local default
+# branch is missing — we still want the [gone] pass to run).
+merged_branches=""
+if git show-ref --verify --quiet "refs/heads/$default_branch"; then
+  merged_branches=$(git branch --merged "$default_branch" --format='%(refname:short)' \
+    | grep -vx "$default_branch" || true)
+else
+  echo "$PROG: warning: local $default_branch not found, skipping --merged check" >&2
+fi
+
+candidates=$(printf '%s\n%s\n' "$gone_branches" "$merged_branches" | sed '/^$/d' | sort -u)
+
+if [ -z "$candidates" ]; then
+  echo "Nothing to clean up."
+  exit 0
+fi
+
+# Map branch -> worktree path.
+worktrees_file=$(mktemp)
+trap 'rm -f "$worktrees_file"' EXIT
+
+git worktree list --porcelain | awk '
+  /^worktree / { path = substr($0, 10); next }
+  /^branch refs\/heads\// {
+    branch = substr($0, 19)
+    printf "%s\t%s\n", branch, path
+  }
+' > "$worktrees_file"
+
+worktree_for() {
+  awk -F '\t' -v b="$1" '$1 == b { print $2; exit }' "$worktrees_file"
+}
+
+deleted=0
+removed_worktrees=0
+skipped=0
+
+while IFS= read -r branch; do
+  [ -z "$branch" ] && continue
+
+  if [ "$branch" = "$default_branch" ]; then
+    continue
+  fi
+
+  if [ -n "$current_branch" ] && [ "$branch" = "$current_branch" ]; then
+    echo "$branch: currently checked out, skipping"
+    skipped=$((skipped + 1))
+    continue
+  fi
+
+  wt=$(worktree_for "$branch")
+  if [ -n "$wt" ]; then
+    if [ -n "$(git -C "$wt" status --porcelain 2>/dev/null)" ]; then
+      echo "$branch: worktree $wt has uncommitted changes, skipping"
+      skipped=$((skipped + 1))
+      continue
+    fi
+    echo "$branch: removing worktree $wt"
+    if run git worktree remove "$wt"; then
+      removed_worktrees=$((removed_worktrees + 1))
+    else
+      echo "$branch: failed to remove worktree, skipping" >&2
+      skipped=$((skipped + 1))
+      continue
+    fi
+  fi
+
+  echo "$branch: deleting branch"
+  if run git branch -D "$branch"; then
+    deleted=$((deleted + 1))
+  else
+    echo "$branch: failed to delete branch" >&2
+    skipped=$((skipped + 1))
+  fi
+done <<< "$candidates"
+
+printf '\n%d branches deleted, %d worktrees removed, %d skipped\n' \
+  "$deleted" "$removed_worktrees" "$skipped"

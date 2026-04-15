@@ -3,3 +3,4 @@
 *.sw?
 *.un~
 config/fish/config.local.fish
+docs/superpowers/

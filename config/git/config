@@ -66,6 +66,7 @@
   dlog = -c diff.external=difft log -p --ext-diff
   dshow = -c diff.external=difft show --ext-diff
   recent = branch --sort=-committerdate --no-column --format="%(color:dim)%(committerdate:relative)%(color:reset)%09%(refname:short)"
+  cleanup = "!git-cleanup"
 [credential]
   helper = osxkeychain
 [commit]

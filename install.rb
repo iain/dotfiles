@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Symlinks config files from this repo into ~/.config and rc files into ~/
+# Symlinks config files from this repo into ~/.config, rc files into ~/,
+# and bin/ scripts into ~/.local/bin.
 
 require "fileutils"
 require "optparse"
@@ -11,6 +12,8 @@ DOTFILES_DIR = Pathname.new(__dir__ || abort("Cannot determine script directory"
 CONFIG_SRC   = DOTFILES_DIR / "config"
 CONFIG_DEST  = Pathname.new(Dir.home) / ".config"
 RC_SRC       = DOTFILES_DIR / "rc"
+BIN_SRC      = DOTFILES_DIR / "bin"
+BIN_DEST     = Pathname.new(Dir.home) / ".local" / "bin"
 HOME         = Pathname.new(Dir.home)
 
 SKIP = %w[config.local.example].freeze
@@ -34,9 +37,41 @@ def prompt?(question, options)
   $stdin.gets&.strip&.downcase == "y"
 end
 
+# Tracks broken parent symlinks already reported during a dry run so we
+# don't print the same "would remove" line for every file inside it. Real
+# runs are naturally idempotent — the first removal makes the path a real
+# directory, so subsequent calls see nothing to clean up.
+DRY_RUN_REPORTED_DANGLING = []
+
+# Walks up from `dir` and removes any dangling symlinks in the ancestor
+# chain so `FileUtils.mkdir_p(dir)` can create real directories in their
+# place. Handles the case where an older version of this script symlinked
+# whole directories at paths that are now expected to be real directories
+# holding individual file symlinks.
+def clear_dangling_parent_symlinks(dir, dry_run:)
+  to_remove = []
+  current = dir
+  until current.directory?
+    break if current.root? || current == current.parent
+    to_remove << current if current.symlink?
+    current = current.parent
+  end
+
+  to_remove.reverse_each do |broken|
+    if dry_run
+      next if DRY_RUN_REPORTED_DANGLING.include?(broken.to_s)
+      DRY_RUN_REPORTED_DANGLING << broken.to_s
+      puts "  [dry-run] would remove dangling symlink #{broken} -> #{broken.readlink}"
+    else
+      puts "  removing dangling symlink #{broken} -> #{broken.readlink}"
+      broken.delete
+    end
+  end
+end
+
 def symlink(src, dest, dry_run:, counts:)
   if dest.symlink?
-    if dest.realpath == src.realpath
+    if dest.exist? && dest.realpath == src.realpath
       puts "  skip #{dest} (already linked)"
       counts[:skipped] += 1
       return
@@ -55,6 +90,8 @@ def symlink(src, dest, dry_run:, counts:)
     FileUtils.mv(dest, backup) unless dry_run
     counts[:backed_up] += 1
   end
+
+  clear_dangling_parent_symlinks(dest.dirname, dry_run: dry_run)
 
   puts "  #{dry_run ? "[dry-run] would link" : "linked"} #{dest} -> #{src}"
   unless dry_run
@@ -94,6 +131,21 @@ if RC_SRC.directory?
     rc_files.each do |name|
       src  = RC_SRC / name
       dest = HOME / ".#{name}"
+      symlink(src, dest, dry_run: dry_run, counts: counts)
+    end
+  end
+end
+
+# bin/ files are symlinked into ~/.local/bin/ (which is on PATH via config.fish)
+if BIN_SRC.directory?
+  bin_files = Dir.glob("*", base: BIN_SRC).sort
+  bin_files.select! { |f| (BIN_SRC / f).file? }
+
+  unless bin_files.empty?
+    puts "\n"
+    bin_files.each do |name|
+      src  = BIN_SRC / name
+      dest = BIN_DEST / name
       symlink(src, dest, dry_run: dry_run, counts: counts)
     end
   end
