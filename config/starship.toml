@@ -11,206 +11,99 @@ $git_metrics\
 $git_status\
 $character"""
 
-# move the rest of the prompt to the right
-right_format = """$all"""
+# Explicit list (instead of $all) so starship doesn't probe for ~30 language manifests every prompt.
+right_format = """\
+$package\
+$dotnet\
+$java\
+$nodejs\
+$bun\
+$ruby\
+$python\
+$golang\
+$rust\
+$cmd_duration\
+$jobs\
+$status\
+"""
+
+scan_timeout = 30
+command_timeout = 500
 
 [line_break]
 disabled = true
 
 [gcloud]
 disabled = true
-symbol = "󱇶 "
 
 [aws]
-symbol = "  "
-
-[buf]
-symbol = " "
-
-[c]
-symbol = " "
-
-[cmake]
-symbol = " "
-
-[conda]
-symbol = " "
-
-[crystal]
-symbol = " "
-
-[dart]
-symbol = " "
+symbol = "  "
 
 [directory]
 read_only = " 󰌾"
 style = "blue"
 
+[dotnet]
+# Drop `project.json` (used by Nx) so JS monorepos don't falsely trigger .NET.
+detect_files = ["global.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props", "*.csproj", "*.fsproj", "*.xproj"]
+
 [docker_context]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
-[fennel]
-symbol = " "
-
-[fossil_branch]
-symbol = " "
+symbol = " "
 
 [git_branch]
-symbol = " "
-style="cyan"
-format='[$symbol$branch(:$remote_branch)]($style) '
+symbol = " "
+style = "cyan"
+format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_commit]
-tag_symbol = '  '
-style="green"
+tag_symbol = '  '
+style = "green"
 
 [git_status]
-style="purple"
+style = "purple"
 format = '([$all_status$ahead_behind]($style) )'
 ahead = '↑'
 diverged = '↕'
 behind = '↓'
 
 [golang]
-symbol = " "
-
-[guix_shell]
-symbol = " "
-
-[haskell]
-symbol = " "
-
-[haxe]
-symbol = " "
-
-[hg_branch]
-symbol = " "
+format = '[$symbol($version )]($style)'
+symbol = " "
 
 [hostname]
-ssh_symbol = " "
+ssh_symbol = " "
 
 [java]
-symbol = " "
-
-[julia]
-symbol = " "
-
-[kotlin]
-symbol = " "
-
-[lua]
-symbol = " "
-
-[memory_usage]
-symbol = "󰍛 "
-
-[meson]
-symbol = "󰔷 "
-
-[nim]
-symbol = "󰆥 "
+format = '[${symbol}(${version} )]($style)'
+symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
 
 [nodejs]
-# symbol = " "
-symbol = " "
+format = '[$symbol($version )]($style)'
+symbol = " "
 style = "green"
-
-[ocaml]
-symbol = " "
-
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CachyOS = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-Nobara = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "
 
 [package]
 symbol = "󰏗 "
-
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[pijul_channel]
-symbol = " "
+format = '[$symbol$version]($style) '
 
 [python]
-symbol = " "
-
-[rlang]
-symbol = "󰟔 "
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
 
 [ruby]
-symbol = " "
+symbol = " "
 style = "red"
 format = '[$symbol($version )]($style)'
 
 [rust]
+format = '[$symbol($version )]($style)'
 symbol = "󱘗 "
 
-[scala]
-symbol = " "
-
-[swift]
-symbol = " "
-
-[zig]
-symbol = " "
+[bun]
+symbol = " "
 
 [gradle]
-symbol = " "
-
-[bun]
-symbol = " "
+symbol = " "
