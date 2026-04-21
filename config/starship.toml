@@ -37,7 +37,7 @@ disabled = true
 disabled = true
 
 [aws]
-symbol = "  "
+symbol = "  "
 
 [directory]
 read_only = " 󰌾"
@@ -48,15 +48,15 @@ style = "blue"
 detect_files = ["global.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props", "*.csproj", "*.fsproj", "*.xproj"]
 
 [docker_context]
-symbol = " "
+symbol = " "
 
 [git_branch]
-symbol = " "
+symbol = " "
 style = "cyan"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_commit]
-tag_symbol = '  '
+tag_symbol = '  '
 style = "green"
 
 [git_status]
@@ -68,21 +68,21 @@ behind = '↓'
 
 [golang]
 format = '[$symbol($version )]($style)'
-symbol = " "
+symbol = " "
 
 [hostname]
-ssh_symbol = " "
+ssh_symbol = " "
 
 [java]
 format = '[${symbol}(${version} )]($style)'
-symbol = " "
+symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
 
 [nodejs]
 format = '[$symbol($version )]($style)'
-symbol = " "
+symbol = " "
 style = "green"
 
 [package]
@@ -91,10 +91,10 @@ format = '[$symbol$version]($style) '
 
 [python]
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-symbol = " "
+symbol = " "
 
 [ruby]
-symbol = " "
+symbol = " "
 style = "red"
 format = '[$symbol($version )]($style)'
 
@@ -103,7 +103,7 @@ format = '[$symbol($version )]($style)'
 symbol = "󱘗 "
 
 [bun]
-symbol = " "
+symbol = " "
 
 [gradle]
-symbol = " "
+symbol = " "
