@@ -4,6 +4,7 @@ $hostname\
 $localip\
 $shlvl\
 $directory\
+${custom.git_worktree}\
 $git_branch\
 $git_commit\
 $git_state\
@@ -56,6 +57,14 @@ symbol = " "
 symbol = " "
 style = "cyan"
 format = '[$symbol$branch(:$remote_branch)]($style) '
+
+[custom.git_worktree]
+description = "Mark when inside a linked git worktree"
+command = 'true'
+when = 'git rev-parse --git-dir 2>/dev/null | grep -q "/\.git/worktrees/"'
+symbol = " "
+style = "yellow"
+format = '[$symbol]($style)'
 
 [git_commit]
 tag_symbol = '  '
