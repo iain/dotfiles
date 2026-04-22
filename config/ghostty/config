@@ -4,6 +4,10 @@ font-size = 14
 theme = Monokai Pro Spectrum
 cursor-style = block
 background = 181818
+window-colorspace = display-p3
+window-padding-x = 12
+window-padding-y = 8
+window-padding-balance = true
 
 # behavior
 copy-on-select = clipboard
