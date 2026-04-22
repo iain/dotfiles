@@ -1,6 +1,13 @@
 [settings]
-legacy_version_file = true
+idiomatic_version_file = true
 experimental = true
+trusted_config_paths = ["~/Code"]
+
+[settings.pipx]
+uvx = true
+
+[settings.python]
+uv_venv_auto = true
 
 [settings.ruby]
 compile = false
