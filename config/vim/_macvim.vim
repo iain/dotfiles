@@ -1,7 +1,7 @@
 " defaults write org.vim.MacVim MMFontPreserveLineSpacing 1
 " set linespace=0    " No extra spaces between rows
 " set guifont=-monospace-:h12
-set guifont=JetBrainsMonoNFM-Light:h13
+set guifont=JetBrainsMonoNFM-Light:h14
 set linespace=1
 
 

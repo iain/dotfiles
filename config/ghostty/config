@@ -1,5 +1,6 @@
 # appearance
-font-family = JetBrainsMono Nerd Font
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 14
 theme = Monokai Pro Spectrum
 cursor-style = block
 background = 181818
