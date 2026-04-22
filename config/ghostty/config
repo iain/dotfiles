@@ -22,8 +22,6 @@ window-inherit-working-directory = true
 quit-after-last-window-closed = true
 
 # macos
-macos-titlebar-style = tabs
-macos-titlebar-proxy-icon = hidden
 macos-option-as-alt = true
 macos-non-native-fullscreen = true
 
