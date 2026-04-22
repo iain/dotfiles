@@ -44,6 +44,8 @@ read_only = " 󰌾"
 style = "blue"
 
 [dotnet]
+format = '[$symbol($version )]($style)'
+symbol = " "
 # Drop `project.json` (used by Nx) so JS monorepos don't falsely trigger .NET.
 detect_files = ["global.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props", "*.csproj", "*.fsproj", "*.xproj"]
 
