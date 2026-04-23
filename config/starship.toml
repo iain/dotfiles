@@ -4,11 +4,7 @@ $hostname\
 $localip\
 $shlvl\
 $directory\
-${custom.git_worktree}\
 $git_branch\
-$git_commit\
-$git_state\
-$git_metrics\
 $git_status\
 $character"""
 
@@ -28,8 +24,8 @@ $jobs\
 $status\
 """
 
-scan_timeout = 30
-command_timeout = 500
+scan_timeout = 10
+command_timeout = 200
 
 [line_break]
 disabled = true
@@ -55,23 +51,15 @@ symbol = " "
 
 [git_branch]
 symbol = " "
-style = "cyan"
+style = "purple"
 format = '[$symbol$branch(:$remote_branch)]($style) '
-
-[custom.git_worktree]
-description = "Mark when inside a linked git worktree"
-command = 'true'
-when = 'git rev-parse --git-dir 2>/dev/null | grep -q "/\.git/worktrees/"'
-symbol = " "
-style = "yellow"
-format = '[$symbol]($style)'
 
 [git_commit]
 tag_symbol = '  '
 style = "green"
 
 [git_status]
-style = "purple"
+style = "yellow"
 format = '([$all_status$ahead_behind]($style) )'
 ahead = '↑'
 diverged = '↕'

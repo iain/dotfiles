@@ -11,11 +11,12 @@ function cdb
     return
   end
 
-  # Phase 2: at a worktree root → go to the main repo root (the first
-  # entry of `git worktree list` is always the main worktree)
-  set -l main (git worktree list --porcelain | string match -rg '^worktree (.*)' | head -n1)
+  # Phase 2: at a worktree root → go to the parent of the shared git dir
+  # (the main repo root in a normal clone, the project folder holding
+  # `.bare` in a bare-repo + siblings layout).
+  set -l root (path dirname (path resolve (git rev-parse --git-common-dir)))
 
-  if test -n "$main"; and test "$main" != "$top"
-    builtin cd $main
+  if test -n "$root"; and test "$root" != "$top"
+    builtin cd $root
   end
 end

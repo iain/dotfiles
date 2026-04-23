@@ -20,6 +20,7 @@ maximize = true
 window-save-state = always
 window-inherit-working-directory = true
 quit-after-last-window-closed = true
+macos-titlebar-style = tabs
 
 # macos
 macos-option-as-alt = true

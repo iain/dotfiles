@@ -57,6 +57,9 @@ if ! git fetch --all --prune; then
   echo "$PROG: warning: git fetch failed, continuing with existing state" >&2
 fi
 
+echo "Pruning stale worktree metadata..."
+run git worktree prune
+
 # Default branch from origin/HEAD; fall back to main.
 default_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||' || true)
 if [ -z "${default_branch:-}" ]; then
