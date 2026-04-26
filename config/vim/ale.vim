@@ -87,6 +87,24 @@ let g:ale_ruby_rubocop_options = "--server"
 
 let g:ale_ruby_sorbet_enable_watchman = 1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sorbet:
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Only run sorbet in projects that actually use it (detected by sorbet/config).
+function! s:SetRubyLinters() abort
+  let l:linters = ['ruby', 'rubocop']
+  if !empty(findfile('sorbet/config', '.;'))
+    call add(l:linters, 'sorbet')
+  endif
+  let b:ale_linters = l:linters
+endfunction
+
+augroup ALERubyLinterDetect
+  autocmd!
+  autocmd FileType ruby call s:SetRubyLinters()
+augroup END
+
 " Use tools from version manager shims if available
 let s:shim_dirs = [
   \ '~/.local/share/mise/shims',
