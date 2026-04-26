@@ -1,9 +1,8 @@
 # appearance
 font-family = JetBrainsMono Nerd Font Mono
+font-style = Light
 font-size = 14
-theme = Monokai Pro Spectrum
 cursor-style = block
-background = 181818
 window-colorspace = display-p3
 window-padding-x = 12
 window-padding-y = 8
@@ -40,3 +39,5 @@ keybind = super+ctrl+h=resize_split:left,10
 keybind = super+ctrl+j=resize_split:down,10
 keybind = super+ctrl+k=resize_split:up,10
 keybind = super+ctrl+l=resize_split:right,10
+
+theme = dark:/Users/iain/Code/iain/spectral/ghostty/spectral-amber,light:Monokai Pro Light
