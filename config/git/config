@@ -29,7 +29,6 @@
   diffFilter = delta --color-only
 [delta]
   navigate = true
-  dark = true
   hyperlinks = true
 [gpg]
   format = ssh
