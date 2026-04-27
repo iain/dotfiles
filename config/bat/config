@@ -1,5 +1,7 @@
-# Use the same theme as Ghostty
---theme="Monokai Extended"
+# Follow macOS appearance, mirroring Ghostty
+--theme=auto
+--theme-dark="Monokai Extended"
+--theme-light="ansi"
 
 # Show line numbers and git changes, no grid
 --style="numbers,changes,header-filename"
