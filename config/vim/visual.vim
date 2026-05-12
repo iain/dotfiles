@@ -119,3 +119,9 @@ nnoremap <silent><D-S-{> :tabprevious<cr>
 nnoremap <silent><D-S-}> :tabnext<cr>
 inoremap <silent><D-S-{> <Esc>:tabprevious<cr>
 inoremap <silent><D-S-}> <Esc>:tabnext<cr>
+
+" Match terminal mouse-button bindings (Ctrl+Tab / Ctrl+Shift+Tab cycle tabs)
+nnoremap <silent><C-Tab>   :tabnext<cr>
+nnoremap <silent><C-S-Tab> :tabprevious<cr>
+inoremap <silent><C-Tab>   <Esc>:tabnext<cr>
+inoremap <silent><C-S-Tab> <Esc>:tabprevious<cr>
