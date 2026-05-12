@@ -13,4 +13,6 @@ uv_venv_auto = true
 compile = false
 
 [tools]
-"npm:pnpm" = "11"
+"npm:pnpm" = "latest"
+ruby = "latest"
+node = "latest"
