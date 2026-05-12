@@ -62,10 +62,6 @@ if command -q direnv
   direnv hook fish | source
 end
 
-if command -q mise
-  mise activate fish | source
-end
-
 if command -q rg
   set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
   abbr -a grep rg
@@ -116,3 +112,9 @@ if test -f ~/.config/fish/config.local.fish
 end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+# mise should run last
+if command -q mise
+  set -gx MISE_EXPERIMENTAL "1"
+  mise activate fish | source
+end

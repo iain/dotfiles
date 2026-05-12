@@ -1,7 +1,7 @@
 [settings]
-idiomatic_version_file = true
+# idiomatic_version_file = true
 experimental = true
-trusted_config_paths = ["~/Code"]
+# trusted_config_paths = ["~/Code"]
 
 [settings.pipx]
 uvx = true
