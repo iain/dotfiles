@@ -68,7 +68,7 @@ end
 
 if command -q rg
   set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
-  alias grep="rg"
+  abbr -a grep rg
 end
 
 if [ -f /opt/homebrew/opt/postgresql@18/bin/psql ]
