@@ -11,3 +11,6 @@ uv_venv_auto = true
 
 [settings.ruby]
 compile = false
+
+[tools]
+"npm:pnpm" = "11"

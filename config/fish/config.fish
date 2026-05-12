@@ -113,6 +113,13 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+# pnpm
+set -gx PNPM_HOME "/Users/iain/Library/pnpm"
+if not string match -q -- "$PNPM_HOME/bin" $PATH
+  set -gx PATH "$PNPM_HOME/bin" $PATH
+end
+# pnpm end
+
 # mise should run last
 if command -q mise
   set -gx MISE_EXPERIMENTAL "1"
