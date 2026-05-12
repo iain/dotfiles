@@ -114,3 +114,5 @@ abbr -a rdm "rails db:migrate"
 if test -f ~/.config/fish/config.local.fish
   source ~/.config/fish/config.local.fish
 end
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
