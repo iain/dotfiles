@@ -1,6 +1,9 @@
 set t_Co=256
 set termguicolors
 
+set background=dark
+colorscheme spectral
+
 function! s:MacOSIsLight() abort
   if !has('macunix')
     return 0
@@ -10,12 +13,12 @@ function! s:MacOSIsLight() abort
 endfunction
 
 function! s:ApplySpectral() abort
-  let l:want = s:MacOSIsLight() ? 'spectral-light' : 'spectral'
+  let l:want = s:MacOSIsLight() ? 'light' : 'dark'
   if get(g:, 'colors_name', '') ==# l:want
     return
   endif
-  let &background = l:want ==# 'spectral-light' ? 'light' : 'dark'
-  execute 'colorscheme' l:want
+  let &background = l:want
+  colorscheme spectral
 endfunction
 
 augroup SpectralAppearance
