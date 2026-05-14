@@ -49,13 +49,32 @@ Create `~/.config/git/config.local` with your per-machine identity (see `config/
   signingKey = ~/.ssh/id_ed25519.pub
 ```
 
-### 6. Generate an SSH Key (for Git Signing)
+### 6. Set Up an SSH Key for GitHub (Auth + Signing)
+
+If you ran `gh auth login` and let it generate an SSH key, the key already exists at `~/.ssh/id_ed25519` and is registered with GitHub as an **authentication** key. Otherwise generate one manually:
 
 ```bash
 ssh-keygen -t ed25519 -C "you@example.com"
 ```
 
-Add the public key to `config/git/allowed_signers` and to your GitHub account (both for authentication and signing).
+GitHub treats authentication and signing keys separately, so the same public key needs to be uploaded a second time as a signing key. The `gh` CLI can do this once given the extra scope:
+
+```bash
+gh auth refresh -h github.com -s admin:ssh_signing_key
+gh ssh-key add ~/.ssh/id_ed25519.pub --type signing --title "$(hostname -s)"
+```
+
+Then add the public key to `config/git/allowed_signers` so local verification works (`git log --show-signature`), and commit the change:
+
+```bash
+echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allowed_signers
+```
+
+Confirm everything is wired up with an empty signed commit:
+
+```bash
+git commit --allow-empty -m "test signing" && git log --show-signature -1
+```
 
 ### 7. Set Fish as Default Shell
 

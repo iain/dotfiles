@@ -6,3 +6,5 @@
 .sublime-workspace
 .vscode
 .ctags
+
+**/.claude/settings.local.json
