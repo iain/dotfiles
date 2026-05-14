@@ -12,9 +12,11 @@ Config files for macOS. Managed with symlinks via `install.rb`.
 
 ### 2. Clone This Repo
 
+Clone it anywhere — `install.rb` resolves paths relative to itself:
+
 ```bash
-git clone <repo-url> ~/iain/dotfiles
-cd ~/iain/dotfiles
+git clone <repo-url>
+cd dotfiles
 ```
 
 ### 3. Install Everything
