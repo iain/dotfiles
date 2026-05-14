@@ -40,4 +40,4 @@ keybind = super+ctrl+j=resize_split:down,10
 keybind = super+ctrl+k=resize_split:up,10
 keybind = super+ctrl+l=resize_split:right,10
 
-theme = dark:/Users/iain/Code/iain/spectral/ghostty/spectral-dark,light:/Users/iain/Code/iain/spectral/ghostty/spectral-light
+theme = dark:spectral-dark,light:spectral-light
