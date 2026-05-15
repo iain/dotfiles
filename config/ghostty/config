@@ -3,7 +3,6 @@ font-family = JetBrainsMono Nerd Font Mono
 font-style = Light
 font-size = 14
 cursor-style = block
-window-colorspace = display-p3
 window-padding-x = 12
 window-padding-y = 8
 window-padding-balance = true
@@ -11,7 +10,6 @@ window-padding-balance = true
 # behavior
 copy-on-select = clipboard
 mouse-hide-while-typing = true
-# scrollback-limit = 100000
 link-url = true
 
 # window
