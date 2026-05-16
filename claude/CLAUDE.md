@@ -18,7 +18,11 @@ Base the PR description on the actual diff against the base branch (`git diff <b
 
 ## Test-driven development
 
-Default to TDD for any non-trivial change — new behaviour, bug fixes, refactors that change observable behaviour. The loop, one small step at a time:
+Default to TDD for any non-trivial change — new behaviour, bug fixes, refactors that change observable behaviour.
+
+Because the loop is outside-in, you don't need a detailed implementation plan up front — clarity on the desired behaviour is enough. Each test pulls the next slice of design out; planning further is usually wasted, since the next test will reshape it.
+
+The loop, one small step at a time:
 
 1. **Write one failing test** that captures the next slice of behaviour. Write it as if the ideal API already existed; the test is the first consumer of the code, so let it pull the shape of the interface.
 2. **Run it and confirm it fails for the right reason** — a real assertion failure or a missing method, not a typo or fixture issue. If it passes on the first run, the test isn't exercising the new behaviour; rewrite it.
