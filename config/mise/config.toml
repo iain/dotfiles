@@ -16,3 +16,5 @@ compile = false
 "npm:pnpm" = "latest"
 ruby = "latest"
 node = "latest"
+age = "latest"
+sops = "latest"
