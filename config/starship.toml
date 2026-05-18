@@ -21,6 +21,7 @@ $ruby\
 $python\
 $golang\
 $rust\
+$terraform\
 $cmd_duration\
 $jobs\
 $status\
@@ -102,6 +103,11 @@ format = '[$symbol($version )]($style)'
 [rust]
 format = '[$symbol($version )]($style)'
 symbol = "󱘗 "
+
+[terraform]
+format = '[$symbol$version]($style) '
+symbol = "󱁢 "
+style = "105"
 
 [bun]
 symbol = " "
