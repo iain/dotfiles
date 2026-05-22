@@ -13,6 +13,10 @@ Plug 'tpope/vim-sensible'              " universal set of vim defaults
 " Colorscheme
 Plug 'iain/spectral'                   " custom colorscheme
 
+" Statusline
+Plug 'itchyny/lightline.vim'           " configurable statusline
+Plug 'maximbaz/lightline-ale'          " surface ALE diagnostics in the statusline
+
 " Editing
 Plug 'AndrewRadev/splitjoin.vim'       " switch between single-line and multi-line statements
 Plug 'godlygeek/tabular'               " align text by pattern
