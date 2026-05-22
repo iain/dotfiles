@@ -39,7 +39,12 @@ function! LightlineGitBranch() abort
 endfunction
 
 " Filename relative to the cwd (falls back to ~-relative, then absolute).
+" In netrw there's no file, so show the browsed directory with a folder glyph.
 function! LightlineFilename() abort
+  if &filetype ==# 'netrw'
+    let l:dir = fnamemodify(get(b:, 'netrw_curdir', getcwd()), ':~:.')
+    return nr2char(0xf07c, 1) . ' ' . (empty(l:dir) ? './' : l:dir)
+  endif
   let l:name = expand('%:~:.')
   return empty(l:name) ? '[No Name]' : l:name
 endfunction
