@@ -39,11 +39,17 @@ function! LightlineGitBranch() abort
 endfunction
 
 " Filename relative to the cwd (falls back to ~-relative, then absolute).
-" In netrw there's no file, so show the browsed directory with a folder glyph.
+" In netrw there's no file, so show the browsed directory with a folder glyph;
+" at the repo root just the glyph (the project name is its own segment).
 function! LightlineFilename() abort
   if &filetype ==# 'netrw'
-    let l:dir = fnamemodify(get(b:, 'netrw_curdir', getcwd()), ':~:.')
-    return nr2char(0xf07c, 1) . ' ' . (empty(l:dir) ? './' : l:dir)
+    let l:dir = get(b:, 'netrw_curdir', getcwd())
+    let l:root = exists('*FugitiveWorkTree') ? FugitiveWorkTree() : ''
+    if !empty(l:root) && fnamemodify(l:dir, ':p') ==# fnamemodify(l:root, ':p')
+      return nr2char(0xf07c, 1)
+    endif
+    let l:rel = fnamemodify(l:dir, ':~:.')
+    return nr2char(0xf07c, 1) . ' ' . (empty(l:rel) ? './' : l:rel)
   endif
   let l:name = expand('%:~:.')
   return empty(l:name) ? '[No Name]' : l:name
@@ -55,9 +61,10 @@ let g:lightline = {
   \ 'active': {
   \   'left':  [ [ 'mode', 'paste' ],
   \              [ 'cwd', 'gitbranch' ],
-  \              [ 'readonly', 'filename', 'modified' ] ],
+  \              [ 'filename', 'modified' ] ],
   \   'right': [ [ 'lineinfo' ],
   \              [ 'percent' ],
+  \              [ 'readonly' ],
   \              [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ] ],
   \ },
   \ 'component': {
@@ -67,6 +74,10 @@ let g:lightline = {
   \   'cwd':       'LightlineCwd',
   \   'gitbranch': 'LightlineGitBranch',
   \   'filename':  'LightlineFilename',
+  \ },
+  \ 'component_visible_condition': {
+  \   'readonly': "&readonly && &filetype !=# 'netrw'",
+  \   'modified': "(&modified || !&modifiable) && &filetype !=# 'netrw'",
   \ },
   \ }
 
@@ -108,4 +119,18 @@ endfunction
 augroup LightlineSpectral
   autocmd!
   autocmd ColorScheme spectral,spectral-dark,spectral-light call s:LightlineReload()
+augroup END
+
+" netrw installs its own window-local statusline while rendering, clobbering
+" lightline's. Re-assert lightline once netrw has finished (deferred via a
+" 0-delay timer so it runs after netrw's synchronous setup).
+function! s:LightlineRefresh(...) abort
+  if exists('g:loaded_lightline')
+    call lightline#update()
+  endif
+endfunction
+
+augroup LightlineNetrw
+  autocmd!
+  autocmd FileType netrw call timer_start(0, function('s:LightlineRefresh'))
 augroup END

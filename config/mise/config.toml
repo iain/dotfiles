@@ -13,8 +13,11 @@ uv_venv_auto = true
 compile = false
 
 [tools]
-"npm:pnpm" = "latest"
+pnpm = "latest"
 ruby = "latest"
 node = "latest"
 age = "latest"
 sops = "latest"
+pitchfork = "latest"
+hk = "latest"
+aube = "latest"
