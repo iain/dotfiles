@@ -77,3 +77,6 @@
 [credential "https://gist.github.com"]
   helper =
   helper = !/opt/homebrew/bin/gh auth git-credential
+[hook "hk-pre-commit"]
+  command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/latest/hk run pre-commit --from-hook \"$@\"
+  event = pre-commit
