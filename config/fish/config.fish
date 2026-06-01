@@ -124,12 +124,7 @@ end
 if command -q mise
   set -gx MISE_EXPERIMENTAL "1"
   mise activate fish | source
-end
-
-if command -q pitchfork
-  pitchfork activate fish | source
-end
-
-if command -q fnox
+  # pitchfork activate fish | source
   fnox activate fish | source
+  abbr -a pf "pitchfork"
 end
