@@ -22,6 +22,11 @@ if command -q vim
 end
 
 if command -q eza
+  # Directories in Spectral's signature amber (#F9AD26). The rest tones down eza's
+  # defaults: every permission bit is set explicitly and non-bold (eza's default triad
+  # is all-bold via attribute bleed), the bright-yellow read bits and owner are dimmed.
+  # Note: user-execute is keyed `ue`, not `ux`.
+  set -gx EZA_COLORS "di=38;2;249;173;38:ur=2;33:uw=31:ux=32:ue=32:gr=2;33:gw=31:gx=32:tr=2;33:tw=31:tx=32:uu=2;37:un=2;37:sn=32:sb=32:xx=90:da=34:ex=32:bu=0"
   alias ls="eza --group-directories-first --icons=auto"
   alias l="eza --group-directories-first --git --all --time-style=iso --long"
 end
