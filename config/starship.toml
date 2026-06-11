@@ -31,12 +31,12 @@ read_only = " 󰌾"
 style = "#F9AD26"
 
 [git_branch]
-symbol = " "
+symbol = " "
 style = "blue"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_commit]
-tag_symbol = '  '
+tag_symbol = '  '
 style = "green"
 
 [git_status]
@@ -47,4 +47,4 @@ diverged = '↕'
 behind = '↓'
 
 [hostname]
-ssh_symbol = " "
+ssh_symbol = " "
