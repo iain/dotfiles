@@ -8,24 +8,8 @@ $shlvl\
 $directory\
 $git_branch\
 $git_status\
-$character"""
-
-# Explicit list (instead of $all) so starship doesn't probe for ~30 language manifests every prompt.
-right_format = """\
-$package\
-$dotnet\
-$java\
-$nodejs\
-$bun\
-$ruby\
-$python\
-$golang\
-$rust\
-$terraform\
 $cmd_duration\
-$jobs\
-$status\
-"""
+$character"""
 
 scan_timeout = 10
 command_timeout = 200
@@ -33,84 +17,34 @@ command_timeout = 200
 [line_break]
 disabled = true
 
-[gcloud]
-disabled = true
+[character]
+# Spectral's signature amber (#F9AD26).
+success_symbol = '[❯](bold #F9AD26)'
 
-[aws]
-symbol = "  "
+[cmd_duration]
+format = '[$duration]($style) '
+style = 'yellow'
 
 [directory]
 read_only = " 󰌾"
-style = "blue"
-
-[dotnet]
-format = '[$symbol($version )]($style)'
-symbol = " "
-# Drop `project.json` (used by Nx) so JS monorepos don't falsely trigger .NET.
-detect_files = ["global.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props", "*.csproj", "*.fsproj", "*.xproj"]
-
-[docker_context]
-symbol = " "
+# Spectral's signature amber (#F9AD26) — used for directories in the colorscheme itself.
+style = "#F9AD26"
 
 [git_branch]
-symbol = " "
-style = "purple"
+symbol = " "
+style = "blue"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_commit]
-tag_symbol = '  '
+tag_symbol = '  '
 style = "green"
 
 [git_status]
-style = "yellow"
+style = "purple"
 format = '([$all_status$ahead_behind]($style) )'
 ahead = '↑'
 diverged = '↕'
 behind = '↓'
 
-[golang]
-format = '[$symbol($version )]($style)'
-symbol = " "
-
 [hostname]
-ssh_symbol = " "
-
-[java]
-format = '[${symbol}(${version} )]($style)'
-symbol = " "
-
-[nix_shell]
-symbol = " "
-
-[nodejs]
-format = '[$symbol($version )]($style)'
-symbol = " "
-style = "green"
-
-[package]
-symbol = "󰏗 "
-format = '[$symbol$version]($style) '
-
-[python]
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-symbol = " "
-
-[ruby]
-symbol = " "
-style = "red"
-format = '[$symbol($version )]($style)'
-
-[rust]
-format = '[$symbol($version )]($style)'
-symbol = "󱘗 "
-
-[terraform]
-format = '[$symbol$version]($style) '
-symbol = "󱁢 "
-style = "105"
-
-[bun]
-symbol = " "
-
-[gradle]
-symbol = " "
+ssh_symbol = " "
