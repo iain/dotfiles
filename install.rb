@@ -27,6 +27,7 @@ OptionParser.new do |opts|
   opts.on("-y", "--yes", "Answer yes to all prompts") { options[:yes] = true }
   opts.on("--[no-]macos", "Run macOS defaults (auto-detected on macOS)") { |v| options[:macos] = v }
   opts.on("--[no-]brew", "Run brew bundle (auto-detected when Brewfile present)") { |v| options[:brew] = v }
+  opts.on("--[no-]mise", "Install mise-managed tools (auto-detected when mise present)") { |v| options[:mise] = v }
   opts.on("--[no-]fish", "Set fish as default shell") { |v| options[:fish] = v }
 end.parse!
 
@@ -276,6 +277,24 @@ if run_brew
     puts "  [dry-run] would run: brew bundle --file=#{brewfile}"
   else
     system("brew", "bundle", "--file=#{brewfile}") || warn("WARNING: brew bundle had errors")
+  end
+end
+
+# Mise install (provision tools pinned in mise config, e.g. hk for git hooks)
+run_mise = if options.key?(:mise)
+  options[:mise]
+elsif system("command -v mise > /dev/null 2>&1")
+  prompt?("Install mise-managed tools?", options)
+else
+  false
+end
+
+if run_mise
+  puts "\nInstalling mise-managed tools..."
+  if dry_run
+    puts "  [dry-run] would run: mise install"
+  else
+    system("mise", "install") || warn("WARNING: mise install had errors")
   end
 end
 

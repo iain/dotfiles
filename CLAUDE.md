@@ -14,11 +14,12 @@ ruby install.rb -n     # dry run — preview what would happen
 ruby install.rb --no-brew --no-macos  # symlinks only
 ```
 
-The script does four things:
+The script does five things:
 1. `config/*` → `~/.config/*` (preserving directory structure)
 2. `rc/*` → `~/.<name>` (adds dot prefix, e.g. `rc/vimrc` → `~/.vimrc`)
 3. `brew bundle` — installs Homebrew packages (auto-detected when `Brewfile` exists, skip with `--no-brew`)
-4. `macos.sh` — applies macOS defaults (auto-detected on macOS, skip with `--no-macos`)
+4. `mise install` — installs tools pinned in mise config, e.g. `hk` for git hooks (auto-detected when `mise` present, skip with `--no-mise`)
+5. `macos.sh` — applies macOS defaults (auto-detected on macOS, skip with `--no-macos`)
 
 Files listed in `SKIP` (currently `config.local.example`) are excluded. Existing non-symlink files are backed up with `.backup` suffix.
 
