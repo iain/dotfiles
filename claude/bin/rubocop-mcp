@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# rubocop MCP launcher — one user-scoped MCP server that adapts to whatever
+# repo Claude Code is started in. Registered via:
+#   claude mcp add --scope user --transport stdio rubocop -- ~/.claude/bin/rubocop-mcp
+#
+# Why this exists:
+#   * --no-server is mandatory: rubocop's caching daemon proxies the call and
+#     detaches, which silently kills the long-lived MCP stdio pipe.
+#   * Repos put the Ruby app in different places (repo root, ./backend,
+#     ./apps/<x>), so we locate the project rather than assume cwd.
+#   * Repos pin different Ruby versions via mise; `mise exec` re-activates the
+#     right toolchain per repo (the MCP process inherits a frozen PATH).
+#
+# A repo can opt out / override by defining a local-scope `rubocop` MCP server
+# (local > user precedence), e.g. the monorepo pins apps/vko explicitly.
+
+set -o pipefail
+
+start="${CLAUDE_PROJECT_DIR:-$PWD}"
+
+# Find $1 by name beneath $start, skipping noise dirs.
+find_down() {
+  find "$start" -maxdepth 5 \
+    \( -name node_modules -o -name vendor -o -name tmp -o -name .git -o -name .bundle \) -prune \
+    -o -name "$1" -print 2>/dev/null
+}
+
+root=""
+
+# 1) Nearest ancestor (including start) that has a Gemfile.
+#    Covers an app at the repo root, or Claude launched inside the app dir.
+d="$start"
+while [ -n "$d" ] && [ "$d" != "/" ]; do
+  if [ -f "$d/Gemfile" ]; then root="$d"; break; fi
+  d="$(dirname "$d")"
+done
+
+# 2) Otherwise search downward for the project. Prefer a dir holding a
+#    .rubocop.yml (that's unambiguously a rubocop project); fall back to the
+#    shallowest Gemfile. Shallowest-then-alphabetical keeps it deterministic.
+pick_shallowest() {
+  # reads find output on stdin, prints the path with the fewest slashes
+  awk '{ n = gsub(/\//, "/"); print n "\t" $0 }' | sort -k1,1n -k2,2 | head -1 | cut -f2-
+}
+if [ -z "$root" ]; then
+  rc="$(find_down .rubocop.yml | pick_shallowest)"
+  if [ -n "$rc" ]; then
+    root="$(dirname "$rc")"
+  else
+    gf="$(find_down Gemfile | pick_shallowest)"
+    [ -n "$gf" ] && root="$(dirname "$gf")"
+  fi
+fi
+
+[ -z "$root" ] && root="$start"
+cd "$root" || exit 1
+
+# Activate this repo's toolchain when mise manages it (Ruby version may differ
+# per repo, and mise merges config up the tree so a subdir inherits the root).
+runner=()
+if command -v mise >/dev/null 2>&1 \
+   && { [ -f mise.toml ] || [ -f .mise.toml ] || [ -f .tool-versions ] || [ -f .ruby-version ] \
+        || mise config 2>/dev/null | grep -q .; }; then
+  runner=(mise exec --)
+fi
+
+if [ -f Gemfile ] && "${runner[@]}" bundle show rubocop >/dev/null 2>&1; then
+  exec "${runner[@]}" bundle exec rubocop --no-server --mcp
+elif "${runner[@]}" rubocop --version >/dev/null 2>&1; then
+  exec "${runner[@]}" rubocop --no-server --mcp
+fi
+
+echo "rubocop-mcp: no rubocop found for ${root}" >&2
+exit 1

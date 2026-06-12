@@ -2,9 +2,11 @@
 # frozen_string_literal: true
 
 # Symlinks config files from this repo into ~/.config, rc files into ~/,
-# and bin/ scripts into ~/.local/bin.
+# and bin/ scripts into ~/.local/bin. Also installs Claude Code plugins and
+# registers the rubocop MCP server from the setup declared in claude/settings.json.
 
 require "fileutils"
+require "json"
 require "optparse"
 require "pathname"
 
@@ -28,6 +30,7 @@ OptionParser.new do |opts|
   opts.on("--[no-]macos", "Run macOS defaults (auto-detected on macOS)") { |v| options[:macos] = v }
   opts.on("--[no-]brew", "Run brew bundle (auto-detected when Brewfile present)") { |v| options[:brew] = v }
   opts.on("--[no-]mise", "Install mise-managed tools (auto-detected when mise present)") { |v| options[:mise] = v }
+  opts.on("--[no-]plugins", "Install Claude plugins + MCP servers (auto-detected when claude present)") { |v| options[:plugins] = v }
   opts.on("--[no-]fish", "Set fish as default shell") { |v| options[:fish] = v }
 end.parse!
 
@@ -93,6 +96,55 @@ def check_git_signing
     puts "  signing OK"
   else
     problems.each { |p| warn "  WARNING: #{p}" }
+  end
+end
+
+# Reproduces the Claude plugin + MCP setup declared in claude/settings.json so a
+# fresh machine matches this one. Marketplaces and enabled plugins are read from
+# the committed settings (the single source of truth), and the rubocop MCP server
+# is registered at user scope so it's available in every repo. Every action is
+# guarded by a presence check, so re-runs are no-ops.
+def install_claude_plugins(dry_run:)
+  settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
+
+  puts "\nInstalling Claude plugins and MCP servers..."
+
+  known = `claude plugin marketplace list 2>/dev/null`
+  settings.fetch("extraKnownMarketplaces", {}).each do |name, spec|
+    repo = spec.dig("source", "repo")
+    next unless repo
+
+    if known.include?(name)
+      puts "  skip marketplace #{name} (already known)"
+    elsif dry_run
+      puts "  [dry-run] would run: claude plugin marketplace add #{repo}"
+    else
+      system("claude", "plugin", "marketplace", "add", repo) || warn("  WARNING: could not add marketplace #{repo}")
+    end
+  end
+
+  installed = `claude plugin list 2>/dev/null`
+  settings.fetch("enabledPlugins", {}).each do |ref, enabled|
+    next unless enabled
+
+    if installed.include?(ref)
+      puts "  skip plugin #{ref} (already installed)"
+    elsif dry_run
+      puts "  [dry-run] would run: claude plugin install #{ref}"
+    else
+      system("claude", "plugin", "install", ref) || warn("  WARNING: could not install plugin #{ref}")
+    end
+  end
+
+  # rubocop MCP server (user scope) — adapts to whichever repo Claude runs in.
+  rubocop_mcp = CLAUDE_DEST / "bin" / "rubocop-mcp"
+  if system("claude mcp get rubocop > /dev/null 2>&1")
+    puts "  skip mcp rubocop (already registered)"
+  elsif dry_run
+    puts "  [dry-run] would run: claude mcp add --scope user rubocop -- #{rubocop_mcp}"
+  else
+    system("claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
+      warn("  WARNING: could not register rubocop MCP server")
   end
 end
 
@@ -348,6 +400,17 @@ if run_mise
     system("mise", "install") || warn("WARNING: mise install had errors")
   end
 end
+
+# Claude plugins + MCP servers (declared in claude/settings.json)
+run_plugins = if options.key?(:plugins)
+  options[:plugins]
+elsif system("command -v claude > /dev/null 2>&1") && (CLAUDE_SRC / "settings.json").file?
+  prompt?("Install Claude plugins and register MCP servers?", options)
+else
+  false
+end
+
+install_claude_plugins(dry_run: dry_run) if run_plugins
 
 # macOS defaults
 run_macos = if options.key?(:macos)
