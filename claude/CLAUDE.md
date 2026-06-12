@@ -10,6 +10,10 @@ After drafting, do a second pass purely for length: cut anything the diff alread
 
 Split unrelated changes into separate commits, but don't over-split — use judgement.
 
+## Rewriting history
+
+Don't rebase, amend, or force-push a commit that's already on the remote (GitHub etc.), especially on a squash-merge project — those operations are risky and any tidiness they'd buy is thrown away by the squash anyway. Amending something not yet pushed is fine, but check first (`git status` / compare with the upstream branch); it may have been pushed outside this session. All of these are of course fair game when you're explicitly asked to do involved git surgery.
+
 ## Pull requests
 
 Same spirit as commits, only more so. Default to draft. The body is one short paragraph focused on *why*. No headers, no sections, no test plan unless I ask. Write the title and body as if they will become the final squash-merged commit message, because they usually do.
