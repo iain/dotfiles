@@ -32,6 +32,7 @@ At the end of a run it also does a read-only **commit-signing check** (`check_gi
 - **`config/vim/`** — Modular vim config auto-sourced via glob in `rc/vimrc`. Files prefixed with `_` (e.g. `_plug.vim`, `_nvim-defaults.vim`, `_macvim.vim`) are sourced explicitly and excluded from the glob
 - **`config/starship.toml`** — Single-line Starship prompt with Nerd Font symbols
 - **`config/mise/config.toml`** — Global mise settings (legacy version files, experimental features)
+- **`claude/`** — Claude Code config symlinked into `~/.claude`: `settings.json` (permissions, status line, hooks), `statusline.sh` (hostname-led status line), and `hooks/machine-context.sh` (a `SessionStart` hook that injects the hostname into the model's context so it knows which machine it's on)
 ## Conventions
 
 - Commit messages: **short, imperative, title case** (e.g. `Add Pagination to Query Endpoint`). No bullet-point bodies unless a single sentence of context is genuinely needed.
