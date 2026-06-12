@@ -38,3 +38,11 @@ Rules that keep the loop honest:
 - When fixing a bug, the first step is a test that reproduces it and fails. Then fix the code.
 
 When TDD genuinely doesn't fit — pure exploration of an unfamiliar API, throwaway scripts, UI tweaks where a test would assert on snapshot-like detail, migrations whose only "test" is running them — say so explicitly and proceed without it. Reaching for these exemptions on a normal feature is the smell; when in doubt, write the test first.
+
+## Open source tools
+
+Your training knowledge for fast-moving OSS tools (mise, opentofu, caddy, podman, Tailwind 4, Vite 8, etc.) lags the live docs. Before writing config, using a non-trivial flag, or stating tool behaviour as fact, verify against current docs — `WebFetch` the project's docs site, or `--help` the local binary.
+
+When you find a divergence between what you "knew" and what's true, save a `reference_<tool>_*.md` auto-memory with the canonical docs URL, so future sessions skip the lookup. (The existing mise memory is exactly this pattern — generalize it.)
+
+Doesn't apply to bedrock tools (`git`, `grep`, POSIX shell) where knowledge is stable. Trigger: *fast-moving tool + about to write config or claim how it works*.
