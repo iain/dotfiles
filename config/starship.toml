@@ -46,13 +46,18 @@ ahead = '↑'
 diverged = '↕'
 behind = '↓'
 
-# SSH login renders as a single badge: amber background, black text.
-# username + hostname share one continuous block (no " in " sentence).
+# Privileged shells render as a "user@host" badge: amber background, black text
+# (red for root). username + hostname share one continuous block (no " in ").
+# Both modules appear only on SSH or under sudo, never on a plain local shell.
 [username]
 style_user = "fg:black bg:#F9AD26"
 style_root = "fg:black bg:red"
 format = '[ $user]($style)'
 
 [hostname]
+# Not ssh_only: also show under sudo (SUDO_USER) so root sees user@host too.
+# detect_env_vars gates it to exactly SSH / sudo — never a plain local prompt.
+ssh_only = false
+detect_env_vars = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY", "SUDO_USER"]
 style = "fg:black bg:#F9AD26"
 format = '[@$hostname ]($style) '
