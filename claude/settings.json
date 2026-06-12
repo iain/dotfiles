@@ -1,4 +1,7 @@
 {
+  "permissions": {
+    "defaultMode": "auto"
+  },
   "effortLevel": "xhigh",
   "statusLine": {
     "type": "command",
