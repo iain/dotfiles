@@ -19,7 +19,7 @@ disabled = true
 
 [character]
 # Spectral's signature amber (#F9AD26).
-success_symbol = '[❯](bold #F9AD26)'
+success_symbol = '[❯](#F9AD26)'
 
 [cmd_duration]
 format = '[$duration]($style) '
@@ -46,5 +46,13 @@ ahead = '↑'
 diverged = '↕'
 behind = '↓'
 
+# SSH login renders as a single badge: amber background, black text.
+# username + hostname share one continuous block (no " in " sentence).
+[username]
+style_user = "fg:black bg:#F9AD26"
+style_root = "fg:black bg:red"
+format = '[ $user]($style)'
+
 [hostname]
-ssh_symbol = " "
+style = "fg:black bg:#F9AD26"
+format = '[@$hostname ]($style) '
