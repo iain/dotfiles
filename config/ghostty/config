@@ -38,4 +38,8 @@ keybind = super+ctrl+j=resize_split:down,10
 keybind = super+ctrl+k=resize_split:up,10
 keybind = super+ctrl+l=resize_split:right,10
 
+# ssh forwarding
+shell-integration-features = ssh-env,ssh-terminfo
+
+# custom theme
 theme = dark:spectral-dark,light:spectral-light
