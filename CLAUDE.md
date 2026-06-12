@@ -23,6 +23,8 @@ The script does five things:
 
 Files listed in `SKIP` (currently `config.local.example`) are excluded. Existing non-symlink files are backed up with `.backup` suffix.
 
+At the end of a run it also does a read-only **commit-signing check** (`check_git_signing`): warns, with the exact fix, if `config.local` is missing, the signing key is absent, or that key isn't trusted in `allowed_signers` / not registered on GitHub. It changes nothing — a new machine just gets told what to wire up.
+
 ## Structure
 
 - **`config/fish/config.fish`** — Fish shell config: PATH, Homebrew, aliases (eza, bat, zoxide, fzf, rg), git/ruby abbreviations, Starship prompt

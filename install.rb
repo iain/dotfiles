@@ -45,6 +45,57 @@ def prompt?(question, options)
   $stdin.gets&.strip&.downcase == "y"
 end
 
+# Read-only check of the commit-signing chain. A new machine typically signs
+# with a key that is trusted nowhere — not in allowed_signers, not on GitHub —
+# so commits come out "Unverified" and nobody notices for weeks. This surfaces
+# each gap during setup and prints the exact fix without changing anything.
+def check_git_signing
+  puts "\nChecking git commit signing..."
+  problems = []
+
+  config_local = HOME / ".config" / "git" / "config.local"
+  unless config_local.file?
+    problems << "Per-machine identity missing (#{config_local}); commits use an auto-detected name/email.\n" \
+                "    Fix: cp #{CONFIG_SRC / 'git' / 'config.local.example'} #{config_local} and edit it."
+  end
+
+  signing_key = `git config --get user.signingkey`.strip
+  if signing_key.empty?
+    problems << "user.signingkey is not set."
+  else
+    key_path = Pathname.new(signing_key.sub(/\A~/, Dir.home))
+    if key_path.file?
+      pubkey = key_path.read.split[0, 2].join(" ") # "ssh-ed25519 AAAA..."
+      email  = `git config --get user.email`.strip
+
+      allowed = CONFIG_SRC / "git" / "allowed_signers"
+      unless allowed.file? && allowed.read.include?(pubkey)
+        problems << "Signing key not in #{allowed}; your commits verify as untrusted locally.\n" \
+                    "    Fix: add this line to config/git/allowed_signers:\n" \
+                    "      #{email} #{pubkey}"
+      end
+
+      if system("command -v gh > /dev/null 2>&1") && system("gh auth status > /dev/null 2>&1")
+        login      = `gh api user --jq .login 2>/dev/null`.strip
+        registered = `gh api users/#{login}/ssh_signing_keys --jq '.[].key' 2>/dev/null`
+        unless registered.include?(pubkey)
+          problems << "Signing key not registered on GitHub; pushed commits show \"Unverified\".\n" \
+                      "    Fix: gh ssh-key add #{key_path} --type signing --title \"<machine-name>\"\n" \
+                      "    (first run if needed: gh auth refresh -h github.com -s admin:ssh_signing_key)"
+        end
+      end
+    else
+      problems << "Signing key #{key_path} does not exist on this machine."
+    end
+  end
+
+  if problems.empty?
+    puts "  signing OK"
+  else
+    problems.each { |p| warn "  WARNING: #{p}" }
+  end
+end
+
 # Walks up from `dir` and removes any dangling symlinks in the ancestor
 # chain so `FileUtils.mkdir_p(dir)` can create real directories in their
 # place. Handles the case where an older version of this script symlinked
@@ -354,5 +405,7 @@ if run_fish && File.executable?(fish_path)
     puts "\n  skip default shell (already fish)"
   end
 end
+
+check_git_signing
 
 puts "\nAll done."
