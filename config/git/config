@@ -14,13 +14,18 @@
   rebase = true
 [rebase]
   autostash = true
+  updateRefs = true
+  autosquash = true
+  missingCommitsCheck = error
 [branch]
   autosetuprebase = always
   sort = -committerdate
 [pager]
   branch = false
+  blame = delta
 [tag]
   gpgSign = true
+  sort = version:refname
 [core]
   protectNTFS = true
   protectHFS = true
@@ -43,9 +48,11 @@
   defaultBranch = main
 [rerere]
   enabled = true
+  autoupdate = true
 [diff]
   algorithm = histogram
   colorMoved = plain
+  colorMovedWS = allow-indentation-change
   renames = true
   renameLimit = 5000
 [difftool "difftastic"]
