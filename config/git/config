@@ -30,6 +30,7 @@
 [delta]
   navigate = true
   hyperlinks = true
+  line-numbers = true
 [gpg]
   format = ssh
 [gpg "ssh"]
