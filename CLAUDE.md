@@ -34,6 +34,29 @@ At the end of a run it also does a read-only **commit-signing check** (`check_gi
 - **`config/starship.toml`** — Single-line Starship prompt with Nerd Font symbols
 - **`config/mise/config.toml`** — Global mise settings (legacy version files, experimental features)
 - **`claude/`** — Claude Code config symlinked into `~/.claude`: `settings.json` (permissions, status line, `SessionStart` hook, plus the enabled plugins and known marketplaces that drive the install-script plugin step), `statusline.sh` (hostname-led status line), `hooks/machine-context.sh` (a `SessionStart` hook that injects the hostname into the model's context so it knows which machine it's on), and `bin/rubocop-mcp` (a per-repo-adaptive rubocop MCP launcher, registered user-scope by the install script). Note: `settings.json` is a tracked file but Claude also writes to `~/.claude/settings.json` at runtime (theme, plugin state), so machine-local tooling that rewrites it — e.g. peon-ping — is intentionally **not** tracked here; its hooks land in `~/.claude/settings.json.backup` after an install run
+## Defender / ~/dev
+
+Microsoft Defender for Endpoint (managed, can't be disabled) scans every file dev
+tools touch during a build — millions of filesystem ops that peg the CPU and push
+the machine into swap. The agreed fix with endpoint security is a single low-risk
+Defender exclusion of `/Users/*/dev`, so **everything a build writes must live under
+`~/dev`**.
+
+`config/fish/config.fish` enforces this by pointing the XDG base dirs there —
+`XDG_CACHE_HOME=~/dev/.cache`, `XDG_DATA_HOME=~/dev/.local/share`,
+`XDG_STATE_HOME=~/dev/.local/state` — while `XDG_CONFIG_HOME` stays at `~/.config`
+(config doesn't churn and these dotfiles live there). Tools that ignore XDG get an
+explicit override in the same file (npm cache, the pnpm store, cargo/rustup, go,
+uv, bundler). Anything XDG-aware (mise, podman, pnpm's cache/state/global) just
+inherits the base dirs.
+
+Consequences to keep in mind:
+- **Projects go in `~/dev`**, not `~/Code` — `node_modules`/`dist`/`build`/`target`
+  only fall under the exclusion if the project itself does.
+- These vars are set in fish, so they only apply to processes launched from the
+  shell. A build kicked off from a GUI app (IDE, Podman Desktop) won't see them
+  unless the vars are also exported at the launchd/session level.
+
 ## Conventions
 
 - Commit messages: **short, imperative, title case** (e.g. `Add Pagination to Query Endpoint`). No bullet-point bodies unless a single sentence of context is genuinely needed.

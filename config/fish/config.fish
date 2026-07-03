@@ -1,4 +1,27 @@
+# ── XDG base directories ──────────────────────────────────────────────
+# Config stays in ~/.config (these dotfiles). Everything else that churns
+# during builds — caches, package stores, toolchains, state — is redirected
+# under ~/dev so a single Microsoft Defender exclusion (/Users/*/dev) covers
+# it all. See CLAUDE.md § "Defender / ~/dev" for the why.
 set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_CACHE_HOME  "$HOME/dev/.cache"
+set -gx XDG_DATA_HOME   "$HOME/dev/.local/share"
+set -gx XDG_STATE_HOME  "$HOME/dev/.local/state"
+
+# ── Dev-tool storage → ~/dev ──────────────────────────────────────────
+# Tools that don't honour the XDG base dirs on their own get pointed at
+# ~/dev explicitly so nothing escapes the Defender exclusion. Tools that
+# already follow XDG (mise, pnpm cache/state/global, podman) inherit the
+# vars above and need nothing here.
+set -gx npm_config_cache      "$XDG_CACHE_HOME/npm"       # default ~/.npm
+set -gx PNPM_CONFIG_STORE_DIR "$XDG_DATA_HOME/pnpm/store" # store ignores XDG
+set -gx CARGO_HOME            "$XDG_DATA_HOME/cargo"      # default ~/.cargo
+set -gx RUSTUP_HOME           "$XDG_DATA_HOME/rustup"     # default ~/.rustup
+set -gx GOPATH                "$XDG_DATA_HOME/go"         # default ~/go
+set -gx GOMODCACHE            "$XDG_DATA_HOME/go/pkg/mod"
+set -gx GOCACHE               "$XDG_CACHE_HOME/go-build"  # default ~/Library/Caches/go-build
+set -gx UV_CACHE_DIR          "$XDG_CACHE_HOME/uv"        # default ~/Library/Caches/uv
+set -gx BUNDLE_USER_HOME      "$XDG_DATA_HOME/bundle"     # default ~/.bundle
 
 if test -x /opt/homebrew/bin/brew
   /opt/homebrew/bin/brew shellenv fish | source
@@ -119,8 +142,8 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-# pnpm
-set -gx PNPM_HOME "/Users/iain/Library/pnpm"
+# pnpm — global bin dir under ~/dev (matches pnpm's XDG-derived globalBinDir)
+set -gx PNPM_HOME "$XDG_DATA_HOME/pnpm"
 if not string match -q -- "$PNPM_HOME/bin" $PATH
   set -gx PATH "$PNPM_HOME/bin" $PATH
 end
@@ -131,6 +154,8 @@ if command -q mise
   set -gx MISE_EXPERIMENTAL "1"
   mise activate fish | source
   # pitchfork activate fish | source
-  fnox activate fish | source
+  if command -q fnox
+    fnox activate fish | source
+  end
   abbr -a pf "pitchfork"
 end
