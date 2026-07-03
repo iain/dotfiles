@@ -12,8 +12,10 @@
 #   * Repos pin different Ruby versions via mise; `mise exec` re-activates the
 #     right toolchain per repo (the MCP process inherits a frozen PATH).
 #
-# A repo can opt out / override by defining a local-scope `rubocop` MCP server
-# (local > user precedence), e.g. the monorepo pins apps/vko explicitly.
+# rubocop --mcp only runs where the `mcp` gem is bundled; a repo can hold
+# several Ruby projects with only one wired up for it, so we target that one
+# (see resolution below). A repo can still override with a local-scope
+# `rubocop` MCP server (local > user precedence).
 
 set -o pipefail
 
@@ -26,23 +28,47 @@ find_down() {
     -o -name "$1" -print 2>/dev/null
 }
 
+# Sort find(1) output shallowest-first, ties broken alphabetically — keeps
+# selection deterministic regardless of filesystem order.
+sort_by_depth() {
+  awk '{ n = gsub(/\//, "/"); print n "\t" $0 }' | sort -k1,1n -k2,2 | cut -f2-
+}
+pick_shallowest() { sort_by_depth | head -1; }
+
+# rubocop --mcp needs the `mcp` gem in that project's bundle.
+has_mcp_gem() {
+  [ -f "$1/Gemfile.lock" ] && grep -Eq '^[[:space:]]+mcp \(' "$1/Gemfile.lock"
+}
+
 root=""
 
-# 1) Nearest ancestor (including start) that has a Gemfile.
-#    Covers an app at the repo root, or Claude launched inside the app dir.
+# 1) The project that can actually serve MCP wins: the one whose bundle has the
+#    `mcp` gem. Look up through ancestors first (mcp gem at an app root above
+#    us, e.g. Claude launched in a subdir), then the shallowest match below us.
 d="$start"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  if [ -f "$d/Gemfile" ]; then root="$d"; break; fi
+  if has_mcp_gem "$d"; then root="$d"; break; fi
   d="$(dirname "$d")"
 done
+if [ -z "$root" ]; then
+  while IFS= read -r lock; do
+    [ -n "$lock" ] || continue
+    if has_mcp_gem "$(dirname "$lock")"; then root="$(dirname "$lock")"; break; fi
+  done <<< "$(find_down Gemfile.lock | sort_by_depth)"
+fi
 
-# 2) Otherwise search downward for the project. Prefer a dir holding a
-#    .rubocop.yml (that's unambiguously a rubocop project); fall back to the
-#    shallowest Gemfile. Shallowest-then-alphabetical keeps it deterministic.
-pick_shallowest() {
-  # reads find output on stdin, prints the path with the fewest slashes
-  awk '{ n = gsub(/\//, "/"); print n "\t" $0 }' | sort -k1,1n -k2,2 | head -1 | cut -f2-
-}
+# 2) No MCP-capable bundle found. Fall back to a best-effort rubocop project:
+#    nearest ancestor with a Gemfile (app at repo root, or launched inside it).
+if [ -z "$root" ]; then
+  d="$start"
+  while [ -n "$d" ] && [ "$d" != "/" ]; do
+    if [ -f "$d/Gemfile" ]; then root="$d"; break; fi
+    d="$(dirname "$d")"
+  done
+fi
+
+# 3) Otherwise search downward: prefer a dir holding a .rubocop.yml (that's
+#    unambiguously a rubocop project); fall back to the shallowest Gemfile.
 if [ -z "$root" ]; then
   rc="$(find_down .rubocop.yml | pick_shallowest)"
   if [ -n "$rc" ]; then
