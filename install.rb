@@ -350,6 +350,47 @@ else
   end
 end
 
+# LaunchAgent that exports the ~/dev XDG storage vars into the GUI (launchd)
+# session, so apps launched outside the shell — IDEs, Podman Desktop — keep
+# their build churn under ~/dev too and stay out of Microsoft Defender's way
+# (see CLAUDE.md § "Defender / ~/dev"). Generated per-machine because launchd
+# plists take absolute paths, not ~; it runs bin/xdg-launchd-env, symlinked
+# into ~/.local/bin above.
+xdg_agent = HOME / "Library" / "LaunchAgents" / "nl.iain.xdg-env.plist"
+if xdg_agent.exist?
+  puts "  skip #{xdg_agent} (already exists)"
+elsif dry_run
+  puts "  [dry-run] would create and bootstrap #{xdg_agent}"
+else
+  FileUtils.mkdir_p(xdg_agent.dirname)
+  xdg_agent.write(<<~PLIST)
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>Label</key>
+      <string>nl.iain.xdg-env</string>
+      <key>ProgramArguments</key>
+      <array>
+        <string>#{BIN_DEST / "xdg-launchd-env"}</string>
+      </array>
+      <key>RunAtLoad</key>
+      <true/>
+    </dict>
+    </plist>
+  PLIST
+  puts "  created #{xdg_agent}"
+
+  domain = "gui/#{Process.uid}"
+  # Re-bootstrap cleanly in case a stale copy is already loaded.
+  system("launchctl", "bootout", domain, xdg_agent.to_s, out: File::NULL, err: File::NULL)
+  if system("launchctl", "bootstrap", domain, xdg_agent.to_s)
+    puts "  bootstrapped nl.iain.xdg-env (#{domain})"
+  else
+    warn "  WARNING: could not bootstrap #{xdg_agent}; it will load at next login"
+  end
+end
+
 puts "\nSymlinks: #{counts[:linked]} linked, #{counts[:skipped]} skipped, #{counts[:backed_up]} backed up."
 
 # Install Homebrew if missing

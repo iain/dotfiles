@@ -1,0 +1,32 @@
+#!/bin/sh
+# Export the ~/dev storage vars into the GUI (launchd) session so apps
+# launched from the Dock/Finder — IDEs, Podman Desktop — write their build
+# churn under ~/dev too, not just shells. Without this, a GUI-triggered build
+# uses the default locations (~/.npm, ~/.local/share, …) and escapes the
+# Microsoft Defender exclusion of /Users/*/dev.
+#
+# Run at login by the nl.iain.xdg-env LaunchAgent (installed by install.rb),
+# and safe to run by hand to refresh a session without logging out. Keep the
+# values in sync with config/fish/config.fish — that's the shell counterpart.
+# See dotfiles CLAUDE.md § "Defender / ~/dev".
+
+set -eu
+
+cache="$HOME/dev/.cache"
+data="$HOME/dev/.local/share"
+state="$HOME/dev/.local/state"
+
+launchctl setenv XDG_CONFIG_HOME       "$HOME/.config"
+launchctl setenv XDG_CACHE_HOME        "$cache"
+launchctl setenv XDG_DATA_HOME         "$data"
+launchctl setenv XDG_STATE_HOME        "$state"
+launchctl setenv npm_config_cache      "$cache/npm"
+launchctl setenv PNPM_HOME             "$data/pnpm"
+launchctl setenv PNPM_CONFIG_STORE_DIR "$data/pnpm/store"
+launchctl setenv CARGO_HOME            "$data/cargo"
+launchctl setenv RUSTUP_HOME           "$data/rustup"
+launchctl setenv GOPATH                "$data/go"
+launchctl setenv GOMODCACHE            "$data/go/pkg/mod"
+launchctl setenv GOCACHE               "$cache/go-build"
+launchctl setenv UV_CACHE_DIR          "$cache/uv"
+launchctl setenv BUNDLE_USER_HOME      "$data/bundle"
