@@ -2,6 +2,8 @@
 
 ## Commits
 
+**Project conventions win.** When a repo's CLAUDE.md or docs define their own commit-message or pull-request conventions — Conventional Commits prefixes, a changelog format, required scopes, whatever — follow those; they override the defaults in this section and in *Pull requests* below. The rules here are the fallback for projects that say nothing.
+
 Keep commit messages short. Imperative subject under ~50 chars. Add a body only when the change isn't self-evident, and then only to explain *why* — the diff shows what changed; the message exists for whoever asks "why did this change?" six months from now.
 
 No conventional-commit prefixes (`feat:`, `fix:`, etc.). No trailers, no `Co-Authored-By`, no "Generated with…" footers. No bulleted list of files touched.
