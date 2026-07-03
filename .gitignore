@@ -5,4 +5,3 @@
 *.un~
 config/fish/config.local.fish
 docs/superpowers/
-Brewfile.lock.json

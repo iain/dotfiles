@@ -24,34 +24,44 @@ aube = "latest"
 fnox = "latest"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# mise bootstrap — declarative machine setup (replaces most of install.rb).
-# Fresh machine:  mise bootstrap        (preview with: mise bootstrap -n)
-# Sources anchor at the repo's canonical path, so re-running converges with the
-# existing symlinks rather than churning them.
+# mise bootstrap — declarative machine setup for these dotfiles.
+# Fresh machine (from the cloned repo):
+#   MISE_GLOBAL_CONFIG_FILE="$PWD/config/mise/config.toml" mise bootstrap
+# Preview with `… mise bootstrap -n`; check drift with `… mise bootstrap status`.
+#
+# Dotfile sources are RELATIVE to this file's directory (config/mise/), so the
+# repo can be cloned anywhere — nothing hardcodes a path. Because relative
+# sources resolve against the file's real location, always run bootstrap from
+# the cloned repo (as above), not against the deployed ~/.config/mise symlink.
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Dotfiles — replaces install.rb's symlink engine. `symlink-each` mirrors the
-# directory and links each file individually, so machine-local siblings mise
+# Dotfiles. `symlink-each` mirrors the directory and links each file
+# individually, so machine-local siblings mise
 # doesn't manage (config/git/config.local, config/fish/config.local.fish) are
 # left untouched inside otherwise-managed directories.
 [dotfiles]
-"~/.config"    = { source = "~/Code/dotfiles/config", mode = "symlink-each" }
-"~/.claude"    = { source = "~/Code/dotfiles/claude", mode = "symlink-each" }
-"~/.local/bin" = { source = "~/Code/dotfiles/bin",    mode = "symlink-each" }
+"~/.config"    = { source = "..",          mode = "symlink-each" }  # config/  → ~/.config/
+"~/.claude"    = { source = "../../claude", mode = "symlink-each" }  # claude/  → ~/.claude/
+"~/.local/bin" = { source = "../../bin",    mode = "symlink-each" }  # bin/     → ~/.local/bin/
 # rc/* → ~/.<name>: the dot-prefix rename can't be expressed by symlink-each,
 # so these are individual whole-file symlinks (mode defaults to symlink).
-"~/.editorconfig" = { source = "~/Code/dotfiles/rc/editorconfig" }
-"~/.hushlogin"    = { source = "~/Code/dotfiles/rc/hushlogin" }
-"~/.psqlrc"       = { source = "~/Code/dotfiles/rc/psqlrc" }
-"~/.tmux.conf"    = { source = "~/Code/dotfiles/rc/tmux.conf" }
-"~/.vimrc"        = { source = "~/Code/dotfiles/rc/vimrc" }
+"~/.editorconfig" = { source = "../../rc/editorconfig" }
+"~/.hushlogin"    = { source = "../../rc/hushlogin" }
+"~/.psqlrc"       = { source = "../../rc/psqlrc" }
+"~/.tmux.conf"    = { source = "../../rc/tmux.conf" }
+"~/.vimrc"        = { source = "../../rc/vimrc" }
 
-# Login shell — replaces install.rb's chsh + /etc/shells dance.
+# Login shell.
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/fish"
 
-# Homebrew packages — replaces the Brewfile. Formulae use `brew:`, casks and
-# fonts use `brew-cask:` (font cask detection landed in mise 2026.7.0).
+# Homebrew must exist before the packages phase. Install it if missing (a no-op
+# when mise itself was installed via brew).
+[bootstrap.hooks.pre-packages]
+run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+
+# Homebrew packages. Formulae use `brew:`, casks and fonts use `brew-cask:`
+# (font cask detection landed in mise 2026.7.0).
 # Languages (ruby, node, …) stay in [tools] above, not here.
 [bootstrap.packages]
 # shell
@@ -113,17 +123,35 @@ login_shell = "/opt/homebrew/bin/fish"
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:ngrok"                         = "latest"   # expose localhost publicly
 
-# Imperative remainder install.rb still owns (not declaratively expressible):
-# interactive git identity, the read-only signing diagnostic, ssh config
-# seeding, vim scratch dirs, and Claude plugins + rubocop MCP. Runs on every
-# bootstrap; each install.rb step is individually idempotent. The --no-* flags
-# skip the phases bootstrap now owns; its symlinking is redundant here but a
-# converging no-op. Follow-up: add a --no-symlink flag (or split the imperative
-# tail into its own script) so install.rb's symlinker can be retired outright.
-[tasks.bootstrap]
-run = "ruby ~/Code/dotfiles/install.rb --yes --no-brew --no-mise --no-macos --no-fish"
+# ── Imperative per-machine setup, driven by bin/dotfiles-setup. The parts mise
+#    can't express declaratively. The dotfiles phase deploys the script to
+#    ~/.local/bin before the bootstrap task runs, and the script finds the repo
+#    via its own realpath — no hardcoded path. Each subcommand is idempotent.
+[tasks.setup-identity]
+description = "Seed per-machine git identity, ssh config, and fish local config"
+run = '"$HOME/.local/bin/dotfiles-setup" identity'
 
-# ── macOS defaults — the declarative `defaults write` lines from macos.sh. ────
+[tasks.setup-vim-dirs]
+description = "Create vim swap/backup/undo directories"
+run = '"$HOME/.local/bin/dotfiles-setup" vim-dirs'
+
+[tasks.setup-claude]
+description = "Install Claude plugins and register the rubocop MCP server"
+run = '"$HOME/.local/bin/dotfiles-setup" claude'
+
+[tasks.check-signing]
+description = "Read-only diagnostic of the commit-signing chain"
+run = '"$HOME/.local/bin/dotfiles-setup" signing'
+
+# Auto-run by `mise bootstrap` (step: mise run bootstrap).
+[tasks.bootstrap]
+depends = ["setup-identity", "setup-vim-dirs", "setup-claude"]
+
+# The signing diagnostic runs last, once identity and tooling are in place.
+[bootstrap.hooks.final]
+run = '"$HOME/.local/bin/dotfiles-setup" signing'
+
+# ── macOS defaults — declarative `defaults write` entries. ───────────────────
 [bootstrap.macos.defaults.NSGlobalDomain]
 # General UI
 NSNavPanelExpandedStateForSaveMode = true
@@ -188,9 +216,9 @@ PlainTextEncodingForWrite = 4
 askForPassword = 1
 askForPasswordDelay = 0
 
-# ── macOS: the non-declarative tail of macos.sh (per-host scope, chflags,
-#    a HOME-expanded path with a prerequisite mkdir, a nested PlistBuddy edit,
-#    and the app restarts). Runs after the declarative defaults are written.
+# ── macOS: the non-declarative extras (per-host scope, chflags, a HOME-expanded
+#    path with a prerequisite mkdir, a nested PlistBuddy edit, and the app
+#    restarts). Runs after the declarative defaults are written.
 [bootstrap.hooks.post-defaults]
 run = """
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
