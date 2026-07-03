@@ -22,3 +22,181 @@ pitchfork = "latest"
 hk = "latest"
 aube = "latest"
 fnox = "latest"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# mise bootstrap — declarative machine setup (replaces most of install.rb).
+# Fresh machine:  mise bootstrap        (preview with: mise bootstrap -n)
+# Sources anchor at the repo's canonical path, so re-running converges with the
+# existing symlinks rather than churning them.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Dotfiles — replaces install.rb's symlink engine. `symlink-each` mirrors the
+# directory and links each file individually, so machine-local siblings mise
+# doesn't manage (config/git/config.local, config/fish/config.local.fish) are
+# left untouched inside otherwise-managed directories.
+[dotfiles]
+"~/.config"    = { source = "~/Code/dotfiles/config", mode = "symlink-each" }
+"~/.claude"    = { source = "~/Code/dotfiles/claude", mode = "symlink-each" }
+"~/.local/bin" = { source = "~/Code/dotfiles/bin",    mode = "symlink-each" }
+# rc/* → ~/.<name>: the dot-prefix rename can't be expressed by symlink-each,
+# so these are individual whole-file symlinks (mode defaults to symlink).
+"~/.editorconfig" = { source = "~/Code/dotfiles/rc/editorconfig" }
+"~/.hushlogin"    = { source = "~/Code/dotfiles/rc/hushlogin" }
+"~/.psqlrc"       = { source = "~/Code/dotfiles/rc/psqlrc" }
+"~/.tmux.conf"    = { source = "~/Code/dotfiles/rc/tmux.conf" }
+"~/.vimrc"        = { source = "~/Code/dotfiles/rc/vimrc" }
+
+# Login shell — replaces install.rb's chsh + /etc/shells dance.
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
+# Homebrew packages — replaces the Brewfile. Formulae use `brew:`, casks and
+# fonts use `brew-cask:` (font cask detection landed in mise 2026.7.0).
+# Languages (ruby, node, …) stay in [tools] above, not here.
+[bootstrap.packages]
+# shell
+"brew:fish"            = "latest"   # friendly interactive shell
+"brew:starship"        = "latest"   # cross-shell prompt
+"brew:direnv"          = "latest"   # per-directory environment variables
+"brew:mise"            = "latest"   # polyglot runtime/tool manager
+"brew:tmux"            = "latest"   # terminal multiplexer
+"brew:zoxide"          = "latest"   # smarter cd with frecency
+# search & navigation
+"brew:bat"             = "latest"   # cat with syntax highlighting
+"brew:bat-extras"      = "latest"   # batdiff, batgrep, batman, etc.
+"brew:eza"             = "latest"   # modern ls replacement
+"brew:fd"              = "latest"   # fast find replacement
+"brew:fzf"             = "latest"   # fuzzy finder
+"brew:ripgrep"         = "latest"   # fast grep replacement
+"brew:tree"            = "latest"   # directory tree viewer
+# git
+"brew:git"             = "latest"   # Homebrew-managed git
+"brew:gh"              = "latest"   # GitHub CLI
+"brew:difftastic"      = "latest"   # structural diff using AST parsing
+"brew:git-delta"       = "latest"   # better git diff pager
+"brew:git-filter-repo" = "latest"   # rewrite/filter git history
+# data & text
+"brew:jq"              = "latest"   # JSON processor
+"brew:jsonlint"        = "latest"   # JSON validator
+"brew:par"             = "latest"   # paragraph reformatter
+"brew:yq"              = "latest"   # YAML/XML/TOML processor
+"brew:sd"              = "latest"   # simpler sed replacement
+"brew:wget"            = "latest"   # file downloader
+# diagnostics & benchmarking
+"brew:btop"            = "latest"   # interactive system monitor
+"brew:dust"            = "latest"   # intuitive disk usage viewer
+"brew:entr"            = "latest"   # run commands on file changes
+"brew:fastfetch"       = "latest"   # system info display
+"brew:gping"           = "latest"   # ping with a graph
+"brew:hyperfine"       = "latest"   # CLI benchmarking
+"brew:procs"           = "latest"   # modern ps replacement
+"brew:tokei"           = "latest"   # code statistics by language
+# databases
+"brew:libpq"           = "latest"   # PostgreSQL client library
+"brew:memcached"       = "latest"   # in-memory caching
+"brew:postgresql@18"   = "latest"   # PostgreSQL server
+"brew:redis"           = "latest"   # in-memory data store
+# core utilities
+"brew:coreutils"       = "latest"   # GNU core utilities
+"brew:ctags"           = "latest"   # code tag generation
+"brew:imagemagick"     = "latest"   # image manipulation toolkit
+"brew:watch"           = "latest"   # run commands periodically
+# libraries
+"brew:libyaml"         = "latest"   # YAML parsing (ruby dependency)
+"brew:vips"            = "latest"   # fast image processing
+"brew:watchman"        = "latest"   # file watching service
+# networking
+"brew:kubernetes-cli"  = "latest"   # kubectl
+"brew:nmap"            = "latest"   # network scanner
+"brew:siege"           = "latest"   # HTTP load testing
+# fonts & casks
+"brew-cask:font-jetbrains-mono-nerd-font" = "latest"
+"brew-cask:ngrok"                         = "latest"   # expose localhost publicly
+
+# Imperative remainder install.rb still owns (not declaratively expressible):
+# interactive git identity, the read-only signing diagnostic, ssh config
+# seeding, vim scratch dirs, and Claude plugins + rubocop MCP. Runs on every
+# bootstrap; each install.rb step is individually idempotent. The --no-* flags
+# skip the phases bootstrap now owns; its symlinking is redundant here but a
+# converging no-op. Follow-up: add a --no-symlink flag (or split the imperative
+# tail into its own script) so install.rb's symlinker can be retired outright.
+[tasks.bootstrap]
+run = "ruby ~/Code/dotfiles/install.rb --yes --no-brew --no-mise --no-macos --no-fish"
+
+# ── macOS defaults — the declarative `defaults write` lines from macos.sh. ────
+[bootstrap.macos.defaults.NSGlobalDomain]
+# General UI
+NSNavPanelExpandedStateForSaveMode = true
+NSNavPanelExpandedStateForSaveMode2 = true
+PMPrintingExpandedStateForPrint = true
+PMPrintingExpandedStateForPrint2 = true
+NSDocumentSaveNewDocumentsToCloud = false
+NSDisableAutomaticTermination = true
+# Keyboard & input
+KeyRepeat = 2
+InitialKeyRepeat = 15
+NSAutomaticSpellingCorrectionEnabled = false
+NSAutomaticDashSubstitutionEnabled = false
+NSAutomaticQuoteSubstitutionEnabled = false
+NSAutomaticCapitalizationEnabled = false
+NSAutomaticPeriodSubstitutionEnabled = false
+AppleKeyboardUIMode = 3
+AppleShowAllExtensions = true
+"com.apple.mouse.tapBehavior" = 1
+
+[bootstrap.macos.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"]
+Clicking = true
+
+[bootstrap.macos.defaults."com.apple.finder"]
+ShowStatusBar = true
+ShowPathbar = true
+_FXSortFoldersFirst = true
+FXPreferredViewStyle = "Nlsv"
+FXDefaultSearchScope = "SCcf"
+FXEnableExtensionChangeWarning = false
+AppleShowAllFiles = true
+
+[bootstrap.macos.defaults."com.apple.desktopservices"]
+DSDontWriteNetworkStores = true
+DSDontWriteUSBStores = true
+
+[bootstrap.macos.defaults."com.apple.dock"]
+mineffect = "scale"
+show-recents = false
+autohide = true
+autohide-delay = 0.0
+autohide-time-modifier = 0.4
+mru-spaces = false
+expose-group-apps = true
+
+[bootstrap.macos.defaults."com.apple.screencapture"]
+type = "png"
+disable-shadow = true
+# location is set in the post-defaults hook — it needs $HOME expansion + mkdir.
+
+[bootstrap.macos.defaults."com.apple.ActivityMonitor"]
+ShowCategory = 0
+SortColumn = "CPUUsage"
+SortDirection = 0
+
+[bootstrap.macos.defaults."com.apple.TextEdit"]
+RichText = 0
+PlainTextEncoding = 4
+PlainTextEncodingForWrite = 4
+
+[bootstrap.macos.defaults."com.apple.screensaver"]
+askForPassword = 1
+askForPasswordDelay = 0
+
+# ── macOS: the non-declarative tail of macos.sh (per-host scope, chflags,
+#    a HOME-expanded path with a prerequisite mkdir, a nested PlistBuddy edit,
+#    and the app restarts). Runs after the declarative defaults are written.
+[bootstrap.hooks.post-defaults]
+run = """
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+chflags nohidden ~/Library
+mkdir -p "$HOME/Screenshots"
+defaults write com.apple.screencapture location -string "$HOME/Screenshots"
+/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
+killall Finder Dock SystemUIServer 2>/dev/null || true
+"""
