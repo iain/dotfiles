@@ -2,11 +2,6 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "effortLevel": "xhigh",
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
-  },
   "hooks": {
     "SessionStart": [
       {
@@ -18,6 +13,13 @@
         ]
       }
     ]
+  },
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
     "code-review@claude-plugins-official": true,
@@ -53,10 +55,9 @@
       }
     }
   },
-  "worktree": {
-    "baseRef": "fresh"
-  },
+  "effortLevel": "xhigh",
   "awaySummaryEnabled": false,
+  "tui": "fullscreen",
   "theme": "auto",
   "skipAutoPermissionPrompt": true
 }
