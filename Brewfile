@@ -6,6 +6,7 @@ brew "starship"            # cross-shell prompt
 brew "direnv"              # per-directory environment variables
 brew "mise"                # polyglot runtime/tool manager
 brew "tmux"                # terminal multiplexer
+brew "screen"              # macOS ships 4.00.03 (2006), which mangles truecolor
 brew "zoxide"              # smarter cd with frecency
 
 # search & navigation

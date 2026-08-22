@@ -1,0 +1,44 @@
+# GNU screen — requires screen 5.x (`brew install screen`).
+# macOS ships 4.00.03 from 2006, which predates 24-bit colour entirely and
+# mangles truecolor SGR sequences into missing backgrounds and wrong hues.
+
+# --- Colour ---------------------------------------------------------------
+
+# screen's built-in default is TERM=screen, which advertises 8 colours and
+# quantises everything else down to them.
+term screen-256color
+
+# 24-bit passthrough. screen(1): "Currently autodetection of truecolor support
+# cannot be done reliably, as such it's left to user to enable. Default is off."
+truecolor on
+
+# COLORTERM doesn't survive ssh (sshd only accepts LANG/LC_*), and plenty of
+# tools sniff it rather than terminfo. Re-assert it for every forked shell.
+setenv COLORTERM truecolor
+
+# Background colour erase. Off by default; without it applications can't paint
+# a background out to the end of the line.
+defbce on
+
+# --- Session behaviour ----------------------------------------------------
+
+startup_message off
+defutf8 on
+
+# Restore the shell view after a full-screen program (vim, less) exits,
+# instead of leaving its contents pasted into the scrollback.
+altscreen on
+
+defscrollback 20000
+
+# Matters over flaky SSH: if the connection dies without a hangup, don't let
+# the dead display block every window. screen(1) calls out exactly this case.
+nonblock on
+
+vbell off
+
+# --- Status line ----------------------------------------------------------
+# Colours are fg;bg. screen 5 deprecated the old k/r/g/y/b/m/c/w letters in
+# favour of 0-7 ANSI, 0-255 indexed, or #rrggbb truecolor.
+
+hardstatus alwayslastline '%{= 0;7}%-Lw%{= 7;4}%n %t%{= 0;7}%+Lw%=%{= 7;0} %H %{= 0;7} %Y-%m-%d %c '
