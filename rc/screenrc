@@ -38,7 +38,23 @@ nonblock on
 vbell off
 
 # --- Status line ----------------------------------------------------------
-# Colours are fg;bg. screen 5 deprecated the old k/r/g/y/b/m/c/w letters in
-# favour of 0-7 ANSI, 0-255 indexed, or #rrggbb truecolor.
+# Styled to match spectral (~/Code/spectral). Colours are fg;bg -- screen 5
+# deprecated the old k/r/g/y/b/m/c/w letters in favour of 0-7 ANSI, 0-255
+# indexed, or #rrggbb truecolor, and `truecolor on` above makes the hex real:
+# #F9AD26 goes out as ESC[48;2;249;173;38m, not a 256-colour approximation.
+#
+# The structure mirrors the theme's own lightline palette, so the bar reads as
+# the same design language as the editor:
+#
+#   raised segment  fg_light  on bg_alt2   -- session name, hostname
+#   base bar        fg_darker on bg_alt    -- window list, clock
+#   current window  bg        on amber     -- the one accent
+#
+# Amber appears exactly once. It marks the window you are in and nothing else;
+# spreading it further is what makes an amber theme read as a novelty.
 
-hardstatus alwayslastline '%{= 0;7}%-Lw%{= 7;4}%n %t%{= 0;7}%+Lw%=%{= 7;0} %H %{= 0;7} %Y-%m-%d %c '
+hardstatus alwayslastline '%{= #F4E6CA;#403D36} %S %{= #7B7463;#282622} %-Lw%{= #1A1815;#F9AD26} %n %t %{= #7B7463;#282622}%+Lw%=%{= #F4E6CA;#403D36} %H %{= #7B7463;#282622} %c '
+
+# Spectral Light -- swap for the line above. screen has no notion of &background,
+# so this is a manual switch rather than something it can track.
+# hardstatus alwayslastline '%{= #171105;#E7D9BD} %S %{= #5D5139;#F6EAD1} %-Lw%{= #FFFAEE;#9D6300} %n %t %{= #5D5139;#F6EAD1}%+Lw%=%{= #171105;#E7D9BD} %H %{= #5D5139;#F6EAD1} %c '
