@@ -135,4 +135,11 @@ if command -q mise
   # pitchfork activate fish | source
   fnox activate fish | source
   abbr -a pf "pitchfork"
+
+  # Claude Code snapshots PATH from this shell and runs its commands under zsh
+  # with that snapshot. mise's activate hook only repositions PATH at the
+  # interactive prompt, which never fires there — leaving the shims dir after
+  # /usr/bin, so `mise exec` and git hooks resolve system ruby. Move shims to
+  # the front so the snapshot (and anything non-interactive) resolves via mise.
+  fish_add_path --global --move --path $HOME/.local/share/mise/shims
 end
