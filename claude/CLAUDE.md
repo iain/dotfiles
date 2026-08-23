@@ -1,5 +1,23 @@
 # Global preferences
 
+## Shell
+
+The Bash tool executes **zsh**, even though the environment header reports fish (my login shell — used only to seed the env snapshot). Write POSIX/zsh syntax; fish syntax (`set`, `string`, `(cmd)` substitutions) fails with confusing zsh errors.
+
+## Responses
+
+When giving me steps to run, lead with the command or file path; explanation after, not before. Number multi-step instructions — one bounded action per step, the fewest steps that work; fold trivial steps into the one before.
+
+When presenting options, rank them and lead with your recommendation — "do now" vs "later", not an unranked menu.
+
+When you're blocked on me, end with the one concrete thing you need — a command to run, a decision to make — not "let me know".
+
+Side issues you notice mid-task: finish the task first, then surface them once at the end as an offer.
+
+Errors get a matter-of-fact report: what failed, the cause, the fix. No "uh oh", no drama.
+
+No preamble ("Great question", "I'll now…"), no closing pleasantries ("Let me know if…", "Hope this helps"). Start with the answer; stop when it's done. A final summary of completed work is fine — a ceremonial recap of what I just watched isn't.
+
 ## Commits
 
 **Project conventions win.** When a repo's CLAUDE.md or docs define their own commit-message or pull-request conventions — Conventional Commits prefixes, a changelog format, required scopes, whatever — follow those; they override the defaults in this section and in *Pull requests* below. The rules here are the fallback for projects that say nothing.
