@@ -103,7 +103,9 @@ bin/
   dotfiles-setup      — per-machine setup driven by mise tasks (identity, Claude, signing)
 claude/
   settings.json       — enabled plugins + marketplaces, hooks, permissions
-mise.toml             — the mise bootstrap config (packages, dotfiles, login shell, macOS defaults, setup tasks)
+system/
+  Library/LaunchDaemons/pitchfork.plist — pitchfork supervisor as root at boot (rendered by mise bootstrap, not symlinked)
+mise.toml             — the mise bootstrap config (packages, system files, dotfiles, login shell, macOS defaults, setup tasks)
 ```
 
 ## Managing Dotfiles
