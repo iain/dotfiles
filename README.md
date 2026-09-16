@@ -94,7 +94,7 @@ config/
   fish/config.fish    — shell: PATH, aliases, abbreviations
   git/                — git config, global ignore, diff attributes, allowed signers
   ghostty/config      — terminal appearance and keybinds
-  mise/config.toml    — global mise settings + pinned tools (languages, jdx's CLIs)
+  mise/config.toml    — global mise settings, XDG + tool storage env vars, pinned tools (languages, jdx's CLIs)
   starship.toml       — prompt theme (single-line, Nerd Font icons)
   vim/                — modular vim config (auto-sourced via glob)
 rc/
