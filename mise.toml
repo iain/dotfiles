@@ -89,12 +89,16 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:redis"           = "latest"   # in-memory data store
 # core utilities
 "brew:coreutils"       = "latest"   # GNU core utilities
-"brew:ctags"           = "latest"   # code tag generation
+"brew:universal-ctags" = "latest"   # code tag generation (maintained ctags)
+"brew:shellcheck"      = "latest"   # shell linter, used by ALE
 "brew:imagemagick"     = "latest"   # image manipulation toolkit
+"brew:jpegoptim"       = "latest"   # lossless JPEG optimizer
+"brew:ffmpeg"          = "latest"   # audio/video conversion (ActiveStorage previews)
 "brew:watch"           = "latest"   # run commands periodically
 # libraries
 "brew:libyaml"         = "latest"   # YAML parsing (ruby dependency)
 "brew:vips"            = "latest"   # fast image processing
+"brew:libmaxminddb"    = "latest"   # MaxMind GeoIP database reader
 "brew:watchman"        = "latest"   # file watching service
 # networking
 "brew:nmap"            = "latest"   # network scanner
