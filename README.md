@@ -101,9 +101,13 @@ rc/
   vimrc               — vim entry point (sources files from config/vim/)
 bin/
   dotfiles-setup      — per-machine setup driven by mise tasks (identity, Claude, signing)
+  pitchfork-supervisor — starts the pitchfork supervisor as the user for its LaunchAgent
 claude/
   settings.json       — enabled plugins + marketplaces, hooks, permissions
-mise.toml             — the mise bootstrap config (packages, dotfiles, login shell, macOS defaults, setup tasks)
+system/               — root-owned files copied (not symlinked) by mise bootstrap
+  etc/pf.anchors/dotfiles-pitchfork                   — forwards loopback 443 to pitchfork's proxy on 8443
+  Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist — loads that rule at boot
+mise.toml             — the mise bootstrap config (packages, system files, dotfiles, login shell, macOS defaults, LaunchAgents, setup tasks)
 ```
 
 ## Managing Dotfiles
