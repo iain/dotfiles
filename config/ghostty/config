@@ -1,3 +1,6 @@
+auto-update-channel = tip
+
+
 # appearance
 font-family = JetBrainsMono Nerd Font Mono
 font-style = Light
