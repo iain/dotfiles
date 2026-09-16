@@ -124,9 +124,6 @@ if command -q mise
     fnox activate fish | source
   end
   abbr -a pf "pitchfork"
-  # Restart the root supervisor through launchd; `pitchfork supervisor start
-  # --force` would replace it with a copy launchd no longer manages.
-  abbr -a pfr "sudo launchctl kickstart -k system/pitchfork"
 
   if command -q rg
     set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
