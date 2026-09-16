@@ -1,28 +1,3 @@
-# XDG base directories, set explicitly so every path below derives from them.
-set -gx XDG_CONFIG_HOME "$HOME/.config"
-set -gx XDG_DATA_HOME   "$HOME/.local/share"
-set -gx XDG_STATE_HOME  "$HOME/.local/state"
-set -gx XDG_CACHE_HOME  "$HOME/.cache"
-
-# Tools that ignore XDG, or fall back to ~/Library on macOS, pointed at it.
-# The comment is where each would write otherwise.
-set -gx HOMEBREW_CACHE           "$XDG_CACHE_HOME/Homebrew"        # ~/Library/Caches/Homebrew
-set -gx npm_config_cache         "$XDG_CACHE_HOME/npm"             # ~/.npm
-set -gx PNPM_HOME                "$XDG_DATA_HOME/pnpm"             # ~/Library/pnpm, incl. the store
-set -gx CARGO_HOME               "$XDG_DATA_HOME/cargo"            # ~/.cargo
-set -gx RUSTUP_HOME              "$XDG_DATA_HOME/rustup"           # ~/.rustup
-set -gx MBX_CACHE_DIR            "$XDG_CACHE_HOME/mbx"             # ~/Library/Caches/mbx
-set -gx GOPATH                   "$XDG_DATA_HOME/go"               # ~/go
-set -gx GOMODCACHE               "$XDG_CACHE_HOME/go-mod"          # ~/go/pkg/mod
-set -gx GOCACHE                  "$XDG_CACHE_HOME/go-build"        # ~/Library/Caches/go-build
-set -gx PIP_CACHE_DIR            "$XDG_CACHE_HOME/pip"             # ~/Library/Caches/pip
-set -gx BUNDLE_USER_CONFIG       "$XDG_CONFIG_HOME/bundle/config"  # ~/.bundle/config
-set -gx BUNDLE_USER_CACHE        "$XDG_CACHE_HOME/bundle"          # ~/.bundle/cache
-set -gx BUNDLE_USER_PLUGIN       "$XDG_DATA_HOME/bundle/plugin"    # ~/.bundle/plugin
-set -gx NUGET_PACKAGES           "$XDG_CACHE_HOME/NuGet/packages"  # ~/.nuget/packages
-set -gx PLAYWRIGHT_BROWSERS_PATH "$XDG_CACHE_HOME/ms-playwright"   # ~/Library/Caches/ms-playwright
-set -gx MAVEN_ARGS               "-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"  # ~/.m2/repository
-
 if test -x /opt/homebrew/bin/brew
   /opt/homebrew/bin/brew shellenv fish | source
 end
@@ -90,11 +65,6 @@ if command -q direnv
   direnv hook fish | source
 end
 
-if command -q rg
-  set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
-  abbr -a grep rg
-end
-
 if [ -f /opt/homebrew/opt/postgresql@18/bin/psql ]
   fish_add_path "/opt/homebrew/opt/postgresql@18/bin"
   set -gx LDFLAGS "-L/opt/homebrew/opt/postgresql@18/lib"
@@ -144,13 +114,8 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-# pnpm
-if not string match -q -- "$PNPM_HOME/bin" $PATH
-  set -gx PATH "$PNPM_HOME/bin" $PATH
-end
-# pnpm end
-
-# mise should run last
+# mise should run last. Its [env] (config/mise/config.toml) exports the XDG and
+# tool storage locations, so everything that reads them lives in here too.
 if command -q mise
   set -gx MISE_EXPERIMENTAL "1"
   mise activate fish | source
@@ -159,6 +124,17 @@ if command -q mise
     fnox activate fish | source
   end
   abbr -a pf "pitchfork"
+
+  if command -q rg
+    set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
+    abbr -a grep rg
+  end
+
+  # pnpm
+  if not string match -q -- "$PNPM_HOME/bin" $PATH
+    set -gx PATH "$PNPM_HOME/bin" $PATH
+  end
+  # pnpm end
 
   # Claude Code snapshots PATH from this shell and runs its commands under zsh
   # with that snapshot. mise's activate hook only repositions PATH at the
