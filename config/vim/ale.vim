@@ -105,9 +105,17 @@ augroup ALERubyLinterDetect
   autocmd FileType ruby call s:SetRubyLinters()
 augroup END
 
-" Use tools from version manager shims if available
+" Use tools from version manager shims if available. Vim launched outside the
+" shell (e.g. MacVim from the Dock) has no XDG_DATA_HOME, so fall back to its
+" default.
+if empty($XDG_DATA_HOME)
+  let s:data_home = '~/.local/share'
+else
+  let s:data_home = $XDG_DATA_HOME
+endif
+
 let s:shim_dirs = [
-  \ '~/.local/share/mise/shims',
+  \ s:data_home . '/mise/shims',
   \ '~/.asdf/shims',
   \ '~/.rbenv/shims',
   \ ]

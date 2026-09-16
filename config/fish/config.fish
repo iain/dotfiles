@@ -1,4 +1,23 @@
+# XDG base directories, set explicitly so every path below derives from them.
 set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_DATA_HOME   "$HOME/.local/share"
+set -gx XDG_STATE_HOME  "$HOME/.local/state"
+set -gx XDG_CACHE_HOME  "$HOME/.cache"
+
+# Tools that ignore XDG, or fall back to ~/Library on macOS, pointed at it.
+# The comment is where each would write otherwise.
+set -gx npm_config_cache         "$XDG_CACHE_HOME/npm"             # ~/.npm
+set -gx PNPM_HOME                "$XDG_DATA_HOME/pnpm"             # ~/Library/pnpm, incl. the store
+set -gx CARGO_HOME               "$XDG_DATA_HOME/cargo"            # ~/.cargo
+set -gx RUSTUP_HOME              "$XDG_DATA_HOME/rustup"           # ~/.rustup
+set -gx GOPATH                   "$XDG_DATA_HOME/go"               # ~/go
+set -gx GOMODCACHE               "$XDG_CACHE_HOME/go-mod"          # ~/go/pkg/mod
+set -gx GOCACHE                  "$XDG_CACHE_HOME/go-build"        # ~/Library/Caches/go-build
+set -gx BUNDLE_USER_CONFIG       "$XDG_CONFIG_HOME/bundle/config"  # ~/.bundle/config
+set -gx BUNDLE_USER_CACHE        "$XDG_CACHE_HOME/bundle"          # ~/.bundle/cache
+set -gx BUNDLE_USER_PLUGIN       "$XDG_DATA_HOME/bundle/plugin"    # ~/.bundle/plugin
+set -gx PLAYWRIGHT_BROWSERS_PATH "$XDG_CACHE_HOME/ms-playwright"   # ~/Library/Caches/ms-playwright
+set -gx MAVEN_ARGS               "-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"  # ~/.m2/repository
 
 if test -x /opt/homebrew/bin/brew
   /opt/homebrew/bin/brew shellenv fish | source
@@ -122,7 +141,6 @@ end
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 # pnpm
-set -gx PNPM_HOME "/Users/iain/Library/pnpm"
 if not string match -q -- "$PNPM_HOME/bin" $PATH
   set -gx PATH "$PNPM_HOME/bin" $PATH
 end
@@ -143,5 +161,5 @@ if command -q mise
   # interactive prompt, which never fires there — leaving the shims dir after
   # /usr/bin, so `mise exec` and git hooks resolve system ruby. Move shims to
   # the front so the snapshot (and anything non-interactive) resolves via mise.
-  fish_add_path --global --move --path $HOME/.local/share/mise/shims
+  fish_add_path --global --move --path $XDG_DATA_HOME/mise/shims
 end
