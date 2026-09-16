@@ -139,6 +139,11 @@ else
 fi
 '''
 
+[tasks.restart-pitchfork]
+description = "Restart the pitchfork supervisor LaunchAgent, e.g. after upgrading pitchfork"
+alias = "pfr"
+run = 'launchctl kickstart -k "gui/$(id -u)/dev.mise.pitchfork"'
+
 # Auto-run by `mise bootstrap` as its final task phase.
 [tasks.bootstrap]
 depends = ["setup-identity", "setup-claude"]
