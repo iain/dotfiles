@@ -221,3 +221,21 @@ mkdir -p "$HOME/Screenshots"
 defaults write com.apple.screencapture location -string "$HOME/Screenshots"
 killall Finder Dock SystemUIServer 2>/dev/null || true
 """
+
+# ── Pitchfork supervisor as root at boot. A LaunchDaemon, which mise bootstrap
+#    can't declare natively, so it's a privileged file (mise retries the write
+#    with sudo). Replaces what `sudo pitchfork boot enable` writes, which pins
+#    the pitchfork version — don't re-run that. launchd only reads the plist
+#    when loading it, so after it changes:
+#      sudo launchctl bootout system/pitchfork
+#      sudo launchctl bootstrap system /Library/LaunchDaemons/pitchfork.plist
+[vars]
+home = "{{env.HOME}}"
+mise_data_dir = "{{ get_env(name='XDG_DATA_HOME', default=env.HOME ~ '/.local/share') }}/mise"
+
+[bootstrap.files."/Library/LaunchDaemons/pitchfork.plist"]
+source = "system/Library/LaunchDaemons/pitchfork.plist"
+template = true
+owner = "root"
+group = "wheel"
+mode = "0644"
