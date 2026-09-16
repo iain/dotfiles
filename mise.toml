@@ -113,10 +113,6 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 description = "Seed per-machine git identity, ssh config, and fish local config"
 run = '"$HOME/.local/bin/dotfiles-setup" identity'
 
-[tasks.setup-vim-dirs]
-description = "Create vim swap/backup/undo directories"
-run = '"$HOME/.local/bin/dotfiles-setup" vim-dirs'
-
 [tasks.setup-claude]
 description = "Install Claude plugins and register the rubocop MCP server"
 run = '"$HOME/.local/bin/dotfiles-setup" claude'
@@ -127,7 +123,7 @@ run = '"$HOME/.local/bin/dotfiles-setup" signing'
 
 # Auto-run by `mise bootstrap` as its final task phase.
 [tasks.bootstrap]
-depends = ["setup-identity", "setup-vim-dirs", "setup-claude"]
+depends = ["setup-identity", "setup-claude"]
 
 # The signing diagnostic runs last, once identity and tooling are in place.
 [bootstrap.hooks.final]
