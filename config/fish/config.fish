@@ -6,16 +6,20 @@ set -gx XDG_CACHE_HOME  "$HOME/.cache"
 
 # Tools that ignore XDG, or fall back to ~/Library on macOS, pointed at it.
 # The comment is where each would write otherwise.
+set -gx HOMEBREW_CACHE           "$XDG_CACHE_HOME/Homebrew"        # ~/Library/Caches/Homebrew
 set -gx npm_config_cache         "$XDG_CACHE_HOME/npm"             # ~/.npm
 set -gx PNPM_HOME                "$XDG_DATA_HOME/pnpm"             # ~/Library/pnpm, incl. the store
 set -gx CARGO_HOME               "$XDG_DATA_HOME/cargo"            # ~/.cargo
 set -gx RUSTUP_HOME              "$XDG_DATA_HOME/rustup"           # ~/.rustup
+set -gx MBX_CACHE_DIR            "$XDG_CACHE_HOME/mbx"             # ~/Library/Caches/mbx
 set -gx GOPATH                   "$XDG_DATA_HOME/go"               # ~/go
 set -gx GOMODCACHE               "$XDG_CACHE_HOME/go-mod"          # ~/go/pkg/mod
 set -gx GOCACHE                  "$XDG_CACHE_HOME/go-build"        # ~/Library/Caches/go-build
+set -gx PIP_CACHE_DIR            "$XDG_CACHE_HOME/pip"             # ~/Library/Caches/pip
 set -gx BUNDLE_USER_CONFIG       "$XDG_CONFIG_HOME/bundle/config"  # ~/.bundle/config
 set -gx BUNDLE_USER_CACHE        "$XDG_CACHE_HOME/bundle"          # ~/.bundle/cache
 set -gx BUNDLE_USER_PLUGIN       "$XDG_DATA_HOME/bundle/plugin"    # ~/.bundle/plugin
+set -gx NUGET_PACKAGES           "$XDG_CACHE_HOME/NuGet/packages"  # ~/.nuget/packages
 set -gx PLAYWRIGHT_BROWSERS_PATH "$XDG_CACHE_HOME/ms-playwright"   # ~/Library/Caches/ms-playwright
 set -gx MAVEN_ARGS               "-Dmaven.repo.local=$XDG_CACHE_HOME/maven/repository"  # ~/.m2/repository
 
