@@ -8,7 +8,7 @@ A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`. Machin
 
 ## Bootstrap
 
-Run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
+A fresh machine clones and bootstraps in one go with `mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles` (trusts the repo for that run only). After that, run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
 
 ```bash
 mise trust
@@ -22,8 +22,8 @@ mise bootstrap status  # show drift from the declared state
 `mise.toml` declares, in pipeline order:
 1. `[bootstrap.hooks.pre-packages]` — installs Homebrew if missing
 2. `[bootstrap.packages]` — Homebrew formulae (`brew:`) and casks/fonts (`brew-cask:`)
-3. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>` (a new `rc/` file needs its own entry). `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched.
-4. `[bootstrap.macos.defaults]` — the declarative `defaults write` set; the non-declarative tail (currentHost scope, chflags, PlistBuddy, killall, `$HOME`-expanded screenshot dir) is in `[bootstrap.hooks.post-defaults]`
+3. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>` (a new `rc/` file needs its own entry). `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched. `exclude` keeps `config.local.example` out of `~/.config`.
+4. `[bootstrap.macos.defaults]` — the declarative `defaults write` set, plus `[bootstrap.macos.trackpad]` (tap to click on both built-in and Bluetooth domains) and `[[bootstrap.macos.defaults_entries]]` for what plain tables can't express: `host = "current"` (`-currentHost`) and `path` (patch one key inside a dict, e.g. the Spotlight hotkey). Prefer these over hook commands — they get drift detection. What's left in `[bootstrap.hooks.post-defaults]` (chflags, `$HOME`-expanded screenshot dir, killall) runs on every bootstrap
 5. `[bootstrap.user].login_shell` — sets fish
 6. `[tools]` from the global config — `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
 7. `[tasks.bootstrap]` — depends on `setup-identity`, `setup-vim-dirs`, `setup-claude`

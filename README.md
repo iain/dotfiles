@@ -12,29 +12,29 @@ curl -fsSL https://mise.run | sh
 
 This installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`. Everything else — including Homebrew itself — is installed by the bootstrap.
 
-### 2. Clone This Repo
+### 2. Bootstrap
 
-Clone it anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`):
+One command clones this repo and bootstraps the machine from it:
 
 ```bash
-git clone <repo-url> dotfiles
-cd dotfiles
+~/.local/bin/mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles
 ```
 
-### 3. Bootstrap
+`--from-dir` can be anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`), but the symlinks point into it, so keep it. The clone needs `git`: on a new Mac, the first use prompts to install the Command Line Tools — accept, then re-run the command.
 
-From the repo:
+`--from` trusts the repo for that one run only. Afterwards, re-run bootstrap from the clone, trusting it once:
 
 ```bash
+cd ~/Code/dotfiles
 mise trust
 mise bootstrap -n      # preview — changes nothing
 mise bootstrap         # apply
 ```
 
-In order, this:
+In order, bootstrap:
 
 1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts).
-2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched.
+2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched. `config.local.example` is excluded — it's documentation, not config.
 3. Writes **macOS defaults**.
 4. Sets **fish** as the login shell.
 5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
@@ -44,7 +44,7 @@ Check for drift any time with `mise bootstrap status`. Re-running is safe: anyth
 
 > The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
 
-### 4. Git Identity
+### 3. Git Identity
 
 The bootstrap task seeds `~/.config/git/config.local` interactively. If it couldn't prompt (no TTY during bootstrap), run it directly:
 
@@ -52,7 +52,7 @@ The bootstrap task seeds `~/.config/git/config.local` interactively. If it could
 mise run setup-identity      # or: dotfiles-setup identity
 ```
 
-### 5. Set Up an SSH Key for GitHub (Auth + Signing)
+### 4. Set Up an SSH Key for GitHub (Auth + Signing)
 
 If you ran `gh auth login` and let it generate an SSH key, the key already exists at `~/.ssh/id_ed25519` and is registered with GitHub as an **authentication** key. Otherwise generate one manually:
 
@@ -79,7 +79,7 @@ echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allow
 git commit --allow-empty -m "test signing" && git log --show-signature -1
 ```
 
-### 6. Install Vim Plugins
+### 5. Install Vim Plugins
 
 Open vim and run:
 
