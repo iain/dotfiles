@@ -1,11 +1,17 @@
-" Install vim-plugged if needed
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let s:vim_data = g:xdg_data_home . '/vim'
+let s:plug_vim = s:vim_data . '/autoload/plug.vim'
+
+" plug.vim is an autoload script, so its directory must be on the runtimepath.
+execute 'set runtimepath^=' . fnameescape(s:vim_data)
+
+" Install vim-plug if needed
+if !filereadable(s:plug_vim)
+  execute 'silent !curl -fLo' shellescape(s:plug_vim) '--create-dirs'
+        \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin(s:vim_data . '/plugged')
 
 " Defaults
 Plug 'tpope/vim-sensible'              " universal set of vim defaults

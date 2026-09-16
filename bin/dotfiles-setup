@@ -2,12 +2,12 @@
 # frozen_string_literal: true
 
 # Per-machine setup that mise bootstrap's declarative sections can't express:
-# interactive git identity, ssh config seeding, fish local config, vim scratch
-# dirs, the read-only commit-signing diagnostic, and Claude plugins + rubocop
-# MCP. Driven by mise tasks (see mise.toml at the repo root); each subcommand is
-# idempotent and safe to re-run.
+# interactive git identity, ssh config seeding, fish local config, the read-only
+# commit-signing diagnostic, and Claude plugins + rubocop MCP. Driven by mise
+# tasks (see mise.toml at the repo root); each subcommand is idempotent and safe
+# to re-run.
 #
-# Usage: dotfiles-setup <identity|vim-dirs|claude|signing|all>
+# Usage: dotfiles-setup <identity|claude|signing|all>
 #
 # The repo is located via this script's own realpath, so it works wherever the
 # dotfiles are cloned — no hardcoded path.
@@ -78,19 +78,6 @@ def setup_identity
       # This file is not checked into git.
     CONFIG
     puts "  created #{fish_local}"
-  end
-end
-
-# Create vim's swap/backup/undo directories.
-def setup_vim_dirs
-  %w[swap tmp undo].each do |dir|
-    vim_dir = HOME / ".vim" / dir
-    if vim_dir.directory?
-      puts "  skip #{vim_dir} (already exists)"
-    else
-      FileUtils.mkdir_p(vim_dir)
-      puts "  created #{vim_dir}"
-    end
   end
 end
 
@@ -192,15 +179,13 @@ end
 
 case ARGV[0]
 when "identity"  then setup_identity
-when "vim-dirs"  then setup_vim_dirs
 when "claude"    then setup_claude
 when "signing"   then check_signing
 when "all", nil
   setup_identity
-  setup_vim_dirs
   setup_claude
   check_signing
 else
-  warn "Usage: dotfiles-setup <identity|vim-dirs|claude|signing|all>"
+  warn "Usage: dotfiles-setup <identity|claude|signing|all>"
   exit 1
 end

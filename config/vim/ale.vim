@@ -107,7 +107,7 @@ augroup END
 
 " Use tools from version manager shims if available
 let s:shim_dirs = [
-  \ '~/.local/share/mise/shims',
+  \ g:xdg_data_home . '/mise/shims',
   \ '~/.asdf/shims',
   \ '~/.rbenv/shims',
   \ ]

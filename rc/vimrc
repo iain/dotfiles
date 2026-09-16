@@ -6,6 +6,20 @@ if !has('nvim') && filereadable(expand('~/.config/vim/_nvim-defaults.vim'))
   source ~/.config/vim/_nvim-defaults.vim
 endif
 
+" XDG base dirs for the files below. Vim launched outside the shell (e.g.
+" MacVim from the Dock) has no XDG vars, so fall back to their defaults.
+if empty($XDG_DATA_HOME)
+  let g:xdg_data_home = expand('~/.local/share')
+else
+  let g:xdg_data_home = $XDG_DATA_HOME
+endif
+
+if empty($XDG_STATE_HOME)
+  let g:xdg_state_home = expand('~/.local/state')
+else
+  let g:xdg_state_home = $XDG_STATE_HOME
+endif
+
 source ~/.config/vim/_plug.vim
 
 for s:file in glob('~/.config/vim/[^_]*.vim', 0, 1)

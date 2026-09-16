@@ -86,7 +86,7 @@
   helper =
   helper = !/opt/homebrew/bin/gh auth git-credential
 [hook "hk-pre-commit"]
-  command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/latest/hk run pre-commit --from-hook \"$@\"
+  command = test \"${HK:-1}\" = \"0\" || ${XDG_DATA_HOME:-$HOME/.local/share}/mise/installs/hk/latest/hk run pre-commit --from-hook \"$@\"
   event = pre-commit
 [diff "sops"]
   textconv = sops --input-type yaml --decrypt

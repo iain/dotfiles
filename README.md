@@ -38,7 +38,7 @@ In order, bootstrap:
 3. Writes **macOS defaults**.
 4. Sets **fish** as the login shell.
 5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
-6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative (git identity, vim dirs, Claude plugins), then a read-only commit-signing diagnostic.
+6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative (git identity, Claude plugins), then a read-only commit-signing diagnostic.
 
 Check for drift any time with `mise bootstrap status`. Re-running is safe: anything already in its desired state is skipped.
 
@@ -100,7 +100,7 @@ config/
 rc/
   vimrc               — vim entry point (sources files from config/vim/)
 bin/
-  dotfiles-setup      — per-machine setup driven by mise tasks (identity, vim dirs, Claude, signing)
+  dotfiles-setup      — per-machine setup driven by mise tasks (identity, Claude, signing)
 claude/
   settings.json       — enabled plugins + marketplaces, hooks, permissions
 mise.toml             — the mise bootstrap config (packages, dotfiles, login shell, macOS defaults, setup tasks)
