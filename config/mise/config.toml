@@ -3,6 +3,11 @@
 experimental = true
 # trusted_config_paths = ["~/Code"]
 
+# gh keeps its token in the macOS keychain, which mise's built-in gh lookup
+# (hosts.yml only) can't see. Without it mise hits the 60/hour anonymous limit.
+[settings.github]
+credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
+
 [settings.pipx]
 uvx = true
 
