@@ -1,0 +1,16 @@
+#!/bin/sh
+# Runs the pitchfork supervisor for the dev.mise.pitchfork LaunchAgent declared in
+# mise.toml. It runs as the user; a root-owned pf rule forwards loopback 443 to
+# its proxy, so nothing user-writable runs as root.
+#
+# launchd gives agents a bare PATH, but daemons run under `mise x`, which needs
+# mise (and Homebrew tools) on it. `mise x` also picks the newest installed
+# pitchfork and applies the global [env]: XDG locations and the proxy port.
+set -eu
+
+PATH="$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/postgresql@18/bin:/opt/homebrew/opt/libpq/bin:/opt/podman/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH
+export LANG="${LANG:-en_US.UTF-8}"
+
+cd "$HOME"
+exec mise x -- pitchfork supervisor run --boot

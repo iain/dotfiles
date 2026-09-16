@@ -221,3 +221,27 @@ mkdir -p "$HOME/Screenshots"
 defaults write com.apple.screencapture location -string "$HOME/Screenshots"
 killall Finder Dock SystemUIServer 2>/dev/null || true
 """
+
+# ── Pitchfork. The supervisor runs as the user from a LaunchAgent, so nothing
+#    user-writable ever runs as root. Unprivileged processes can't bind 443, so
+#    a root-owned pf rule forwards loopback 443 to the proxy on 8443
+#    (PITCHFORK_PROXY_PORT in config/mise/config.toml). launchd only reads a
+#    LaunchDaemon when loading it, so after the pf rule or plist changes:
+#      sudo launchctl bootout system/dev.dotfiles.pitchfork-pf
+#      sudo launchctl bootstrap system /Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist
+[bootstrap.macos.launchd.agents.pitchfork]
+program = "~/.local/bin/pitchfork-supervisor"
+run_at_load = true
+keep_alive_on_failure = true
+
+[bootstrap.files."/etc/pf.anchors/dotfiles-pitchfork"]
+source = "system/etc/pf.anchors/dotfiles-pitchfork"
+owner = "root"
+group = "wheel"
+mode = "0644"
+
+[bootstrap.files."/Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist"]
+source = "system/Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist"
+owner = "root"
+group = "wheel"
+mode = "0644"

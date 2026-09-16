@@ -124,6 +124,10 @@ if command -q mise
     fnox activate fish | source
   end
   abbr -a pf "pitchfork"
+  # Restart the supervisor through its LaunchAgent, e.g. after upgrading
+  # pitchfork; `pitchfork supervisor start --force` would replace it with a copy
+  # launchd doesn't manage.
+  abbr -a pfr "launchctl kickstart -k gui/(id -u)/dev.mise.pitchfork"
 
   if command -q rg
     set -gx RIPGREP_CONFIG_PATH "$XDG_CONFIG_HOME/ripgrep/config"
