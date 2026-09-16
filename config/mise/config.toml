@@ -48,6 +48,7 @@ fnox = "latest"
 "~/.editorconfig" = { source = "../../rc/editorconfig" }
 "~/.hushlogin"    = { source = "../../rc/hushlogin" }
 "~/.psqlrc"       = { source = "../../rc/psqlrc" }
+"~/.screenrc"     = { source = "../../rc/screenrc" }
 "~/.tmux.conf"    = { source = "../../rc/tmux.conf" }
 "~/.vimrc"        = { source = "../../rc/vimrc" }
 
@@ -68,8 +69,8 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:fish"            = "latest"   # friendly interactive shell
 "brew:starship"        = "latest"   # cross-shell prompt
 "brew:direnv"          = "latest"   # per-directory environment variables
-"brew:mise"            = "latest"   # polyglot runtime/tool manager
 "brew:tmux"            = "latest"   # terminal multiplexer
+"brew:screen"          = "latest"   # macOS ships 4.00.03 (2006), which mangles truecolor
 "brew:zoxide"          = "latest"   # smarter cd with frecency
 # search & navigation
 "brew:bat"             = "latest"   # cat with syntax highlighting
