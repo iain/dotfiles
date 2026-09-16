@@ -71,7 +71,6 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:jq"              = "latest"   # JSON processor
 "brew:jsonlint"        = "latest"   # JSON validator
 "brew:par"             = "latest"   # paragraph reformatter
-"brew:yq"              = "latest"   # YAML/XML/TOML processor
 "brew:sd"              = "latest"   # simpler sed replacement
 "brew:wget"            = "latest"   # file downloader
 # diagnostics & benchmarking
@@ -98,7 +97,6 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:vips"            = "latest"   # fast image processing
 "brew:watchman"        = "latest"   # file watching service
 # networking
-"brew:kubernetes-cli"  = "latest"   # kubectl
 "brew:nmap"            = "latest"   # network scanner
 "brew:siege"           = "latest"   # HTTP load testing
 # fonts & casks
