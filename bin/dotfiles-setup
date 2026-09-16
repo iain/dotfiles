@@ -4,7 +4,7 @@
 # Per-machine setup that mise bootstrap's declarative sections can't express:
 # interactive git identity, ssh config seeding, fish local config, vim scratch
 # dirs, the read-only commit-signing diagnostic, and Claude plugins + rubocop
-# MCP. Driven by mise tasks (see config/mise/config.toml); each subcommand is
+# MCP. Driven by mise tasks (see mise.toml at the repo root); each subcommand is
 # idempotent and safe to re-run.
 #
 # Usage: dotfiles-setup <identity|vim-dirs|claude|signing|all>

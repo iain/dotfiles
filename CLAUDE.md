@@ -4,26 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`. Machine setup is declarative via `mise bootstrap`, driven entirely by `config/mise/config.toml`.
+A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`. Machine setup is declarative via `mise bootstrap`, driven by the repo-root `mise.toml`. mise itself is installed from `https://mise.run`, never Homebrew (a brewed mise can't `self-update`).
 
 ## Bootstrap
 
-Run from the cloned repo (relative dotfile sources resolve against the config file's real location, so it can be cloned anywhere):
+Run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
 
 ```bash
-export MISE_GLOBAL_CONFIG_FILE="$PWD/config/mise/config.toml"
+mise trust
 mise bootstrap -n      # preview — changes nothing
 mise bootstrap         # apply
 mise bootstrap status  # show drift from the declared state
 ```
 
-`config/mise/config.toml` declares, in pipeline order:
+**Keep bootstrap config out of `config/mise/config.toml`.** That file is symlinked to the global `~/.config/mise/config.toml`, and mise merges `[bootstrap]`/`[dotfiles]` across the config hierarchy like `[tools]` — anything bootstrap-related there would be applied by `mise bootstrap` in every project on the machine. The global file holds only `[settings]` and `[tools]` (languages plus jdx's CLIs: `hk`, `pitchfork`, `aube`, `fnox`); it still merges into a bootstrap run from this repo.
+
+`mise.toml` declares, in pipeline order:
 1. `[bootstrap.hooks.pre-packages]` — installs Homebrew if missing
 2. `[bootstrap.packages]` — Homebrew formulae (`brew:`) and casks/fonts (`brew-cask:`)
-3. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>`. `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched.
-4. `[bootstrap.user].login_shell` — sets fish
-5. `[bootstrap.macos.defaults]` — the declarative `defaults write` set; the non-declarative tail (currentHost scope, chflags, PlistBuddy, killall, `$HOME`-expanded screenshot dir) is in `[bootstrap.hooks.post-defaults]`
-6. `[tools]` — `mise install`
+3. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>` (a new `rc/` file needs its own entry). `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched.
+4. `[bootstrap.macos.defaults]` — the declarative `defaults write` set; the non-declarative tail (currentHost scope, chflags, PlistBuddy, killall, `$HOME`-expanded screenshot dir) is in `[bootstrap.hooks.post-defaults]`
+5. `[bootstrap.user].login_shell` — sets fish
+6. `[tools]` from the global config — `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
 7. `[tasks.bootstrap]` — depends on `setup-identity`, `setup-vim-dirs`, `setup-claude`
 8. `[bootstrap.hooks.final]` — the read-only commit-signing diagnostic
 
@@ -43,7 +45,8 @@ The parts mise can't express declaratively live in `bin/dotfiles-setup` (a Ruby 
 - **`config/git/`** — Git config with SSH signing, histogram diff, zdiff3 merge conflicts, rerere, auto-rebase on pull. Per-machine identity goes in `~/.config/git/config.local` (see `config.local.example`)
 - **`config/vim/`** — Modular vim config auto-sourced via glob in `rc/vimrc`. Files prefixed with `_` (e.g. `_plug.vim`, `_nvim-defaults.vim`, `_macvim.vim`) are sourced explicitly and excluded from the glob
 - **`config/starship.toml`** — Single-line Starship prompt with Nerd Font symbols
-- **`config/mise/config.toml`** — mise settings and pinned `[tools]`, plus the whole `mise bootstrap` config (packages, dotfiles, login shell, macOS defaults, setup tasks)
+- **`config/mise/config.toml`** — global mise settings and pinned `[tools]` only; deployed to `~/.config/mise/config.toml`
+- **`mise.toml`** — the whole `mise bootstrap` config (packages, dotfiles, login shell, macOS defaults, setup tasks); a project config so it never leaks into other projects' bootstraps
 - **`claude/`** — Claude Code config symlinked into `~/.claude`: `settings.json` (permissions, status line, `SessionStart` hook, plus the enabled plugins and known marketplaces that drive the `setup-claude` task), `statusline.sh` (hostname-led status line), `hooks/machine-context.sh` (a `SessionStart` hook that injects the hostname into the model's context so it knows which machine it's on), and `bin/rubocop-mcp` (a per-repo-adaptive rubocop MCP launcher, registered user-scope by the `setup-claude` task). Note: `settings.json` is a tracked file but Claude also writes to `~/.claude/settings.json` at runtime (theme, plugin state), so machine-local tooling that rewrites it — e.g. peon-ping — is intentionally **not** tracked here; its hooks land in `~/.claude/settings.json.backup` after a bootstrap run
 ## Conventions
 

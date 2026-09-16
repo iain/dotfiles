@@ -1,20 +1,20 @@
 # Dotfiles
 
-Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html) — one config (`config/mise/config.toml`) describes the packages, dotfile symlinks, login shell, macOS defaults, and tools for the whole machine.
+Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html) — the repo-root `mise.toml` describes the packages, dotfile symlinks, login shell, and macOS defaults for the whole machine; `config/mise/config.toml` holds the global mise settings and tools.
 
 ## New Laptop Setup
 
 ### 1. Install mise
 
 ```bash
-curl https://mise.run | sh      # or: brew install mise
+curl -fsSL https://mise.run | sh
 ```
 
-Everything else — including Homebrew itself — is installed by the bootstrap.
+This installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`. Everything else — including Homebrew itself — is installed by the bootstrap.
 
 ### 2. Clone This Repo
 
-Clone it anywhere; nothing hardcodes a path (dotfile sources resolve relative to the config file):
+Clone it anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`):
 
 ```bash
 git clone <repo-url> dotfiles
@@ -23,11 +23,10 @@ cd dotfiles
 
 ### 3. Bootstrap
 
-Run bootstrap **from the repo** so the relative dotfile sources resolve correctly:
+From the repo:
 
 ```bash
-export MISE_GLOBAL_CONFIG_FILE="$PWD/config/mise/config.toml"
-mise trust "$MISE_GLOBAL_CONFIG_FILE"
+mise trust
 mise bootstrap -n      # preview — changes nothing
 mise bootstrap         # apply
 ```
@@ -36,14 +35,14 @@ In order, this:
 
 1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts).
 2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched.
-3. Sets **fish** as the login shell.
-4. Writes **macOS defaults**.
-5. Installs the pinned **tools** (`ruby`, `node`, …).
+3. Writes **macOS defaults**.
+4. Sets **fish** as the login shell.
+5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
 6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative (git identity, vim dirs, Claude plugins), then a read-only commit-signing diagnostic.
 
 Check for drift any time with `mise bootstrap status`. Re-running is safe: anything already in its desired state is skipped.
 
-> Run bootstrap from the cloned repo, not against the deployed `~/.config/mise` symlink — relative sources resolve against the config file's real location.
+> The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
 
 ### 4. Git Identity
 
@@ -95,7 +94,7 @@ config/
   fish/config.fish    — shell: PATH, aliases, abbreviations
   git/                — git config, global ignore, diff attributes, allowed signers
   ghostty/config      — terminal appearance and keybinds
-  mise/config.toml    — tools + the mise bootstrap config (packages, dotfiles, macOS defaults)
+  mise/config.toml    — global mise settings + pinned tools (languages, jdx's CLIs)
   starship.toml       — prompt theme (single-line, Nerd Font icons)
   vim/                — modular vim config (auto-sourced via glob)
 rc/
@@ -104,11 +103,12 @@ bin/
   dotfiles-setup      — per-machine setup driven by mise tasks (identity, vim dirs, Claude, signing)
 claude/
   settings.json       — enabled plugins + marketplaces, hooks, permissions
+mise.toml             — the mise bootstrap config (packages, dotfiles, login shell, macOS defaults, setup tasks)
 ```
 
 ## Managing Dotfiles
 
-Bootstrap is declarative and idempotent, so day-to-day changes are just edits to `config/mise/config.toml` and the files under `config/`, `rc/`, etc. Useful commands:
+Bootstrap is declarative and idempotent, so day-to-day changes are just edits to `mise.toml` and the files under `config/`, `rc/`, etc. Run these from the repo:
 
 ```bash
 mise bootstrap status          # what's drifted from the declared state
