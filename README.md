@@ -1,57 +1,58 @@
 # Dotfiles
 
-Config files for macOS. Managed with symlinks via `install.rb`.
+Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html) — the repo-root `mise.toml` describes the packages, dotfile symlinks, login shell, and macOS defaults for the whole machine; `config/mise/config.toml` holds the global mise settings and tools.
 
 ## New Laptop Setup
 
-### 1. Install Homebrew
+### 1. Install mise
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+curl -fsSL https://mise.run | sh
 ```
 
-### 2. Clone This Repo
+This installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`. Everything else — including Homebrew itself — is installed by the bootstrap.
 
-Clone it anywhere — `install.rb` resolves paths relative to itself:
+### 2. Bootstrap
+
+One command clones this repo and bootstraps the machine from it:
 
 ```bash
-git clone <repo-url>
-cd dotfiles
+~/.local/bin/mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles
 ```
 
-### 3. Install Everything
+`--from-dir` can be anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`), but the symlinks point into it, so keep it. The clone needs `git`: on a new Mac, the first use prompts to install the Command Line Tools — accept, then re-run the command.
+
+`--from` trusts the repo for that one run only. Afterwards, re-run bootstrap from the clone, trusting it once:
 
 ```bash
-ruby install.rb -n   # preview what will happen
-ruby install.rb      # do it
+cd ~/Code/dotfiles
+mise trust
+mise bootstrap -n      # preview — changes nothing
+mise bootstrap         # apply
 ```
 
-This does four things in order:
-1. **Symlinks** config files into place (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`). Existing files are backed up with a `.backup` suffix.
-2. **`brew bundle`** — installs packages from the `Brewfile` (auto-detected when the file exists).
-3. **mise** — installs mise from `https://mise.run` into `~/.local/bin`, then installs the tools pinned in `config/mise/config.toml` (languages, plus jdx's `hk`, `pitchfork`, `aube`, `fnox`). Deliberately not a Homebrew formula, so `mise self-update` works.
-4. **`macos.sh`** — applies macOS defaults (auto-detected on macOS).
+In order, bootstrap:
 
-Each step can be controlled with flags:
+1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts).
+2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched. `config.local.example` is excluded — it's documentation, not config.
+3. Writes **macOS defaults**.
+4. Sets **fish** as the login shell.
+5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
+6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative (git identity, vim dirs, Claude plugins), then a read-only commit-signing diagnostic.
+
+Check for drift any time with `mise bootstrap status`. Re-running is safe: anything already in its desired state is skipped.
+
+> The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
+
+### 3. Git Identity
+
+The bootstrap task seeds `~/.config/git/config.local` interactively. If it couldn't prompt (no TTY during bootstrap), run it directly:
 
 ```bash
-ruby install.rb --no-brew    # skip brew bundle
-ruby install.rb --no-mise    # skip mise and its tools
-ruby install.rb --no-macos   # skip macOS defaults
+mise run setup-identity      # or: dotfiles-setup identity
 ```
 
-### 5. Set Up Git Identity
-
-Create `~/.config/git/config.local` with your per-machine identity (see `config/git/config.local.example`):
-
-```ini
-[user]
-  email = you@example.com
-  name = Your Name
-  signingKey = ~/.ssh/id_ed25519.pub
-```
-
-### 6. Set Up an SSH Key for GitHub (Auth + Signing)
+### 4. Set Up an SSH Key for GitHub (Auth + Signing)
 
 If you ran `gh auth login` and let it generate an SSH key, the key already exists at `~/.ssh/id_ed25519` and is registered with GitHub as an **authentication** key. Otherwise generate one manually:
 
@@ -72,20 +73,13 @@ Then add the public key to `config/git/allowed_signers` so local verification wo
 echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allowed_signers
 ```
 
-Confirm everything is wired up with an empty signed commit:
+`mise run check-signing` re-runs the diagnostic and prints the exact fix for anything still missing. Confirm everything is wired up with an empty signed commit:
 
 ```bash
 git commit --allow-empty -m "test signing" && git log --show-signature -1
 ```
 
-### 7. Set Fish as Default Shell
-
-```bash
-echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
-chsh -s /opt/homebrew/bin/fish
-```
-
-### 8. Install Vim Plugins
+### 5. Install Vim Plugins
 
 Open vim and run:
 
@@ -100,14 +94,25 @@ config/
   fish/config.fish    — shell: PATH, aliases, abbreviations
   git/                — git config, global ignore, diff attributes, allowed signers
   ghostty/config      — terminal appearance and keybinds
-  mise/config.toml    — runtime version manager settings
+  mise/config.toml    — global mise settings + pinned tools (languages, jdx's CLIs)
   starship.toml       — prompt theme (single-line, Nerd Font icons)
   vim/                — modular vim config (auto-sourced via glob)
 rc/
   vimrc               — vim entry point (sources files from config/vim/)
+bin/
+  dotfiles-setup      — per-machine setup driven by mise tasks (identity, vim dirs, Claude, signing)
 claude/
-  commands/           — custom Claude Code slash commands
-Brewfile              — Homebrew packages and casks
-install.rb            — installer: symlinks, brew bundle, macOS defaults
-macos.sh              — macOS system preferences (run via install.rb or standalone)
+  settings.json       — enabled plugins + marketplaces, hooks, permissions
+mise.toml             — the mise bootstrap config (packages, dotfiles, login shell, macOS defaults, setup tasks)
+```
+
+## Managing Dotfiles
+
+Bootstrap is declarative and idempotent, so day-to-day changes are just edits to `mise.toml` and the files under `config/`, `rc/`, etc. Run these from the repo:
+
+```bash
+mise bootstrap status          # what's drifted from the declared state
+mise dotfiles apply -n         # preview dotfile symlink changes
+mise run setup-identity        # (re)seed git identity / ssh / fish-local
+mise run check-signing         # audit the commit-signing chain
 ```

@@ -1,0 +1,206 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Per-machine setup that mise bootstrap's declarative sections can't express:
+# interactive git identity, ssh config seeding, fish local config, vim scratch
+# dirs, the read-only commit-signing diagnostic, and Claude plugins + rubocop
+# MCP. Driven by mise tasks (see mise.toml at the repo root); each subcommand is
+# idempotent and safe to re-run.
+#
+# Usage: dotfiles-setup <identity|vim-dirs|claude|signing|all>
+#
+# The repo is located via this script's own realpath, so it works wherever the
+# dotfiles are cloned — no hardcoded path.
+
+require "fileutils"
+require "json"
+require "pathname"
+
+REPO        = Pathname.new(File.realpath(__FILE__)).dirname.parent
+CONFIG_SRC  = REPO / "config"
+CLAUDE_SRC  = REPO / "claude"
+HOME        = Pathname.new(Dir.home)
+CONFIG_DEST = HOME / ".config"
+CLAUDE_DEST = HOME / ".claude"
+
+def ask(question, default = nil)
+  suffix = default ? " [#{default}]" : ""
+  print "  #{question}#{suffix}: "
+  answer = $stdin.gets&.strip
+  answer.nil? || answer.empty? ? default : answer
+end
+
+# Seed ~/.config/git/config.local (per-machine identity), ~/.ssh/config, and
+# fish's local config. Skips anything already present; prompts only on a TTY.
+def setup_identity
+  git_local = CONFIG_DEST / "git" / "config.local"
+  if git_local.exist?
+    puts "  skip #{git_local} (already exists)"
+  elsif $stdin.tty?
+    puts "Setting up git identity (#{git_local})..."
+    name = ask("Git name")
+    email = ask("Git email")
+    key = ask("SSH signing key path", "~/.ssh/id_ed25519.pub")
+    FileUtils.mkdir_p(git_local.dirname)
+    git_local.write(<<~CONFIG)
+      [user]
+        email = #{email}
+        name = #{name}
+        signingKey = #{key}
+    CONFIG
+    puts "  created #{git_local}"
+  else
+    warn "  WARNING: #{git_local} missing and no TTY; run `mise run setup-identity` interactively."
+  end
+
+  ssh_config = HOME / ".ssh" / "config"
+  if ssh_config.exist?
+    puts "  skip #{ssh_config} (already exists)"
+  else
+    FileUtils.mkdir_p(ssh_config.dirname, mode: 0o700)
+    ssh_config.write(<<~CONFIG)
+      Host *
+        AddKeysToAgent yes
+        UseKeychain yes
+        IdentityFile ~/.ssh/id_ed25519
+    CONFIG
+    FileUtils.chmod(0o600, ssh_config)
+    puts "  created #{ssh_config}"
+  end
+
+  fish_local = CONFIG_DEST / "fish" / "config.local.fish"
+  if fish_local.exist?
+    puts "  skip #{fish_local} (already exists)"
+  else
+    FileUtils.mkdir_p(fish_local.dirname)
+    fish_local.write(<<~CONFIG)
+      # Local fish config — secrets and machine-specific settings
+      # This file is not checked into git.
+    CONFIG
+    puts "  created #{fish_local}"
+  end
+end
+
+# Create vim's swap/backup/undo directories.
+def setup_vim_dirs
+  %w[swap tmp undo].each do |dir|
+    vim_dir = HOME / ".vim" / dir
+    if vim_dir.directory?
+      puts "  skip #{vim_dir} (already exists)"
+    else
+      FileUtils.mkdir_p(vim_dir)
+      puts "  created #{vim_dir}"
+    end
+  end
+end
+
+# Reproduce the Claude plugin + MCP setup declared in claude/settings.json.
+# Marketplaces and enabled plugins are read from the committed settings (the
+# single source of truth); the rubocop MCP server is registered at user scope.
+# Each action is guarded by a presence check, so re-runs are no-ops.
+def setup_claude
+  unless system("command -v claude > /dev/null 2>&1")
+    puts "  skip Claude setup (claude not installed)"
+    return
+  end
+
+  settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
+  puts "Installing Claude plugins and MCP servers..."
+
+  known = `claude plugin marketplace list 2>/dev/null`
+  settings.fetch("extraKnownMarketplaces", {}).each do |name, spec|
+    repo = spec.dig("source", "repo")
+    next unless repo
+
+    if known.include?(name)
+      puts "  skip marketplace #{name} (already known)"
+    else
+      system("claude", "plugin", "marketplace", "add", repo) || warn("  WARNING: could not add marketplace #{repo}")
+    end
+  end
+
+  installed = `claude plugin list 2>/dev/null`
+  settings.fetch("enabledPlugins", {}).each do |ref, enabled|
+    next unless enabled
+
+    if installed.include?(ref)
+      puts "  skip plugin #{ref} (already installed)"
+    else
+      system("claude", "plugin", "install", ref) || warn("  WARNING: could not install plugin #{ref}")
+    end
+  end
+
+  rubocop_mcp = CLAUDE_DEST / "bin" / "rubocop-mcp"
+  if system("claude mcp get rubocop > /dev/null 2>&1")
+    puts "  skip mcp rubocop (already registered)"
+  else
+    system("claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
+      warn("  WARNING: could not register rubocop MCP server")
+  end
+end
+
+# Read-only check of the commit-signing chain. A new machine typically signs
+# with a key that is trusted nowhere — not in allowed_signers, not on GitHub —
+# so commits come out "Unverified" and nobody notices for weeks. This surfaces
+# each gap and prints the exact fix without changing anything.
+def check_signing
+  puts "Checking git commit signing..."
+  problems = []
+
+  config_local = CONFIG_DEST / "git" / "config.local"
+  unless config_local.file?
+    problems << "Per-machine identity missing (#{config_local}); commits use an auto-detected name/email.\n" \
+                "    Fix: run `mise run setup-identity`."
+  end
+
+  signing_key = `git config --get user.signingkey`.strip
+  if signing_key.empty?
+    problems << "user.signingkey is not set."
+  else
+    key_path = Pathname.new(signing_key.sub(/\A~/, Dir.home))
+    if key_path.file?
+      pubkey = key_path.read.split[0, 2].join(" ")
+      email  = `git config --get user.email`.strip
+
+      allowed = CONFIG_SRC / "git" / "allowed_signers"
+      unless allowed.file? && allowed.read.include?(pubkey)
+        problems << "Signing key not in #{allowed}; your commits verify as untrusted locally.\n" \
+                    "    Fix: add this line to config/git/allowed_signers:\n" \
+                    "      #{email} #{pubkey}"
+      end
+
+      if system("command -v gh > /dev/null 2>&1") && system("gh auth status > /dev/null 2>&1")
+        login      = `gh api user --jq .login 2>/dev/null`.strip
+        registered = `gh api users/#{login}/ssh_signing_keys --jq '.[].key' 2>/dev/null`
+        unless registered.include?(pubkey)
+          problems << "Signing key not registered on GitHub; pushed commits show \"Unverified\".\n" \
+                      "    Fix: gh ssh-key add #{key_path} --type signing --title \"<machine-name>\"\n" \
+                      "    (first run if needed: gh auth refresh -h github.com -s admin:ssh_signing_key)"
+        end
+      end
+    else
+      problems << "Signing key #{key_path} does not exist on this machine."
+    end
+  end
+
+  if problems.empty?
+    puts "  signing OK"
+  else
+    problems.each { |p| warn "  WARNING: #{p}" }
+  end
+end
+
+case ARGV[0]
+when "identity"  then setup_identity
+when "vim-dirs"  then setup_vim_dirs
+when "claude"    then setup_claude
+when "signing"   then check_signing
+when "all", nil
+  setup_identity
+  setup_vim_dirs
+  setup_claude
+  check_signing
+else
+  warn "Usage: dotfiles-setup <identity|vim-dirs|claude|signing|all>"
+  exit 1
+end

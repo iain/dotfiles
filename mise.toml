@@ -1,0 +1,227 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# mise bootstrap — declarative machine setup for these dotfiles.
+#
+#   mise trust && mise bootstrap -n   # preview, from the cloned repo
+#   mise bootstrap                    # apply
+#   mise bootstrap status             # drift from the declared state
+#
+# This is a PROJECT config, deliberately not config/mise/config.toml. mise merges
+# [bootstrap] across the config hierarchy like [tools], so a machine bootstrap in
+# the global config would be inherited by `mise bootstrap` in every project.
+# Here it only applies when run from this repo, while the global [settings] and
+# [tools] still merge in. mise reloads config after the dotfiles phase, so on a
+# fresh machine the tools phase already sees the just-linked global config.
+#
+# Dotfile sources are relative to this file, so the repo can live anywhere.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Dotfiles. `symlink-each` mirrors the directory and links each file
+# individually, so machine-local siblings mise doesn't manage
+# (config/git/config.local, config/fish/config.local.fish) are left untouched
+# inside otherwise-managed directories. The example file is documentation for
+# config.local, not config, so it stays in the repo.
+[dotfiles]
+"~/.config"    = { source = "config", mode = "symlink-each", exclude = ["config.local.example"] }  # config/  → ~/.config/
+"~/.claude"    = { source = "claude", mode = "symlink-each" }  # claude/  → ~/.claude/
+"~/.local/bin" = { source = "bin",    mode = "symlink-each" }  # bin/     → ~/.local/bin/
+# rc/* → ~/.<name>: the dot-prefix rename can't be expressed by symlink-each,
+# so these are individual whole-file symlinks (mode defaults to symlink).
+"~/.editorconfig" = { source = "rc/editorconfig" }
+"~/.hushlogin"    = { source = "rc/hushlogin" }
+"~/.psqlrc"       = { source = "rc/psqlrc" }
+"~/.screenrc"     = { source = "rc/screenrc" }
+"~/.tmux.conf"    = { source = "rc/tmux.conf" }
+"~/.vimrc"        = { source = "rc/vimrc" }
+
+# Login shell.
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
+# Homebrew must exist before the packages phase.
+[bootstrap.hooks.pre-packages]
+run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+
+# Homebrew packages. Formulae use `brew:`, casks and fonts use `brew-cask:`.
+# Languages (ruby, node, …) and jdx's own CLIs (hk, pitchfork, aube, fnox) are
+# pinned in config/mise/config.toml, and mise itself installs from
+# https://mise.run — a brewed mise can't `mise self-update`.
+[bootstrap.packages]
+# shell
+"brew:fish"            = "latest"   # friendly interactive shell
+"brew:starship"        = "latest"   # cross-shell prompt
+"brew:direnv"          = "latest"   # per-directory environment variables
+"brew:tmux"            = "latest"   # terminal multiplexer
+"brew:screen"          = "latest"   # macOS ships 4.00.03 (2006), which mangles truecolor
+"brew:zoxide"          = "latest"   # smarter cd with frecency
+# search & navigation
+"brew:bat"             = "latest"   # cat with syntax highlighting
+"brew:bat-extras"      = "latest"   # batdiff, batgrep, batman, etc.
+"brew:eza"             = "latest"   # modern ls replacement
+"brew:fd"              = "latest"   # fast find replacement
+"brew:fzf"             = "latest"   # fuzzy finder
+"brew:ripgrep"         = "latest"   # fast grep replacement
+"brew:tree"            = "latest"   # directory tree viewer
+# git
+"brew:git"             = "latest"   # Homebrew-managed git
+"brew:gh"              = "latest"   # GitHub CLI
+"brew:difftastic"      = "latest"   # structural diff using AST parsing
+"brew:git-delta"       = "latest"   # better git diff pager
+"brew:git-filter-repo" = "latest"   # rewrite/filter git history
+# data & text
+"brew:jq"              = "latest"   # JSON processor
+"brew:jsonlint"        = "latest"   # JSON validator
+"brew:par"             = "latest"   # paragraph reformatter
+"brew:yq"              = "latest"   # YAML/XML/TOML processor
+"brew:sd"              = "latest"   # simpler sed replacement
+"brew:wget"            = "latest"   # file downloader
+# diagnostics & benchmarking
+"brew:btop"            = "latest"   # interactive system monitor
+"brew:dust"            = "latest"   # intuitive disk usage viewer
+"brew:entr"            = "latest"   # run commands on file changes
+"brew:fastfetch"       = "latest"   # system info display
+"brew:gping"           = "latest"   # ping with a graph
+"brew:hyperfine"       = "latest"   # CLI benchmarking
+"brew:procs"           = "latest"   # modern ps replacement
+"brew:tokei"           = "latest"   # code statistics by language
+# databases
+"brew:libpq"           = "latest"   # PostgreSQL client library
+"brew:memcached"       = "latest"   # in-memory caching
+"brew:postgresql@18"   = "latest"   # PostgreSQL server
+"brew:redis"           = "latest"   # in-memory data store
+# core utilities
+"brew:coreutils"       = "latest"   # GNU core utilities
+"brew:ctags"           = "latest"   # code tag generation
+"brew:imagemagick"     = "latest"   # image manipulation toolkit
+"brew:watch"           = "latest"   # run commands periodically
+# libraries
+"brew:libyaml"         = "latest"   # YAML parsing (ruby dependency)
+"brew:vips"            = "latest"   # fast image processing
+"brew:watchman"        = "latest"   # file watching service
+# networking
+"brew:kubernetes-cli"  = "latest"   # kubectl
+"brew:nmap"            = "latest"   # network scanner
+"brew:siege"           = "latest"   # HTTP load testing
+# fonts & casks
+"brew-cask:font-jetbrains-mono-nerd-font" = "latest"
+"brew-cask:ngrok"                         = "latest"   # expose localhost publicly
+
+# ── Imperative per-machine setup, driven by bin/dotfiles-setup. The parts mise
+#    can't express declaratively. The dotfiles phase deploys the script to
+#    ~/.local/bin before the bootstrap task runs, and the script finds the repo
+#    via its own realpath — no hardcoded path. Each subcommand is idempotent.
+[tasks.setup-identity]
+description = "Seed per-machine git identity, ssh config, and fish local config"
+run = '"$HOME/.local/bin/dotfiles-setup" identity'
+
+[tasks.setup-vim-dirs]
+description = "Create vim swap/backup/undo directories"
+run = '"$HOME/.local/bin/dotfiles-setup" vim-dirs'
+
+[tasks.setup-claude]
+description = "Install Claude plugins and register the rubocop MCP server"
+run = '"$HOME/.local/bin/dotfiles-setup" claude'
+
+[tasks.check-signing]
+description = "Read-only diagnostic of the commit-signing chain"
+run = '"$HOME/.local/bin/dotfiles-setup" signing'
+
+# Auto-run by `mise bootstrap` as its final task phase.
+[tasks.bootstrap]
+depends = ["setup-identity", "setup-vim-dirs", "setup-claude"]
+
+# The signing diagnostic runs last, once identity and tooling are in place.
+[bootstrap.hooks.final]
+run = '"$HOME/.local/bin/dotfiles-setup" signing'
+
+# ── macOS defaults — declarative `defaults write` entries. ───────────────────
+[bootstrap.macos.defaults.NSGlobalDomain]
+# General UI
+NSNavPanelExpandedStateForSaveMode = true
+NSNavPanelExpandedStateForSaveMode2 = true
+PMPrintingExpandedStateForPrint = true
+PMPrintingExpandedStateForPrint2 = true
+NSDocumentSaveNewDocumentsToCloud = false
+NSDisableAutomaticTermination = true
+# Keyboard & input
+KeyRepeat = 2
+InitialKeyRepeat = 15
+NSAutomaticSpellingCorrectionEnabled = false
+NSAutomaticDashSubstitutionEnabled = false
+NSAutomaticQuoteSubstitutionEnabled = false
+NSAutomaticCapitalizationEnabled = false
+NSAutomaticPeriodSubstitutionEnabled = false
+AppleKeyboardUIMode = 3
+AppleShowAllExtensions = true
+"com.apple.mouse.tapBehavior" = 1
+
+# Tap to click, on both the built-in and Bluetooth trackpad domains.
+[bootstrap.macos.trackpad]
+tap_to_click = true
+
+[bootstrap.macos.defaults."com.apple.finder"]
+ShowStatusBar = true
+ShowPathbar = true
+_FXSortFoldersFirst = true
+FXPreferredViewStyle = "Nlsv"
+FXDefaultSearchScope = "SCcf"
+FXEnableExtensionChangeWarning = false
+AppleShowAllFiles = true
+
+[bootstrap.macos.defaults."com.apple.desktopservices"]
+DSDontWriteNetworkStores = true
+DSDontWriteUSBStores = true
+
+[bootstrap.macos.defaults."com.apple.dock"]
+mineffect = "scale"
+show-recents = false
+autohide = true
+autohide-delay = 0.0
+autohide-time-modifier = 0.4
+mru-spaces = false
+expose-group-apps = true
+
+[bootstrap.macos.defaults."com.apple.screencapture"]
+type = "png"
+disable-shadow = true
+# location is set in the post-defaults hook — it needs $HOME expansion + mkdir.
+
+[bootstrap.macos.defaults."com.apple.ActivityMonitor"]
+ShowCategory = 0
+SortColumn = "CPUUsage"
+SortDirection = 0
+
+[bootstrap.macos.defaults."com.apple.TextEdit"]
+RichText = 0
+PlainTextEncoding = 4
+PlainTextEncodingForWrite = 4
+
+[bootstrap.macos.defaults."com.apple.screensaver"]
+askForPassword = 1
+askForPasswordDelay = 0
+
+# Tap to click for the current host's preferences, not just the global ones.
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "com.apple.mouse.tapBehavior"
+host = "current"
+value = 1
+
+# Free up ⌘Space for Raycast/Alfred: disable the Spotlight shortcut (hotkey 64).
+# Re-enable in System Settings > Keyboard > Shortcuts. `path` patches the
+# one key, so the other shortcuts in AppleSymbolicHotKeys are left alone.
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.symbolichotkeys"
+key = "AppleSymbolicHotKeys"
+path = ["64", "enabled"]
+value = false
+
+# ── macOS: the non-declarative extras (chflags, a HOME-expanded path with a
+#    prerequisite mkdir, and the app restarts). Runs on every bootstrap, after
+#    the declarative defaults are written.
+[bootstrap.hooks.post-defaults]
+run = """
+chflags nohidden ~/Library
+mkdir -p "$HOME/Screenshots"
+defaults write com.apple.screencapture location -string "$HOME/Screenshots"
+killall Finder Dock SystemUIServer 2>/dev/null || true
+"""
