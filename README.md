@@ -26,15 +26,17 @@ ruby install.rb -n   # preview what will happen
 ruby install.rb      # do it
 ```
 
-This does three things in order:
+This does four things in order:
 1. **Symlinks** config files into place (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`). Existing files are backed up with a `.backup` suffix.
 2. **`brew bundle`** — installs packages from the `Brewfile` (auto-detected when the file exists).
-3. **`macos.sh`** — applies macOS defaults (auto-detected on macOS).
+3. **mise** — installs mise from `https://mise.run` into `~/.local/bin`, then installs the tools pinned in `config/mise/config.toml` (languages, plus jdx's `hk`, `pitchfork`, `aube`, `fnox`). Deliberately not a Homebrew formula, so `mise self-update` works.
+4. **`macos.sh`** — applies macOS defaults (auto-detected on macOS).
 
 Each step can be controlled with flags:
 
 ```bash
 ruby install.rb --no-brew    # skip brew bundle
+ruby install.rb --no-mise    # skip mise and its tools
 ruby install.rb --no-macos   # skip macOS defaults
 ```
 

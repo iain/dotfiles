@@ -1,10 +1,11 @@
 # Languages (ruby, node, python, etc.) are managed by mise, not Brew.
+# mise itself installs from https://mise.run — a brewed mise can't self-update.
+# jdx's other tools (hk, pitchfork, aube, fnox) are pinned in config/mise/config.toml.
 
 # shell
 brew "fish"                # friendly interactive shell
 brew "starship"            # cross-shell prompt
 brew "direnv"              # per-directory environment variables
-brew "mise"                # polyglot runtime/tool manager
 brew "tmux"                # terminal multiplexer
 brew "screen"              # macOS ships 4.00.03 (2006), which mangles truecolor
 brew "zoxide"              # smarter cd with frecency

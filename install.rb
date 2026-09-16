@@ -19,6 +19,7 @@ CLAUDE_DEST  = Pathname.new(Dir.home) / ".claude"
 BIN_SRC      = DOTFILES_DIR / "bin"
 BIN_DEST     = Pathname.new(Dir.home) / ".local" / "bin"
 HOME         = Pathname.new(Dir.home)
+MISE_BIN     = BIN_DEST / "mise"
 
 SKIP = %w[config.local.example].freeze
 
@@ -29,7 +30,7 @@ OptionParser.new do |opts|
   opts.on("-y", "--yes", "Answer yes to all prompts") { options[:yes] = true }
   opts.on("--[no-]macos", "Run macOS defaults (auto-detected on macOS)") { |v| options[:macos] = v }
   opts.on("--[no-]brew", "Run brew bundle (auto-detected when Brewfile present)") { |v| options[:brew] = v }
-  opts.on("--[no-]mise", "Install mise-managed tools (auto-detected when mise present)") { |v| options[:mise] = v }
+  opts.on("--[no-]mise", "Install mise and its tools (auto-detected when mise config present)") { |v| options[:mise] = v }
   opts.on("--[no-]plugins", "Install Claude plugins + MCP servers (auto-detected when claude present)") { |v| options[:plugins] = v }
   opts.on("--[no-]fish", "Set fish as default shell") { |v| options[:fish] = v }
 end.parse!
@@ -96,6 +97,25 @@ def check_git_signing
     puts "  signing OK"
   else
     problems.each { |p| warn "  WARNING: #{p}" }
+  end
+end
+
+# mise installs itself from https://mise.run rather than from Homebrew: a brewed
+# mise cannot `mise self-update`, and it drags jdx's other tools (hk, pitchfork,
+# aube, fnox) onto brew's release cadence instead of mise's own.
+def install_mise(dry_run:)
+  if MISE_BIN.executable?
+    puts "  skip mise (already installed at #{MISE_BIN})"
+  elsif dry_run
+    puts "  [dry-run] would run: curl -fsSL https://mise.run | sh"
+  else
+    puts "  installing mise from https://mise.run"
+    system("sh", "-c", "curl -fsSL https://mise.run | sh") || warn("  WARNING: mise installation had errors")
+  end
+
+  if system("brew list mise > /dev/null 2>&1")
+    warn "  WARNING: mise is also installed via Homebrew; the two copies will fight over PATH.\n" \
+         "    Fix: brew uninstall mise && #{MISE_BIN} reshim"
   end
 end
 
@@ -383,21 +403,25 @@ if run_brew
   end
 end
 
-# Mise install (provision tools pinned in mise config, e.g. hk for git hooks)
+# Mise (installs mise itself, then the tools pinned in mise config, e.g. hk for git hooks)
 run_mise = if options.key?(:mise)
   options[:mise]
-elsif system("command -v mise > /dev/null 2>&1")
-  prompt?("Install mise-managed tools?", options)
+elsif (CONFIG_SRC / "mise" / "config.toml").file?
+  prompt?("Install mise and its tools?", options)
 else
   false
 end
 
 if run_mise
-  puts "\nInstalling mise-managed tools..."
+  puts "\nInstalling mise and mise-managed tools..."
+  install_mise(dry_run: dry_run)
+
   if dry_run
-    puts "  [dry-run] would run: mise install"
+    puts "  [dry-run] would run: #{MISE_BIN} install"
+  elsif MISE_BIN.executable?
+    system(MISE_BIN.to_s, "install") || warn("WARNING: mise install had errors")
   else
-    system("mise", "install") || warn("WARNING: mise install had errors")
+    warn "WARNING: #{MISE_BIN} not found; skipping tool install"
   end
 end
 
