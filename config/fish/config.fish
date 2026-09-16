@@ -133,7 +133,9 @@ if command -q mise
   set -gx MISE_EXPERIMENTAL "1"
   mise activate fish | source
   # pitchfork activate fish | source
-  fnox activate fish | source
+  if command -q fnox
+    fnox activate fish | source
+  end
   abbr -a pf "pitchfork"
 
   # Claude Code snapshots PATH from this shell and runs its commands under zsh
