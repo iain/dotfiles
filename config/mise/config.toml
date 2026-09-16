@@ -40,11 +40,10 @@ NUGET_PACKAGES           = "{{env.XDG_CACHE_HOME}}/NuGet/packages"  # ~/.nuget/p
 PLAYWRIGHT_BROWSERS_PATH = "{{env.XDG_CACHE_HOME}}/ms-playwright"   # ~/Library/Caches/ms-playwright
 MAVEN_ARGS               = "-Dmaven.repo.local={{env.XDG_CACHE_HOME}}/maven/repository"  # ~/.m2/repository
 
-# Pitchfork's proxy runs as the user, so it listens on 8443; a root-owned pf rule
-# in mise.toml forwards loopback 443 to it. Syncing /etc/hosts would need root,
-# and macOS resolves *.localhost on its own.
-PITCHFORK_PROXY_PORT       = "8443"
-PITCHFORK_PROXY_SYNC_HOSTS = "false"
+# The pitchfork supervisor is owned by its LaunchAgent (bin/pitchfork-supervisor),
+# which also sets its proxy port. A client command starting its own supervisor
+# would bind the wrong port, so it mustn't.
+PITCHFORK_SUPERVISOR_AUTO_START = "false"
 
 [tools]
 pnpm = "latest"

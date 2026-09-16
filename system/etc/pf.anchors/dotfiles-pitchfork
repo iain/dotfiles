@@ -1,4 +1,4 @@
 # Forward loopback HTTPS to the pitchfork proxy, which runs as the user on port
-# 8443 (PITCHFORK_PROXY_PORT in config/mise/config.toml) because unprivileged
+# 8443 (set in bin/pitchfork-supervisor) because unprivileged
 # processes can't bind 443. Loaded by the dev.dotfiles.pitchfork-pf LaunchDaemon.
 rdr pass on lo0 inet proto tcp from any to 127.0.0.1 port 443 -> 127.0.0.1 port 8443

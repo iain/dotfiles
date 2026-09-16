@@ -225,7 +225,7 @@ killall Finder Dock SystemUIServer 2>/dev/null || true
 # ── Pitchfork. The supervisor runs as the user from a LaunchAgent, so nothing
 #    user-writable ever runs as root. Unprivileged processes can't bind 443, so
 #    a root-owned pf rule forwards loopback 443 to the proxy on 8443
-#    (PITCHFORK_PROXY_PORT in config/mise/config.toml). launchd only reads a
+#    (set in bin/pitchfork-supervisor). launchd only reads a
 #    LaunchDaemon when loading it, so after the pf rule or plist changes:
 #      sudo launchctl bootout system/dev.dotfiles.pitchfork-pf
 #      sudo launchctl bootstrap system /Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist
