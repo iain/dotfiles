@@ -22,13 +22,12 @@ mise bootstrap status  # show drift from the declared state
 `mise.toml` declares, in pipeline order:
 1. `[bootstrap.hooks.pre-packages]` — installs Homebrew if missing
 2. `[bootstrap.packages]` — Homebrew formulae (`brew:`) and casks/fonts (`brew-cask:`)
-3. `[bootstrap.files]` — root-owned system files rendered from `system/` (templates use `[vars]`, which resolve the home and mise data dir so nothing hardcodes a user). mise writes as the current user first and retries with sudo
-4. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>` (a new `rc/` file needs its own entry). `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched. `exclude` keeps `config.local.example` out of `~/.config`.
-5. `[bootstrap.macos.defaults]` — the declarative `defaults write` set, plus `[bootstrap.macos.trackpad]` (tap to click on both built-in and Bluetooth domains) and `[[bootstrap.macos.defaults_entries]]` for what plain tables can't express: `host = "current"` (`-currentHost`) and `path` (patch one key inside a dict, e.g. the Spotlight hotkey). Prefer these over hook commands — they get drift detection. What's left in `[bootstrap.hooks.post-defaults]` (chflags, `$HOME`-expanded screenshot dir, killall) runs on every bootstrap
-6. `[bootstrap.user].login_shell` — sets fish
-7. `[tools]` from the global config — `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
-8. `[tasks.bootstrap]` — depends on `setup-identity`, `setup-claude`
-9. `[bootstrap.hooks.final]` — the read-only commit-signing diagnostic
+3. `[dotfiles]` — `symlink-each` for `config/` → `~/.config/`, `claude/` → `~/.claude/`, `bin/` → `~/.local/bin/`, plus per-file `rc/*` → `~/.<name>` (a new `rc/` file needs its own entry). `symlink-each` links each file individually, so machine-local siblings (`config.local`, `config.local.fish`) inside managed dirs are left untouched. `exclude` keeps `config.local.example` out of `~/.config`.
+4. `[bootstrap.macos.defaults]` — the declarative `defaults write` set, plus `[bootstrap.macos.trackpad]` (tap to click on both built-in and Bluetooth domains) and `[[bootstrap.macos.defaults_entries]]` for what plain tables can't express: `host = "current"` (`-currentHost`) and `path` (patch one key inside a dict, e.g. the Spotlight hotkey). Prefer these over hook commands — they get drift detection. What's left in `[bootstrap.hooks.post-defaults]` (chflags, `$HOME`-expanded screenshot dir, killall) runs on every bootstrap
+5. `[bootstrap.user].login_shell` — sets fish
+6. `[tools]` from the global config — `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
+7. `[tasks.bootstrap]` — depends on `setup-identity`, `setup-claude`
+8. `[bootstrap.hooks.final]` — the read-only commit-signing diagnostic
 
 Everything is idempotent — anything already in its desired state is skipped, so re-running is safe.
 
@@ -46,17 +45,7 @@ The parts mise can't express declaratively live in `bin/dotfiles-setup` (a Ruby 
 - **`config/vim/`** — Modular vim config auto-sourced via glob in `rc/vimrc`. Files prefixed with `_` (e.g. `_plug.vim`, `_nvim-defaults.vim`, `_macvim.vim`) are sourced explicitly and excluded from the glob. Plugins live in `$XDG_DATA_HOME/vim`, swap/backup/undo in `$XDG_STATE_HOME/vim` (vim creates those dirs itself)
 - **`config/starship.toml`** — Single-line Starship prompt with Nerd Font symbols
 - **`config/mise/config.toml`** — global mise settings, `[env]` with the XDG and tool storage locations, and pinned `[tools]`; deployed to `~/.config/mise/config.toml`
-- **`mise.toml`** — the whole `mise bootstrap` config (packages, system files, dotfiles, login shell, macOS defaults, setup tasks); a project config so it never leaks into other projects' bootstraps
-- **`system/`** — root-owned system files, laid out by target path and deployed by `[bootstrap.files]`, not symlinked. `system/Library/LaunchDaemons/pitchfork.plist` runs the pitchfork supervisor as root at boot (see below)
-
-## Pitchfork
-
-The supervisor runs as root so its proxy can bind port 443; `settings.supervisor.user` in `/etc/pitchfork/config.toml` (not tracked here) runs the daemons as the user.
-
-- **The LaunchDaemon is managed by `mise.toml`, not `pitchfork boot enable`.** That command pins the current pitchfork version's binary path, which breaks once mise upgrades and prunes it; the managed plist uses mise's `installs/pitchfork/latest` link, so upgrades just need a supervisor restart. Don't re-run `boot enable`.
-- **Restart with `pfr`** (`sudo launchctl kickstart -k system/pitchfork`). `pitchfork supervisor start --force` replaces the launchd-managed supervisor with an unmanaged copy that inherits the caller's sudo environment.
-- **After the plist changes**, launchd must reload it: `sudo launchctl bootout system/pitchfork && sudo launchctl bootstrap system /Library/LaunchDaemons/pitchfork.plist`. It restarts on crashes (`KeepAlive` on unsuccessful exit) but stays stopped after a clean `pitchfork supervisor stop`. Diagnose a failed start with `launchctl print system/pitchfork` and `pitchfork logs pitchfork`.
-- The plist sets `HOME`, `PATH` (with `~/.local/bin` for mise) and `LANG` itself — launchd provides none, and daemons run under `mise x`.
+- **`mise.toml`** — the whole `mise bootstrap` config (packages, dotfiles, login shell, macOS defaults, setup tasks); a project config so it never leaks into other projects' bootstraps
 - **`claude/`** — Claude Code config symlinked into `~/.claude`: `settings.json` (permissions, status line, `SessionStart` hook, plus the enabled plugins and known marketplaces that drive the `setup-claude` task), `statusline.sh` (hostname-led status line), `hooks/machine-context.sh` (a `SessionStart` hook that injects the hostname into the model's context so it knows which machine it's on), and `bin/rubocop-mcp` (a per-repo-adaptive rubocop MCP launcher, registered user-scope by the `setup-claude` task). Note: `settings.json` is a tracked file but Claude also writes to `~/.claude/settings.json` at runtime (theme, plugin state), so machine-local tooling that rewrites it — e.g. peon-ping — is intentionally **not** tracked here; its hooks land in `~/.claude/settings.json.backup` after a bootstrap run
 
 ## XDG Locations
