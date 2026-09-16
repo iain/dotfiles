@@ -121,6 +121,22 @@ run = '"$HOME/.local/bin/dotfiles-setup" claude'
 description = "Read-only diagnostic of the commit-signing chain"
 run = '"$HOME/.local/bin/dotfiles-setup" signing'
 
+# `mise bootstrap` only installs what's missing; this moves everything to latest.
+[tasks.upgrade]
+description = "Upgrade mise, bootstrap packages and mise tools to their latest versions"
+usage = 'flag "-n --dry-run" help="Show what would be upgraded without changing anything"'
+run = '''
+if [ "${usage_dry_run:-false}" = "true" ]; then
+  mise version
+  mise bootstrap packages upgrade --dry-run
+  mise upgrade --dry-run
+else
+  mise self-update --yes
+  mise bootstrap packages upgrade --yes
+  mise upgrade
+fi
+'''
+
 # Auto-run by `mise bootstrap` as its final task phase.
 [tasks.bootstrap]
 depends = ["setup-identity", "setup-claude"]

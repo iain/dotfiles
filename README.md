@@ -120,3 +120,14 @@ mise dotfiles apply -n         # preview dotfile symlink changes
 mise run setup-identity        # (re)seed git identity / ssh / fish-local
 mise run check-signing         # audit the commit-signing chain
 ```
+
+## Upgrading
+
+`mise bootstrap` only installs what's missing; it never upgrades. To move mise, packages and tools to their latest versions:
+
+```bash
+mise run upgrade -n            # preview what would be upgraded
+mise run upgrade               # upgrade mise itself, bootstrap packages, then mise tools
+```
+
+mise fetches current formula metadata from Homebrew's API on every run, so there's no `brew update` step. Casks that Homebrew installed before the switch to bootstrap are left alone by mise; upgrade those with `brew upgrade --cask`.

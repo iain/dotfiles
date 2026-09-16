@@ -15,7 +15,10 @@ mise trust
 mise bootstrap -n      # preview — changes nothing
 mise bootstrap         # apply
 mise bootstrap status  # show drift from the declared state
+mise run upgrade [-n]  # upgrade mise, bootstrap packages and mise tools to latest
 ```
+
+`mise bootstrap` only installs what's missing, it never upgrades. The `upgrade` task runs `mise self-update` first (so the rest uses the new mise), then `mise bootstrap packages upgrade` and `mise upgrade`. `self-update` has no dry run, so `-n` runs `mise version` instead, which warns when a newer mise is available. Casks that Homebrew installed before the switch to bootstrap are left alone by mise; upgrade those with `brew upgrade --cask`.
 
 **Keep bootstrap config out of `config/mise/config.toml`.** That file is symlinked to the global `~/.config/mise/config.toml`, and mise merges `[bootstrap]`/`[dotfiles]` across the config hierarchy like `[tools]` — anything bootstrap-related there would be applied by `mise bootstrap` in every project on the machine. The global file holds only `[settings]`, `[env]` (XDG and tool storage locations, see below) and `[tools]` (languages plus jdx's CLIs: `hk`, `pitchfork`, `aube`, `fnox`); it still merges into a bootstrap run from this repo.
 
