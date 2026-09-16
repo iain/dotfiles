@@ -36,7 +36,7 @@
     "ruby-lsp@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "nx@nx-claude-plugins": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -58,7 +58,12 @@
       }
     }
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    }
+  },
   "awaySummaryEnabled": false,
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
