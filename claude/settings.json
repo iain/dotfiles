@@ -59,6 +59,7 @@
     }
   },
   "feedbackDrafts": "off",
+  "feedbackSurveyRate": 0,
   "effortLevel": "high",
   "modelSettings": {
     "claude-opus-5-5": {
