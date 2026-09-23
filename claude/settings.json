@@ -60,8 +60,11 @@
   },
   "effortLevel": "high",
   "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
     "claude-fable-5-1": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     }
   },
   "awaySummaryEnabled": false,
