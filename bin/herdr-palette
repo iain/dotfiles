@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# Command palette for herdr: pick an action with fzf and run it through the
+# herdr CLI. Runs as a herdr popup (config/herdr/config.toml), which passes the
+# pane underneath as HERDR_ACTIVE_PANE_ID, its tab and its working directory.
+# Escape closes the palette without doing anything.
+set -euo pipefail
+
+cwd=${HERDR_ACTIVE_PANE_CWD:-$PWD}
+
+pick() {
+	fzf --reverse --prompt "$1> " --delimiter $'\t' --with-nth 2..
+}
+
+jump_to_agent() {
+	local pane
+	pane=$(herdr agent list |
+		jq -r '.result.agents[] | [.pane_id, "\(.agent_status)\t\(.terminal_title_stripped // .agent)\t\(.cwd)"] | join("\t")' |
+		pick agent | cut -f1)
+	herdr agent focus "$pane" >/dev/null
+}
+
+open_worktree() {
+	local path
+	path=$(herdr worktree list --cwd "$cwd" |
+		jq -r '.result.worktrees[] | [.path, "\(.branch // "detached")\t\(.path)"] | join("\t")' |
+		pick worktree | cut -f1)
+	herdr worktree open --cwd "$cwd" --path "$path" --focus >/dev/null
+}
+
+# Goes through Claude's WorktreeCreate hook, so a worktree made here matches
+# one Claude makes: same place, fresh origin/main, no upstream until pushed.
+new_worktree() {
+	local branch path
+	read -rp "branch: " branch
+	path=$(jq -n --arg name "$branch" --arg cwd "$cwd" '{name: $name, cwd: $cwd}' |
+		bash "$HOME/.claude/hooks/worktree-create.sh")
+	herdr worktree open --cwd "$cwd" --path "$path" --focus >/dev/null
+}
+
+move_pane_to_workspace() {
+	local workspace
+	workspace=$(herdr workspace list |
+		jq -r '.result.workspaces[] | [.workspace_id, .label] | join("\t")' |
+		pick workspace | cut -f1)
+	herdr pane move "$HERDR_ACTIVE_PANE_ID" --new-tab --workspace "$workspace" --focus >/dev/null
+}
+
+rename_tab() {
+	local label
+	read -rp "tab name: " label
+	herdr tab rename "$HERDR_ACTIVE_TAB_ID" "$label" >/dev/null
+}
+
+actions=$(printf '%s\t%s\n' \
+	jump_to_agent "jump to agent" \
+	open_pr "open this branch's pull request" \
+	pitchfork "pitchfork dashboard" \
+	new_worktree "new worktree" \
+	open_worktree "open worktree" \
+	move_pane_to_workspace "move this pane to another workspace" \
+	new_tab "new tab here" \
+	rename_tab "rename this tab" \
+	scratch_shell "scratch shell" \
+	reload_config "reload herdr config")
+
+action=$(pick herdr <<<"$actions" | cut -f1)
+
+case "$action" in
+	open_pr) cd "$cwd" && gh pr view --web ;;
+	pitchfork) exec pitchfork tui ;;
+	new_tab) herdr tab create --cwd "$cwd" --focus >/dev/null ;;
+	scratch_shell) cd "$cwd" && exec "${SHELL:-sh}" ;;
+	reload_config) herdr server reload-config >/dev/null ;;
+	*) "$action" ;;
+esac

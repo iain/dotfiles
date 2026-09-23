@@ -56,6 +56,14 @@ width = "70%"
 height = "60%"
 
 [[keys.command]]
+key = ["prefix+space", "ctrl+alt+space"]
+type = "popup"
+command = "herdr-palette"
+description = "command palette"
+width = "70%"
+height = "50%"
+
+[[keys.command]]
 key = ["prefix+f", "ctrl+alt+f"]
 type = "popup"
 command = "pitchfork tui"
