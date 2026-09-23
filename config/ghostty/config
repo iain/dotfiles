@@ -23,7 +23,17 @@ maximize = true
 window-save-state = always
 window-inherit-working-directory = true
 quit-after-last-window-closed = true
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
+
+# herdr: attach to (or start) the herdr server in the first window, so a
+# restart continues where it left off. Later tabs and windows stay plain
+# shells, the way back in when herdr won't start. A Dock launch doesn't get the
+# shell's PATH or mise [env], so run it through a login fish.
+initial-command = /opt/homebrew/bin/fish -l -c herdr
+# herdr always counts as a running process, so Ghostty would ask every time,
+# while closing only detaches. This is global: a plain tab running something
+# closes without asking too.
+confirm-close-surface = false
 
 # macos
 macos-option-as-alt = true
@@ -49,3 +59,46 @@ shell-integration-features = ssh-env,ssh-terminfo
 
 # custom theme
 theme = dark:spectral-dark,light:spectral-light
+
+# herdr keys: these hand Ghostty's tab and split keys to herdr, whose config
+# binds the same keys to its own tabs and panes; comment them out to give the
+# keys back to Ghostty. Unbinding passes a key through to herdr instead of
+# Ghostty acting on it. Ghostty can't do this per tab, so plain tabs lose these
+# keys too; Cmd+N stays Ghostty's and opens a plain shell, the way out when
+# herdr won't start.
+# This block has to stay last: a later keybind for the same key would win.
+keybind = super+t=unbind
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+keybind = super+digit_1=unbind
+keybind = super+digit_2=unbind
+keybind = super+digit_3=unbind
+keybind = super+digit_4=unbind
+keybind = super+digit_5=unbind
+keybind = super+digit_6=unbind
+keybind = super+digit_7=unbind
+keybind = super+digit_8=unbind
+keybind = super+shift+[=unbind
+keybind = super+shift+]=unbind
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = super+alt+w=unbind
+keybind = super+d=unbind
+keybind = super+shift+d=unbind
+keybind = super+w=unbind
+keybind = super+shift+enter=unbind
+keybind = ctrl+h=unbind
+keybind = ctrl+j=unbind
+keybind = ctrl+k=unbind
+keybind = ctrl+l=unbind
+keybind = super+ctrl+h=unbind
+keybind = super+ctrl+j=unbind
+keybind = super+ctrl+k=unbind
+keybind = super+ctrl+l=unbind

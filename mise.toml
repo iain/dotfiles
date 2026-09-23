@@ -51,6 +51,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:starship"        = "latest"   # cross-shell prompt
 "brew:direnv"          = "latest"   # per-directory environment variables
 "brew:tmux"            = "latest"   # terminal multiplexer
+"brew:herdr"           = "latest"   # agent-aware terminal multiplexer
 "brew:screen"          = "latest"   # macOS ships 4.00.03 (2006), which mangles truecolor
 "brew:zoxide"          = "latest"   # smarter cd with frecency
 # search & navigation
