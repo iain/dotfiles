@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# WorktreeCreate hook: create Claude's worktrees the way herdr does, so herdr,
+# Claude and plain git share one layout, ~/Code/worktrees/<repo>/<branch-slug>
+# (the [worktrees] directory in config/herdr/config.toml). Inside herdr, herdr
+# creates the checkout itself, so it opens as a workspace grouped under its
+# repo. Claude reads the last line of stdout as the path, so everything else
+# goes to stderr.
+set -euo pipefail
+
+input=$(cat)
+name=$(jq -r .name <<<"$input")
+cwd=$(jq -r .cwd <<<"$input")
+
+# Claude writes the slash of a branch-style name as "+"; the branch keeps it.
+branch=${name//+//}
+
+common_dir=$(git -C "$cwd" rev-parse --path-format=absolute --git-common-dir)
+repo_root=$(dirname "$common_dir")
+repo_name=$(basename "$repo_root")
+
+# The hook replaces Claude's own creation, so its worktree.baseRef "fresh" no
+# longer applies: branch from a just-fetched default branch here instead.
+base=HEAD
+if default=$(git -C "$repo_root" symbolic-ref --quiet --short refs/remotes/origin/HEAD); then
+	git -C "$repo_root" fetch --quiet origin "${default#origin/}" >&2
+	base=$default
+fi
+
+if [ "${HERDR_ENV:-}" = "1" ]; then
+	path=$(herdr worktree create --cwd "$repo_root" --branch "$branch" --base "$base" --no-focus |
+		jq -er .result.worktree.path)
+	# herdr lets the new branch track its base, origin/main. That upstream makes
+	# gh look for main's pull request and stops push.autoSetupRemote from
+	# tracking the branch itself on its first push.
+	if [ "$(git -C "$path" rev-parse --abbrev-ref '@{u}' 2>/dev/null)" = "$base" ]; then
+		git -C "$path" branch --unset-upstream
+	fi
+else
+	# herdr's branch_to_path_slug: lowercase, every other run of characters one "-".
+	slug=$(printf '%s' "$branch" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+	path="$HOME/Code/worktrees/$repo_name/$slug"
+	mkdir -p "$(dirname "$path")"
+	if git -C "$repo_root" show-ref --verify --quiet "refs/heads/$branch"; then
+		git -C "$repo_root" worktree add "$path" "$branch" >&2
+	else
+		git -C "$repo_root" worktree add --no-track -b "$branch" "$path" "$base" >&2
+	fi
+fi
+
+echo "$path"

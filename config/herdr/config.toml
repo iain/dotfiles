@@ -12,6 +12,13 @@ onboarding = false
 version_check = false
 manifest_check = false
 
+[worktrees]
+# Outside every repo, so mise doesn't also load the main checkout's config.
+# Claude's WorktreeCreate hook (claude/hooks/worktree-create.sh) routes its
+# worktrees here too, so herdr, Claude and plain git share one layout:
+# <directory>/<repo>/<branch-slug>.
+directory = "~/Code/worktrees"
+
 [keys]
 # Each action has up to three keys: the ctrl+b prefix binding, a ctrl+alt
 # chord, and the key Ghostty uses for the same thing (Cmd+T, Cmd+1…9, the
