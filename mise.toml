@@ -117,7 +117,7 @@ description = "Seed per-machine git identity, ssh config, and fish local config"
 run = '"$HOME/.local/bin/dotfiles-setup" identity'
 
 [tasks.setup-claude]
-description = "Install Claude plugins and register the rubocop MCP server"
+description = "Install Claude plugins, register the rubocop MCP server, install herdr's hooks"
 run = '"$HOME/.local/bin/dotfiles-setup" claude'
 
 [tasks.check-signing]

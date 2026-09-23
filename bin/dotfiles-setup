@@ -3,7 +3,7 @@
 
 # Per-machine setup that mise bootstrap's declarative sections can't express:
 # interactive git identity, ssh config seeding, fish local config, the read-only
-# commit-signing diagnostic, and Claude plugins + rubocop MCP. Driven by mise
+# commit-signing diagnostic, and Claude plugins + rubocop MCP + herdr hooks. Driven by mise
 # tasks (see mise.toml at the repo root); each subcommand is idempotent and safe
 # to re-run.
 #
@@ -123,6 +123,18 @@ def setup_claude
   else
     system("claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
       warn("  WARNING: could not register rubocop MCP server")
+  end
+
+  # Registers herdr's hooks in the tracked settings.json (through the symlink)
+  # and writes the untracked hook script they call, so a machine that gets the
+  # committed hooks also gets the script. Always run, so a herdr upgrade that
+  # ships a new hook version reaches it; settings.json is only rewritten when
+  # its hooks differ.
+  if system("command -v herdr > /dev/null 2>&1")
+    system("herdr", "integration", "install", "claude") ||
+      warn("  WARNING: could not install the herdr Claude integration")
+  else
+    puts "  skip herdr integration (herdr not installed)"
   end
 end
 

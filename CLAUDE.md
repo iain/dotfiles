@@ -41,7 +41,7 @@ Everything is idempotent — anything already in its desired state is skipped, s
 
 The parts mise can't express declaratively live in `bin/dotfiles-setup` (a Ruby script). The dotfiles phase deploys it to `~/.local/bin` before the `bootstrap` task runs, and it locates the repo via its own realpath — no hardcoded path. Subcommands, each a mise task and idempotent:
 - `identity` (`mise run setup-identity`) — interactive git identity → `~/.config/git/config.local`, ssh config, fish local config
-- `claude` (`mise run setup-claude`) — installs the marketplaces/plugins declared in `claude/settings.json` and registers the rubocop MCP server at user scope
+- `claude` (`mise run setup-claude`) — installs the marketplaces/plugins declared in `claude/settings.json`, registers the rubocop MCP server at user scope, and runs `herdr integration install claude` (hooks in the tracked `claude/settings.json`, script in the untracked `~/.claude/hooks/`)
 - `signing` (`mise run check-signing`) — read-only diagnostic: warns, with the exact fix, if `config.local` is missing, the signing key is absent, or that key isn't in `allowed_signers` / not registered on GitHub
 
 ## Structure
