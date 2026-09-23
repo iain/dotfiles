@@ -3,6 +3,9 @@ auto-update-channel = tip
 
 # appearance
 font-family = JetBrainsMono Nerd Font Mono
+# The Mono variant keeps glyphs one cell wide, which the Claude status line
+# counts on when it fits itself to the width.
+env = STATUSLINE_NERDFONT=1
 font-style = Light
 font-size = 14
 cursor-style = block
