@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Usage: spinoff <branch> < brief
+#
+# Spin work off into its own herdr workspace: a fresh worktree of the current
+# repo, with a new Claude session in it that starts on the brief from stdin.
+# Prints the worktree path.
+set -euo pipefail
+
+branch=${1:?usage: spinoff <branch> < brief}
+
+if [ "${HERDR_ENV:-}" != "1" ]; then
+	echo "spinoff: not running inside herdr" >&2
+	exit 1
+fi
+
+worktree=$("$HOME/.claude/bin/worktree-create" "$PWD" "$branch" | tail -n 1)
+trap 'echo "spinoff: created $worktree, but its Claude session did not start" >&2' ERR
+
+# herdr refuses agent arguments with newlines or tabs, so the brief goes in a
+# file and the prompt only points at it. The worktree's own git dir keeps the
+# file out of commits, and it goes when the worktree does.
+brief=$(git -C "$worktree" rev-parse --path-format=absolute --git-path spinoff-brief.md)
+cat >"$brief"
+
+workspace_id=$(herdr worktree list --cwd "$worktree" |
+	jq -er --arg worktree "$worktree" '.result.worktrees[] | select(.path == $worktree) | .open_workspace_id')
+pane_id=$(herdr pane list --workspace "$workspace_id" | jq -er '.result.panes[0].pane_id')
+
+# The worktree's directory is herdr's branch slug, which fits herdr's agent
+# names apart from their 32-character limit. A longer one loses its cut-off word.
+name=$(basename "$worktree")
+if [ ${#name} -gt 32 ]; then
+	name=${name:0:32}
+	name=${name%-*}
+fi
+herdr agent start "$name" --kind claude --pane "$pane_id" -- "Read $brief: it is your brief for this task." >&2
+
+echo "$worktree"
