@@ -133,8 +133,28 @@ def setup_claude
   if system("command -v herdr > /dev/null 2>&1")
     system("herdr", "integration", "install", "claude") ||
       warn("  WARNING: could not install the herdr Claude integration")
+    install_herdr_skill
   else
     puts "  skip herdr integration (herdr not installed)"
+  end
+end
+
+# herdr prints a Claude skill for its own CLI. It's written untracked, straight
+# into ~/.claude, so it always matches the installed herdr.
+def install_herdr_skill
+  skill = `herdr --skill`
+  unless $?.success?
+    warn "  WARNING: could not print the herdr skill"
+    return
+  end
+
+  skill_file = CLAUDE_DEST / "skills" / "herdr" / "SKILL.md"
+  if skill_file.file? && skill_file.read == skill
+    puts "  skip herdr skill (up to date)"
+  else
+    FileUtils.mkdir_p(skill_file.dirname)
+    skill_file.write(skill)
+    puts "  wrote #{skill_file}"
   end
 end
 
