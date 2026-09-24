@@ -90,8 +90,12 @@ rows = [["state_icon", "tab"], ["machine", "workspace", "agent"]]
 
 [ui.sidebar.agents.rows_by_agent]
 # Claude sets the terminal title to the session name (from /rename or --name,
-# otherwise its own generated title); the stripped form drops its spinner.
-claude = [["state_icon", "terminal_title_stripped"], ["tab"], ["machine", "workspace"]]
+# otherwise its own generated title); the stripped form drops its spinner. No
+# tab row: Claude's Stop hook names the tab after that same title. The agent
+# panel groups by workspace without drawing headers, so a bold workspace name
+# is what shows where one group ends and the next begins. machine only shows
+# up once there's more than the local machine.
+claude = [["state_icon", "terminal_title_stripped"], [{ token = "workspace", bold = true }, "machine"]]
 
 [ui.toast]
 # Ghostty turns this into a macOS notification when an agent in a background
