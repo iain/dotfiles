@@ -1,47 +1,113 @@
 #!/usr/bin/env bash
-# Command palette for herdr: pick an action with fzf and run it through the
-# herdr CLI. Runs as a herdr popup (config/herdr/config.toml), which passes the
-# pane underneath as HERDR_ACTIVE_PANE_ID, its tab and its working directory.
+# Command palette for herdr, searched like Raycast: one fzf list holds the
+# other agents, workspaces and not yet opened worktrees alongside the actions,
+# so typing finds any of them straight away. When nothing matches, Enter
+# creates a worktree named after what was typed. Runs as a herdr popup
+# (config/herdr/config.toml), which passes the pane underneath as
+# HERDR_ACTIVE_PANE_ID, its tab and its working directory.
 # Escape closes the palette without doing anything.
 set -euo pipefail
 
 cwd=${HERDR_ACTIVE_PANE_CWD:-$PWD}
 
 pick() {
-	fzf --reverse --prompt "$1> " --delimiter $'\t' --with-nth 2..
+	local prompt=$1
+	shift
+	fzf --reverse --ansi --prompt "$prompt> " --delimiter $'\t' --with-nth 3.. "$@"
 }
 
-jump_to_agent() {
-	local pane
-	pane=$(herdr agent list |
-		jq -r '.result.agents[] | [.pane_id, "\(.agent_status)\t\(.terminal_title_stripped // .agent)\t\(.cwd)"] | join("\t")' |
-		pick agent | cut -f1)
-	herdr agent focus "$pane" >/dev/null
+# Typed text becomes a branch name with its spaces turned into dashes.
+branch_name() {
+	printf '%s' "$1" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/[[:space:]]+/-/g'
+}
+export -f branch_name
+
+# The popup closes as soon as the script ends, so wait for a key first, or the
+# message is gone before it can be read.
+fail() {
+	echo "$1" >&2
+	read -rsn1 -p "press any key to close"
+	exit 1
 }
 
-open_worktree() {
-	local path
-	path=$(herdr worktree list --cwd "$cwd" |
-		jq -r '.result.worktrees[] | [.path, "\(.branch // "detached")\t\(.path)"] | join("\t")' |
-		pick worktree | cut -f1)
-	herdr worktree open --cwd "$cwd" --path "$path" --focus >/dev/null
+# Every source below emits rows of five tab-separated fields: handler,
+# argument, kind, text, detail. This turns them into the fzf line, keeping the
+# first two hidden for the dispatch at the end.
+format_rows() {
+	awk -F'\t' '{ printf "%s\t%s\t\033[2m%-9s\033[0m %s  \033[2m%s\033[0m\n", $1, $2, $3, $4, $5 }'
+}
+
+agent_rows() {
+	local workspace_labels
+	workspace_labels=$(herdr workspace list | jq '.result.workspaces | map({(.workspace_id): .label}) | add')
+	herdr agent list |
+		jq -r --argjson labels "$workspace_labels" --arg active "${HERDR_ACTIVE_PANE_ID:-}" '
+			{blocked: "×", working: "◐", done: "✓", idle: "○"} as $symbols
+			| .result.agents[]
+			| select(.pane_id != $active)
+			| ["agent", .pane_id, "agent",
+				"\($symbols[.agent_status] // "·") \(.terminal_title_stripped // .agent)",
+				$labels[.workspace_id]]
+			| join("\t")'
+}
+
+action_rows() {
+	printf '%s\t\taction\t%s\t\n' \
+		open_pr "open this branch's pull request" \
+		pitchfork "pitchfork dashboard" \
+		new_worktree "new worktree" \
+		move_pane_to_workspace "move this pane to another workspace" \
+		new_tab "new tab here" \
+		rename_tab "rename this tab" \
+		scratch_shell "scratch shell" \
+		reload_config "reload herdr config"
+}
+
+workspace_rows() {
+	herdr workspace list |
+		jq -r '.result.workspaces[] | select(.focused | not) | ["workspace", .workspace_id, "workspace", .label, ""] | join("\t")'
+}
+
+# Worktrees that already have a workspace show up as that workspace. Outside a
+# git repo there are none to list.
+worktree_rows() {
+	local worktrees
+	if worktrees=$(herdr worktree list --cwd "$cwd" 2>/dev/null); then
+		jq -r --arg home "$HOME" '
+			.result.worktrees[]
+			| select(.open_workspace_id == null and (.is_bare | not))
+			| ["worktree", .path, "worktree", .branch // "detached", (.path | sub("^" + $home; "~"))]
+			| join("\t")' <<<"$worktrees"
+	fi
 }
 
 # Goes through Claude's WorktreeCreate hook, so a worktree made here matches
 # one Claude makes: same place, fresh origin/main, no upstream until pushed.
+# Asks for the branch unless the palette passes along what was typed.
 new_worktree() {
-	local branch path
-	read -rp "branch: " branch
-	path=$(jq -n --arg name "$branch" --arg cwd "$cwd" '{name: $name, cwd: $cwd}' |
-		bash "$HOME/.claude/hooks/worktree-create.sh")
+	local branch=${1:-} path
+	if [ -z "$branch" ]; then
+		read -rp "branch: " branch
+	fi
+	branch=$(branch_name "$branch")
+
+	if ! git check-ref-format --branch "$branch" >/dev/null 2>&1; then
+		fail "\"$branch\" is not a valid branch name"
+	fi
+	if ! path=$(jq -n --arg name "$branch" --arg cwd "$cwd" '{name: $name, cwd: $cwd}' |
+		bash "$HOME/.claude/hooks/worktree-create.sh"); then
+		fail "could not create a worktree for $branch"
+	fi
 	herdr worktree open --cwd "$cwd" --path "$path" --focus >/dev/null
+}
+
+in_git_repo() {
+	git -C "$cwd" rev-parse --git-dir >/dev/null 2>&1
 }
 
 move_pane_to_workspace() {
 	local workspace
-	workspace=$(herdr workspace list |
-		jq -r '.result.workspaces[] | [.workspace_id, .label] | join("\t")' |
-		pick workspace | cut -f1)
+	workspace=$(workspace_rows | format_rows | pick workspace | cut -f2)
 	herdr pane move "$HERDR_ACTIVE_PANE_ID" --new-tab --workspace "$workspace" --focus >/dev/null
 }
 
@@ -51,25 +117,32 @@ rename_tab() {
 	herdr tab rename "$HERDR_ACTIVE_TAB_ID" "$label" >/dev/null
 }
 
-actions=$(printf '%s\t%s\n' \
-	jump_to_agent "jump to agent" \
-	open_pr "open this branch's pull request" \
-	pitchfork "pitchfork dashboard" \
-	new_worktree "new worktree" \
-	open_worktree "open worktree" \
-	move_pane_to_workspace "move this pane to another workspace" \
-	new_tab "new tab here" \
-	rename_tab "rename this tab" \
-	scratch_shell "scratch shell" \
-	reload_config "reload herdr config")
+# --print-query makes the first line the query; the second is the picked row,
+# missing when nothing matched.
+palette_options=(--print-query --bind enter:accept-or-print-query)
+if in_git_repo; then
+	# While nothing matches, the footer tells what Enter will do. fzf runs the
+	# footer command with $SHELL, which is fish here, so ask for bash.
+	palette_options+=(--with-shell "bash -c" --bind 'result:transform-footer:if [ "$FZF_MATCH_COUNT" = 0 ]; then printf "↵  new worktree %s" "$(branch_name {q})"; fi')
+fi
+choice=$({ agent_rows; action_rows; workspace_rows; worktree_rows; } | format_rows | pick herdr "${palette_options[@]}")
+query=$(sed -n 1p <<<"$choice")
+row=$(sed -n 2p <<<"$choice")
+handler=$(cut -f1 <<<"$row")
+argument=$(cut -f2 <<<"$row")
 
-action=$(pick herdr <<<"$actions" | cut -f1)
-
-case "$action" in
-	open_pr) cd "$cwd" && gh pr view --web ;;
-	pitchfork) exec pitchfork tui ;;
-	new_tab) herdr tab create --cwd "$cwd" --focus >/dev/null ;;
-	scratch_shell) cd "$cwd" && exec "${SHELL:-sh}" ;;
-	reload_config) herdr server reload-config >/dev/null ;;
-	*) "$action" ;;
-esac
+if [ -n "$row" ]; then
+	case "$handler" in
+		agent) herdr agent focus "$argument" >/dev/null ;;
+		workspace) herdr workspace focus "$argument" >/dev/null ;;
+		worktree) herdr worktree open --cwd "$cwd" --path "$argument" --focus >/dev/null ;;
+		open_pr) cd "$cwd" && gh pr view --web ;;
+		pitchfork) exec pitchfork tui ;;
+		new_tab) herdr tab create --cwd "$cwd" --focus >/dev/null ;;
+		scratch_shell) cd "$cwd" && exec "${SHELL:-sh}" ;;
+		reload_config) herdr server reload-config >/dev/null ;;
+		*) "$handler" ;;
+	esac
+elif in_git_repo; then
+	new_worktree "$query"
+fi
