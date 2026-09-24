@@ -44,7 +44,13 @@ resize-overlay = never
 
 # macos
 macos-option-as-alt = true
-macos-non-native-fullscreen = true
+# Fullscreen (Cmd+Enter) without the macOS animation.
+# padded-notch keeps the window below the MacBook's notch, where herdr's tab
+# bar would otherwise hide; on external displays it's the same as true.
+macos-non-native-fullscreen = padded-notch
+# Every new window starts that way too; maximize above is the size it returns
+# to when leaving fullscreen.
+fullscreen = non-native-padded-notch
 
 # keybinds
 keybind = super+r=clear_screen
