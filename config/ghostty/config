@@ -12,6 +12,9 @@ cursor-style = block
 window-padding-x = 12
 window-padding-y = 8
 window-padding-balance = true
+# Paint the padding with the edge cells' colors, so herdr's sidebar and panels
+# reach the window edge instead of stopping at a band of Ghostty background.
+window-padding-color = extend
 
 # behavior
 copy-on-select = clipboard
@@ -34,6 +37,10 @@ initial-command = /opt/homebrew/bin/fish -l -c herdr
 # while closing only detaches. This is global: a plain tab running something
 # closes without asking too.
 confirm-close-surface = false
+# herdr fills the window and draws its own pane scrollbars, so Ghostty's
+# scrollbar and size popup describe herdr's screen, not a pane.
+scrollbar = never
+resize-overlay = never
 
 # macos
 macos-option-as-alt = true
