@@ -55,13 +55,25 @@ description = "open scratch terminal"
 width = "70%"
 height = "60%"
 
+# Trying out the herdr-quick-actions plugin (herdr plugin install
+# enekos/herdr-quick-actions) on the palette's keys; herdr-palette is below
+# without a key until this is settled. Run through bin/herdr-quick-actions
+# rather than as a plugin_action, which can't set the popup size.
 [[keys.command]]
 key = ["prefix+space", "ctrl+alt+space"]
 type = "popup"
-command = "herdr-palette"
-description = "command palette"
-width = "70%"
+command = "herdr-quick-actions"
+description = "quick actions"
+width = "50%"
 height = "50%"
+
+# [[keys.command]]
+# key = ["prefix+space", "ctrl+alt+space"]
+# type = "popup"
+# command = "herdr-palette"
+# description = "command palette"
+# width = "70%"
+# height = "50%"
 
 [[keys.command]]
 key = ["prefix+f", "ctrl+alt+f"]

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Runs the herdr-quick-actions plugin's picker in a plain herdr popup, whose
+# size config.toml sets; the plugin's own action opens it at a fixed size.
+# The picker acts on the pane underneath, which the popup passes in.
+set -euo pipefail
+
+palette=$(ls "$HOME"/.config/herdr/plugins/github/es.quick-actions-*/palette.sh 2>/dev/null | head -1)
+if [ -z "$palette" ]; then
+	echo "herdr-quick-actions is not installed: herdr plugin install enekos/herdr-quick-actions" >&2
+	read -rsn1 -p "press any key to close"
+	exit 1
+fi
+
+pane=${HERDR_ACTIVE_PANE_ID:-}
+QA_CONTEXT_JSON=$(jq -nc \
+	--arg pane "$pane" \
+	--arg tab "${HERDR_ACTIVE_TAB_ID:-}" \
+	--arg workspace "${pane%%:*}" \
+	--arg cwd "${HERDR_ACTIVE_PANE_CWD:-$PWD}" \
+	'{pane: $pane, tab: $tab, workspace: $workspace, cwd: $cwd}')
+export QA_CONTEXT_JSON
+exec bash "$palette"
