@@ -11,6 +11,9 @@
 # A branch marked [gone] that is neither is listed but kept: its PR was
 # closed unmerged, or its remote branch was deleted by hand.
 #
+# A worktree on a detached HEAD is removable when that HEAD is the commit a
+# merged pull request ended on.
+#
 # A worktree open in herdr is removed through herdr, which also closes its
 # workspace. Worktrees with uncommitted changes, or with a herdr agent still
 # working or waiting for input in them, are skipped; the current branch and
@@ -29,7 +32,8 @@ the default branch, removing any attached worktrees and herdr workspaces
 first. Worktrees with uncommitted changes or a busy herdr agent are skipped.
 
 Options:
-  -n, --dry-run   Show what would happen, make no changes.
+  -n, --dry-run   Show what would happen. Still fetches from the remotes,
+                  so the result matches a real run, but removes nothing.
   -h, --help      Show this help.
 EOF
 }
@@ -123,6 +127,13 @@ worktrees=$(git worktree list --porcelain | awk '
   }
 ')
 
+# Worktrees on a detached HEAD, as "path<TAB>commit".
+detached_worktrees=$(git worktree list --porcelain | awk '
+  /^worktree / { path = substr($0, 10); next }
+  /^HEAD /     { head = substr($0, 6); next }
+  /^detached$/ { printf "%s\t%s\n", path, head }
+')
+
 worktree_for() {
   printf '%s\n' "$worktrees" | awk -F '\t' -v b="$1" '$1 == b { print $2; exit }'
 }
@@ -143,6 +154,13 @@ agent_busy_in() {
 pr_merged_at() {
   printf '%s\n' "$merged_prs" | awk -F '\t' -v b="$1" -v c="$2" '
     $1 == b && $2 == c { found = 1 }
+    END { exit !found }
+  '
+}
+
+is_merged_pr_head() {
+  printf '%s\n' "$merged_prs" | awk -F '\t' -v c="$1" '
+    $2 == c { found = 1 }
     END { exit !found }
   '
 }
@@ -247,6 +265,27 @@ while IFS=$'\t' read -r branch upstream track; do
     skipped=$((skipped + 1))
   fi
 done < <(git for-each-ref --format='%(refname:short)%09%(upstream)%09%(upstream:track)' refs/heads)
+
+current_worktree=$(git rev-parse --show-toplevel)
+
+while IFS=$'\t' read -r wt head; do
+  if [ -z "$wt" ]; then
+    continue
+  fi
+  if ! is_merged_pr_head "$head"; then
+    continue
+  fi
+
+  label="detached ${head:0:9}"
+  if [ "$wt" = "$current_worktree" ]; then
+    echo "$label: currently checked out, skipping"
+    skipped=$((skipped + 1))
+  elif remove_worktree "$label" "$wt"; then
+    removed_worktrees=$((removed_worktrees + 1))
+  else
+    skipped=$((skipped + 1))
+  fi
+done <<< "$detached_worktrees"
 
 if [ "$dry_run" = 1 ]; then
   printf '\n%d branches would be deleted, %d worktrees removed, %d kept or skipped\n' \
