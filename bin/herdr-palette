@@ -13,7 +13,7 @@ cwd=${HERDR_ACTIVE_PANE_CWD:-$PWD}
 pick() {
 	local prompt=$1
 	shift
-	fzf --reverse --ansi --prompt "$prompt> " --delimiter $'\t' --with-nth 3.. "$@"
+	fzf --reverse --ansi --prompt "$prompt> " --delimiter $'\t' --with-nth 3.. --tiebreak index "$@"
 }
 
 # Typed text becomes a branch name with its spaces turned into dashes.
@@ -37,13 +37,17 @@ format_rows() {
 	awk -F'\t' '{ printf "%s\t%s\t\033[2m%-9s\033[0m %s  \033[2m%s\033[0m\n", $1, $2, $3, $4, $5 }'
 }
 
+# Agents that want attention come first: waiting for input, then done, each
+# with the most recent change on top.
 agent_rows() {
 	local workspace_labels
 	workspace_labels=$(herdr workspace list | jq '.result.workspaces | map({(.workspace_id): .label}) | add')
 	herdr agent list |
 		jq -r --argjson labels "$workspace_labels" --arg active "${HERDR_ACTIVE_PANE_ID:-}" '
 			{blocked: "×", working: "◐", done: "✓", idle: "○"} as $symbols
-			| .result.agents[]
+			| {blocked: 0, done: 1, idle: 2, working: 3} as $urgency
+			| .result.agents
+			| sort_by($urgency[.agent_status] // 4, -.state_change_seq)[]
 			| select(.pane_id != $active)
 			| ["agent", .pane_id, "agent",
 				"\($symbols[.agent_status] // "·") \(.terminal_title_stripped // .agent)",
