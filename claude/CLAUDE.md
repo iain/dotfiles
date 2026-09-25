@@ -32,9 +32,16 @@ The Bash tool executes **zsh**, even though the environment header reports fish 
 
 ## Pull requests
 
-Same spirit as commits, only more so. Default to draft. The body is one short paragraph focused on *why*. No headers, no sections, no test plan unless I ask. Write the title and body as if they will become the final squash-merged commit message, because they usually do.
+Default to draft. The reviewer reads the description now. The title and opening paragraph usually become the squash-merged commit too, so that paragraph must stand alone.
 
-Base the PR description on the actual diff against the base branch (`git diff <base>...HEAD`), not on individual commit messages — intermediate work that got revised should not show up in the description.
+- **Why first:** at most three sentences, full prose, on the problem rather than the solution. A one-idea change stops here.
+- **Parts, if there are several:** `**term:**` lists or one small table, no headers. At most five items per list, one line each, fragments rather than sentences.
+- **Checked:** one line on how you know it works. Not a checkbox test plan.
+- **Reviewer action:** risks, pre-merge steps, open decisions. Leave it out when there are none.
+
+Every line must pass one test: would the reviewer act differently without it? If not, delete it. Never restate what the diff shows, list files the reviewer can see, or describe how you got there. After drafting, do a pass that only deletes. Over 200 words needs a reason.
+
+Base the description on the actual diff against the base branch (`git diff <base>...HEAD`), not on individual commit messages. Intermediate work that got revised should not show up in it.
 
 ## Test-driven development
 
