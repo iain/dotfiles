@@ -65,6 +65,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 # git
 "brew:git"             = "latest"   # Homebrew-managed git
 "brew:gh"              = "latest"   # GitHub CLI
+"brew:tuicr"           = "latest"   # PR review TUI, used by the `review` fish function
 "brew:difftastic"      = "latest"   # structural diff using AST parsing
 "brew:git-delta"       = "latest"   # better git diff pager
 "brew:git-filter-repo" = "latest"   # rewrite/filter git history
