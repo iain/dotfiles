@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Usage: worktree pr <number>
+#
+# The one place worktrees are made, so herdr, Claude and the shell share one
+# layout, ~/Code/worktrees/<repo>/<branch-slug> (the [worktrees] directory in
+# config/herdr/config.toml). Prints the path as the last line of stdout;
+# everything else goes to stderr.
+set -euo pipefail
+
+usage() {
+	echo "usage: worktree pr <number>" >&2
+	exit 2
+}
+
+repo_root() {
+	dirname "$(git rev-parse --path-format=absolute --git-common-dir)"
+}
+
+# herdr's branch_to_path_slug: lowercase, every other run of characters one "-".
+path_for() {
+	local slug
+	slug=$(printf '%s' "$2" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+	echo "$HOME/Code/worktrees/$(basename "$1")/$slug"
+}
+
+checkout_of() {
+	git -C "$1" worktree list --porcelain | awk -v ref="refs/heads/$2" '
+		/^worktree / { path = substr($0, 10) }
+		$0 == "branch " ref { print path; exit }
+	'
+}
+
+pr() {
+	local number=${1:-} root branch path
+	if [ -z "$number" ]; then
+		usage
+	fi
+	root=$(repo_root)
+	branch=pr-$number
+
+	path=$(checkout_of "$root" "$branch")
+	if [ -z "$path" ]; then
+		path=$(path_for "$root" "$branch")
+		add_pr_checkout "$root" "$number" "$branch" "$path"
+	fi
+	open_in_herdr "$root" "$path"
+	echo "$path"
+}
+
+add_pr_checkout() {
+	local root=$1 number=$2 branch=$3 path=$4
+	git -C "$root" fetch --quiet origin "pull/$number/head" >&2
+	mkdir -p "$(dirname "$path")"
+	git -C "$root" worktree add --quiet -b "$branch" "$path" FETCH_HEAD >&2
+
+	# The same upstream `gh pr checkout` gives a fork's pull request, which is
+	# how `gh pr view` finds it. Pushes go to a remote that doesn't exist, as
+	# push.default=current would otherwise publish the branch on origin.
+	git -C "$root" config "branch.$branch.remote" origin
+	git -C "$root" config "branch.$branch.merge" "refs/pull/$number/head"
+	git -C "$root" config "branch.$branch.pushRemote" no-pushing-a-review
+}
+
+# Gives the worktree a herdr workspace, grouped under its repo, or finds the
+# one it already has. The caller decides whether to focus it.
+open_in_herdr() {
+	if [ "${HERDR_ENV:-}" = "1" ]; then
+		herdr worktree open --cwd "$1" --path "$2" --no-focus >/dev/null
+	fi
+}
+
+command=${1:-}
+shift || true
+case "$command" in
+	pr) pr "$@" ;;
+	*) usage ;;
+esac

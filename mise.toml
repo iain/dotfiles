@@ -93,6 +93,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:coreutils"       = "latest"   # GNU core utilities
 "brew:universal-ctags" = "latest"   # code tag generation (maintained ctags)
 "brew:shellcheck"      = "latest"   # shell linter, used by ALE
+"brew:bats-core"       = "latest"   # bash test runner, for `mise run test`
 "brew:imagemagick"     = "latest"   # image manipulation toolkit
 "brew:jpegoptim"       = "latest"   # lossless JPEG optimizer
 "brew:ffmpeg"          = "latest"   # audio/video conversion (ActiveStorage previews)
@@ -140,6 +141,10 @@ else
   mise upgrade
 fi
 '''
+
+[tasks.test]
+description = "Run the tests of the scripts in bin/"
+run = "bats test"
 
 [tasks.restart-pitchfork]
 description = "Restart the pitchfork supervisor LaunchAgent, e.g. after upgrading pitchfork"
