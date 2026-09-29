@@ -62,6 +62,7 @@
     "baseRef": "fresh"
   },
   "enableWorkflows": false,
+  "remoteControlAtStartup": true,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
@@ -101,8 +102,8 @@
       }
     }
   },
-  "feedbackDrafts": "off",
   "feedbackSurveyRate": 0,
+  "feedbackDrafts": "off",
   "modelSettings": {
     "claude-fable-5-1": {
       "effortLevel": "high"
