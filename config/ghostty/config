@@ -22,7 +22,7 @@ mouse-hide-while-typing = true
 link-url = true
 
 # window
-maximize = true
+# maximize = true
 window-save-state = always
 window-inherit-working-directory = true
 quit-after-last-window-closed = true
