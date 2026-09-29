@@ -15,6 +15,12 @@
 # Dotfile sources are relative to this file, so the repo can live anywhere.
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Repositories other config links into, cloned before the dotfiles phase. With
+# no `ref`, an existing checkout is left at whatever commit it's on. The URL
+# must match the checkout's origin, or mise reports a conflict.
+[bootstrap.repos]
+"~/Code/spectral" = { url = "git@github.com:iain/spectral.git" }
+
 # Dotfiles. `symlink-each` mirrors the directory and links each file
 # individually, so machine-local siblings mise doesn't manage
 # (config/git/config.local, config/fish/config.local.fish) are left untouched
@@ -24,6 +30,8 @@
 "~/.config"    = { source = "config", mode = "symlink-each", exclude = ["config.local.example"] }  # config/  → ~/.config/
 "~/.claude"    = { source = "claude", mode = "symlink-each" }  # claude/  → ~/.claude/
 "~/.local/bin" = { source = "bin",    mode = "symlink-each" }  # bin/     → ~/.local/bin/
+# tuicr's Spectral themes are generated in the spectral repo, cloned below.
+"~/.config/tuicr/themes" = { source = "~/Code/spectral/tuicr", mode = "symlink-each" }
 # rc/* → ~/.<name>: the dot-prefix rename can't be expressed by symlink-each,
 # so these are individual whole-file symlinks (mode defaults to symlink).
 "~/.editorconfig" = { source = "rc/editorconfig" }

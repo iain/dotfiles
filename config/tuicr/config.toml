@@ -1,0 +1,4 @@
+# Spectral, following the macOS appearance. The theme files are symlinked
+# from the ~/Code/spectral checkout by mise.toml.
+theme_dark = "spectral-dark"
+theme_light = "spectral-light"
