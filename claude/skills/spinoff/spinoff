@@ -24,7 +24,7 @@ for file in "$@"; do
 	fi
 done
 
-worktree=$("$HOME/.claude/bin/worktree-create" "$PWD" "$branch" | tail -n 1)
+worktree=$(worktree new "$branch" | tail -n 1)
 trap 'echo "spinoff: created $worktree, but its Claude session did not start" >&2' ERR
 
 for file in "$@"; do

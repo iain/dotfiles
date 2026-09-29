@@ -85,11 +85,9 @@ worktree_rows() {
 	fi
 }
 
-# Goes through Claude's WorktreeCreate hook, so a worktree made here matches
-# one Claude makes: same place, fresh origin/main, no upstream until pushed.
 # Asks for the branch unless the palette passes along what was typed.
 new_worktree() {
-	local branch=${1:-} path
+	local branch=${1:-}
 	if [ -z "$branch" ]; then
 		read -rp "branch: " branch
 	fi
@@ -98,11 +96,9 @@ new_worktree() {
 	if ! git check-ref-format --branch "$branch" >/dev/null 2>&1; then
 		fail "\"$branch\" is not a valid branch name"
 	fi
-	if ! path=$(jq -n --arg name "$branch" --arg cwd "$cwd" '{name: $name, cwd: $cwd}' |
-		bash "$HOME/.claude/hooks/worktree-create.sh"); then
+	if ! (cd "$cwd" && worktree new --focus "$branch" >/dev/null); then
 		fail "could not create a worktree for $branch"
 	fi
-	herdr worktree open --cwd "$cwd" --path "$path" --focus >/dev/null
 }
 
 in_git_repo() {

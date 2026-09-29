@@ -53,3 +53,48 @@ setup() {
 
 	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/pr-7 --no-focus" "$HERDR_LOG"
 }
+
+@test "new branches from the just-fetched default branch, without an upstream" {
+	newest=$(advance_origin_main)
+	cd "$REPO"
+
+	run worktree new feature/thing
+
+	[ "$status" -eq 0 ]
+	[ "${lines[-1]}" = "$HOME/Code/worktrees/app/feature-thing" ]
+	cd "$HOME/Code/worktrees/app/feature-thing"
+	[ "$(git branch --show-current)" = "feature/thing" ]
+	[ "$(git rev-parse HEAD)" = "$newest" ]
+	run git rev-parse --abbrev-ref '@{u}'
+	[ "$status" -ne 0 ]
+}
+
+@test "new checks out a branch that already exists" {
+	cd "$REPO"
+	git branch existing
+	git -C "$REPO" commit --quiet --allow-empty -m "only on main"
+
+	run worktree new existing
+
+	[ "$status" -eq 0 ]
+	[ "$(git -C "${lines[-1]}" rev-parse HEAD)" = "$(git rev-parse existing)" ]
+}
+
+@test "new again returns the existing worktree" {
+	cd "$REPO"
+	worktree new feature
+
+	run worktree new feature
+
+	[ "$status" -eq 0 ]
+	[ "${lines[-1]}" = "$HOME/Code/worktrees/app/feature" ]
+}
+
+@test "--focus switches herdr to the worktree's workspace" {
+	stub_herdr
+	cd "$REPO"
+
+	worktree new --focus feature
+
+	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/feature --focus" "$HERDR_LOG"
+}

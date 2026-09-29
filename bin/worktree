@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Usage: worktree pr <number>
+# Usage: worktree new [--focus] <branch>
+#        worktree pr [--focus] <number>
 #
 # The one place worktrees are made, so herdr, Claude and the shell share one
 # layout, ~/Code/worktrees/<repo>/<branch-slug> (the [worktrees] directory in
@@ -8,7 +9,7 @@
 set -euo pipefail
 
 usage() {
-	echo "usage: worktree pr <number>" >&2
+	sed -n 's/^# Usage: /usage: /p; s/^#        /       /p' "$0" | head -2 >&2
 	exit 2
 }
 
@@ -28,6 +29,34 @@ checkout_of() {
 		/^worktree / { path = substr($0, 10) }
 		$0 == "branch " ref { print path; exit }
 	'
+}
+
+new() {
+	local branch=${1:-} root path base=HEAD default
+	if [ -z "$branch" ]; then
+		usage
+	fi
+	root=$(repo_root)
+
+	path=$(checkout_of "$root" "$branch")
+	if [ -z "$path" ]; then
+		path=$(path_for "$root" "$branch")
+		mkdir -p "$(dirname "$path")"
+		if git -C "$root" show-ref --verify --quiet "refs/heads/$branch"; then
+			git -C "$root" worktree add --quiet "$path" "$branch" >&2
+		else
+			# Branch from the default branch as it is on origin now, not as it
+			# was at the last fetch.
+			if default=$(git -C "$root" symbolic-ref --quiet --short refs/remotes/origin/HEAD); then
+				git -C "$root" fetch --quiet origin "${default#origin/}" >&2
+				base=$default
+			fi
+			git -C "$root" worktree add --quiet --no-track -b "$branch" "$path" "$base" >&2
+		fi
+	fi
+
+	open_in_herdr "$root" "$path"
+	echo "$path"
 }
 
 pr() {
@@ -62,16 +91,22 @@ add_pr_checkout() {
 }
 
 # Gives the worktree a herdr workspace, grouped under its repo, or finds the
-# one it already has. The caller decides whether to focus it.
+# one it already has.
 open_in_herdr() {
 	if [ "${HERDR_ENV:-}" = "1" ]; then
-		herdr worktree open --cwd "$1" --path "$2" --no-focus >/dev/null
+		herdr worktree open --cwd "$1" --path "$2" "$focus" >/dev/null
 	fi
 }
 
 command=${1:-}
 shift || true
+focus=--no-focus
+if [ "${1:-}" = "--focus" ]; then
+	focus=--focus
+	shift
+fi
 case "$command" in
+	new) new "$@" ;;
 	pr) pr "$@" ;;
 	*) usage ;;
 esac

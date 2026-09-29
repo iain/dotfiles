@@ -68,3 +68,12 @@ STUB
 pull_request_state() {
 	echo "$2" >"$BATS_TEST_TMPDIR/pr-states/$1"
 }
+
+# Pushes a commit to origin's main that the clone hasn't fetched, and prints it.
+advance_origin_main() {
+	local scratch=$BATS_TEST_TMPDIR/advance
+	git clone --quiet "$ORIGIN" "$scratch" 2>/dev/null
+	git -C "$scratch" commit --quiet --allow-empty -m "newer on main"
+	git -C "$scratch" push --quiet origin main
+	git -C "$scratch" rev-parse HEAD
+}
