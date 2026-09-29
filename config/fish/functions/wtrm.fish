@@ -33,5 +33,5 @@ function wtrm --description 'Remove a git worktree via fzf (or matching query)'
   set -l choice (printf '%s\n' $candidates | fzf --height 40% --reverse --select-1 --query="$argv" --prompt='remove worktree> ')
   test -n "$choice"; or return
 
-  git worktree remove $choice
+  worktree rm $choice
 end

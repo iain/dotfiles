@@ -37,18 +37,29 @@ open_pull_request() {
 }
 
 # Puts a fake herdr on PATH that logs each call to $HERDR_LOG, and makes
-# the scripts believe they run inside herdr.
+# the scripts believe they run inside herdr. It answers "{}", or what
+# herdr_replies set for the first two words of the call.
 stub_herdr() {
 	export HERDR_ENV=1
 	export HERDR_LOG=$BATS_TEST_TMPDIR/herdr.log
-	mkdir -p "$BATS_TEST_TMPDIR/stubs"
+	export HERDR_REPLIES=$BATS_TEST_TMPDIR/herdr-replies
+	mkdir -p "$BATS_TEST_TMPDIR/stubs" "$HERDR_REPLIES"
 	cat >"$BATS_TEST_TMPDIR/stubs/herdr" <<'STUB'
 #!/usr/bin/env bash
 echo "$*" >>"$HERDR_LOG"
-echo '{}'
+if [ -f "$HERDR_REPLIES/$1 $2" ]; then
+	cat "$HERDR_REPLIES/$1 $2"
+else
+	echo '{}'
+fi
 STUB
 	chmod +x "$BATS_TEST_TMPDIR/stubs/herdr"
 	PATH=$BATS_TEST_TMPDIR/stubs:$PATH
+}
+
+# Usage: herdr_replies "worktree list" <<<'{"result": ...}'
+herdr_replies() {
+	cat >"$HERDR_REPLIES/$1"
 }
 
 # Puts a fake gh on PATH. `gh pr view <n>` answers with the state set by

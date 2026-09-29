@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: worktree new [--focus] <branch>
 #        worktree pr [--focus] <number>
+#        worktree rm <path>
 #
 # The one place worktrees are made, so herdr, Claude and the shell share one
 # layout, ~/Code/worktrees/<repo>/<branch-slug> (the [worktrees] directory in
@@ -9,7 +10,7 @@
 set -euo pipefail
 
 usage() {
-	sed -n 's/^# Usage: /usage: /p; s/^#        /       /p' "$0" | head -2 >&2
+	sed -n 's/^# Usage: /usage: /p; s/^#        /       /p' "$0" | head -3 >&2
 	exit 2
 }
 
@@ -90,6 +91,46 @@ add_pr_checkout() {
 	git -C "$root" config "branch.$branch.pushRemote" no-pushing-a-review
 }
 
+# Never forces: a checkout with uncommitted or untracked files stays on disk
+# and the removal fails, so nothing is lost silently. Inside herdr, a
+# worktree's workspace closes with it.
+remove() {
+	local path=${1:-} root branch workspace=""
+	if [ -z "$path" ]; then
+		usage
+	fi
+	root=$(dirname "$(git -C "$path" rev-parse --path-format=absolute --git-common-dir)")
+	branch=$(git -C "$path" branch --show-current)
+
+	if [ "${HERDR_ENV:-}" = "1" ]; then
+		workspace=$(herdr worktree list --cwd "$root" |
+			jq -r --arg path "$path" '.result.worktrees[]? | select(.path == $path) | .open_workspace_id // empty')
+	fi
+	if [ -n "$workspace" ]; then
+		herdr worktree remove --workspace "$workspace" >/dev/null
+	else
+		git -C "$root" worktree remove "$path" >&2
+	fi
+
+	if [ -n "$branch" ] && ! has_own_commits "$root" "$branch"; then
+		git -C "$root" branch --quiet -D "$branch" >&2
+	fi
+}
+
+# Commits on the branch that aren't on what it started from: the pull request
+# for a review branch, the default branch for any other.
+has_own_commits() {
+	local root=$1 branch=$2 base merge
+	merge=$(git -C "$root" config --get "branch.$branch.merge" || true)
+	if [[ "$merge" == refs/pull/*/head ]]; then
+		git -C "$root" fetch --quiet origin "$merge" >&2
+		base=FETCH_HEAD
+	elif ! base=$(git -C "$root" symbolic-ref --quiet --short refs/remotes/origin/HEAD); then
+		return 0
+	fi
+	[ "$(git -C "$root" rev-list --count "$base..$branch")" != 0 ]
+}
+
 # Gives the worktree a herdr workspace, grouped under its repo, or finds the
 # one it already has.
 open_in_herdr() {
@@ -108,5 +149,6 @@ fi
 case "$command" in
 	new) new "$@" ;;
 	pr) pr "$@" ;;
+	rm) remove "$@" ;;
 	*) usage ;;
 esac

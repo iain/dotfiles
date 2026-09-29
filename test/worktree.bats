@@ -98,3 +98,49 @@ setup() {
 
 	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/feature --focus" "$HERDR_LOG"
 }
+
+@test "rm removes a worktree and its branch when the branch has nothing of its own" {
+	cd "$REPO"
+	path=$(worktree new feature | tail -n 1)
+
+	run worktree rm "$path"
+
+	[ "$status" -eq 0 ]
+	[ ! -d "$path" ]
+	run git rev-parse --verify --quiet refs/heads/feature
+	[ "$status" -ne 0 ]
+}
+
+@test "rm deletes a review branch that has nothing beyond its pull request" {
+	open_pull_request 7
+	cd "$REPO"
+	path=$(worktree pr 7 | tail -n 1)
+
+	worktree rm "$path"
+
+	run git rev-parse --verify --quiet refs/heads/pr-7
+	[ "$status" -ne 0 ]
+}
+
+@test "rm keeps a branch with commits of its own" {
+	cd "$REPO"
+	path=$(worktree new feature | tail -n 1)
+	git -C "$path" commit --quiet --allow-empty -m "mine"
+
+	worktree rm "$path"
+
+	[ ! -d "$path" ]
+	git rev-parse --verify --quiet refs/heads/feature
+}
+
+@test "rm closes the worktree's herdr workspace along with it" {
+	cd "$REPO"
+	path=$(worktree new feature | tail -n 1)
+	stub_herdr
+	herdr_replies "worktree list" <<<"{\"result\": {\"worktrees\": [{\"path\": \"$path\", \"open_workspace_id\": \"w9\"}]}}"
+
+	# The stub leaves the checkout in place, so deleting the branch fails after.
+	run worktree rm "$path"
+
+	grep -qxF "worktree remove --workspace w9" "$HERDR_LOG"
+}
