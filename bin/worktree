@@ -2,6 +2,7 @@
 # Usage: worktree new [--focus] <branch>
 #        worktree pr [--focus] <number>
 #        worktree rm <path>
+#        worktree herdr-sync
 #
 # The one place worktrees are made, so herdr, Claude and the shell share one
 # layout, ~/Code/worktrees/<repo>/<branch-slug> (the [worktrees] directory in
@@ -10,7 +11,7 @@
 set -euo pipefail
 
 usage() {
-	sed -n 's/^# Usage: /usage: /p; s/^#        /       /p' "$0" | head -3 >&2
+	sed -n 's/^# Usage: /usage: /p; s/^#        /       /p' "$0" | head -4 >&2
 	exit 2
 }
 
@@ -131,6 +132,31 @@ has_own_commits() {
 	[ "$(git -C "$root" rev-list --count "$base..$branch")" != 0 ]
 }
 
+# Makes herdr's workspaces match the repo's worktrees: every checkout gets a
+# workspace, and a workspace whose checkout was deleted from disk closes,
+# after which git forgets that checkout too.
+herdr_sync() {
+	local root listing path workspace
+	if [ "${HERDR_ENV:-}" != "1" ]; then
+		echo "worktree: herdr-sync only works inside herdr" >&2
+		exit 1
+	fi
+	root=$(repo_root)
+	listing=$(herdr worktree list --cwd "$root")
+
+	while read -r path; do
+		echo "opening $path" >&2
+		open_in_herdr "$root" "$path"
+	done < <(jq -r '.result.worktrees[] | select(.is_bare or .is_prunable | not) | select(.open_workspace_id == null) | .path' <<<"$listing")
+
+	while read -r workspace; do
+		echo "closing workspace $workspace, its checkout is gone" >&2
+		herdr workspace close "$workspace" >/dev/null
+	done < <(jq -r '.result.worktrees[] | select(.is_prunable and .open_workspace_id != null) | .open_workspace_id' <<<"$listing")
+
+	git -C "$root" worktree prune
+}
+
 # Gives the worktree a herdr workspace, grouped under its repo, or finds the
 # one it already has.
 open_in_herdr() {
@@ -150,5 +176,6 @@ case "$command" in
 	new) new "$@" ;;
 	pr) pr "$@" ;;
 	rm) remove "$@" ;;
+	herdr-sync) herdr_sync ;;
 	*) usage ;;
 esac

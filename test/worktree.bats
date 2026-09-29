@@ -144,3 +144,23 @@ setup() {
 
 	grep -qxF "worktree remove --workspace w9" "$HERDR_LOG"
 }
+
+@test "herdr-sync opens worktrees without a workspace and closes those whose checkout is gone" {
+	cd "$REPO"
+	stub_herdr
+	herdr_replies "worktree list" <<EOF_JSON
+{"result": {"worktrees": [
+	{"path": "$REPO", "is_bare": false, "is_prunable": false, "open_workspace_id": "w1"},
+	{"path": "/wt/closed", "is_bare": false, "is_prunable": false, "open_workspace_id": null},
+	{"path": "/wt/open", "is_bare": false, "is_prunable": false, "open_workspace_id": "w2"},
+	{"path": "/wt/gone", "is_bare": false, "is_prunable": true, "open_workspace_id": "w3"}
+]}}
+EOF_JSON
+
+	run worktree herdr-sync
+
+	[ "$status" -eq 0 ]
+	grep -qxF "worktree open --cwd $REPO --path /wt/closed --no-focus" "$HERDR_LOG"
+	grep -qxF "workspace close w3" "$HERDR_LOG"
+	[ "$(grep -c "^worktree open\|^workspace close" "$HERDR_LOG")" -eq 2 ]
+}
