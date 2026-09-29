@@ -30,8 +30,10 @@
 "~/.config"    = { source = "config", mode = "symlink-each", exclude = ["config.local.example"] }  # config/  → ~/.config/
 "~/.claude"    = { source = "claude", mode = "symlink-each" }  # claude/  → ~/.claude/
 "~/.local/bin" = { source = "bin",    mode = "symlink-each" }  # bin/     → ~/.local/bin/
-# tuicr's Spectral themes are generated in the spectral repo, cloned below.
-"~/.config/tuicr/themes" = { source = "~/Code/spectral/tuicr", mode = "symlink-each" }
+# Spectral themes are generated in the spectral repo, cloned above. Ghostty's
+# directory also holds the install script these links replace.
+"~/.config/tuicr/themes"   = { source = "~/Code/spectral/tuicr",   mode = "symlink-each" }
+"~/.config/ghostty/themes" = { source = "~/Code/spectral/ghostty", mode = "symlink-each", exclude = ["install.sh"] }
 # rc/* → ~/.<name>: the dot-prefix rename can't be expressed by symlink-each,
 # so these are individual whole-file symlinks (mode defaults to symlink).
 "~/.editorconfig" = { source = "rc/editorconfig" }
