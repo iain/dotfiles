@@ -6,7 +6,9 @@
 # A branch is removable when either:
 #   - its pull request was merged and the branch still points at the commit
 #     that was merged, which is how squash merges are recognised, or
-#   - it was pushed and is merged into the repository default branch.
+#   - it was pushed and is merged into the repository default branch, or
+#   - it is a review branch from `worktree pr` whose pull request was merged
+#     or closed, and it has no commits of its own.
 #
 # A branch marked [gone] that is neither is listed but kept: its PR was
 # closed unmerged, or its remote branch was deleted by hand.
@@ -176,6 +178,38 @@ is_merged_into_default() {
   printf '%s\n' "$merged_branches" | grep -qxF "$1"
 }
 
+# The pull request a review branch from `worktree pr` checks out, found
+# through its refs/pull/<n>/head upstream. Empty for any other branch.
+review_pr_of() {
+  git config --get "branch.$1.merge" | sed -n 's|^refs/pull/\([0-9][0-9]*\)/head$|\1|p' || true
+}
+
+# A review branch goes once its pull request is merged or closed, whoever
+# wrote it, unless it has commits the pull request doesn't.
+review_finished() {
+  local branch=$1 number=$2 state
+
+  if ! state=$(gh pr view "$number" --json state --jq .state 2>/dev/null); then
+    echo "$branch: could not look up pull request #$number, keeping"
+    skipped=$((skipped + 1))
+    return 1
+  fi
+  if [ "$state" = OPEN ]; then
+    return 1
+  fi
+
+  if ! git fetch --quiet origin "pull/$number/head"; then
+    echo "$branch: could not fetch pull request #$number, keeping"
+    skipped=$((skipped + 1))
+    return 1
+  fi
+  if [ "$(git rev-list --count "FETCH_HEAD..refs/heads/$branch")" != 0 ]; then
+    echo "$branch: has commits pull request #$number doesn't, keeping"
+    skipped=$((skipped + 1))
+    return 1
+  fi
+}
+
 # Removes the branch's worktree, if it has one. Fails when it has to stay.
 remove_worktree() {
   local branch=$1 wt=$2 workspace status_out
@@ -225,7 +259,12 @@ while IFS=$'\t' read -r branch upstream track; do
   fi
 
   tip=$(git rev-parse "refs/heads/$branch")
-  if pr_merged_at "$branch" "$tip"; then
+  review_pr=$(review_pr_of "$branch")
+  if [ -n "$review_pr" ]; then
+    if ! review_finished "$branch" "$review_pr"; then
+      continue
+    fi
+  elif pr_merged_at "$branch" "$tip"; then
     :
   elif [ -n "$upstream" ] && is_merged_into_default "$branch"; then
     :

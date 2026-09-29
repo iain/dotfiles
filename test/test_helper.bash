@@ -50,3 +50,21 @@ STUB
 	chmod +x "$BATS_TEST_TMPDIR/stubs/herdr"
 	PATH=$BATS_TEST_TMPDIR/stubs:$PATH
 }
+
+# Puts a fake gh on PATH. `gh pr view <n>` answers with the state set by
+# pull_request_state; every other call prints nothing.
+stub_gh() {
+	mkdir -p "$BATS_TEST_TMPDIR/stubs" "$BATS_TEST_TMPDIR/pr-states"
+	cat >"$BATS_TEST_TMPDIR/stubs/gh" <<STUB
+#!/usr/bin/env bash
+if [ "\$1 \$2" = "pr view" ]; then
+	cat "$BATS_TEST_TMPDIR/pr-states/\$3"
+fi
+STUB
+	chmod +x "$BATS_TEST_TMPDIR/stubs/gh"
+	PATH=$BATS_TEST_TMPDIR/stubs:$PATH
+}
+
+pull_request_state() {
+	echo "$2" >"$BATS_TEST_TMPDIR/pr-states/$1"
+}
