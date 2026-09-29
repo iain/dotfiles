@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Reviews the pull request of the branch in the pane underneath with tuicr.
+# Runs as a herdr popup (config/herdr/config.toml), which passes that pane's
+# working directory. Review worktrees from `worktree pr` work too: gh finds
+# their pull request through the refs/pull upstream.
+set -euo pipefail
+
+cd "${HERDR_ACTIVE_PANE_CWD:-$PWD}"
+
+# The popup closes as soon as the script ends, so wait for a key first, or
+# the message is gone before it can be read.
+if ! number=$(gh pr view --json number --jq .number 2>&1); then
+	echo "$number" >&2
+	read -rsn1 -p "press any key to close"
+	exit 1
+fi
+exec tuicr pr "$number"

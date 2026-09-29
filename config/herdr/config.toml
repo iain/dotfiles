@@ -83,12 +83,15 @@ description = "pitchfork dashboard"
 width = "90%"
 height = "85%"
 
-# Runs in the focused pane's directory, so it opens that branch's PR.
+# Reviews the focused pane's branch's PR in tuicr. The command palette still
+# opens it in the browser.
 [[keys.command]]
 key = ["prefix+alt+p", "ctrl+alt+p"]
-type = "shell"
-command = "gh pr view --web"
-description = "open this branch's pull request"
+type = "popup"
+command = "herdr-review-pr"
+description = "review this branch's pull request"
+width = "90%"
+height = "85%"
 
 [ui]
 # Distinct shapes per state (× blocked, ◐ working, ✓ done, ○ idle), so the
