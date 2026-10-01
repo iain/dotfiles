@@ -22,7 +22,7 @@ mouse-hide-while-typing = true
 link-url = true
 
 # window
-# maximize = true
+maximize = true
 window-save-state = always
 window-inherit-working-directory = true
 quit-after-last-window-closed = true
@@ -48,9 +48,6 @@ macos-option-as-alt = true
 # padded-notch keeps the window below the MacBook's notch, where herdr's tab
 # bar would otherwise hide; on external displays it's the same as true.
 macos-non-native-fullscreen = padded-notch
-# Every new window starts that way too; maximize above is the size it returns
-# to when leaving fullscreen.
-fullscreen = non-native-padded-notch
 
 # keybinds
 keybind = super+r=clear_screen
