@@ -20,7 +20,7 @@ link-url = true
 
 # window
 maximize = true
-window-save-state = always
+window-save-state = never
 window-inherit-working-directory = true
 quit-after-last-window-closed = true
 macos-titlebar-style = hidden
