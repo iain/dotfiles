@@ -94,8 +94,11 @@ keybind = super+digit_7=unbind
 keybind = super+digit_8=unbind
 keybind = super+shift+[=unbind
 keybind = super+shift+]=unbind
-keybind = ctrl+tab=unbind
-keybind = ctrl+shift+tab=unbind
+# Unbinding isn't enough for ctrl+tab: macOS still takes it for native tab
+# switching. Sending the kitty-protocol encoding herdr expects claims the key
+# first.
+keybind = ctrl+tab=csi:9;5u
+keybind = ctrl+shift+tab=csi:9;6u
 keybind = super+alt+w=unbind
 keybind = super+d=unbind
 keybind = super+shift+d=unbind
