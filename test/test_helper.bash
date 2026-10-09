@@ -88,3 +88,39 @@ advance_origin_main() {
 	git -C "$scratch" push --quiet origin main
 	git -C "$scratch" rev-parse HEAD
 }
+
+# Puts a fake fzf on PATH. It saves the rows it was offered, without colours,
+# to $FZF_OFFERED, and chooses the first row containing $FZF_PICK; a script
+# that runs fzf more than once gets the next line of FZF_PICK each time. With
+# --print-query it first prints $FZF_QUERY, as if that had been typed; leaving
+# FZF_PICK empty then means nothing matched. With neither set, it exits the
+# way Escape makes it. With neither set it exits like
+# Escape does.
+stub_fzf() {
+	export FZF_OFFERED=$BATS_TEST_TMPDIR/fzf-offered
+	mkdir -p "$BATS_TEST_TMPDIR/stubs"
+	cat >"$BATS_TEST_TMPDIR/stubs/fzf" <<'STUB'
+#!/usr/bin/env bash
+sed $'s/\033\\[[0-9;]*m//g' >"$FZF_OFFERED"
+if [ -z "${FZF_PICK:-}${FZF_QUERY:-}" ]; then
+	exit 130
+fi
+for argument in "$@"; do
+	if [ "$argument" = --print-query ]; then
+		printf '%s\n' "${FZF_QUERY:-}"
+	fi
+done
+if [ -n "${FZF_PICK:-}" ]; then
+	echo run >>"$FZF_OFFERED.runs"
+	pick=$(sed -n "$(wc -l <"$FZF_OFFERED.runs")p" <<<"$FZF_PICK")
+	grep -F -m1 -- "$pick" "$FZF_OFFERED"
+fi
+STUB
+	chmod +x "$BATS_TEST_TMPDIR/stubs/fzf"
+	PATH=$BATS_TEST_TMPDIR/stubs:$PATH
+}
+
+# The visible text of the rows fzf was offered, without the two hidden fields.
+offered() {
+	cut -f3- "$FZF_OFFERED"
+}
