@@ -67,6 +67,15 @@ action_rows() {
 		reload_config "reload herdr config"
 }
 
+# Each saved SSH machine offers whichever of enable or disable applies to it.
+machine_rows() {
+	herdr machine list --json |
+		jq -r '.[]
+			| if .enabled then ["disable_machine", "disable"] else ["enable_machine", "enable"] end as [$handler, $verb]
+			| [$handler, .id, "machine", "\($verb) \(.label)", .target]
+			| join("\t")'
+}
+
 workspace_rows() {
 	herdr workspace list |
 		jq -r '.result.workspaces[] | select(.focused | not) | ["workspace", .workspace_id, "workspace", .label, ""] | join("\t")'
@@ -125,7 +134,7 @@ if in_git_repo; then
 	# footer command with $SHELL, which is fish here, so ask for bash.
 	palette_options+=(--with-shell "bash -c" --bind 'result:transform-footer:if [ "$FZF_MATCH_COUNT" = 0 ]; then printf "↵  new worktree %s" "$(branch_name {q})"; fi')
 fi
-choice=$({ agent_rows; action_rows; workspace_rows; worktree_rows; } | format_rows | pick herdr "${palette_options[@]}")
+choice=$({ agent_rows; action_rows; machine_rows; workspace_rows; worktree_rows; } | format_rows | pick herdr "${palette_options[@]}")
 query=$(sed -n 1p <<<"$choice")
 row=$(sed -n 2p <<<"$choice")
 handler=$(cut -f1 <<<"$row")
@@ -138,6 +147,8 @@ if [ -n "$row" ]; then
 		worktree) herdr worktree open --cwd "$cwd" --path "$argument" --focus >/dev/null ;;
 		open_pr) cd "$cwd" && gh pr view --web ;;
 		pitchfork) exec pitchfork tui ;;
+		enable_machine) herdr machine enable "$argument" >/dev/null ;;
+		disable_machine) herdr machine disable "$argument" >/dev/null ;;
 		new_tab) herdr tab create --cwd "$cwd" --focus >/dev/null ;;
 		scratch_shell) cd "$cwd" && exec "${SHELL:-sh}" ;;
 		reload_config) herdr server reload-config >/dev/null ;;
