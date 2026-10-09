@@ -1,4 +1,7 @@
 {
+  "env": {
+    "MCP_PROTOCOL_NEGOTIATION": "legacy"
+  },
   "permissions": {
     "defaultMode": "auto"
   },
