@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# Usage: spinoff <branch> [file...] < brief
+# Usage: spinoff <branch> <name> [file...] < brief
 #
 # Spin work off into its own herdr workspace: a fresh worktree of the current
-# repo, with a new Claude session in it that starts on the brief from stdin.
-# Each file, a path relative to the repo root, is copied to the same path in
+# repo in a directory called <name>, with a new Claude session in it that
+# starts on the brief from stdin. Each file, a path relative to the repo root, is copied to the same path in
 # the worktree: a checkout only brings tracked files, and a plan in a
 # gitignored directory would stay behind. Prints the worktree path.
 set -euo pipefail
 
-branch=${1:?usage: spinoff <branch> [file...] < brief}
-shift
+branch=${1:?usage: spinoff <branch> <name> [file...] < brief}
+name=${2:?usage: spinoff <branch> <name> [file...] < brief}
+shift 2
 
 if [ "${HERDR_ENV:-}" != "1" ]; then
 	echo "spinoff: not running inside herdr" >&2
@@ -24,7 +25,7 @@ for file in "$@"; do
 	fi
 done
 
-worktree=$(worktree new "$branch" | tail -n 1)
+worktree=$(worktree new "$branch" "$name" | tail -n 1)
 trap 'echo "spinoff: created $worktree, but its Claude session did not start" >&2' ERR
 
 for file in "$@"; do
@@ -42,17 +43,17 @@ workspace_id=$(herdr worktree list --cwd "$worktree" |
 	jq -er --arg worktree "$worktree" '.result.worktrees[] | select(.path == $worktree) | .open_workspace_id')
 pane_id=$(herdr pane list --workspace "$workspace_id" | jq -er '.result.panes[0].pane_id')
 
-# The worktree's directory is herdr's branch slug, which fits herdr's agent
-# names apart from their 32-character limit. A longer one loses its cut-off word.
-name=$(basename "$worktree")
-if [ ${#name} -gt 32 ]; then
-	name=${name:0:32}
-	name=${name%-*}
+# The worktree's directory is the name's slug, which fits herdr's agent names
+# apart from their 32-character limit. A longer one loses its cut-off word.
+agent_name=$(basename "$worktree")
+if [ ${#agent_name} -gt 32 ]; then
+	agent_name=${agent_name:0:32}
+	agent_name=${agent_name%-*}
 fi
 # Claude takes longer than herdr's default 30 seconds to be ready in a fresh
 # worktree. herdr giving up only stops the wait: the prompt is an argument, so
 # a Claude that is running got it.
-if ! herdr agent start "$name" --kind claude --pane "$pane_id" --timeout 120000 -- "Read $brief: it is your brief for this task." >&2; then
+if ! herdr agent start "$agent_name" --kind claude --pane "$pane_id" --timeout 120000 -- "Read $brief: it is your brief for this task." >&2; then
 	agent=$(herdr pane get "$pane_id" | jq -r '.result.pane.agent // empty')
 	if [ "$agent" = "claude" ]; then
 		echo "spinoff: herdr stopped waiting, but Claude is running in $pane_id" >&2

@@ -14,7 +14,8 @@ The new session does the work, including the investigation. Your only job is to 
 
 1. Check that `$HERDR_ENV` is `1`. If it isn't, say that spinoff needs herdr and stop.
 2. Pick a branch name. If this conversation already settled one (a plan names it, or the tracker suggests one, such as Linear's `gitBranchName`), use it. Otherwise make it short and kebab-case, with the same prefix as `git branch --show-current` if it has one (e.g. `iain/`).
-3. Write the brief in markdown:
+3. Pick a worktree name: one to three kebab-case words for the gist of the task, without the branch's prefix or a ticket number, e.g. `vraagbaak-redesign` for `iain/nfko-123-redesign-the-vraagbaak-page`. It names the worktree's directory and its herdr agent, and becomes part of pitchfork's proxy URLs (`https://<app>.<name>.<project>.localhost`), so keep it short enough to type.
+4. Write the brief in markdown:
    - **Problem:** what was reported or seen, with exact error text if we have it.
    - **What we know:** only what already came up here: files, causes, reproduction steps, fix ideas. Mark each as confirmed or a hunch.
    - **Goal:** investigate, reproduce, fix it test-first, and open a draft pull request.
@@ -22,13 +23,13 @@ The new session does the work, including the investigation. Your only job is to 
    A few lines is fine when little is known. Leave out everything that isn't about this task.
 
    When this session wrote a plan that the new session implements, the plan holds the detail. The brief then points at it, says the worktree is already on the plan's branch, and makes the plan's own hand-off command the **Goal**, for example `/pr-from-linear NFKO-78` after `plan-from-linear`.
-4. From the repo, run:
+5. From the repo, run:
 
    ```bash
-   ${CLAUDE_SKILL_DIR}/spinoff <branch> [file...] <<'BRIEF'
+   ${CLAUDE_SKILL_DIR}/spinoff <branch> <worktree-name> [file...] <<'BRIEF'
    <the brief>
    BRIEF
    ```
 
    It creates the worktree as a herdr workspace, starts Claude there on the brief (saved in the worktree's git dir, so it's never committed), and prints the worktree path. Each `file`, relative to the repo root, is copied to the same path in the worktree. Pass the files the new session needs that a checkout leaves out: untracked or gitignored ones, such as a plan in `.claude/plans/`.
-5. Report the branch and path in one line. Don't carry on with the spun-off work in this session.
+6. Report the branch, worktree name and path in one line. Don't carry on with the spun-off work in this session.

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Usage: worktree new [--focus] <branch>
+# Usage: worktree new [--focus] <branch> [name]
 #        worktree pr [--focus] <number>
 #        worktree rm <path>
 #        worktree herdr-sync
 #
 # The one place worktrees are made, so herdr, Claude and the shell share one
-# layout, ~/Code/worktrees/<repo>/<branch-slug> (the [worktrees] directory in
+# layout, ~/Code/worktrees/<repo>/<branch-or-name-slug> (the [worktrees] directory in
 # config/herdr/config.toml). Prints the path as the last line of stdout;
 # everything else goes to stderr.
 set -euo pipefail
@@ -33,8 +33,9 @@ checkout_of() {
 	'
 }
 
+# The directory is named after the branch, unless a name is given.
 new() {
-	local branch=${1:-} root path base=HEAD default
+	local branch=${1:-} name=${2:-${1:-}} root path base=HEAD default
 	if [ -z "$branch" ]; then
 		usage
 	fi
@@ -42,7 +43,7 @@ new() {
 
 	path=$(checkout_of "$root" "$branch")
 	if [ -z "$path" ]; then
-		path=$(path_for "$root" "$branch")
+		path=$(path_for "$root" "$name")
 		mkdir -p "$(dirname "$path")"
 		if git -C "$root" show-ref --verify --quiet "refs/heads/$branch"; then
 			git -C "$root" worktree add --quiet "$path" "$branch" >&2

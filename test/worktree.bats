@@ -80,6 +80,18 @@ setup() {
 	[ "$(git -C "${lines[-1]}" rev-parse HEAD)" = "$(git rev-parse existing)" ]
 }
 
+# The directory name ends up in pitchfork's proxy URLs, where a ticket number
+# and a long title don't belong.
+@test "new names the worktree's directory after the given name instead of the branch" {
+	cd "$REPO"
+
+	run worktree new iain/NFKO-123-redesign-the-vraagbaak-page "Vraagbaak redesign"
+
+	[ "$status" -eq 0 ]
+	[ "${lines[-1]}" = "$HOME/Code/worktrees/app/vraagbaak-redesign" ]
+	[ "$(git -C "${lines[-1]}" branch --show-current)" = "iain/NFKO-123-redesign-the-vraagbaak-page" ]
+}
+
 @test "new again returns the existing worktree" {
 	cd "$REPO"
 	worktree new feature
