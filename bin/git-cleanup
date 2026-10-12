@@ -4,8 +4,9 @@
 # worktrees attached to them.
 #
 # A branch is removable when either:
-#   - its pull request was merged and the branch still points at the commit
-#     that was merged, which is how squash merges are recognised, or
+#   - its pull request was merged and holds every commit on the branch, which
+#     is how squash merges are recognised, also when commits were pushed to
+#     the pull request on GitHub or someone else opened it, or
 #   - it was pushed and is merged into the repository default branch, or
 #   - it is a review branch from `worktree pr` whose pull request was merged
 #     or closed, and it has no commits of its own.
@@ -87,11 +88,11 @@ fi
 # Empty in detached HEAD — that's fine.
 current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)
 
-# Merged pull requests as "branch<TAB>head commit".
+# Merged pull requests as "branch<TAB>head commit<TAB>number".
 merged_prs=""
 if command -v gh >/dev/null 2>&1; then
   if ! merged_prs=$(gh pr list --state merged --author @me --limit 500 \
-      --json headRefName,headRefOid --jq '.[] | "\(.headRefName)\t\(.headRefOid)"' 2>/dev/null); then
+      --json headRefName,headRefOid,number --jq '.[] | "\(.headRefName)\t\(.headRefOid)\t\(.number)"' 2>/dev/null); then
     echo "$PROG: warning: could not list merged pull requests, only checking git" >&2
     merged_prs=""
   fi
@@ -153,23 +154,43 @@ agent_busy_in() {
   '
 }
 
-pr_merged_at() {
-  printf '%s\n' "$merged_prs" | awk -F '\t' -v b="$1" -v c="$2" '
-    $1 == b && $2 == c { found = 1 }
-    END { exit !found }
-  '
+# The branch's merged pull requests, as "head commit<TAB>number". A branch
+# whose upstream is gone but has none of mine may have someone else's, like
+# Renovate's, so GitHub is asked about that branch alone.
+merged_prs_of() {
+  local branch=$1 track=$2 found
+
+  found=$(printf '%s\n' "$merged_prs" | awk -F '\t' -v b="$branch" '$1 == b { print $2 "\t" $3 }')
+  if [ -z "$found" ] && [ "$track" = "[gone]" ]; then
+    found=$(gh pr list --state merged --head "$branch" \
+      --json headRefOid,number --jq '.[] | "\(.headRefOid)\t\(.number)"' 2>/dev/null || true)
+  fi
+  printf '%s\n' "$found"
+}
+
+# True when one of the merged pull requests holds every commit up to the tip.
+# A pull request can be ahead of the branch: commits pushed on GitHub, like an
+# update from the default branch or new visual baselines, never reach it.
+merged_pr_contains() {
+  local tip=$1 prs=$2 head number
+
+  while IFS=$'\t' read -r head number; do
+    if [ -z "$head" ]; then
+      continue
+    fi
+    if [ "$head" = "$tip" ]; then
+      return 0
+    fi
+    if git fetch --quiet origin "pull/$number/head" && git merge-base --is-ancestor "$tip" FETCH_HEAD; then
+      return 0
+    fi
+  done <<< "$prs"
+  return 1
 }
 
 is_merged_pr_head() {
   printf '%s\n' "$merged_prs" | awk -F '\t' -v c="$1" '
     $2 == c { found = 1 }
-    END { exit !found }
-  '
-}
-
-has_merged_pr() {
-  printf '%s\n' "$merged_prs" | awk -F '\t' -v b="$1" '
-    $1 == b { found = 1 }
     END { exit !found }
   '
 }
@@ -260,15 +281,16 @@ while IFS=$'\t' read -r branch upstream track; do
 
   tip=$(git rev-parse "refs/heads/$branch")
   review_pr=$(review_pr_of "$branch")
+  branch_prs=$(merged_prs_of "$branch" "$track")
   if [ -n "$review_pr" ]; then
     if ! review_finished "$branch" "$review_pr"; then
       continue
     fi
-  elif pr_merged_at "$branch" "$tip"; then
+  elif merged_pr_contains "$tip" "$branch_prs"; then
     :
   elif [ -n "$upstream" ] && is_merged_into_default "$branch"; then
     :
-  elif has_merged_pr "$branch"; then
+  elif [ -n "$branch_prs" ]; then
     echo "$branch: has commits after its pull request was merged, keeping"
     skipped=$((skipped + 1))
     continue

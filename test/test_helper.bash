@@ -63,13 +63,29 @@ herdr_replies() {
 }
 
 # Puts a fake gh on PATH. `gh pr view <n>` answers with the state set by
-# pull_request_state; every other call prints nothing.
+# pull_request_state. `gh pr list` answers from the pull requests that
+# merged_pull_request added, filtered by --author @me and --head, and formatted
+# by the caller's --jq. Every other call prints nothing.
 stub_gh() {
 	mkdir -p "$BATS_TEST_TMPDIR/stubs" "$BATS_TEST_TMPDIR/pr-states"
+	echo '[]' >"$BATS_TEST_TMPDIR/merged-prs.json"
 	cat >"$BATS_TEST_TMPDIR/stubs/gh" <<STUB
 #!/usr/bin/env bash
 if [ "\$1 \$2" = "pr view" ]; then
 	cat "$BATS_TEST_TMPDIR/pr-states/\$3"
+elif [ "\$1 \$2" = "pr list" ]; then
+	author="" head="" format=".[]"
+	while [ \$# -gt 0 ]; do
+		case "\$1" in
+			--author) author=\$2; shift ;;
+			--head) head=\$2; shift ;;
+			--jq) format=\$2; shift ;;
+		esac
+		shift
+	done
+	jq --arg author "\$author" --arg head "\$head" \\
+		'map(select((\$author != "@me" or .author == "me") and (\$head == "" or .headRefName == \$head)))' \\
+		"$BATS_TEST_TMPDIR/merged-prs.json" | jq -r "\$format"
 fi
 STUB
 	chmod +x "$BATS_TEST_TMPDIR/stubs/gh"
@@ -78,6 +94,35 @@ STUB
 
 pull_request_state() {
 	echo "$2" >"$BATS_TEST_TMPDIR/pr-states/$1"
+}
+
+# Usage: merged_pull_request <number> <branch> <head commit> [author]
+# The author defaults to "me", the one `gh pr list --author @me` finds.
+merged_pull_request() {
+	local file=$BATS_TEST_TMPDIR/merged-prs.json
+	jq --argjson number "$1" --arg branch "$2" --arg head "$3" --arg author "${4:-me}" \
+		'. + [{number: $number, headRefName: $branch, headRefOid: $head, author: $author}]' \
+		"$file" >"$file.new"
+	mv "$file.new" "$file"
+}
+
+# Adds a commit to refs/pull/<n>/head on origin that the clone doesn't have,
+# the way GitHub's "Update branch" button or a bot does, and prints it.
+push_to_pull_request() {
+	local number=$1 scratch=$BATS_TEST_TMPDIR/push-pr-$1
+	git clone --quiet "$ORIGIN" "$scratch" 2>/dev/null
+	git -C "$scratch" fetch --quiet origin "refs/pull/$number/head"
+	git -C "$scratch" switch --quiet --detach FETCH_HEAD
+	git -C "$scratch" commit --quiet --allow-empty -m "pushed from GitHub"
+	git -C "$scratch" push --quiet origin "HEAD:refs/pull/$number/head"
+	git -C "$scratch" rev-parse HEAD
+}
+
+# Pushes the branch from the clone, then deletes it on origin, the way GitHub
+# does once a pull request is merged.
+push_and_delete_on_origin() {
+	git -C "$REPO" push --quiet --set-upstream origin "$1" 2>/dev/null
+	git -C "$REPO" push --quiet origin --delete "$1" 2>/dev/null
 }
 
 # Pushes a commit to origin's main that the clone hasn't fetched, and prints it.
