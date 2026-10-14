@@ -45,6 +45,7 @@ PLAYWRIGHT_BROWSERS_PATH = "{{env.XDG_CACHE_HOME}}/ms-playwright"   # ~/Library/
 PUPPETEER_CACHE_DIR      = "{{env.XDG_CACHE_HOME}}/puppeteer"       # ~/.cache/puppeteer, even with XDG set
 MAVEN_ARGS               = "-Dmaven.repo.local={{env.XDG_CACHE_HOME}}/maven/repository"  # ~/.m2/repository
 PITCHFORK_STATE_DIR      = "{{env.XDG_STATE_HOME}}/pitchfork"       # ~/.local/state/pitchfork, even with XDG set
+STARSHIP_CACHE           = "{{env.XDG_CACHE_HOME}}/starship"        # ~/.cache/starship, even with XDG set
 
 # The pitchfork supervisor is owned by its LaunchAgent (bin/pitchfork-supervisor),
 # which also sets its proxy port. A client command starting its own supervisor
