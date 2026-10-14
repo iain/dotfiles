@@ -22,12 +22,14 @@ compile = false
 # them. Set here rather than in fish so they also reach mise tasks and anything
 # run under `mise x` — such as pitchfork daemons, whose supervisor runs through
 # sudo and loses the shell's environment. The comment is where each tool would
-# write otherwise.
+# write otherwise. A base dir already set from outside wins over the default:
+# the work laptop's launchd puts data, state and cache under ~/dev, the only
+# place Defender excludes from scanning.
 [env]
-XDG_CONFIG_HOME          = "{{env.HOME}}/.config"
-XDG_DATA_HOME            = "{{env.HOME}}/.local/share"
-XDG_STATE_HOME           = "{{env.HOME}}/.local/state"
-XDG_CACHE_HOME           = "{{env.HOME}}/.cache"
+XDG_CONFIG_HOME          = "{{get_env(name='XDG_CONFIG_HOME', default=env.HOME ~ '/.config')}}"
+XDG_DATA_HOME            = "{{get_env(name='XDG_DATA_HOME', default=env.HOME ~ '/.local/share')}}"
+XDG_STATE_HOME           = "{{get_env(name='XDG_STATE_HOME', default=env.HOME ~ '/.local/state')}}"
+XDG_CACHE_HOME           = "{{get_env(name='XDG_CACHE_HOME', default=env.HOME ~ '/.cache')}}"
 HOMEBREW_CACHE           = "{{env.XDG_CACHE_HOME}}/Homebrew"        # ~/Library/Caches/Homebrew
 npm_config_cache         = "{{env.XDG_CACHE_HOME}}/npm"             # ~/.npm
 PNPM_HOME                = "{{env.XDG_DATA_HOME}}/pnpm"             # ~/Library/pnpm, incl. the store
