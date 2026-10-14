@@ -44,6 +44,9 @@ NUGET_PACKAGES           = "{{env.XDG_CACHE_HOME}}/NuGet/packages"  # ~/.nuget/p
 PLAYWRIGHT_BROWSERS_PATH = "{{env.XDG_CACHE_HOME}}/ms-playwright"   # ~/Library/Caches/ms-playwright
 PUPPETEER_CACHE_DIR      = "{{env.XDG_CACHE_HOME}}/puppeteer"       # ~/.cache/puppeteer, even with XDG set
 MAVEN_ARGS               = "-Dmaven.repo.local={{env.XDG_CACHE_HOME}}/maven/repository"  # ~/.m2/repository
+MAVEN_USER_HOME          = "{{env.XDG_CACHE_HOME}}/maven"           # ~/.m2, where ./mvnw keeps its Maven download
+HK_STATE_DIR             = "{{env.XDG_STATE_HOME}}/hk"              # ~/.local/state/hk, even with XDG set
+HK_CACHE_DIR             = "{{env.XDG_CACHE_HOME}}/hk"              # ~/Library/Caches/hk
 PITCHFORK_STATE_DIR      = "{{env.XDG_STATE_HOME}}/pitchfork"       # ~/.local/state/pitchfork, even with XDG set
 STARSHIP_CACHE           = "{{env.XDG_CACHE_HOME}}/starship"        # ~/.cache/starship, even with XDG set
 
