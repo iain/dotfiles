@@ -45,6 +45,7 @@ BUNDLE_USER_CACHE        = "{{env.XDG_CACHE_HOME}}/bundle"          # ~/.bundle/
 BUNDLE_USER_PLUGIN       = "{{env.XDG_DATA_HOME}}/bundle/plugin"    # ~/.bundle/plugin
 NUGET_PACKAGES           = "{{env.XDG_CACHE_HOME}}/NuGet/packages"  # ~/.nuget/packages
 PLAYWRIGHT_BROWSERS_PATH = "{{env.XDG_CACHE_HOME}}/ms-playwright"   # ~/Library/Caches/ms-playwright
+PUPPETEER_CACHE_DIR      = "{{env.XDG_CACHE_HOME}}/puppeteer"       # ~/.cache/puppeteer, even with XDG set
 MAVEN_ARGS               = "-Dmaven.repo.local={{env.XDG_CACHE_HOME}}/maven/repository"  # ~/.m2/repository
 
 # The pitchfork supervisor is owned by its LaunchAgent (bin/pitchfork-supervisor),
