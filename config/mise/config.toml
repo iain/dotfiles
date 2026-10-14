@@ -17,11 +17,11 @@ compile = false
 # XDG base directories, set explicitly so every path below derives from them,
 # and the tools that ignore XDG (or fall back to ~/Library on macOS) pointed at
 # them. Set here rather than in fish so they also reach mise tasks and anything
-# run under `mise x` — such as pitchfork daemons, whose supervisor runs through
-# sudo and loses the shell's environment. The comment is where each tool would
-# write otherwise. A base dir already set from outside wins over the default:
-# the work laptop's launchd puts data, state and cache under ~/dev, the only
-# place Defender excludes from scanning.
+# run under `mise x` — such as pitchfork daemons, whose supervisor starts from
+# launchd and never sees the shell's environment. The comment is where each
+# tool would write otherwise. A base dir already set from outside wins over the
+# default: the work laptop's launchd puts data, state and cache under ~/dev, the
+# only place Defender excludes from scanning.
 [env]
 XDG_CONFIG_HOME          = "{{get_env(name='XDG_CONFIG_HOME', default=env.HOME ~ '/.config')}}"
 XDG_DATA_HOME            = "{{get_env(name='XDG_DATA_HOME', default=env.HOME ~ '/.local/share')}}"
@@ -44,6 +44,7 @@ NUGET_PACKAGES           = "{{env.XDG_CACHE_HOME}}/NuGet/packages"  # ~/.nuget/p
 PLAYWRIGHT_BROWSERS_PATH = "{{env.XDG_CACHE_HOME}}/ms-playwright"   # ~/Library/Caches/ms-playwright
 PUPPETEER_CACHE_DIR      = "{{env.XDG_CACHE_HOME}}/puppeteer"       # ~/.cache/puppeteer, even with XDG set
 MAVEN_ARGS               = "-Dmaven.repo.local={{env.XDG_CACHE_HOME}}/maven/repository"  # ~/.m2/repository
+PITCHFORK_STATE_DIR      = "{{env.XDG_STATE_HOME}}/pitchfork"       # ~/.local/state/pitchfork, even with XDG set
 
 # The pitchfork supervisor is owned by its LaunchAgent (bin/pitchfork-supervisor),
 # which also sets its proxy port. A client command starting its own supervisor
