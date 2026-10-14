@@ -11,9 +11,6 @@ credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
 [settings.pipx]
 uvx = true
 
-[settings.python]
-uv_venv_auto = true
-
 [settings.ruby]
 compile = false
 
