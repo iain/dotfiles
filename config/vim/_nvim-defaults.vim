@@ -20,6 +20,7 @@ set nojoinspaces
 set langnoremap
 set nolangremap
 set laststatus=2
+set mouse=nvi
 " set listchars="tab:> ,trail:-,nbsp:+"
 set nrformats=bin,hex
 set ruler
