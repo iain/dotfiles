@@ -96,9 +96,10 @@ rows = [["state_icon", "tab"], ["machine", "workspace", "agent"]]
 # otherwise its own generated title); the stripped form drops its spinner. No
 # tab row: Claude's Stop hook names the tab after that same title. The agent
 # panel groups by workspace without drawing headers, so a bold workspace name
-# is what shows where one group ends and the next begins. machine only shows
-# up once there's more than the local machine.
-claude = [["state_icon", "terminal_title_stripped"], [{ token = "workspace", bold = true }, "machine"]]
+# is what shows where one group ends and the next begins; it is dimmed so the
+# bold session title above it stays the row's lead. machine only shows up once
+# there's more than the local machine.
+claude = [["state_icon", { token = "terminal_title_stripped", bold = true }], [{ token = "workspace", bold = true, dim = true }, "machine"]]
 
 [ui.toast]
 # Ghostty turns this into a macOS notification when an agent in a background
@@ -116,13 +117,13 @@ auto_switch = true
 accent = "#F9AD26"
 panel_bg = "reset"
 sidebar_bg = "reset"
-active_row_bg = "#282622"
+active_row_bg = "#3B2E18"
 selection_bg = "#403D36"
 surface0 = "#282622"
 surface1 = "#403D36"
 surface_dim = "#403D36"
-overlay0 = "#5E574A"
-overlay1 = "#7B7463"
+overlay0 = "#908775"
+overlay1 = "#A19784"
 subtext0 = "#A19784"
 text = "#DCD0B5"
 mauve = "#CC77DF"
@@ -137,13 +138,13 @@ peach = "#FF8432"
 accent = "#A76C01"
 panel_bg = "reset"
 sidebar_bg = "reset"
-active_row_bg = "#F6EAD1"
+active_row_bg = "#E5CFA7"
 selection_bg = "#E7D9BD"
 surface0 = "#F6EAD1"
 surface1 = "#E7D9BD"
 surface_dim = "#E7D9BD"
-overlay0 = "#6E6249"
-overlay1 = "#5D5139"
+overlay0 = "#504530"
+overlay1 = "#463C28"
 subtext0 = "#463C28"
 text = "#2B2313"
 mauve = "#791DC7"
