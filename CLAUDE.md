@@ -8,7 +8,7 @@ A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`. Machin
 
 ## Bootstrap
 
-A fresh machine clones and bootstraps in one go with `mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles` (trusts the repo for that run only). Homebrew and a logged-in `gh` with an SSH key come first, by hand (README "New Laptop Setup"): mise needs `git` to clone, the bootstrap's Homebrew hook can't prompt for sudo, the repos phase clones spectral over SSH, and the tools phase needs `gh`'s token. After that, run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
+A fresh Mac starts with `install.sh`, fetched with curl (README "New Laptop Setup"); it sits at the repo root rather than in `bin/` so `[dotfiles]` doesn't link it onto PATH. It names the machine, then does what the bootstrap needs first and can't do itself — Homebrew, installed interactively (mise needs `git` to clone, and the bootstrap's Homebrew hook can't prompt for sudo); `gh`, logged in over SSH (the repos phase clones spectral over SSH, the tools phase needs `gh`'s token) with the key also added as a signing key; and mise — and then runs `mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles` (trusts the repo for that run only), or bootstraps the existing checkout on a re-run. Tested with bats against stubs, which get a PATH of only stubs and `/usr/bin:/bin`, so a real `gh` login can never start. After that, run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
 
 ```bash
 mise trust

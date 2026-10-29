@@ -4,98 +4,58 @@ Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https:
 
 ## New Laptop Setup
 
-Steps 1–3 run in Terminal.app, with Safari for the GitHub login. Ghostty and Firefox arrive with the bootstrap. Have your GitHub password and 2FA at hand: no password manager is installed yet.
+### 1. Run the Install Script
 
-### 1. Install Homebrew
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Run it by hand, before anything else. It asks for your password and installs the Command Line Tools, which bring `git`. mise can't clone this repo without `git`, and the bootstrap's own Homebrew hook runs non-interactively, so it can't ask for the password.
-
-### 2. Log In to GitHub With an SSH Key
+In Terminal.app:
 
 ```bash
-/opt/homebrew/bin/brew install gh
-/opt/homebrew/bin/gh auth login
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/iain/dotfiles/main/install.sh)"
 ```
 
-Choose SSH and let `gh` generate and upload a key; the browser step works in Safari. The bootstrap needs both results: it clones `~/Code/spectral` over SSH, and mise gets its GitHub token from `gh` (without it, installing tools runs into the 60/hour anonymous API limit).
+Have your GitHub password and 2FA at hand: no password manager is installed yet, and the GitHub login opens in Safari. [`install.sh`](install.sh) does what the bootstrap can't do for itself, then starts it:
 
-GitHub treats authentication and signing keys separately, so upload the same key once more as a signing key:
+1. **Names the machine.** The status line, Claude's machine context and the signing key's title use it, and a new Mac comes with a name like `Iains-MacBook-Pro`.
+2. **Installs Homebrew**, interactively: it asks for your password, and brings the Command Line Tools and with them `git`, which mise needs to clone this repo.
+3. **Logs `gh` in to GitHub over SSH.** Let it generate and upload a key: the bootstrap clones `~/Code/spectral` over SSH, and mise gets its GitHub token from `gh` (without one, installing tools runs into the 60/hour anonymous API limit).
+4. **Adds that key to GitHub again, as a signing key.** GitHub keeps authentication and signing keys apart.
+5. **Installs mise** from `mise.run` (a brewed mise can't `mise self-update`) and bootstraps from this repo, cloned to `~/Code/dotfiles`.
 
-```bash
-/opt/homebrew/bin/gh auth refresh -h github.com -s admin:ssh_signing_key
-/opt/homebrew/bin/gh ssh-key add ~/.ssh/id_ed25519.pub --type signing --title "$(hostname -s)"
-```
-
-### 3. Install mise and Bootstrap
-
-```bash
-curl -fsSL https://mise.run | sh
-~/.local/bin/mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles
-```
-
-mise installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`.
-
-`--from-dir` can be anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`), but the symlinks point into it, so keep it.
-
-`--from` trusts the repo for that one run only. Afterwards, re-run bootstrap from the clone, trusting it once:
-
-```bash
-cd ~/Code/dotfiles
-mise trust
-mise bootstrap -n      # preview — changes nothing
-mise bootstrap         # apply
-```
+Every step is skipped when already done, so after a failure just run it again; it then bootstraps from the existing checkout. Run it as above rather than through `curl | bash`, so its prompts can read the terminal.
 
 In order, bootstrap:
 
-1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts).
+1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts), and copies the root-owned **system files**: Touch ID for `sudo`, and pitchfork's port forward.
 2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched. `config.local.example` is excluded — it's documentation, not config.
 3. Writes **macOS defaults**.
 4. Sets **fish** as the login shell.
 5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
-6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative (git identity, Claude plugins), then a read-only commit-signing diagnostic.
+6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative, then a read-only commit-signing diagnostic. It asks for your git identity, suggesting the name and email of your GitHub account, and writes it to `~/.config/git/config.local`; if it couldn't prompt, run `mise run setup-identity`. It also adds this machine's signing key to `config/git/allowed_signers`, and sets up the Claude plugins.
 
-Check for drift any time with `mise bootstrap status`. Re-running is safe: anything already in its desired state is skipped.
+Re-run the bootstrap from the checkout any time; anything already in its desired state is skipped:
+
+```bash
+cd ~/Code/dotfiles
+mise bootstrap -n      # preview — changes nothing
+mise bootstrap         # apply
+mise bootstrap status  # drift from the declared state
+```
 
 > The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
 
-### 4. Switch to Ghostty
+### 2. Switch to Ghostty
 
-From here on, work in Ghostty, where fish is now the login shell. Set Firefox as the default browser, and grant the permissions apps ask for on first launch, such as Screen Recording for macshot.
+From here on, work in Ghostty, where fish is now the login shell. Set Firefox as the default browser, and grant the permissions apps ask for on first launch, such as Screen Recording for macshot. Vim installs its plugins the first time it starts.
 
-### 5. Git Identity
+### 3. Commit Your Signing Key
 
-The bootstrap task seeds `~/.config/git/config.local` interactively. If it couldn't prompt (no TTY during bootstrap), run it directly:
-
-```bash
-mise run setup-identity      # or: dotfiles-setup identity
-```
-
-### 6. Allow Your Signing Key
-
-Add the public key from step 2 to `config/git/allowed_signers` so local verification works (`git log --show-signature`), and commit the change:
+The bootstrap added this machine's key to `config/git/allowed_signers`, so its commits verify locally. Commit that change, which also tests signing:
 
 ```bash
-echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allowed_signers
+cd ~/Code/dotfiles
+git commit -am "Allow Signing Key for $(scutil --get LocalHostName)" && git log --show-signature -1
 ```
 
-`mise run check-signing` re-runs the diagnostic and prints the exact fix for anything still missing. Confirm everything is wired up with an empty signed commit:
-
-```bash
-git commit --allow-empty -m "test signing" && git log --show-signature -1
-```
-
-### 7. Install Vim Plugins
-
-Open vim and run:
-
-```
-:PlugInstall
-```
+`mise run check-signing` re-runs the diagnostic and prints the exact fix for anything still missing.
 
 ## Structure
 
@@ -115,8 +75,10 @@ bin/
 claude/
   settings.json       — enabled plugins + marketplaces, hooks, permissions
 system/               — root-owned files copied (not symlinked) by mise bootstrap
+  etc/pam.d/sudo_local                                — Touch ID for sudo
   etc/pf.anchors/dotfiles-pitchfork                   — forwards loopback 443 to pitchfork's proxy on 8443
   Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist — loads that rule at boot
+install.sh            — first thing on a new Mac: machine name, Homebrew, gh and its keys, mise, bootstrap. Outside bin/, so it isn't linked onto PATH
 mise.toml             — the mise bootstrap config (packages, system files, dotfiles, login shell, macOS defaults, LaunchAgents, setup tasks)
 ```
 

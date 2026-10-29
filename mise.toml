@@ -164,7 +164,7 @@ fi
 '''
 
 [tasks.test]
-description = "Run the tests of the scripts in bin/"
+description = "Run the tests of the scripts in bin/ and install.sh"
 run = "bats test"
 
 [tasks.restart-pitchfork]
