@@ -121,6 +121,15 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:ngrok"                         = "latest"   # expose localhost publicly
 "brew-cask:macshot"                       = "latest"   # screenshots; updates itself via Sparkle
+"brew-cask:ghostty"                       = "latest"   # terminal
+"brew-cask:macvim-app"                    = "latest"   # vim GUI, launched from the Dock
+"brew-cask:firefox"                       = "latest"   # browser
+"brew-cask:linear"                        = "latest"   # issue tracker
+
+# Take over apps that were installed by hand instead of replacing them, which
+# can make macOS drop their permissions. Self-updating apps are adopted as-is.
+[bootstrap.brew]
+adopt = true
 
 # ── Imperative per-machine setup, driven by bin/dotfiles-setup. The parts mise
 #    can't express declaratively. The dotfiles phase deploys the script to
