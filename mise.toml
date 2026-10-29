@@ -120,6 +120,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 # fonts & casks
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:ngrok"                         = "latest"   # expose localhost publicly
+"brew-cask:macshot"                       = "latest"   # screenshots; updates itself via Sparkle
 
 # ── Imperative per-machine setup, driven by bin/dotfiles-setup. The parts mise
 #    can't express declaratively. The dotfiles phase deploys the script to
@@ -251,6 +252,39 @@ domain = "com.apple.symbolichotkeys"
 key = "AppleSymbolicHotKeys"
 path = ["64", "enabled"]
 value = false
+
+# macshot takes over the screenshot shortcuts: ⌘⇧3 captures the screen, ⌘⇧4
+# an area, ⌘⇧5 records an area. macOS's own hotkeys win while they're enabled,
+# so switch off 28 (⌘⇧3), 30 (⌘⇧4) and 184 (⌘⇧5, the screenshot toolbar).
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.symbolichotkeys"
+key = "AppleSymbolicHotKeys"
+path = ["28", "enabled"]
+value = false
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.symbolichotkeys"
+key = "AppleSymbolicHotKeys"
+path = ["30", "enabled"]
+value = false
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.symbolichotkeys"
+key = "AppleSymbolicHotKeys"
+path = ["184", "enabled"]
+value = false
+
+# macshot stores Carbon key codes (kVK_ANSI_3 = 20, 4 = 21, 5 = 23) and Carbon
+# modifiers (cmdKey | shiftKey = 768). Restart macshot to pick them up.
+[bootstrap.macos.defaults."com.sw33tlie.macshot.macshot"]
+hotkeyFullScreenKeyCode = 20
+hotkeyFullScreenModifiers = 768
+hotkeyKeyCode = 21
+hotkeyModifiers = 768
+hotkeyRecordKeyCode = 23
+hotkeyRecordModifiers = 768
+# The cask is auto_updates, so brew leaves updating to macshot's Sparkle.
+SUAutomaticallyUpdate = true
 
 # ── macOS: the non-declarative extras (chflags, a HOME-expanded path with a
 #    prerequisite mkdir, and the app restarts). Runs on every bootstrap, after
