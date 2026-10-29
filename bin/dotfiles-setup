@@ -2,7 +2,8 @@
 # frozen_string_literal: true
 
 # Per-machine setup that mise bootstrap's declarative sections can't express:
-# interactive git identity, ssh config seeding, fish local config, the read-only
+# interactive git identity, ssh config seeding, fish local config, this machine's
+# signing key in allowed_signers, the read-only
 # commit-signing diagnostic, and Claude plugins + rubocop MCP + herdr hooks. Driven by mise
 # tasks (see mise.toml at the repo root); each subcommand is idempotent and safe
 # to re-run.
@@ -46,8 +47,8 @@ def setup_identity
     puts "  skip #{git_local} (already exists)"
   elsif $stdin.tty?
     puts "Setting up git identity (#{git_local})..."
-    name = ask("Git name")
-    email = ask("Git email")
+    name = ask("Git name", github_user_field("name"))
+    email = ask("Git email", github_user_field("email"))
     key = ask("SSH signing key path", "~/.ssh/id_ed25519.pub")
     FileUtils.mkdir_p(git_local.dirname)
     git_local.write(<<~CONFIG)
@@ -86,6 +87,45 @@ def setup_identity
       # This file is not checked into git.
     CONFIG
     puts "  created #{fish_local}"
+  end
+
+  allow_signing_key
+end
+
+# A field of the GitHub account gh is logged in to, or nil: gh may be missing
+# or logged out, and a private email reads as empty.
+def github_user_field(field)
+  value = ""
+  if system("command -v gh > /dev/null 2>&1")
+    value = `gh api user --jq .#{field} 2>/dev/null`.strip
+  end
+
+  if value.empty?
+    nil
+  else
+    value
+  end
+end
+
+# Add this machine's signing key to the tracked allowed_signers, so its commits
+# verify locally. The change is left for you to commit.
+def allow_signing_key
+  signing_key = `git config --get user.signingkey`.strip
+  email       = `git config --get user.email`.strip
+  key_path    = Pathname.new(signing_key.sub(/\A~/, Dir.home))
+  allowed     = CONFIG_SRC / "git" / "allowed_signers"
+
+  if signing_key.empty? || email.empty? || !key_path.file?
+    puts "  skip #{allowed} (no signing key or email yet)"
+  else
+    pubkey = key_path.read.split[0, 2].join(" ")
+    if allowed.read.include?(pubkey)
+      puts "  skip #{allowed} (signing key already allowed)"
+    else
+      machine = `scutil --get LocalHostName`.strip
+      allowed.write("# #{machine}\n#{email} #{pubkey}\n", mode: "a")
+      puts "  added this machine's signing key to #{allowed}; commit it"
+    end
   end
 end
 
