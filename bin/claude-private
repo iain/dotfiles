@@ -1,0 +1,6 @@
+#!/bin/sh
+# Claude Code on the private account. The profile has its own login, history
+# and memory; settings, skills and hooks are the same files as ~/.claude's,
+# because mise.toml links claude/ into both.
+export CLAUDE_CONFIG_DIR="$HOME/.claude-private"
+exec claude "$@"

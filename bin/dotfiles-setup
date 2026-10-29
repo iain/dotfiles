@@ -23,6 +23,14 @@ HOME        = Pathname.new(Dir.home)
 CONFIG_DEST = HOME / ".config"
 CLAUDE_DEST = HOME / ".claude"
 
+# Each Claude profile's directory, with the CLAUDE_CONFIG_DIR that selects it.
+# The default profile runs with the variable unset: when it's set, even to
+# ~/.claude, Claude keeps .claude.json inside that dir instead of in $HOME.
+CLAUDE_PROFILES = {
+  CLAUDE_DEST              => nil,
+  HOME / ".claude-private" => (HOME / ".claude-private").to_s
+}.freeze
+
 def ask(question, default = nil)
   suffix = default ? " [#{default}]" : ""
   print "  #{question}#{suffix}: "
@@ -92,46 +100,21 @@ def setup_claude
   end
 
   settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
-  puts "Installing Claude plugins and MCP servers..."
-
-  known = `claude plugin marketplace list 2>/dev/null`
-  settings.fetch("extraKnownMarketplaces", {}).each do |name, spec|
-    repo = spec.dig("source", "repo")
-    next unless repo
-
-    if known.include?(name)
-      puts "  skip marketplace #{name} (already known)"
-    else
-      system("claude", "plugin", "marketplace", "add", repo) || warn("  WARNING: could not add marketplace #{repo}")
-    end
-  end
-
-  installed = `claude plugin list 2>/dev/null`
-  settings.fetch("enabledPlugins", {}).each do |ref, enabled|
-    next unless enabled
-
-    if installed.include?(ref)
-      puts "  skip plugin #{ref} (already installed)"
-    else
-      system("claude", "plugin", "install", ref) || warn("  WARNING: could not install plugin #{ref}")
-    end
-  end
-
-  rubocop_mcp = CLAUDE_DEST / "bin" / "rubocop-mcp"
-  if system("claude mcp get rubocop > /dev/null 2>&1")
-    puts "  skip mcp rubocop (already registered)"
-  else
-    system("claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
-      warn("  WARNING: could not register rubocop MCP server")
+  CLAUDE_PROFILES.each do |dir, config_dir|
+    puts "Installing Claude plugins and MCP servers in #{dir}..."
+    env = { "CLAUDE_CONFIG_DIR" => config_dir }
+    install_claude_plugins(env, settings)
+    register_rubocop_mcp(env)
   end
 
   # Registers herdr's hooks in the tracked settings.json (through the symlink)
   # and writes the untracked hook script they call, so a machine that gets the
   # committed hooks also gets the script. Always run, so a herdr upgrade that
   # ships a new hook version reaches it; settings.json is only rewritten when
-  # its hooks differ.
+  # its hooks differ. Run once, for the default profile: the other profiles
+  # share its settings.json, and the hooks call the script in ~/.claude.
   if system("command -v herdr > /dev/null 2>&1")
-    system("herdr", "integration", "install", "claude") ||
+    system({ "CLAUDE_CONFIG_DIR" => nil }, "herdr", "integration", "install", "claude") ||
       warn("  WARNING: could not install the herdr Claude integration")
     install_herdr_skill
   else
@@ -139,8 +122,43 @@ def setup_claude
   end
 end
 
+def install_claude_plugins(env, settings)
+  known = IO.popen(env, %w[claude plugin marketplace list], err: File::NULL, &:read)
+  settings.fetch("extraKnownMarketplaces", {}).each do |name, spec|
+    repo = spec.dig("source", "repo")
+    next unless repo
+
+    if known.include?(name)
+      puts "  skip marketplace #{name} (already known)"
+    else
+      system(env, "claude", "plugin", "marketplace", "add", repo) || warn("  WARNING: could not add marketplace #{repo}")
+    end
+  end
+
+  installed = IO.popen(env, %w[claude plugin list], err: File::NULL, &:read)
+  settings.fetch("enabledPlugins", {}).each do |ref, enabled|
+    next unless enabled
+
+    if installed.include?(ref)
+      puts "  skip plugin #{ref} (already installed)"
+    else
+      system(env, "claude", "plugin", "install", ref) || warn("  WARNING: could not install plugin #{ref}")
+    end
+  end
+end
+
+def register_rubocop_mcp(env)
+  rubocop_mcp = CLAUDE_DEST / "bin" / "rubocop-mcp"
+  if system(env, "claude mcp get rubocop > /dev/null 2>&1")
+    puts "  skip mcp rubocop (already registered)"
+  else
+    system(env, "claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
+      warn("  WARNING: could not register rubocop MCP server")
+  end
+end
+
 # herdr prints a Claude skill for its own CLI. It's written untracked, straight
-# into ~/.claude, so it always matches the installed herdr.
+# into each profile, so it always matches the installed herdr.
 def install_herdr_skill
   skill = `herdr --skill`
   unless $?.success?
@@ -148,13 +166,15 @@ def install_herdr_skill
     return
   end
 
-  skill_file = CLAUDE_DEST / "skills" / "herdr" / "SKILL.md"
-  if skill_file.file? && skill_file.read == skill
-    puts "  skip herdr skill (up to date)"
-  else
-    FileUtils.mkdir_p(skill_file.dirname)
-    skill_file.write(skill)
-    puts "  wrote #{skill_file}"
+  CLAUDE_PROFILES.each_key do |dir|
+    skill_file = dir / "skills" / "herdr" / "SKILL.md"
+    if skill_file.file? && skill_file.read == skill
+      puts "  skip herdr skill in #{dir} (up to date)"
+    else
+      FileUtils.mkdir_p(skill_file.dirname)
+      skill_file.write(skill)
+      puts "  wrote #{skill_file}"
+    end
   end
 end
 

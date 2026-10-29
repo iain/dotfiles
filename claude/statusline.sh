@@ -3,7 +3,7 @@
 # machine a session is on. This is UI-only — the model never sees it (that is
 # what hooks/machine-context.sh is for); it exists purely to orient the human.
 #
-#   host  repo[⧉wt]/subdir  branch  model·effort  tokens/window pct  $cost  [#pr] [⚡] [limits]
+#   host  [profile]  repo[⧉wt]/subdir  branch  model·effort  tokens/window pct  $cost  [#pr] [⚡] [limits]
 #
 # (⧉ and # become Nerd Font glyphs, and the branch gains one, when
 # STATUSLINE_NERDFONT is set.)
@@ -226,6 +226,11 @@ fi
 location=$location_root$worktree_label$location_tail
 
 add "$cyan" "$host"
+# claude-private and the like run on another account, under ~/.claude-<profile>.
+if [ -n "$CLAUDE_CONFIG_DIR" ]; then
+	profile=${CLAUDE_CONFIG_DIR##*/}
+	add "$bold$yellow" "${profile#.claude-}"
+fi
 location_index=-1
 if [ -n "$location" ]; then
 	location_index=${#texts[@]}

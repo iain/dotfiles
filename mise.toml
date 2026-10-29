@@ -29,6 +29,7 @@
 [dotfiles]
 "~/.config"    = { source = "config", mode = "symlink-each", exclude = ["config.local.example"] }  # config/  → ~/.config/
 "~/.claude"    = { source = "claude", mode = "symlink-each" }  # claude/  → ~/.claude/
+"~/.claude-private" = { source = "claude", mode = "symlink-each" }  # the claude-private profile
 "~/.local/bin" = { source = "bin",    mode = "symlink-each" }  # bin/     → ~/.local/bin/
 # Spectral themes are generated in the spectral repo, cloned above. Ghostty's
 # directory also holds the install script these links replace.
