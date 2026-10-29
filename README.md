@@ -4,23 +4,42 @@ Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https:
 
 ## New Laptop Setup
 
-### 1. Install mise
+Steps 1–3 run in Terminal.app, with Safari for the GitHub login. Ghostty and Firefox arrive with the bootstrap. Have your GitHub password and 2FA at hand: no password manager is installed yet.
+
+### 1. Install Homebrew
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Run it by hand, before anything else. It asks for your password and installs the Command Line Tools, which bring `git`. mise can't clone this repo without `git`, and the bootstrap's own Homebrew hook runs non-interactively, so it can't ask for the password.
+
+### 2. Log In to GitHub With an SSH Key
+
+```bash
+/opt/homebrew/bin/brew install gh
+/opt/homebrew/bin/gh auth login
+```
+
+Choose SSH and let `gh` generate and upload a key; the browser step works in Safari. The bootstrap needs both results: it clones `~/Code/spectral` over SSH, and mise gets its GitHub token from `gh` (without it, installing tools runs into the 60/hour anonymous API limit).
+
+GitHub treats authentication and signing keys separately, so upload the same key once more as a signing key:
+
+```bash
+/opt/homebrew/bin/gh auth refresh -h github.com -s admin:ssh_signing_key
+/opt/homebrew/bin/gh ssh-key add ~/.ssh/id_ed25519.pub --type signing --title "$(hostname -s)"
+```
+
+### 3. Install mise and Bootstrap
 
 ```bash
 curl -fsSL https://mise.run | sh
-```
-
-This installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`. Everything else — including Homebrew itself — is installed by the bootstrap.
-
-### 2. Bootstrap
-
-One command clones this repo and bootstraps the machine from it:
-
-```bash
 ~/.local/bin/mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles
 ```
 
-`--from-dir` can be anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`), but the symlinks point into it, so keep it. The clone needs `git`: on a new Mac, the first use prompts to install the Command Line Tools — accept, then re-run the command.
+mise installs to `~/.local/bin/mise`. Don't `brew install mise`: a brewed mise can't `mise self-update`.
+
+`--from-dir` can be anywhere; nothing hardcodes a path (dotfile sources resolve relative to `mise.toml`), but the symlinks point into it, so keep it.
 
 `--from` trusts the repo for that one run only. Afterwards, re-run bootstrap from the clone, trusting it once:
 
@@ -44,7 +63,11 @@ Check for drift any time with `mise bootstrap status`. Re-running is safe: anyth
 
 > The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
 
-### 3. Git Identity
+### 4. Switch to Ghostty
+
+From here on, work in Ghostty, where fish is now the login shell. Set Firefox as the default browser, and grant the permissions apps ask for on first launch, such as Screen Recording for macshot.
+
+### 5. Git Identity
 
 The bootstrap task seeds `~/.config/git/config.local` interactively. If it couldn't prompt (no TTY during bootstrap), run it directly:
 
@@ -52,22 +75,9 @@ The bootstrap task seeds `~/.config/git/config.local` interactively. If it could
 mise run setup-identity      # or: dotfiles-setup identity
 ```
 
-### 4. Set Up an SSH Key for GitHub (Auth + Signing)
+### 6. Allow Your Signing Key
 
-If you ran `gh auth login` and let it generate an SSH key, the key already exists at `~/.ssh/id_ed25519` and is registered with GitHub as an **authentication** key. Otherwise generate one manually:
-
-```bash
-ssh-keygen -t ed25519 -C "you@example.com"
-```
-
-GitHub treats authentication and signing keys separately, so the same public key needs to be uploaded a second time as a signing key. The `gh` CLI can do this once given the extra scope:
-
-```bash
-gh auth refresh -h github.com -s admin:ssh_signing_key
-gh ssh-key add ~/.ssh/id_ed25519.pub --type signing --title "$(hostname -s)"
-```
-
-Then add the public key to `config/git/allowed_signers` so local verification works (`git log --show-signature`), and commit the change:
+Add the public key from step 2 to `config/git/allowed_signers` so local verification works (`git log --show-signature`), and commit the change:
 
 ```bash
 echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allowed_signers
@@ -79,7 +89,7 @@ echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> config/git/allow
 git commit --allow-empty -m "test signing" && git log --show-signature -1
 ```
 
-### 5. Install Vim Plugins
+### 7. Install Vim Plugins
 
 Open vim and run:
 

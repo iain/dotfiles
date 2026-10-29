@@ -8,7 +8,7 @@ A macOS dotfiles repo. Config files live in `config/`, rc files in `rc/`. Machin
 
 ## Bootstrap
 
-A fresh machine clones and bootstraps in one go with `mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles` (trusts the repo for that run only). After that, run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
+A fresh machine clones and bootstraps in one go with `mise bootstrap --from https://github.com/iain/dotfiles --from-dir ~/Code/dotfiles` (trusts the repo for that run only). Homebrew and a logged-in `gh` with an SSH key come first, by hand (README "New Laptop Setup"): mise needs `git` to clone, the bootstrap's Homebrew hook can't prompt for sudo, the repos phase clones spectral over SSH, and the tools phase needs `gh`'s token. After that, run from the cloned repo (dotfile sources are relative to `mise.toml`, so it can be cloned anywhere):
 
 ```bash
 mise trust
