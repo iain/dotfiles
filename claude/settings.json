@@ -65,7 +65,6 @@
     "baseRef": "fresh"
   },
   "enableWorkflows": false,
-  "remoteControlAtStartup": true,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
@@ -82,7 +81,7 @@
     "impeccable@impeccable": true,
     "ruby-lsp@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "nx@nx-claude-plugins": true,
+    "nx@nx-claude-plugins": false,
     "mattpocock-skills@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {
@@ -103,6 +102,12 @@
         "source": "github",
         "repo": "pbakaus/impeccable"
       }
+    },
+    "sigrid": {
+      "source": {
+        "source": "github",
+        "repo": "Software-Improvement-Group/agent-integrations"
+      }
     }
   },
   "feedbackSurveyRate": 0,
@@ -113,9 +118,18 @@
     }
   },
   "awaySummaryEnabled": false,
+  "pluginConfigs": {
+    "axis@sigrid": {
+      "options": {
+        "nudge_guardrails": true,
+        "nudge_architecture_explorer": true
+      }
+    }
+  },
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
+  "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true
 }
