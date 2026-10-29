@@ -1,0 +1,4 @@
+# sudo_local: local config file which survives system update and is included for sudo
+# Touch ID for sudo. No pam_reattach: its module is a user-writable Homebrew
+# file, and sudo would load it as root.
+auth       sufficient     pam_tid.so

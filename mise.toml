@@ -318,6 +318,13 @@ program = "~/.local/bin/pitchfork-supervisor"
 run_at_load = true
 keep_alive_on_failure = true
 
+# Touch ID for sudo. sudo_local is the include Apple keeps across OS updates.
+[bootstrap.files."/etc/pam.d/sudo_local"]
+source = "system/etc/pam.d/sudo_local"
+owner = "root"
+group = "wheel"
+mode = "0644"
+
 [bootstrap.files."/etc/pf.anchors/dotfiles-pitchfork"]
 source = "system/etc/pf.anchors/dotfiles-pitchfork"
 owner = "root"
