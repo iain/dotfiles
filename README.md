@@ -95,11 +95,19 @@ mise run check-signing         # audit the commit-signing chain
 
 ## Upgrading
 
-`mise bootstrap` only installs what's missing; it never upgrades. To move mise, packages and tools to their latest versions:
+`mise bootstrap` only installs what's missing; it never upgrades. One task does all the upkeep:
 
 ```bash
-mise run upgrade -n            # preview what would be upgraded
-mise run upgrade               # upgrade mise itself, bootstrap packages, then mise tools
+mise run upgrade -n            # preview — changes nothing
+mise run upgrade
 ```
+
+In order, it:
+
+1. Upgrades **mise** itself, then the **bootstrap packages** and the **mise tools**.
+2. Removes what's no longer used: tool versions no config asks for (`mise prune`), and old Homebrew versions and downloads (`brew cleanup`).
+3. Re-runs the **Claude setup**, so a new herdr's hooks reach Claude, then updates the **Claude plugins** of both profiles (restart Claude to load them) and the **vim plugins**.
+4. Relinks any Homebrew formula a failed upgrade left unlinked, which once took `gh` off `PATH`.
+5. Lists pending **macOS updates**. It doesn't install them, as they can need a restart: use System Settings or `softwareupdate --install`.
 
 mise fetches current formula metadata from Homebrew's API on every run, so there's no `brew update` step. Casks that Homebrew installed before the switch to bootstrap are left alone by mise; upgrade those with `brew upgrade --cask`.

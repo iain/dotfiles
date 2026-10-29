@@ -59,3 +59,85 @@ true'
 	grep -qx '  name = Iain Hecker' "$HOME/.config/git/config.local"
 	grep -qx '  email = iain@iain.nl' "$HOME/.config/git/config.local"
 }
+
+# For `upgrade`: claude, vim, brew and softwareupdate become stubs that log
+# their calls to $CALLS, and nothing else but ruby and the system's own
+# programs is on PATH, so no real update ever runs.
+stub_upgrade_tools() {
+	# The stubs log the Claude profile; the one running the tests isn't theirs.
+	unset CLAUDE_CONFIG_DIR
+	export CALLS=$BATS_TEST_TMPDIR/calls
+	touch "$CALLS"
+	mkdir -p "$REPO/claude"
+	echo '{"enabledPlugins": {"one@market": true, "off@market": false}}' >"$REPO/claude/settings.json"
+	for tool in claude vim brew softwareupdate; do
+		printf '#!/bin/sh\necho "${CLAUDE_CONFIG_DIR:-default} %s $*" >>"$CALLS"\n' "$tool" >"$BATS_TEST_TMPDIR/stubs/$tool"
+		chmod +x "$BATS_TEST_TMPDIR/stubs/$tool"
+	done
+	PATH=$BATS_TEST_TMPDIR/stubs:$(dirname "$(command -v ruby)"):/usr/bin:/bin
+}
+
+@test "upgrade updates the marketplaces and enabled plugins of each Claude profile" {
+	stub_upgrade_tools
+
+	run -0 "$REPO/bin/dotfiles-setup" upgrade
+
+	grep -qx 'default claude plugin marketplace update' "$CALLS"
+	grep -qx 'default claude plugin update one@market' "$CALLS"
+	grep -qx "$HOME/.claude-private claude plugin marketplace update" "$CALLS"
+	grep -qx "$HOME/.claude-private claude plugin update one@market" "$CALLS"
+	! grep -q 'off@market' "$CALLS"
+}
+
+@test "upgrade updates vim-plug and the vim plugins" {
+	stub_upgrade_tools
+
+	run -0 "$REPO/bin/dotfiles-setup" upgrade
+
+	grep -qx "default vim -N -u $HOME/.vimrc -es +PlugUpgrade +PlugUpdate --sync +qa" "$CALLS"
+}
+
+@test "upgrade relinks formulae that a failed upgrade left unlinked" {
+	stub_upgrade_tools
+	cat >"$BATS_TEST_TMPDIR/stubs/brew" <<'STUB'
+#!/bin/sh
+echo "brew $*" >>"$CALLS"
+if [ "$1" = info ]; then
+	echo '{"formulae": [
+		{"name": "gh", "keg_only": false, "linked_keg": null},
+		{"name": "libpq", "keg_only": true, "linked_keg": null},
+		{"name": "git", "keg_only": false, "linked_keg": "2.56.0"}
+	]}'
+fi
+STUB
+
+	run -0 "$REPO/bin/dotfiles-setup" upgrade
+
+	grep -qx 'brew link gh' "$CALLS"
+	! grep -q 'brew link libpq\|brew link git' "$CALLS"
+}
+
+@test "upgrade lists pending macOS updates without installing them" {
+	stub_upgrade_tools
+
+	run -0 "$REPO/bin/dotfiles-setup" upgrade
+
+	grep -qx 'default softwareupdate --list' "$CALLS"
+	! grep -q 'softwareupdate --install' "$CALLS"
+}
+
+@test "upgrade --dry-run says what it would change, and changes nothing" {
+	stub_upgrade_tools
+	cat >"$BATS_TEST_TMPDIR/stubs/brew" <<'STUB'
+#!/bin/sh
+echo "brew $*" >>"$CALLS"
+[ "$1" = info ] && echo '{"formulae": [{"name": "gh", "keg_only": false, "linked_keg": null}]}'
+true
+STUB
+
+	run -0 "$REPO/bin/dotfiles-setup" upgrade --dry-run
+
+	[[ "$output" == *"would run: claude plugin update one@market"* ]]
+	[[ "$output" == *"would run: brew link gh"* ]]
+	! grep -q 'claude\|vim\|brew link' "$CALLS"
+}

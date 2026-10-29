@@ -147,19 +147,29 @@ run = '"$HOME/.local/bin/dotfiles-setup" claude'
 description = "Read-only diagnostic of the commit-signing chain"
 run = '"$HOME/.local/bin/dotfiles-setup" signing'
 
-# `mise bootstrap` only installs what's missing; this moves everything to latest.
+# `mise bootstrap` only installs what's missing; this moves everything to latest
+# and cleans up after it. setup-claude runs again so a new herdr's hooks reach
+# Claude; `dotfiles-setup upgrade` covers Claude and vim plugins, relinks
+# formulae a failed upgrade left unlinked, and lists macOS updates.
 [tasks.upgrade]
-description = "Upgrade mise, bootstrap packages and mise tools to their latest versions"
+description = "Upgrade mise, packages, tools and plugins, then clean up old versions"
 usage = 'flag "-n --dry-run" help="Show what would be upgraded without changing anything"'
 run = '''
 if [ "${usage_dry_run:-false}" = "true" ]; then
   mise version
   mise bootstrap packages upgrade --dry-run
   mise upgrade --dry-run
+  mise prune --dry-run
+  brew cleanup --dry-run
+  "$HOME/.local/bin/dotfiles-setup" upgrade --dry-run
 else
   mise self-update --yes
   mise bootstrap packages upgrade --yes
   mise upgrade
+  mise prune --yes
+  brew cleanup
+  "$HOME/.local/bin/dotfiles-setup" claude
+  "$HOME/.local/bin/dotfiles-setup" upgrade
 fi
 '''
 

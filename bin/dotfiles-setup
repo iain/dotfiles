@@ -9,6 +9,7 @@
 # to re-run.
 #
 # Usage: dotfiles-setup <identity|claude|signing|all>
+#        dotfiles-setup upgrade [--dry-run]
 #
 # The repo is located via this script's own realpath, so it works wherever the
 # dotfiles are cloned — no hardcoded path.
@@ -269,8 +270,75 @@ def check_signing
   end
 end
 
+# Updates that `mise bootstrap packages upgrade` and `mise upgrade` don't reach.
+# Run by `mise run upgrade`, after those. With --dry-run, only what reads runs.
+def upgrade(dry_run:)
+  upgrade_claude_plugins(dry_run)
+  upgrade_vim_plugins(dry_run)
+  relink_formulae(dry_run)
+  list_macos_updates
+end
+
+# Runs a command that changes something, or in a dry run only says so.
+def change(dry_run, *command, failure:, env: {})
+  if dry_run
+    puts "  would run: #{command.join(" ")}"
+  else
+    system(env, *command) || warn("  WARNING: #{failure}")
+  end
+end
+
+# Listed only: installing one can need a restart, so that stays a choice.
+def list_macos_updates
+  puts "Checking for macOS updates..."
+  system("softwareupdate", "--list") || warn("  WARNING: could not check for macOS updates")
+end
+
+# A `brew upgrade` whose link step fails leaves the new keg unlinked, and mise
+# still counts it as installed: its opt link resolves. That once took gh off
+# PATH unnoticed.
+def relink_formulae(dry_run)
+  installed = IO.popen(%w[brew info --json=v2 --installed], err: File::NULL, &:read)
+  if installed.empty?
+    warn "  WARNING: could not list the Homebrew formulae to check their links"
+  else
+    formulae = JSON.parse(installed)["formulae"]
+    unlinked = formulae.select { |formula| !formula["keg_only"] && formula["linked_keg"].nil? }
+    unlinked.each do |formula|
+      puts "Relinking #{formula["name"]}..."
+      change(dry_run, "brew", "link", formula["name"],
+             failure: "could not link #{formula["name"]}; see `brew link #{formula["name"]}`")
+    end
+  end
+end
+
+# Silent Ex mode, so it runs without a terminal UI. That mode skips the vimrc,
+# and with it vim-plug, unless -u names it. --sync makes PlugUpdate finish
+# before :qa quits.
+def upgrade_vim_plugins(dry_run)
+  puts "Updating vim plugins..."
+  change(dry_run, "vim", "-N", "-u", (HOME / ".vimrc").to_s, "-es", "+PlugUpgrade", "+PlugUpdate --sync", "+qa",
+         failure: "could not update the vim plugins")
+end
+
+# Claude only loads updated plugins after a restart.
+def upgrade_claude_plugins(dry_run)
+  settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
+  CLAUDE_PROFILES.each do |dir, config_dir|
+    puts "Updating Claude plugins in #{dir}..."
+    env = { "CLAUDE_CONFIG_DIR" => config_dir }
+    change(dry_run, "claude", "plugin", "marketplace", "update", env: env, failure: "could not update the marketplaces")
+    settings.fetch("enabledPlugins", {}).each do |ref, enabled|
+      if enabled
+        change(dry_run, "claude", "plugin", "update", ref, env: env, failure: "could not update plugin #{ref}")
+      end
+    end
+  end
+end
+
 case ARGV[0]
 when "identity"  then setup_identity
+when "upgrade"   then upgrade(dry_run: ARGV.include?("--dry-run"))
 when "claude"    then setup_claude
 when "signing"   then check_signing
 when "all", nil
@@ -278,6 +346,6 @@ when "all", nil
   setup_claude
   check_signing
 else
-  warn "Usage: dotfiles-setup <identity|claude|signing|all>"
+  warn "Usage: dotfiles-setup <identity|claude|signing|all|upgrade [--dry-run]>"
   exit 1
 end
