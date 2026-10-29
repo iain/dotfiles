@@ -79,12 +79,13 @@
 [commit]
   gpgSign = true
   verbose = true
+# opt/gh survives a failed `brew upgrade` that leaves gh unlinked from bin/.
 [credential "https://github.com"]
   helper =
-  helper = !/opt/homebrew/bin/gh auth git-credential
+  helper = !/opt/homebrew/opt/gh/bin/gh auth git-credential
 [credential "https://gist.github.com"]
   helper =
-  helper = !/opt/homebrew/bin/gh auth git-credential
+  helper = !/opt/homebrew/opt/gh/bin/gh auth git-credential
 [hook "hk-pre-commit"]
   command = test \"${HK:-1}\" = \"0\" || ${XDG_DATA_HOME:-$HOME/.local/share}/mise/installs/hk/latest/hk run pre-commit --from-hook \"$@\"
   event = pre-commit
