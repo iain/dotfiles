@@ -267,6 +267,7 @@ def check_signing
     puts "  signing OK"
   else
     problems.each { |p| warn "  WARNING: #{p}" }
+    exit 1
   end
 end
 

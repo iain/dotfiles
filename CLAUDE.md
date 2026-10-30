@@ -15,6 +15,7 @@ mise trust
 mise bootstrap -n      # preview — changes nothing
 mise bootstrap         # apply
 mise bootstrap status  # show drift from the declared state
+mise doctor project    # check drift, GitHub login, commit signing and pitchfork
 mise run upgrade [-n]  # upgrade everything, clean up, update plugins, list macOS updates
 ```
 
@@ -33,7 +34,7 @@ mise run upgrade [-n]  # upgrade everything, clean up, update plugins, list macO
 6. `[bootstrap.user].login_shell` — sets fish
 7. `[tools]` from the global config — `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
 8. `[tasks.bootstrap]` — depends on `setup-identity`, `setup-claude`
-9. `[bootstrap.hooks.final]` — the read-only commit-signing diagnostic
+9. `[bootstrap.hooks.final]` — the read-only commit-signing diagnostic, whose failure only warns: a new machine's key isn't trusted yet
 
 Everything is idempotent — anything already in its desired state is skipped, so re-running is safe.
 
@@ -42,7 +43,7 @@ Everything is idempotent — anything already in its desired state is skipped, s
 The parts mise can't express declaratively live in `bin/dotfiles-setup` (a Ruby script). The dotfiles phase deploys it to `~/.local/bin` before the `bootstrap` task runs, and it locates the repo via its own realpath — no hardcoded path. Subcommands, each a mise task and idempotent:
 - `identity` (`mise run setup-identity`) — interactive git identity → `~/.config/git/config.local` (defaults from the GitHub account `gh` is logged in to), ssh config, fish local config; then appends this machine's signing key to the tracked `config/git/allowed_signers`, leaving the commit to you
 - `claude` (`mise run setup-claude`) — for each Claude profile (`~/.claude`, `~/.claude-private`), installs the marketplaces/plugins declared in `claude/settings.json` and registers the rubocop MCP server at user scope; then runs `herdr integration install claude` once, for the default profile (hooks in the tracked `claude/settings.json`, script in the untracked `~/.claude/hooks/`)
-- `signing` (`mise run check-signing`) — read-only diagnostic: warns, with the exact fix, if `config.local` is missing, the signing key is absent, or that key isn't in `allowed_signers` / not registered on GitHub
+- `signing` (`mise run check-signing`) — read-only diagnostic: exits 1 and warns, with the exact fix, if `config.local` is missing, the signing key is absent, or that key isn't in `allowed_signers` / not registered on GitHub
 
 ## Structure
 
@@ -75,7 +76,7 @@ The parts mise can't express declaratively live in `bin/dotfiles-setup` (a Ruby 
 
 - **Never run pitchfork as root** — no `sudo pitchfork …`, no `sudo pitchfork boot enable`, no `settings.supervisor.user`. A root supervisor executes the user-owned pitchfork binary (and a root `log-sink` per daemon start) and reads user-editable config, so any code running as the user could escalate to root.
 - **Restart with `pfr`** (`launchctl kickstart -k gui/$UID/dev.mise.pitchfork`), e.g. after upgrading pitchfork. It's both a fish abbreviation, usable anywhere, and the `restart-pitchfork` task (alias `pfr`) in this repo. `pitchfork supervisor start --force` replaces it with a copy launchd doesn't manage.
-- **If `https://*.localhost` stops answering**, first check the supervisor is up (`launchctl print gui/$UID/dev.mise.pitchfork`, `lsof -a -nP -iTCP:8443 -sTCP:LISTEN`), then the forward: `sudo pfctl -s info` and `sudo pfctl -a com.apple/250.dotfiles-pitchfork -s nat`; re-run it with `sudo launchctl kickstart system/dev.dotfiles.pitchfork-pf`. Other software that disables pf would do this. Don't test via `:8443` — it's unreachable by design while the forward works.
+- **If `https://*.localhost` stops answering**, run `mise doctor project` from this repo, which checks the chain below without `sudo`. By hand, first check the supervisor is up (`launchctl print gui/$UID/dev.mise.pitchfork`, `lsof -a -nP -iTCP:8443 -sTCP:LISTEN`), then the forward: `sudo pfctl -s info` and `sudo pfctl -a com.apple/250.dotfiles-pitchfork -s nat`; re-run it with `sudo launchctl kickstart system/dev.dotfiles.pitchfork-pf`. Other software that disables pf would do this. Don't test via `:8443` — it's unreachable by design while the forward works.
 - **After the pf rule or its plist changes**, `mise bootstrap` rewrites the files but launchd only reads the plist on load: `sudo launchctl bootout system/dev.dotfiles.pitchfork-pf && sudo launchctl bootstrap system /Library/LaunchDaemons/dev.dotfiles.pitchfork-pf.plist`.
 
 ## Conventions

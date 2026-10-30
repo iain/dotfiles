@@ -200,10 +200,47 @@ run = 'launchctl kickstart -k "gui/$(id -u)/dev.mise.pitchfork"'
 [tasks.bootstrap]
 depends = ["setup-identity", "setup-claude"]
 
-# The signing diagnostic runs last, once identity and tooling are in place.
+# The signing diagnostic runs last, once identity and tooling are in place. A new
+# machine's key isn't trusted yet, which is worth a warning but not a failed bootstrap.
 [bootstrap.hooks.final]
 description = "Check commit signing"
+run = '"$HOME/.local/bin/dotfiles-setup" signing || true'
+
+# ── Health checks, run with `mise -C ~/Code/dotfiles doctor project`. Here rather
+#    than in the global config, which would add them to every project.
+[doctor.checks.bootstrap-drift]
+description = "This machine matches the bootstrap config"
+run = "mise bootstrap status --missing"
+hint = "Preview the fix with `mise bootstrap -n`, then run `mise bootstrap`"
+timeout = "30s"
+
+[doctor.checks.github-auth]
+description = "gh is logged in to GitHub"
+run = "gh auth status"
+hint = "Run `gh auth login`"
+
+[doctor.checks.commit-signing]
+description = "Commits are signed with a trusted key"
+depends = "github-auth"
 run = '"$HOME/.local/bin/dotfiles-setup" signing'
+hint = "Run `mise run check-signing` for the fix to each problem"
+
+[doctor.checks.pitchfork-supervisor]
+description = "The pitchfork supervisor is running"
+run = 'launchctl print "gui/$(id -u)/dev.mise.pitchfork" | grep -q "state = running"'
+hint = "Restart it with `pfr`"
+
+[doctor.checks.pitchfork-proxy]
+description = "The pitchfork proxy is listening on 8443"
+depends = "pitchfork-supervisor"
+run = "lsof -a -nP -iTCP:8443 -sTCP:LISTEN"
+hint = "Restart it with `pfr`"
+
+[doctor.checks.pitchfork-forward]
+description = "Loopback 443 forwards to the proxy"
+depends = "pitchfork-proxy"
+run = "nc -z -G 2 127.0.0.1 443"
+hint = "Run `sudo launchctl kickstart system/dev.dotfiles.pitchfork-pf`"
 
 # ── macOS defaults — declarative `defaults write` entries. ───────────────────
 [bootstrap.macos.defaults.NSGlobalDomain]

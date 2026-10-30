@@ -60,6 +60,31 @@ true'
 	grep -qx '  email = iain@iain.nl' "$HOME/.config/git/config.local"
 }
 
+# For `signing`: gh reports being logged out, so GitHub isn't consulted.
+stub_logged_out_gh() {
+	printf '#!/bin/sh\nexit 1\n' >"$BATS_TEST_TMPDIR/stubs/gh"
+	chmod +x "$BATS_TEST_TMPDIR/stubs/gh"
+}
+
+@test "signing fails and prints the fix when the key isn't allowed" {
+	stub_logged_out_gh
+	touch "$HOME/.config/git/config.local"
+
+	run -1 "$REPO/bin/dotfiles-setup" signing
+
+	[[ "$output" == *"iain@iain.nl ssh-ed25519 AAAAnew"* ]]
+}
+
+@test "signing passes when the chain is complete" {
+	stub_logged_out_gh
+	touch "$HOME/.config/git/config.local"
+	echo 'iain@iain.nl ssh-ed25519 AAAAnew' >>"$REPO/config/git/allowed_signers"
+
+	run -0 "$REPO/bin/dotfiles-setup" signing
+
+	[[ "$output" == *"signing OK"* ]]
+}
+
 # For `upgrade`: claude, vim, brew and softwareupdate become stubs that log
 # their calls to $CALLS, and nothing else but ruby and the system's own
 # programs is on PATH, so no real update ever runs.

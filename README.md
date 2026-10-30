@@ -91,6 +91,7 @@ mise bootstrap status          # what's drifted from the declared state
 mise dotfiles apply -n         # preview dotfile symlink changes
 mise run setup-identity        # (re)seed git identity / ssh / fish-local
 mise run check-signing         # audit the commit-signing chain
+mise doctor project            # check drift, GitHub login, signing and pitchfork
 ```
 
 ## Upgrading
