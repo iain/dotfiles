@@ -104,10 +104,10 @@ mise run upgrade
 
 In order, it:
 
-1. Upgrades **mise** itself, then the **bootstrap packages** and the **mise tools**.
+1. Upgrades **mise** itself, then the **bootstrap packages**, everything else **Homebrew** manages (Homebrew itself, formulae a project installed, casks from before the bootstrap), the **mise tools** and the **uv tools**.
 2. Removes what's no longer used: tool versions no config asks for (`mise prune`), and old Homebrew versions and downloads (`brew cleanup`).
 3. Re-runs the **Claude setup**, so a new herdr's hooks reach Claude, then updates the **Claude plugins** of both profiles (restart Claude to load them) and the **vim plugins**.
 4. Relinks any Homebrew formula a failed upgrade left unlinked, which once took `gh` off `PATH`.
 5. Lists pending **macOS updates**. It doesn't install them, as they can need a restart: use System Settings or `softwareupdate --install`.
 
-mise fetches current formula metadata from Homebrew's API on every run, so there's no `brew update` step. Casks that Homebrew installed before the switch to bootstrap are left alone by mise; upgrade those with `brew upgrade --cask`.
+`mise bootstrap packages upgrade` only upgrades what `mise.toml` declares, and leaves casks that Homebrew installed before the switch to bootstrap alone, so `brew upgrade` follows it for the rest; it also updates Homebrew itself. Casks that update themselves, like macshot, are left to their own updater.

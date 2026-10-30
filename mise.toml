@@ -158,14 +158,18 @@ run = '''
 if [ "${usage_dry_run:-false}" = "true" ]; then
   mise version
   mise bootstrap packages upgrade --dry-run
+  brew upgrade --dry-run
   mise upgrade --dry-run
+  uv tool list --outdated
   mise prune --dry-run
   brew cleanup --dry-run
   "$HOME/.local/bin/dotfiles-setup" upgrade --dry-run
 else
   mise self-update --yes
   mise bootstrap packages upgrade --yes
+  brew upgrade
   mise upgrade
+  uv tool upgrade --all
   mise prune --yes
   brew cleanup
   "$HOME/.local/bin/dotfiles-setup" claude
