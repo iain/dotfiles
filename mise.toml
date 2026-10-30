@@ -43,6 +43,10 @@
 "~/.screenrc"     = { source = "rc/screenrc" }
 "~/.tmux.conf"    = { source = "rc/tmux.conf" }
 "~/.vimrc"        = { source = "rc/vimrc" }
+# Docker only finds plugins here. ~/.docker/config.json could list Homebrew's
+# plugin dir instead, but it holds registry logins, so it can't be tracked.
+"~/.docker/cli-plugins/docker-buildx"  = { source = "/opt/homebrew/opt/docker-buildx/bin/docker-buildx" }
+"~/.docker/cli-plugins/docker-compose" = { source = "/opt/homebrew/opt/docker-compose/bin/docker-compose" }
 
 # Login shell.
 [bootstrap.user]
@@ -117,6 +121,11 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 # networking
 "brew:nmap"            = "latest"   # network scanner
 "brew:siege"           = "latest"   # HTTP load testing
+# containers
+"brew:colima"          = "latest"   # Linux VM running Docker Engine, started on demand
+"brew:docker"          = "latest"   # Docker CLI
+"brew:docker-buildx"   = "latest"   # Docker build plugin, linked in [dotfiles]
+"brew:docker-compose"  = "latest"   # Docker Compose plugin, linked in [dotfiles]
 # fonts & casks
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:ngrok"                         = "latest"   # expose localhost publicly

@@ -49,6 +49,12 @@ HK_STATE_DIR             = "{{env.XDG_STATE_HOME}}/hk"              # ~/.local/s
 HK_CACHE_DIR             = "{{env.XDG_CACHE_HOME}}/hk"              # ~/Library/Caches/hk
 PITCHFORK_STATE_DIR      = "{{env.XDG_STATE_HOME}}/pitchfork"       # ~/.local/state/pitchfork, even with XDG set
 STARSHIP_CACHE           = "{{env.XDG_CACHE_HOME}}/starship"        # ~/.cache/starship, even with XDG set
+LIMA_HOME                = "{{env.XDG_DATA_HOME}}/lima"             # $XDG_CONFIG_HOME/colima/_lima, incl. Colima's VM disks
+
+# For tools that ignore Docker contexts. Testcontainers mounts the socket into its
+# Ryuk container, so it needs the path inside Colima's VM, not the one on the Mac.
+DOCKER_HOST = "unix://{{env.XDG_CONFIG_HOME}}/colima/default/docker.sock"
+TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock"
 
 # The pitchfork supervisor is owned by its LaunchAgent (bin/pitchfork-supervisor),
 # which also sets its proxy port. A client command starting its own supervisor

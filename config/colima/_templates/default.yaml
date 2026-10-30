@@ -1,0 +1,46 @@
+# Applied when Colima creates a VM; later changes don't reach an existing one.
+# Colima doesn't merge a template with its defaults, so this lists every setting.
+# Changed from those defaults: cpu, memory, vmType and mountType (the defaults of
+# `colima start` itself, but not of a template) and sshConfig (which would add an
+# Include to ~/.ssh/config).
+cpu: 4
+disk: 100
+memory: 8
+arch: host
+runtime: docker
+modelRunner: docker
+hostname: null
+kubernetes:
+  enabled: false
+  version: v1.35.0+k3s1
+  k3sArgs: [--disable=traefik]
+  port: 0
+autoActivate: true
+network:
+  address: false
+  mode: shared
+  interface: en0
+  preferredRoute: false
+  dns: []
+  dnsHosts:
+    host.docker.internal: host.lima.internal
+  hostAddresses: false
+  gatewayAddress: 192.168.5.2
+forwardAgent: false
+docker: {}
+vmType: vz
+portForwarder: ssh
+rosetta: false
+binfmt: true
+nestedVirtualization: false
+mountType: virtiofs
+mountInotify: false
+cpuType: host
+provision: []
+sshConfig: false
+sshPort: 0
+mounts: []
+diskImage: ""
+forceDiskImage: false
+rootDisk: 20
+env: {}
