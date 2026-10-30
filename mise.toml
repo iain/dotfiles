@@ -222,6 +222,8 @@ _FXSortFoldersFirst = true
 FXPreferredViewStyle = "Nlsv"
 FXDefaultSearchScope = "SCcf"
 FXEnableExtensionChangeWarning = false
+# No icons on the desktop, so screenshots never show them; ~/Desktop stays in Finder.
+CreateDesktop = false
 AppleShowAllFiles = true
 
 [bootstrap.macos.defaults."com.apple.desktopservices"]
