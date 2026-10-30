@@ -2,6 +2,31 @@
 
 Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html) — the repo-root `mise.toml` describes the packages, dotfile symlinks, login shell, and macOS defaults for the whole machine; `config/mise/config.toml` holds the global mise settings and tools.
 
+## Using These Yourself
+
+This is one person's setup, so fork it instead of running the install script as it is. It needs an Apple Silicon Mac, because `/opt/homebrew` is hardcoded.
+
+**Change in your fork:**
+
+- `install.sh` and this README: point the `iain/dotfiles` URLs at your fork.
+- `config/git/allowed_signers`: delete my keys, or your machine keeps trusting them. Your own key is added during setup.
+- `config/direnv/direnv.toml`: replace `~/iain` in the trusted prefixes.
+- `claude/settings.json`: review it, as it uses Claude's auto permission mode and turns on my plugins and remote control.
+- `config/iterm/`: delete it, or replace my hostnames and home path.
+
+**Expect these changes to your machine**, and preview them with `mise bootstrap -n`:
+
+- ⌘Space no longer opens Spotlight, and macOS's ⌘⇧3, ⌘⇧4 and ⌘⇧5 screenshot shortcuts are off in favour of macshot. Nothing here installs a replacement for Spotlight.
+- Desktop icons are hidden, Finder shows hidden files, and Finder and the Dock restart on every bootstrap.
+- Root-owned files are installed: Touch ID for `sudo`, and a pf rule with a LaunchDaemon that forwards local port 443 to pitchfork.
+- fish becomes your login shell.
+- `DOCKER_HOST` points at Colima, so tools that honour it stop using Docker Desktop.
+- Caches and tool data move to the XDG folders, so npm, Go, cargo and Maven download their files again.
+- `--force-dotfiles` replaces any existing dotfiles that conflict, so back up yours first.
+- `mise bootstrap packages prune` removes Homebrew packages not declared here.
+
+Released under the [MIT License](LICENSE).
+
 ## New Laptop Setup
 
 ### 1. Run the Install Script
