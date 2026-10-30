@@ -293,8 +293,9 @@ key = "AppleSymbolicHotKeys"
 path = ["184", "enabled"]
 value = false
 
-# macshot stores Carbon key codes (kVK_ANSI_3 = 20, 4 = 21, 5 = 23) and Carbon
-# modifiers (cmdKey | shiftKey = 768). Restart macshot to pick them up.
+# macshot stores Carbon key codes (kVK_ANSI_2 = 19, 3 = 20, 4 = 21, 5 = 23) and
+# Carbon modifiers (cmdKey | shiftKey = 768). Restart macshot to pick them up.
+# Quick capture (⌘⇧2) skips the toolbar and copies or saves straight away.
 [bootstrap.macos.defaults."com.sw33tlie.macshot.macshot"]
 hotkeyFullScreenKeyCode = 20
 hotkeyFullScreenModifiers = 768
@@ -302,8 +303,13 @@ hotkeyKeyCode = 21
 hotkeyModifiers = 768
 hotkeyRecordKeyCode = 23
 hotkeyRecordModifiers = 768
-# The cask is auto_updates, so brew leaves updating to macshot's Sparkle.
-SUAutomaticallyUpdate = true
+hotkeyQuickCaptureKeyCode = 19
+hotkeyQuickCaptureModifiers = 768
+# A trimmed toolbar, by AnnotationTool raw value: arrow, rectangle, marker,
+# text, number, censor, crop and spotlight. Actions: pin, OCR, auto-redact and
+# scrolling capture; upload is off, so nothing goes to a public image host.
+enabledTools = [2, 3, 6, 7, 8, 9, 15, 18]
+enabledActions = [1002, 1003, 1006, 1010]
 
 # ── macOS: the non-declarative extras (chflags, a HOME-expanded path with a
 #    prerequisite mkdir, and the app restarts). Runs on every bootstrap, after
