@@ -14,6 +14,9 @@ uvx = true
 [settings.ruby]
 compile = false
 
+[settings.self_update]
+auto = true
+
 # XDG base directories, set explicitly so every path below derives from them,
 # and the tools that ignore XDG (or fall back to ~/Library on macOS) pointed at
 # them. Set here rather than in fish so they also reach mise tasks and anything

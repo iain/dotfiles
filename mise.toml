@@ -50,10 +50,11 @@
 
 # Login shell.
 [bootstrap.user]
-login_shell = "/opt/homebrew/bin/fish"
+login_shell = "fish"
 
 # Homebrew must exist before the packages phase.
 [bootstrap.hooks.pre-packages]
+description = "Install Homebrew if it's missing"
 run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 
 # Homebrew packages. Formulae use `brew:`, casks and fonts use `brew-cask:`.
@@ -201,6 +202,7 @@ depends = ["setup-identity", "setup-claude"]
 
 # The signing diagnostic runs last, once identity and tooling are in place.
 [bootstrap.hooks.final]
+description = "Check commit signing"
 run = '"$HOME/.local/bin/dotfiles-setup" signing'
 
 # ── macOS defaults — declarative `defaults write` entries. ───────────────────
@@ -330,6 +332,7 @@ enabledActions = [1002, 1003, 1006, 1010]
 #    prerequisite mkdir, and the app restarts). Runs on every bootstrap, after
 #    the declarative defaults are written.
 [bootstrap.hooks.post-defaults]
+description = "Set the screenshot folder, unhide ~/Library and restart Finder and Dock"
 run = """
 chflags nohidden ~/Library
 mkdir -p "$HOME/Screenshots"
