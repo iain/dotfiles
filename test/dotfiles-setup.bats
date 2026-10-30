@@ -102,6 +102,44 @@ stub_upgrade_tools() {
 	PATH=$BATS_TEST_TMPDIR/stubs:$(dirname "$(command -v ruby)"):/usr/bin:/bin
 }
 
+# Like the real herdr, adds its hook with an absolute path unless that exact
+# hook is already there, writing through the symlink.
+stub_herdr_integration() {
+	mkdir -p "$HOME/.claude"
+	ln -s "$REPO/claude/settings.json" "$HOME/.claude/settings.json"
+	cat >"$BATS_TEST_TMPDIR/stubs/herdr" <<'STUB'
+#!/bin/sh
+settings=$HOME/.claude/settings.json
+hook="bash '$HOME/.claude/hooks/herdr-agent-state.sh' session"
+if [ "$1" = integration ] && ! grep -qF "$hook" "$settings"; then
+	updated=$(sed "s|\"hooks\": \[|\"hooks\": [\"$hook\", |" "$settings")
+	echo "$updated" >"$settings"
+fi
+STUB
+	chmod +x "$BATS_TEST_TMPDIR/stubs/herdr"
+}
+
+@test "claude keeps herdr's hook in settings.json free of the home path" {
+	stub_upgrade_tools
+	stub_herdr_integration
+	echo '{"hooks": ["bash ~/.claude/hooks/herdr-agent-state.sh session"]}' >"$REPO/claude/settings.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" claude
+
+	[ "$(cat "$REPO/claude/settings.json")" = '{"hooks": ["bash ~/.claude/hooks/herdr-agent-state.sh session"]}' ]
+}
+
+@test "claude makes a freshly installed herdr hook free of the home path" {
+	stub_upgrade_tools
+	stub_herdr_integration
+	echo '{"hooks": []}' >"$REPO/claude/settings.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" claude
+
+	grep -qF '"bash ~/.claude/hooks/herdr-agent-state.sh session"' "$REPO/claude/settings.json"
+	! grep -qF "$HOME" "$REPO/claude/settings.json"
+}
+
 @test "upgrade updates the marketplaces and enabled plugins of each Claude profile" {
 	stub_upgrade_tools
 

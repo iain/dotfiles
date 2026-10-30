@@ -155,8 +155,7 @@ def setup_claude
   # its hooks differ. Run once, for the default profile: the other profiles
   # share its settings.json, and the hooks call the script in ~/.claude.
   if system("command -v herdr > /dev/null 2>&1")
-    system({ "CLAUDE_CONFIG_DIR" => nil }, "herdr", "integration", "install", "claude") ||
-      warn("  WARNING: could not install the herdr Claude integration")
+    install_herdr_integration
     install_herdr_skill
   else
     puts "  skip herdr integration (herdr not installed)"
@@ -196,6 +195,20 @@ def register_rubocop_mcp(env)
     system(env, "claude", "mcp", "add", "--scope", "user", "rubocop", "--", rubocop_mcp.to_s) ||
       warn("  WARNING: could not register rubocop MCP server")
   end
+end
+
+# herdr writes its hook with an absolute path and only recognises that exact form,
+# so the tracked settings.json gets the absolute path while herdr runs and goes
+# back to ~ afterwards, to work for any user.
+def install_herdr_integration
+  settings = CLAUDE_SRC / "settings.json"
+  portable_hook = "bash ~/.claude/hooks/herdr-agent-state.sh"
+  absolute_hook = "bash '#{CLAUDE_DEST}/hooks/herdr-agent-state.sh'"
+
+  settings.write(settings.read.gsub(portable_hook, absolute_hook))
+  system({ "CLAUDE_CONFIG_DIR" => nil }, "herdr", "integration", "install", "claude") ||
+    warn("  WARNING: could not install the herdr Claude integration")
+  settings.write(settings.read.gsub(absolute_hook, portable_hook))
 end
 
 # herdr prints a Claude skill for its own CLI. It's written untracked, straight
