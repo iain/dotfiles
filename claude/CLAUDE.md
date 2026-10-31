@@ -70,10 +70,10 @@ When TDD doesn't fit (pure exploration of an unfamiliar API, throwaway scripts, 
 
 Your training knowledge for fast-moving OSS tools (mise, opentofu, caddy, podman, Tailwind 4, Vite 8, etc.) lags the live docs. Before writing config, using a non-trivial flag, or stating tool behaviour as fact, verify against current docs: `WebFetch` the project's docs site, or `--help` the local binary.
 
-When you find a divergence between what you "knew" and what's true, save a `reference_<tool>_*.md` auto-memory with the canonical docs URL, so future sessions skip the lookup. (The existing mise memory is this pattern: generalize it.)
+When you find a divergence between what you "knew" and what's true, save a `reference_<tool>_*.md` auto-memory with the canonical docs URL, so future sessions skip the lookup.
 
 Doesn't apply to bedrock tools (`git`, `grep`, POSIX shell) where knowledge is stable. Trigger: *fast-moving tool + about to write config or claim how it works*.
 
 ## Tools
 
-When doing simple code changes, use the `Update` tool instead of writing a script that does the writing for you. This helps the human in the loop to better follow along what you are doing.
+When doing simple code changes, use the `Edit` tool instead of writing a script that does the writing for you. This helps the human in the loop to better follow along what you are doing.
