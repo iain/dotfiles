@@ -1,6 +1,6 @@
 # Dotfiles
 
-Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html) — the repo-root `mise.toml` describes the packages, dotfile symlinks, login shell, and macOS defaults for the whole machine; `config/mise/config.toml` holds the global mise settings and tools.
+Config files for macOS. Provisioned declaratively with [`mise bootstrap`](https://mise.jdx.dev/bootstrap.html): the repo-root `mise.toml` describes the packages, dotfile symlinks, login shell and macOS defaults for the whole machine, and `config/mise/config.toml` has the global mise settings and tools.
 
 ## Using These Yourself
 
@@ -45,16 +45,16 @@ Have your GitHub password and 2FA at hand: no password manager is installed yet,
 4. **Adds that key to GitHub again, as a signing key.** GitHub keeps authentication and signing keys apart.
 5. **Installs mise** from `mise.run` (a brewed mise can't `mise self-update`) and bootstraps from this repo, cloned to `~/Code/dotfiles`.
 
-Every step is skipped when already done, so after a failure just run it again; it then bootstraps from the existing checkout. Run it as above rather than through `curl | bash`, so its prompts can read the terminal.
+Every step is skipped when already done, so after a failure, run it again: it bootstraps from the existing checkout. Run it as above rather than through `curl | bash`, so its prompts can read the terminal.
 
 In order, bootstrap:
 
 1. Installs Homebrew if missing, then the **`[bootstrap.packages]`** (formulae + casks/fonts), and copies the root-owned **system files**: Touch ID for `sudo`, and pitchfork's port forward.
-2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched. `config.local.example` is excluded — it's documentation, not config.
+2. Symlinks **dotfiles** (`config/*` → `~/.config/*`, `rc/*` → `~/.<name>`, `claude/*` → `~/.claude/*`, `bin/*` → `~/.local/bin/*`). `symlink-each` links each file individually, so machine-local files like `~/.config/git/config.local` are left untouched. `config.local.example` is excluded, as it's documentation.
 3. Writes **macOS defaults**.
 4. Sets **fish** as the login shell.
-5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml` — one run is enough.
-6. Runs the **`bootstrap` task** — per-machine setup that isn't declarative, then a read-only commit-signing diagnostic. It asks for your git identity, suggesting the name and email of your GitHub account, and writes it to `~/.config/git/config.local`; if it couldn't prompt, run `mise run setup-identity`. It also adds this machine's signing key to `config/git/allowed_signers`, and sets up the Claude plugins.
+5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml`, and one run is enough.
+6. Runs the **`bootstrap` task**: per-machine setup that isn't declarative, then a read-only commit-signing diagnostic. It asks for your git identity, suggesting the name and email of your GitHub account, and writes it to `~/.config/git/config.local`; if it couldn't prompt, run `mise run setup-identity`. It also adds this machine's signing key to `config/git/allowed_signers`, and sets up the Claude plugins.
 
 Re-run the bootstrap from the checkout any time; anything already in its desired state is skipped:
 
@@ -65,7 +65,7 @@ mise bootstrap         # apply
 mise bootstrap status  # drift from the declared state
 ```
 
-> The machine bootstrap lives in the repo-root `mise.toml` — a project config — on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
+> The machine bootstrap is in the repo-root `mise.toml`, a project config, on purpose. mise merges `[bootstrap]` across the config hierarchy like `[tools]`, so if it lived in the global config, running `mise bootstrap` in *any* project would also re-apply these packages, dotfiles, and macOS defaults.
 
 ### 2. Switch to Ghostty
 
@@ -109,7 +109,7 @@ mise.toml             — the mise bootstrap config (packages, system files, dot
 
 ## Managing Dotfiles
 
-Bootstrap is declarative and idempotent, so day-to-day changes are just edits to `mise.toml` and the files under `config/`, `rc/`, etc. Run these from the repo:
+Bootstrap is declarative and idempotent, so day-to-day changes are edits to `mise.toml` and the files under `config/`, `rc/`, etc. Run these from the repo:
 
 ```bash
 mise bootstrap status          # what's drifted from the declared state
@@ -136,4 +136,4 @@ In order, it:
 4. Relinks any Homebrew formula a failed upgrade left unlinked, which once took `gh` off `PATH`.
 5. Lists pending **macOS updates**. It doesn't install them, as they can need a restart: use System Settings or `softwareupdate --install`.
 
-`mise bootstrap packages upgrade` only upgrades what `mise.toml` declares, and leaves casks that Homebrew installed before the switch to bootstrap alone, so `brew upgrade` follows it for the rest; it also updates Homebrew itself. Casks that update themselves, like macshot, are left to their own updater.
+`mise bootstrap packages upgrade` only upgrades what `mise.toml` declares, and leaves casks that Homebrew installed before the switch to bootstrap alone, so `brew upgrade` follows it for the rest and updates Homebrew itself. Casks that update themselves, like macshot, are left to their own updater.
