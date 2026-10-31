@@ -109,6 +109,7 @@ delivery = "terminal"
 # Paste into herdr's config.toml, replacing any [theme] section.
 
 # using my custom spectral theme
+# panel_bg is "reset" on purpose, unlike the generated file: keep that when pasting.
 [theme]
 auto_switch = true
 
@@ -116,7 +117,7 @@ auto_switch = true
 accent = "#F9AD26"
 panel_bg = "reset"
 sidebar_bg = "reset"
-active_row_bg = "#000000"
+active_row_bg = "#040302"
 selection_bg = "#403D36"
 surface0 = "#282622"
 surface1 = "#403D36"
