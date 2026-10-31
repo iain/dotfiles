@@ -66,6 +66,7 @@ shell-integration-features = ssh-env,ssh-terminfo
 
 # custom theme
 theme = dark:spectral-dark,light:spectral-light
+window-colorspace = display-p3
 
 # herdr keys: these hand Ghostty's tab and split keys to herdr, whose config
 # binds the same keys to its own tabs and panes; comment them out to give the
