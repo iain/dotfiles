@@ -347,9 +347,11 @@ key = "AppleSymbolicHotKeys"
 path = ["184", "enabled"]
 value = false
 
-# macshot stores Carbon key codes (kVK_ANSI_2 = 19, 3 = 20, 4 = 21, 5 = 23) and
-# Carbon modifiers (cmdKey | shiftKey = 768). Restart macshot to pick them up.
-# Quick capture (⌘⇧2) skips the toolbar and copies or saves straight away.
+# macshot stores Carbon key codes (kVK_ANSI_2 = 19, 3 = 20, 4 = 21, 5 = 23,
+# 6 = 22) and Carbon modifiers (cmdKey | shiftKey = 768). Restart macshot to
+# pick them up. Quick capture (⌘⇧2) skips the toolbar and copies or saves
+# straight away. OCR moves from ⌘⇧T, which reopens closed tabs in browsers, to
+# ⌘⇧6, which macOS only uses on Macs with a Touch Bar.
 [bootstrap.macos.defaults."com.sw33tlie.macshot.macshot"]
 hotkeyFullScreenKeyCode = 20
 hotkeyFullScreenModifiers = 768
@@ -359,6 +361,8 @@ hotkeyRecordKeyCode = 23
 hotkeyRecordModifiers = 768
 hotkeyQuickCaptureKeyCode = 19
 hotkeyQuickCaptureModifiers = 768
+hotkeyOCRKeyCode = 22
+hotkeyOCRModifiers = 768
 # A trimmed toolbar, by AnnotationTool raw value: arrow, rectangle, marker,
 # text, number, censor, crop and spotlight. Actions: pin, OCR, auto-redact and
 # scrolling capture; upload is off, so nothing goes to a public image host.
