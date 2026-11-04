@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Prints a random BSN (Dutch citizen service number) for test data. It passes
+# the elfproef, the checksum that forms validate, but a valid number can still
+# belong to a real person, so keep these out of production systems.
+
+WEIGHTS = [9, 8, 7, 6, 5, 4, 3, 2].freeze
+
+# The elfproef wants the weighted sum of the first eight digits minus the last
+# to be a multiple of 11, so the last digit is that sum mod 11. Ten doesn't fit
+# in one digit, so those draws start over.
+def random_bsn
+  loop do
+    digits = Array.new(8) { rand(10) }
+    check_digit = digits.zip(WEIGHTS).sum { |digit, weight| digit * weight } % 11
+    if check_digit < 10
+      return (digits + [check_digit]).join
+    end
+  end
+end
+
+puts random_bsn
