@@ -4,11 +4,11 @@
 # Per-machine setup that mise bootstrap's declarative sections can't express:
 # interactive git identity, ssh config seeding, fish local config, this machine's
 # signing key in allowed_signers, the read-only
-# commit-signing diagnostic, and Claude plugins + rubocop MCP + herdr hooks. Driven by mise
-# tasks (see mise.toml at the repo root); each subcommand is idempotent and safe
-# to re-run.
+# commit-signing diagnostic, Claude plugins + rubocop MCP + herdr hooks, and
+# Sol's shortcuts and search engine. Driven by mise tasks (see mise.toml at the repo root); each
+# subcommand is idempotent and safe to re-run.
 #
-# Usage: dotfiles-setup <identity|claude|signing|all>
+# Usage: dotfiles-setup <identity|claude|sol|signing|all>
 #        dotfiles-setup upgrade [--dry-run]
 #
 # The repo is located via this script's own realpath, so it works wherever the
@@ -232,6 +232,70 @@ def install_herdr_skill
   end
 end
 
+# Sol keeps its settings in ~/.config/sol/config.json, but rewrites the whole
+# file atomically, which would replace a symlink, so the keys that matter are
+# merged in instead. Sol only reads the file at launch and writes its in-memory
+# settings back on any change, so a running Sol is quit first and reopened after.
+def setup_sol
+  config_file = CONFIG_DEST / "sol" / "config.json"
+  config = read_sol_config(config_file)
+  if with_sol_settings(config) == config
+    puts "  skip #{config_file} (settings already set)"
+    return
+  end
+
+  if sol_running?
+    system("osascript", "-e", 'quit app "Sol"')
+    unless sol_exited_within?(10)
+      warn "  WARNING: Sol didn't quit, so #{config_file} is left unchanged"
+      return
+    end
+  end
+  config = with_sol_settings(read_sol_config(config_file))
+  FileUtils.mkdir_p(config_file.dirname)
+  config_file.write(JSON.pretty_generate(config))
+  puts "  set Sol's settings in #{config_file}"
+  system("open", "-a", "Sol")
+end
+
+def sol_running?
+  system("pgrep -x sol > /dev/null")
+end
+
+# Quitting returns before Sol has exited, and `open` fails on an app that's
+# still shutting down.
+def sol_exited_within?(seconds)
+  deadline = Time.now + seconds
+  while sol_running? && Time.now < deadline
+    sleep 0.1
+  end
+  !sol_running?
+end
+
+# Missing until Sol first runs. Writing it then also skips Sol's onboarding,
+# which only picks the global shortcut and gives a tour.
+def read_sol_config(config_file)
+  if config_file.exist?
+    JSON.parse(config_file.read)
+  else
+    {}
+  end
+end
+
+# Without a shortcuts map Sol uses its defaults, which already put the emoji
+# picker on ⌃⌘Space. A map replaces all of them, so one is never added.
+def with_sol_settings(config)
+  updated = config.merge(
+    "globalShortcut" => "command",
+    "searchEngine" => "custom",
+    "customSearchUrl" => "https://kagi.com/search?q=%s"
+  )
+  if config.key?("shortcuts")
+    updated["shortcuts"] = config["shortcuts"].merge("emoji_picker" => "command+control+space")
+  end
+  updated
+end
+
 # Read-only check of the commit-signing chain. A new machine typically signs
 # with a key that is trusted nowhere — not in allowed_signers, not on GitHub —
 # so commits come out "Unverified" and nobody notices for weeks. This surfaces
@@ -355,11 +419,13 @@ when "identity"  then setup_identity
 when "upgrade"   then upgrade(dry_run: ARGV.include?("--dry-run"))
 when "claude"    then setup_claude
 when "signing"   then check_signing
+when "sol"       then setup_sol
 when "all", nil
   setup_identity
   setup_claude
+  setup_sol
   check_signing
 else
-  warn "Usage: dotfiles-setup <identity|claude|signing|all|upgrade [--dry-run]>"
+  warn "Usage: dotfiles-setup <identity|claude|sol|signing|all|upgrade [--dry-run]>"
   exit 1
 end

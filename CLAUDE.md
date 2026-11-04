@@ -33,7 +33,7 @@ mise run upgrade [-n]  # upgrade everything, clean up, update plugins, list macO
 5. `[bootstrap.macos.defaults]`: the declarative `defaults write` set, plus `[bootstrap.macos.trackpad]` (tap to click on both built-in and Bluetooth domains) and `[[bootstrap.macos.defaults_entries]]` for what plain tables can't express: `host = "current"` (`-currentHost`) and `path` (patch one key inside a dict, e.g. the Spotlight hotkey). Prefer these over hook commands, as they get drift detection. What's left in `[bootstrap.hooks.post-defaults]` (chflags, `$HOME`-expanded screenshot dir, killall) runs on every bootstrap. Then `[bootstrap.macos.launchd.agents]`: the pitchfork supervisor, as `dev.mise.pitchfork`
 6. `[bootstrap.user].login_shell`: sets fish
 7. `[tools]` from the global config: `mise install`. mise reloads config after the dotfiles phase, so a fresh machine picks up the just-linked global config in the same run
-8. `[tasks.bootstrap]`: depends on `setup-identity`, `setup-claude`
+8. `[tasks.bootstrap]`: depends on `setup-identity`, `setup-claude`, `setup-sol`
 9. `[bootstrap.hooks.final]`: the read-only commit-signing diagnostic, whose failure only warns: a new machine's key isn't trusted yet
 
 Everything is idempotent: anything already in its desired state is skipped, so re-running is safe.
@@ -43,6 +43,7 @@ Everything is idempotent: anything already in its desired state is skipped, so r
 The parts mise can't express declaratively are in `bin/dotfiles-setup` (a Ruby script). The dotfiles phase deploys it to `~/.local/bin` before the `bootstrap` task runs, and it locates the repo via its own realpath, with no hardcoded path. Subcommands, each a mise task and idempotent:
 - `identity` (`mise run setup-identity`): interactive git identity → `~/.config/git/config.local` (defaults from the GitHub account `gh` is logged in to), ssh config, fish local config; then appends this machine's signing key to the tracked `config/git/allowed_signers`, leaving the commit to you
 - `claude` (`mise run setup-claude`): for each Claude profile (`~/.claude`, `~/.claude-private`), installs the marketplaces/plugins declared in `claude/settings.json` and registers the rubocop MCP server at user scope; then runs `herdr integration install claude` once, for the default profile (hooks in the tracked `claude/settings.json`, kept as `~` paths by swapping them around herdr's run since it writes and only recognises absolute ones; script in the untracked `~/.claude/hooks/`)
+- `sol` (`mise run setup-sol`): merges the launcher hotkey (⌘Space), emoji picker (⌃⌘Space) and Kagi as web search into `~/.config/sol/config.json`, quitting and reopening Sol around the write. Not a `[dotfiles]` link: Sol rewrites the file atomically, which replaces a symlink, and only reads it at launch. The emoji key is only set inside an existing `shortcuts` map, since a map replaces all of Sol's default shortcuts
 - `signing` (`mise run check-signing`): read-only diagnostic: exits 1 and warns, with the exact fix, if `config.local` is missing, the signing key is absent, or that key isn't in `allowed_signers` / not registered on GitHub
 
 ## Structure

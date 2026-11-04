@@ -16,7 +16,7 @@ This is one person's setup, so fork it instead of running the install script as 
 
 **Expect these changes to your machine**, and preview them with `mise bootstrap -n`:
 
-- ⌘Space no longer opens Spotlight, and macOS's ⌘⇧3, ⌘⇧4 and ⌘⇧5 screenshot shortcuts are off in favour of macshot. Nothing here installs a replacement for Spotlight.
+- ⌘Space no longer opens Spotlight, freeing it for the Sol launcher, and macOS's ⌘⇧3, ⌘⇧4 and ⌘⇧5 screenshot shortcuts are off in favour of macshot.
 - Desktop icons are hidden, Finder shows hidden files, and Finder and the Dock restart on every bootstrap.
 - Root-owned files are installed: Touch ID for `sudo`, and a pf rule with a LaunchDaemon that forwards local port 443 to pitchfork.
 - fish becomes your login shell.

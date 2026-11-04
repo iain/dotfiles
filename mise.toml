@@ -131,6 +131,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:ngrok"                         = "latest"   # expose localhost publicly
 "brew-cask:macshot"                       = "latest"   # screenshots; updates itself via Sparkle
+"brew-cask:sol"                           = "latest"   # launcher on ⌘Space; updates itself
 "brew-cask:ghostty"                       = "latest"   # terminal
 "brew-cask:macvim-app"                    = "latest"   # vim GUI, launched from the Dock
 "brew-cask:firefox"                       = "latest"   # browser
@@ -152,6 +153,10 @@ run = '"$HOME/.local/bin/dotfiles-setup" identity'
 [tasks.setup-claude]
 description = "Install Claude plugins, register the rubocop MCP server, install herdr's hooks"
 run = '"$HOME/.local/bin/dotfiles-setup" claude'
+
+[tasks.setup-sol]
+description = "Put Sol on ⌘Space and its emoji picker on ⌃⌘Space, search with Kagi"
+run = '"$HOME/.local/bin/dotfiles-setup" sol'
 
 [tasks.check-signing]
 description = "Read-only diagnostic of the commit-signing chain"
@@ -198,7 +203,7 @@ run = 'launchctl kickstart -k "gui/$(id -u)/dev.mise.pitchfork"'
 
 # Auto-run by `mise bootstrap` as its final task phase.
 [tasks.bootstrap]
-depends = ["setup-identity", "setup-claude"]
+depends = ["setup-identity", "setup-claude", "setup-sol"]
 
 # The signing diagnostic runs last, once identity and tooling are in place. A new
 # machine's key isn't trusted yet, which is worth a warning but not a failed bootstrap.
@@ -317,7 +322,7 @@ key = "com.apple.mouse.tapBehavior"
 host = "current"
 value = 1
 
-# Free up ⌘Space for Raycast/Alfred: disable the Spotlight shortcut (hotkey 64).
+# Free up ⌘Space for Sol: disable the Spotlight shortcut (hotkey 64).
 # Re-enable in System Settings > Keyboard > Shortcuts. `path` patches the
 # one key, so the other shortcuts in AppleSymbolicHotKeys are left alone.
 [[bootstrap.macos.defaults_entries]]

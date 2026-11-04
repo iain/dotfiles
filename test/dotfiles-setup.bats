@@ -204,3 +204,54 @@ STUB
 	[[ "$output" == *"would run: brew link gh"* ]]
 	! grep -q 'claude\|vim\|brew link' "$CALLS"
 }
+
+# Sol's process, and the commands that quit and reopen it, log to $CALLS.
+stub_sol() {
+	export CALLS=$BATS_TEST_TMPDIR/calls
+	touch "$CALLS"
+	for tool in osascript open; do
+		printf '#!/bin/sh\necho "%s $*" >>"$CALLS"\n' "$tool" >"$BATS_TEST_TMPDIR/stubs/$tool"
+		chmod +x "$BATS_TEST_TMPDIR/stubs/$tool"
+	done
+	printf '#!/bin/sh\nexit 1\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
+	chmod +x "$BATS_TEST_TMPDIR/stubs/pgrep"
+	mkdir -p "$HOME/.config/sol"
+}
+
+# A shortcuts map replaces Sol's defaults, emoji picker included, as a whole.
+@test "sol leaves its default shortcuts alone when the config has none" {
+	stub_sol
+	echo '{"globalShortcut": "option"}' >"$HOME/.config/sol/config.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ "$(ruby -rjson -e 'p JSON.parse(File.read(ARGV[0])).key?("shortcuts")' "$HOME/.config/sol/config.json")" = false ]
+}
+
+@test "sol leaves a running Sol alone when its config is already set" {
+	stub_sol
+	echo '{"shortcuts": {}}' >"$HOME/.config/sol/config.json"
+	"$REPO/bin/dotfiles-setup" sol
+	: >"$CALLS"
+	printf '#!/bin/sh\n[ "$*" = "-x sol" ]\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ ! -s "$CALLS" ]
+}
+
+# The stubbed Sol takes a moment to exit after being told to quit, like the real one.
+@test "sol quits a running Sol before the change and reopens it once it has exited" {
+	stub_sol
+	export RUNNING=$BATS_TEST_TMPDIR/sol-running
+	touch "$RUNNING"
+	printf '#!/bin/sh\n[ "$*" = "-x sol" ] && [ -e "$RUNNING" ]\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
+	printf '#!/bin/sh\necho "osascript $*" >>"$CALLS"\n(sleep 0.5; rm "$RUNNING") &\n' >"$BATS_TEST_TMPDIR/stubs/osascript"
+	printf '#!/bin/sh\n[ -e "$RUNNING" ] && echo "open while running" >>"$CALLS" || echo "open after exit" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/stubs/open"
+	echo '{}' >"$HOME/.config/sol/config.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ "$(cat "$CALLS")" = 'osascript -e quit app "Sol"
+open after exit' ]
+}
