@@ -84,6 +84,7 @@ run = 'command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl 
 "brew:tuicr"           = "latest"   # PR review TUI, used by the `review` fish function
 "brew:difftastic"      = "latest"   # structural diff using AST parsing
 "brew:git-delta"       = "latest"   # better git diff pager
+"brew:diffnav"         = "latest"   # delta with a file tree, gh-dash's diff pager
 "brew:git-filter-repo" = "latest"   # rewrite/filter git history
 # data & text
 "brew:jq"              = "latest"   # JSON processor
