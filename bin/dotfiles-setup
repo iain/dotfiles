@@ -255,7 +255,17 @@ def setup_sol
   FileUtils.mkdir_p(config_file.dirname)
   config_file.write(JSON.pretty_generate(config))
   puts "  set Sol's settings in #{config_file}"
-  system("open", "-a", "Sol")
+  open_sol_like_the_dock
+end
+
+# `open` hands its own environment to the app, and apps launched from Sol
+# inherit Sol's, so from a terminal herdr's variables would reach every new
+# Ghostty. With almost nothing set, the app gets the Dock's environment.
+def open_sol_like_the_dock
+  open_command = ENV.fetch("PATH").split(":")
+                    .map { |dir| File.join(dir, "open") }
+                    .find { |path| File.executable?(path) }
+  system({ "HOME" => Dir.home, "USER" => ENV.fetch("USER", nil) }, open_command, "-a", "Sol", unsetenv_others: true)
 end
 
 def sol_running?

@@ -205,12 +205,13 @@ STUB
 	! grep -q 'claude\|vim\|brew link' "$CALLS"
 }
 
-# Sol's process, and the commands that quit and reopen it, log to $CALLS.
+# Sol's process, and the commands that quit and reopen it, log to $CALLS. The
+# path is written into each stub, as Sol is reopened without the environment.
 stub_sol() {
 	export CALLS=$BATS_TEST_TMPDIR/calls
 	touch "$CALLS"
 	for tool in osascript open; do
-		printf '#!/bin/sh\necho "%s $*" >>"$CALLS"\n' "$tool" >"$BATS_TEST_TMPDIR/stubs/$tool"
+		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$CALLS" >"$BATS_TEST_TMPDIR/stubs/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/stubs/$tool"
 	done
 	printf '#!/bin/sh\nexit 1\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
@@ -247,11 +248,24 @@ stub_sol() {
 	touch "$RUNNING"
 	printf '#!/bin/sh\n[ "$*" = "-x sol" ] && [ -e "$RUNNING" ]\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
 	printf '#!/bin/sh\necho "osascript $*" >>"$CALLS"\n(sleep 0.5; rm "$RUNNING") &\n' >"$BATS_TEST_TMPDIR/stubs/osascript"
-	printf '#!/bin/sh\n[ -e "$RUNNING" ] && echo "open while running" >>"$CALLS" || echo "open after exit" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/stubs/open"
+	printf '#!/bin/sh\n[ -e "%s" ] && echo "open while running" >>"%s" || echo "open after exit" >>"%s"\n' "$RUNNING" "$CALLS" "$CALLS" >"$BATS_TEST_TMPDIR/stubs/open"
 	echo '{}' >"$HOME/.config/sol/config.json"
 
 	run -0 "$REPO/bin/dotfiles-setup" sol
 
 	[ "$(cat "$CALLS")" = 'osascript -e quit app "Sol"
 open after exit' ]
+}
+
+# Apps launched from Sol inherit its environment, and from a terminal that
+# includes herdr's, which makes herdr in a new Ghostty think it's nested.
+@test "sol reopens Sol without the terminal's environment, like the Dock" {
+	stub_sol
+	printf '#!/bin/sh\necho "open HERDR_ENV=$HERDR_ENV" >>"%s"\n' "$CALLS" >"$BATS_TEST_TMPDIR/stubs/open"
+	export HERDR_ENV=1
+	echo '{}' >"$HOME/.config/sol/config.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ "$(cat "$CALLS")" = "open HERDR_ENV=" ]
 }
