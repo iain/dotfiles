@@ -45,6 +45,9 @@ macos-option-as-alt = true
 # padded-notch keeps the window below the MacBook's notch, where herdr's tab
 # bar would otherwise hide; on external displays it's the same as true.
 #macos-non-native-fullscreen = padded-notch
+# The channel otherwise follows the running build, so an app that was once a
+# tip build keeps updating to tip after Homebrew takes it over.
+auto-update-channel = stable
 
 # keybinds
 keybind = super+r=clear_screen
