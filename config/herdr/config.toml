@@ -85,6 +85,8 @@ height = "85%"
 # Distinct shapes per state (× blocked, ◐ working, ✓ done, ○ idle), so the
 # state doesn't depend on telling the custom theme's colors apart.
 status_indicators = "symbols"
+# Open new tabs straight away with a generated name; prefix+shift+t renames.
+prompt_new_tab_name = false
 
 [ui.sidebar.agents]
 # The first row is the only one with room to spare, so it carries what tells
