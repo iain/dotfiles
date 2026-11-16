@@ -229,6 +229,19 @@ stub_sol() {
 	[ "$(ruby -rjson -e 'p JSON.parse(File.read(ARGV[0])).key?("shortcuts")' "$HOME/.config/sol/config.json")" = false ]
 }
 
+@test "sol hides Apple Mail and Calendar, keeping the items hidden in Sol" {
+	stub_sol
+	echo '{"disabledItemIds": ["file:///Applications/Raycast.app/"]}' >"$HOME/.config/sol/config.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	run -0 ruby -rjson -e 'puts JSON.parse(File.read(ARGV[0]))["disabledItemIds"]' "$HOME/.config/sol/config.json"
+	[ "$output" = "file:///Applications/Raycast.app/
+file:///System/Applications/Mail.app/
+file:///System/Applications/Calendar.app/
+file:///Applications/Proton%20Mail%20Uninstaller.app/" ]
+}
+
 @test "sol leaves a running Sol alone when its config is already set" {
 	stub_sol
 	echo '{"shortcuts": {}}' >"$HOME/.config/sol/config.json"
@@ -255,6 +268,43 @@ stub_sol() {
 
 	[ "$(cat "$CALLS")" = 'osascript -e quit app "Sol"
 open after exit' ]
+}
+
+# Sol misses new links in its scripts folder until it restarts.
+@test "sol restarts a running Sol that started before a script was added" {
+	stub_sol
+	echo '{"shortcuts": {}}' >"$HOME/.config/sol/config.json"
+	"$REPO/bin/dotfiles-setup" sol
+	: >"$CALLS"
+	export RUNNING=$BATS_TEST_TMPDIR/sol-running
+	touch "$RUNNING"
+	printf '#!/bin/sh\n[ "$*" = "-x sol" ] && [ -e "$RUNNING" ] && echo 123\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
+	printf '#!/bin/sh\necho "osascript $*" >>"$CALLS"\nrm "$RUNNING"\n' >"$BATS_TEST_TMPDIR/stubs/osascript"
+	printf '#!/bin/sh\n[ "$*" = "-o lstart= -p 123" ] && date -v-1H "+%%a %%b %%e %%T %%Y"\n' >"$BATS_TEST_TMPDIR/stubs/ps"
+	chmod +x "$BATS_TEST_TMPDIR/stubs/ps"
+	mkdir -p "$HOME/.config/sol/scripts"
+	ln -s "$REPO/new.applescript" "$HOME/.config/sol/scripts/new.applescript"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ "$(cat "$CALLS")" = 'osascript -e quit app "Sol"
+open -a Sol' ]
+}
+
+@test "sol leaves a running Sol alone that started after its scripts were added" {
+	stub_sol
+	echo '{"shortcuts": {}}' >"$HOME/.config/sol/config.json"
+	mkdir -p "$HOME/.config/sol/scripts"
+	ln -s "$REPO/old.applescript" "$HOME/.config/sol/scripts/old.applescript"
+	"$REPO/bin/dotfiles-setup" sol
+	: >"$CALLS"
+	printf '#!/bin/sh\n[ "$*" = "-x sol" ] && echo 123\n' >"$BATS_TEST_TMPDIR/stubs/pgrep"
+	printf '#!/bin/sh\n[ "$*" = "-o lstart= -p 123" ] && date -v+1H "+%%a %%b %%e %%T %%Y"\n' >"$BATS_TEST_TMPDIR/stubs/ps"
+	chmod +x "$BATS_TEST_TMPDIR/stubs/ps"
+
+	run -0 "$REPO/bin/dotfiles-setup" sol
+
+	[ ! -s "$CALLS" ]
 }
 
 # Apps launched from Sol inherit its environment, and from a terminal that

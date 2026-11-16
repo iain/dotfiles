@@ -17,6 +17,7 @@
 require "fileutils"
 require "json"
 require "pathname"
+require "time"
 
 REPO        = Pathname.new(File.realpath(__FILE__)).dirname.parent
 CONFIG_SRC  = REPO / "config"
@@ -236,10 +237,13 @@ end
 # file atomically, which would replace a symlink, so the keys that matter are
 # merged in instead. Sol only reads the file at launch and writes its in-memory
 # settings back on any change, so a running Sol is quit first and reopened after.
+# It also misses new links in its scripts folder, so those restart it too.
 def setup_sol
   config_file = CONFIG_DEST / "sol" / "config.json"
   config = read_sol_config(config_file)
-  if with_sol_settings(config) == config
+  settings_missing = with_sol_settings(config) != config
+  scripts_unseen = sol_scripts_newer_than_sol?
+  if !settings_missing && !scripts_unseen
     puts "  skip #{config_file} (settings already set)"
     return
   end
@@ -251,11 +255,31 @@ def setup_sol
       return
     end
   end
-  config = with_sol_settings(read_sol_config(config_file))
-  FileUtils.mkdir_p(config_file.dirname)
-  config_file.write(JSON.pretty_generate(config))
-  puts "  set Sol's settings in #{config_file}"
+  if settings_missing
+    config = with_sol_settings(read_sol_config(config_file))
+    FileUtils.mkdir_p(config_file.dirname)
+    config_file.write(JSON.pretty_generate(config))
+    puts "  set Sol's settings in #{config_file}"
+  else
+    puts "  restarted Sol to load new scripts"
+  end
   open_sol_like_the_dock
+end
+
+# The links' own times, as [dotfiles] makes a new link for each new script.
+def sol_scripts_newer_than_sol?
+  started = sol_started_at
+  return false unless started
+
+  scripts = (CONFIG_DEST / "sol" / "scripts").glob("*")
+  scripts.any? { |script| script.lstat.mtime > started }
+end
+
+def sol_started_at
+  pid = `pgrep -x sol`.strip
+  return nil if pid.empty?
+
+  Time.parse(`ps -o lstart= -p #{pid}`)
 end
 
 # `open` hands its own environment to the app, and apps launched from Sol
@@ -303,8 +327,16 @@ def with_sol_settings(config)
   if config.key?("shortcuts")
     updated["shortcuts"] = config["shortcuts"].merge("emoji_picker" => "command+control+space")
   end
+  updated["disabledItemIds"] = config.fetch("disabledItemIds", []) | SOL_HIDDEN_ITEMS
   updated
 end
+
+# Sol's IDs for apps are their file URLs. Proton Mail does mail and calendar.
+SOL_HIDDEN_ITEMS = [
+  "file:///System/Applications/Mail.app/",
+  "file:///System/Applications/Calendar.app/",
+  "file:///Applications/Proton%20Mail%20Uninstaller.app/"
+].freeze
 
 # Read-only check of the commit-signing chain. A new machine typically signs
 # with a key that is trusted nowhere — not in allowed_signers, not on GitHub —
