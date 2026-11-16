@@ -8,9 +8,6 @@ experimental = true
 [settings.github]
 credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
 
-[settings.pipx]
-uvx = true
-
 [settings.ruby]
 compile = false
 
