@@ -12,11 +12,13 @@ This is one person's setup, so fork it instead of running the install script as 
 - `config/git/allowed_signers`: delete my keys, or your machine keeps trusting them. Your own key is added during setup.
 - `config/direnv/direnv.toml`: replace `~/iain` in the trusted prefixes.
 - `claude/settings.json`: review it, as it uses Claude's auto permission mode and turns on my plugins and remote control.
-- `config/iterm/`: delete it, or replace my hostnames and home path.
+- `config/iterm/` and `config/wezterm/`: delete them unless you use those terminals, and replace my hostnames and home path in the iTerm one.
+- `bin/dotfiles-setup`, its Sol settings: Kagi as web search, and Apple Mail and Calendar hidden (`SOL_HIDDEN_ITEMS`). `config/sol/scripts/calendar.applescript` opens Proton Mail's calendar, so delete it if you don't use Proton.
 
 **Expect these changes to your machine**, and preview them with `mise bootstrap -n`:
 
 - ⌘Space no longer opens Spotlight, freeing it for the Sol launcher, and macOS's ⌘⇧3, ⌘⇧4 and ⌘⇧5 screenshot shortcuts are off in favour of macshot.
+- Sol hides Apple Mail and Calendar, and the bootstrap restarts Sol when its settings change or a new Sol command is added.
 - Desktop icons are hidden, Finder shows hidden files, and Finder and the Dock restart on every bootstrap.
 - Root-owned files are installed: Touch ID for `sudo`, and a pf rule with a LaunchDaemon that forwards local port 443 to pitchfork.
 - fish becomes your login shell.
@@ -54,7 +56,7 @@ In order, bootstrap:
 3. Writes **macOS defaults**.
 4. Sets **fish** as the login shell.
 5. Installs the pinned **tools** (`ruby`, `node`, `hk`, …). mise reloads config after step 2, so on a fresh machine this already sees the just-linked `~/.config/mise/config.toml`, and one run is enough.
-6. Runs the **`bootstrap` task**: per-machine setup that isn't declarative, then a read-only commit-signing diagnostic. It asks for your git identity, suggesting the name and email of your GitHub account, and writes it to `~/.config/git/config.local`; if it couldn't prompt, run `mise run setup-identity`. It also adds this machine's signing key to `config/git/allowed_signers`, and sets up the Claude plugins.
+6. Runs the **`bootstrap` task**: per-machine setup that isn't declarative, then a read-only commit-signing diagnostic. It asks for your git identity, suggesting the name and email of your GitHub account, and writes it to `~/.config/git/config.local`; if it couldn't prompt, run `mise run setup-identity`. It also adds this machine's signing key to `config/git/allowed_signers`, sets up the Claude plugins, and configures Sol.
 
 Re-run the bootstrap from the checkout any time; anything already in its desired state is skipped:
 
@@ -89,16 +91,30 @@ config/
   fish/config.fish    — shell: PATH, aliases, abbreviations
   git/                — git config, global ignore, diff attributes, allowed signers
   ghostty/config      — terminal appearance and keybinds
+  herdr/config.toml   — terminal multiplexer: worktree layout, keybindings
   mise/config.toml    — global mise settings, XDG + tool storage env vars, pinned tools (languages, jdx's CLIs, kubectl, uv, yq)
+  sol/scripts/        — Sol launcher commands (caffeinate, Docker, test data, …)
+  colima/             — settings for new Colima VMs
   starship.toml       — prompt theme (single-line, Nerd Font icons)
   vim/                — modular vim config (auto-sourced via glob)
+  bat/ fd/ ripgrep/ direnv/ tuicr/ — smaller tool configs
+  iterm/ wezterm/     — configs for terminals the bootstrap doesn't install
 rc/
   vimrc               — vim entry point (sources files from config/vim/)
 bin/
-  dotfiles-setup      — per-machine setup driven by mise tasks (identity, Claude, signing)
+  dotfiles-setup      — per-machine setup driven by mise tasks (identity, Claude, Sol, signing)
   pitchfork-supervisor — starts the pitchfork supervisor as the user for its LaunchAgent
+  worktree            — creates, opens and removes git worktrees as herdr workspaces
+  git-cleanup         — removes review worktrees once their PR is merged or closed
+  herdr-palette, herdr-review-pr — herdr popups
+  claude-private      — runs Claude on a second account, with its own login and memory
+  caffeine, colima-notify — keep the Mac awake; start or stop Colima, for Sol
+  bsn, iban           — Dutch test data
 claude/
+  CLAUDE.md           — global instructions for Claude in every project
   settings.json       — enabled plugins + marketplaces, hooks, permissions
+  hooks/ skills/      — session hooks (machine context, worktrees, herdr tab names), /spinoff
+test/                 — bats tests for bin/ and install.sh: `mise run test`
 system/               — root-owned files copied (not symlinked) by mise bootstrap
   etc/pam.d/sudo_local                                — Touch ID for sudo
   etc/pf.anchors/dotfiles-pitchfork                   — forwards loopback 443 to pitchfork's proxy on 8443
@@ -117,6 +133,7 @@ mise dotfiles apply -n         # preview dotfile symlink changes
 mise run setup-identity        # (re)seed git identity / ssh / fish-local
 mise run check-signing         # audit the commit-signing chain
 mise doctor project            # check drift, GitHub login, signing and pitchfork
+mise run test                  # bats tests of the scripts in bin/ and install.sh
 ```
 
 ## Upgrading
