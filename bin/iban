@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Prints a random Dutch IBAN for test data. It passes the mod-97 check that
+# every IBAN validator applies, and its account number passes the old Dutch
+# 11-test that some still do. The bank codes are real, so a valid number can
+# still belong to a real account: keep these out of production systems.
+
+BANK_CODES = %w[ABNA INGB RABO SNSB TRIO ASNB].freeze
+ACCOUNT_WEIGHTS = (1..10).to_a.reverse.freeze
+
+# 10·d1 + 9·d2 + … + 1·d10 must be a multiple of 11. The last digit has weight
+# 1, so it's that sum mod 11 subtracted from 11. Ten doesn't fit in one digit,
+# so those draws start over.
+def random_account_number
+  loop do
+    digits = Array.new(9) { rand(10) }
+    sum = digits.zip(ACCOUNT_WEIGHTS).sum { |digit, weight| digit * weight }
+    last_digit = (11 - (sum % 11)) % 11
+    if last_digit < 10
+      return (digits + [last_digit]).join
+    end
+  end
+end
+
+# The check digits make the IBAN, with its first four characters moved to the
+# end and its letters as numbers (A = 10 … Z = 35), leave 1 when divided by 97.
+def check_digits(bban)
+  number = "#{bban}NL00".chars.map { |char| char.to_i(36).to_s }.join.to_i
+  format("%02d", 98 - (number % 97))
+end
+
+bban = BANK_CODES.sample + random_account_number
+puts "NL#{check_digits(bban)}#{bban}"

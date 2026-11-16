@@ -1,0 +1,40 @@
+#!/bin/sh
+# Keeps the Mac and its display awake, like Raycast's caffeinate: for a number
+# of minutes, or until stopped.
+#
+#   caffeine <minutes>
+#   caffeine on
+#   caffeine off
+
+pidfile=${XDG_STATE_HOME:-$HOME/.local/state}/caffeine.pid
+
+stop() {
+	if [ -f "$pidfile" ]; then
+		pid=$(cat "$pidfile")
+		if ps -p "$pid" -o command= | grep -q caffeinate; then
+			kill "$pid"
+		fi
+		rm -f "$pidfile"
+	fi
+}
+
+start() {
+	mkdir -p "$(dirname "$pidfile")"
+	caffeinate -di "$@" >/dev/null 2>&1 &
+	echo $! >"$pidfile"
+}
+
+stop
+case $1 in
+	off)
+		echo "The Mac can sleep again"
+		;;
+	on)
+		start
+		echo "Awake until stopped"
+		;;
+	*)
+		start -t $(($1 * 60))
+		echo "Awake until $(date -v+"$1"M +%H:%M)"
+		;;
+esac

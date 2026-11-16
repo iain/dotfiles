@@ -1,0 +1,27 @@
+#!/bin/sh
+# Starts or stops Colima and shows a notification once it's done, for Sol's
+# Docker commands, which run it in the background as starting takes a while.
+#
+#   colima-notify start|stop
+#
+# Sol gives scripts a bare PATH without mise, and Colima needs mise's [env]:
+# LIMA_HOME is where its VM disks are, so without it Colima would make a new VM.
+
+PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH
+
+notify() {
+	osascript -e "display notification \"$1\" with title \"$2\""
+}
+
+cd "$HOME" || exit 1
+if mise x -- colima "$1"; then
+	if [ "$1" = start ]; then
+		notify "Docker is running" Colima
+	else
+		notify "Docker has stopped" Colima
+	fi
+else
+	notify "Run colima $1 in a terminal to see why" "Colima didn't $1"
+	exit 1
+fi
