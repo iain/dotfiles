@@ -84,7 +84,7 @@ height = "85%"
 [ui]
 # Distinct shapes per state (× blocked, ◐ working, ✓ done, ○ idle), so the
 # state doesn't depend on telling the custom theme's colors apart.
-status_indicators = "symbols"
+status_indicators = "dots"
 # Open new tabs straight away with a generated name; prefix+shift+t renames.
 prompt_new_tab_name = false
 
