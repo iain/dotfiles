@@ -29,6 +29,7 @@ The Bash tool executes **zsh**, even though the environment header reports fish 
 ## Rewriting history
 
 - Don't rebase, amend, or force-push a commit that's already on the remote (GitHub etc.), especially on a squash-merge project: those operations are risky and any tidiness they'd buy is thrown away by the squash anyway. Amending something not yet pushed is fine, but check first (`git status` / compare with the upstream branch); it may have been pushed outside this session. All of these are of course fair game when you're explicitly asked to do involved git surgery.
+- **Exception, restacking:** when the base PR of a stack is squash-merged, restack the stacked branch: `git rebase --onto origin/main <old tip of the base branch>`, then `git push --force-with-lease`. Merging main instead uses the old merge base and can silently bring back lines the stacked branch removed. We don't share branches, and `--force-with-lease` refuses to overwrite work you haven't seen.
 
 ## Pull requests
 
@@ -73,6 +74,11 @@ Your training knowledge for fast-moving OSS tools (mise, opentofu, caddy, podman
 When you find a divergence between what you "knew" and what's true, save a `reference_<tool>_*.md` auto-memory with the canonical docs URL, so future sessions skip the lookup.
 
 Doesn't apply to bedrock tools (`git`, `grep`, POSIX shell) where knowledge is stable. Trigger: *fast-moving tool + about to write config or claim how it works*.
+
+## Test runs
+
+- **Never pipe a test run into `tail`, `head` or `grep`:** they print nothing until the run ends, so a hung run looks the same as a slow one. Write the output to a file in the scratchpad and read the file, and start a run that can take over two minutes with `run_in_background`.
+- **A run that took far longer than expected may have spanned a sleep of this laptop:** check `pmset -g log | grep -E "^$(date +%F).*(Sleep|Wake) "` (local time) before treating it as a hang. Rerun what failed across a sleep before debugging it.
 
 ## Tools
 
