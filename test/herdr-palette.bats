@@ -117,7 +117,7 @@ JSON
 	herdr-palette
 
 	[ "$(git -C "$HOME/Code/worktrees/app/fix-the-login-bug" branch --show-current)" = "fix-the-login-bug" ]
-	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/fix-the-login-bug --focus" "$HERDR_LOG"
+	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/fix-the-login-bug --label fix-the-login-bug --focus" "$HERDR_LOG"
 }
 
 @test "typing an invalid branch name says so and creates nothing" {

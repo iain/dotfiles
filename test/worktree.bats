@@ -51,7 +51,7 @@ setup() {
 
 	worktree pr 7
 
-	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/pr-7 --no-focus" "$HERDR_LOG"
+	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/pr-7 --label pr-7 --no-focus" "$HERDR_LOG"
 }
 
 @test "new branches from the just-fetched default branch, without an upstream" {
@@ -108,7 +108,16 @@ setup() {
 
 	worktree new --focus feature
 
-	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/feature --focus" "$HERDR_LOG"
+	grep -qxF "worktree open --cwd $REPO --path $HOME/Code/worktrees/app/feature --label feature --focus" "$HERDR_LOG"
+}
+
+@test "names the herdr workspace after the worktree's directory, not its branch" {
+	stub_herdr
+	cd "$REPO"
+
+	worktree new iain/long-branch-name short
+
+	grep -q "^worktree open .* --label short " "$HERDR_LOG"
 }
 
 @test "rm removes a worktree and its branch when the branch has nothing of its own" {
@@ -164,7 +173,6 @@ setup() {
 {"result": {"worktrees": [
 	{"path": "$REPO", "is_bare": false, "is_prunable": false, "open_workspace_id": "w1"},
 	{"path": "/wt/closed", "is_bare": false, "is_prunable": false, "open_workspace_id": null},
-	{"path": "/wt/open", "is_bare": false, "is_prunable": false, "open_workspace_id": "w2"},
 	{"path": "/wt/gone", "is_bare": false, "is_prunable": true, "open_workspace_id": "w3"}
 ]}}
 EOF_JSON
@@ -172,7 +180,24 @@ EOF_JSON
 	run worktree herdr-sync
 
 	[ "$status" -eq 0 ]
-	grep -qxF "worktree open --cwd $REPO --path /wt/closed --no-focus" "$HERDR_LOG"
+	grep -qxF "worktree open --cwd $REPO --path /wt/closed --label closed --no-focus" "$HERDR_LOG"
 	grep -qxF "workspace close w3" "$HERDR_LOG"
 	[ "$(grep -c "^worktree open\|^workspace close" "$HERDR_LOG")" -eq 2 ]
+}
+
+@test "herdr-sync names already open worktree workspaces after their directory, but leaves the main checkout alone" {
+	cd "$REPO"
+	stub_herdr
+	herdr_replies "worktree list" <<EOF_JSON
+{"result": {"worktrees": [
+	{"path": "$REPO", "is_bare": false, "is_prunable": false, "open_workspace_id": "w1"},
+	{"path": "/wt/open", "is_bare": false, "is_prunable": false, "open_workspace_id": "w2"}
+]}}
+EOF_JSON
+
+	run worktree herdr-sync
+
+	[ "$status" -eq 0 ]
+	grep -qxF "worktree open --cwd $REPO --path /wt/open --label open --no-focus" "$HERDR_LOG"
+	[ "$(grep -c "^worktree open" "$HERDR_LOG")" -eq 1 ]
 }

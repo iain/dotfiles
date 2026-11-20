@@ -134,8 +134,8 @@ has_own_commits() {
 }
 
 # Makes herdr's workspaces match the repo's worktrees: every checkout gets a
-# workspace, and a workspace whose checkout was deleted from disk closes,
-# after which git forgets that checkout too.
+# workspace named after its directory, and a workspace whose checkout was
+# deleted from disk closes, after which git forgets that checkout too.
 herdr_sync() {
 	local root listing path workspace
 	if [ "${HERDR_ENV:-}" != "1" ]; then
@@ -148,7 +148,7 @@ herdr_sync() {
 	while read -r path; do
 		echo "opening $path" >&2
 		open_in_herdr "$root" "$path"
-	done < <(jq -r '.result.worktrees[] | select(.is_bare or .is_prunable | not) | select(.open_workspace_id == null) | .path' <<<"$listing")
+	done < <(jq -r --arg root "$root" '.result.worktrees[] | select(.is_bare or .is_prunable | not) | select(.path != $root) | .path' <<<"$listing")
 
 	while read -r workspace; do
 		echo "closing workspace $workspace, its checkout is gone" >&2
@@ -159,10 +159,12 @@ herdr_sync() {
 }
 
 # Gives the worktree a herdr workspace, grouped under its repo, or finds the
-# one it already has.
+# one it already has. The workspace is named after the directory, which is
+# also the name in pitchfork's proxy URLs. Without a name of its own, herdr
+# would show the branch instead.
 open_in_herdr() {
 	if [ "${HERDR_ENV:-}" = "1" ]; then
-		herdr worktree open --cwd "$1" --path "$2" "$focus" >/dev/null
+		herdr worktree open --cwd "$1" --path "$2" --label "$(basename "$2")" "$focus" >/dev/null
 	fi
 }
 
