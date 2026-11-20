@@ -1,0 +1,17 @@
+# gh-dash (`gh dash`). Every option: https://www.gh-dash.dev/configuration/
+# Without prSections or issuesSections it shows its default sections.
+
+# Where checkouts live, for keybindings that use {{.RepoPath}}.
+repoPaths:
+  iain/*: ~/Code/*
+  zvasva/monorepo: ~/Code/monorepo
+
+# d on a PR shows its diff in diffnav: delta with a file tree.
+pager:
+  diff: diffnav
+
+keybindings:
+  prs:
+    - key: T
+      name: checks in enhance
+      command: gh enhance -R {{.RepoName}} {{.PrNumber}}
