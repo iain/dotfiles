@@ -70,7 +70,7 @@
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "code-review@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
     "code-simplifier@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
@@ -82,7 +82,8 @@
     "ruby-lsp@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "nx@nx-claude-plugins": false,
-    "mattpocock-skills@claude-plugins-official": false
+    "mattpocock-skills@claude-plugins-official": false,
+    "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
