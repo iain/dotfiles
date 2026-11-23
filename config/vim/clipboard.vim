@@ -9,3 +9,8 @@ if !empty($SSH_CONNECTION)
   packadd osc52
   set clipmethod=osc52
 endif
+
+" ,y copies to the system clipboard: ,yy a line, ,yiw a word, or ,y on a
+" visual selection (which a mouse drag makes). ⌘V pastes, via the terminal.
+nnoremap <leader>y "+y
+xnoremap <leader>y "+y
