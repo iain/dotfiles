@@ -276,6 +276,8 @@ NSAutomaticPeriodSubstitutionEnabled = false
 AppleKeyboardUIMode = 3
 AppleShowAllExtensions = true
 "com.apple.mouse.tapBehavior" = 1
+# Natural scrolling off. Takes effect after logging out.
+"com.apple.swipescrolldirection" = false
 
 # Tap to click, on both the built-in and Bluetooth trackpad domains.
 [bootstrap.macos.trackpad]
