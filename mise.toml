@@ -257,9 +257,9 @@ PMPrintingExpandedStateForPrint = true
 PMPrintingExpandedStateForPrint2 = true
 NSDocumentSaveNewDocumentsToCloud = false
 NSDisableAutomaticTermination = true
-# Keyboard & input
-KeyRepeat = 2
-InitialKeyRepeat = 15
+# Keyboard & input. Floats, as macOS 27 stores these as reals even after `-int`
+KeyRepeat = 2.0
+InitialKeyRepeat = 15.0
 NSAutomaticSpellingCorrectionEnabled = false
 NSAutomaticDashSubstitutionEnabled = false
 NSAutomaticQuoteSubstitutionEnabled = false
