@@ -152,7 +152,7 @@ description = "Seed per-machine git identity, ssh config, and fish local config"
 run = '"$HOME/.local/bin/dotfiles-setup" identity'
 
 [tasks.setup-claude]
-description = "Install Claude plugins, register the rubocop MCP server, install herdr's hooks"
+description = "Install Claude Code and its plugins, register the rubocop MCP server, install herdr's hooks"
 run = '"$HOME/.local/bin/dotfiles-setup" claude'
 
 [tasks.setup-sol]
@@ -230,6 +230,12 @@ description = "Commits are signed with a trusted key"
 depends = "github-auth"
 run = '"$HOME/.local/bin/dotfiles-setup" signing'
 hint = "Run `mise run check-signing` for the fix to each problem"
+
+[doctor.checks.claude-setup]
+description = "Claude Code, its hook scripts and plugins are installed"
+run = '"$HOME/.local/bin/dotfiles-setup" check-claude'
+hint = "Run `mise run setup-claude`"
+timeout = "30s"
 
 [doctor.checks.pitchfork-supervisor]
 description = "The pitchfork supervisor is running"

@@ -140,6 +140,80 @@ STUB
 	! grep -qF "$HOME" "$REPO/claude/settings.json"
 }
 
+# Like Anthropic's installer, puts claude in ~/.local/bin, which needn't be on PATH.
+stub_claude_installer() {
+	rm "$BATS_TEST_TMPDIR/stubs/claude"
+	cat >"$BATS_TEST_TMPDIR/stubs/curl" <<'STUB'
+#!/bin/sh
+echo "curl $*" >>"$CALLS"
+echo 'mkdir -p "$HOME/.local/bin"'
+echo 'printf "#!/bin/sh\necho \"installed claude \$*\" >>\"$CALLS\"\n" >"$HOME/.local/bin/claude"'
+echo 'chmod +x "$HOME/.local/bin/claude"'
+STUB
+	chmod +x "$BATS_TEST_TMPDIR/stubs/curl"
+}
+
+@test "claude installs Claude Code when it's missing, then sets it up" {
+	stub_upgrade_tools
+	stub_claude_installer
+
+	run -0 "$REPO/bin/dotfiles-setup" claude
+
+	grep -qx 'curl -fsSL https://claude.ai/install.sh' "$CALLS"
+	grep -qx 'installed claude plugin install one@market' "$CALLS"
+}
+
+@test "claude leaves an installed Claude Code alone" {
+	stub_upgrade_tools
+	stub_claude_installer
+	printf '#!/bin/sh\n' >"$BATS_TEST_TMPDIR/stubs/claude"
+	chmod +x "$BATS_TEST_TMPDIR/stubs/claude"
+
+	run -0 "$REPO/bin/dotfiles-setup" claude
+
+	! grep -q curl "$CALLS"
+}
+
+@test "check-claude fails and names a hook script that's missing" {
+	stub_upgrade_tools
+	echo '{"hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "bash ~/.claude/hooks/gone.sh session"}]}]}}' >"$REPO/claude/settings.json"
+
+	run -1 "$REPO/bin/dotfiles-setup" check-claude
+
+	[[ "$output" == *"~/.claude/hooks/gone.sh"* ]]
+}
+
+@test "check-claude fails and names a plugin a profile is missing" {
+	stub_upgrade_tools
+	printf '#!/bin/sh\n[ -z "$CLAUDE_CONFIG_DIR" ] && echo "  ❯ one@market"\ntrue\n' >"$BATS_TEST_TMPDIR/stubs/claude"
+
+	run -1 "$REPO/bin/dotfiles-setup" check-claude
+
+	[[ "$output" == *"one@market is not installed in $HOME/.claude-private"* ]]
+	[[ "$output" != *"one@market is not installed in $HOME/.claude "* ]]
+}
+
+@test "check-claude passes when scripts and plugins are in place" {
+	stub_upgrade_tools
+	printf '#!/bin/sh\necho "  ❯ one@market"\n' >"$BATS_TEST_TMPDIR/stubs/claude"
+	mkdir -p "$HOME/.claude/hooks"
+	touch "$HOME/.claude/hooks/here.sh"
+	echo '{"enabledPlugins": {"one@market": true}, "statusLine": {"command": "bash ~/.claude/hooks/here.sh"}}' >"$REPO/claude/settings.json"
+
+	run -0 "$REPO/bin/dotfiles-setup" check-claude
+
+	[[ "$output" == *"claude OK"* ]]
+}
+
+@test "check-claude fails when Claude Code isn't installed" {
+	stub_upgrade_tools
+	rm "$BATS_TEST_TMPDIR/stubs/claude"
+
+	run -1 "$REPO/bin/dotfiles-setup" check-claude
+
+	[[ "$output" == *"Claude Code is not installed"* ]]
+}
+
 @test "upgrade updates the marketplaces and enabled plugins of each Claude profile" {
 	stub_upgrade_tools
 

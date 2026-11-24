@@ -8,7 +8,7 @@
 # Sol's shortcuts and search engine. Driven by mise tasks (see mise.toml at the repo root); each
 # subcommand is idempotent and safe to re-run.
 #
-# Usage: dotfiles-setup <identity|claude|sol|signing|all>
+# Usage: dotfiles-setup <identity|claude|sol|signing|check-claude|all>
 #        dotfiles-setup upgrade [--dry-run]
 #
 # The repo is located via this script's own realpath, so it works wherever the
@@ -136,9 +136,8 @@ end
 # single source of truth); the rubocop MCP server is registered at user scope.
 # Each action is guarded by a presence check, so re-runs are no-ops.
 def setup_claude
-  unless system("command -v claude > /dev/null 2>&1")
-    puts "  skip Claude setup (claude not installed)"
-    return
+  if !system("command -v claude > /dev/null 2>&1")
+    install_claude
   end
 
   settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
@@ -161,6 +160,14 @@ def setup_claude
   else
     puts "  skip herdr integration (herdr not installed)"
   end
+end
+
+# Anthropic's native installer, which keeps Claude Code updated itself. It
+# links claude into ~/.local/bin, which a bootstrap's PATH may not include yet.
+def install_claude
+  puts "Installing Claude Code..."
+  system("curl -fsSL https://claude.ai/install.sh | bash") || abort("  ERROR: could not install Claude Code")
+  ENV["PATH"] = "#{HOME / ".local" / "bin"}:#{ENV.fetch("PATH")}"
 end
 
 def install_claude_plugins(env, settings)
@@ -390,6 +397,60 @@ def check_signing
   end
 end
 
+# Read-only, for `mise doctor project`: what setup_claude should have left
+# behind. Some hook scripts aren't in this repo (herdr writes its own), so a
+# skipped setup only showed up as an error on every Claude start.
+def check_claude
+  settings = JSON.parse((CLAUDE_SRC / "settings.json").read)
+  problems = missing_claude_scripts(settings)
+  if system("command -v claude > /dev/null 2>&1")
+    problems.concat(missing_claude_plugins(settings))
+  else
+    problems << "Claude Code is not installed"
+  end
+
+  if problems.empty?
+    puts "  claude OK"
+  else
+    problems.each { |p| warn "  WARNING: #{p}" }
+    warn "  Fix: mise run setup-claude"
+    exit 1
+  end
+end
+
+# Each ~/ path in a hook or status line command, when that file doesn't exist.
+def missing_claude_scripts(settings)
+  commands = []
+  collect_commands(settings.slice("hooks", "statusLine"), commands)
+  paths = commands.flat_map { |command| command.scan(%r{~/[^\s'"]+}) }
+  missing = paths.uniq.reject { |path| File.exist?(File.expand_path(path)) }
+  missing.map { |path| "#{path} is missing, but Claude's settings run it" }
+end
+
+def missing_claude_plugins(settings)
+  enabled = settings.fetch("enabledPlugins", {}).select { |_ref, on| on }.keys
+  CLAUDE_PROFILES.flat_map do |dir, config_dir|
+    installed = IO.popen({ "CLAUDE_CONFIG_DIR" => config_dir }, %w[claude plugin list], err: File::NULL, &:read)
+    missing = enabled.reject { |ref| installed.include?(ref) }
+    missing.map { |ref| "#{ref} is not installed in #{dir}" }
+  end
+end
+
+def collect_commands(node, commands)
+  case node
+  when Hash
+    node.each do |key, value|
+      if key == "command"
+        commands << value
+      else
+        collect_commands(value, commands)
+      end
+    end
+  when Array
+    node.each { |value| collect_commands(value, commands) }
+  end
+end
+
 # Updates that `mise bootstrap packages upgrade` and `mise upgrade` don't reach.
 # Run by `mise run upgrade`, after those. With --dry-run, only what reads runs.
 def upgrade(dry_run:)
@@ -460,6 +521,7 @@ case ARGV[0]
 when "identity"  then setup_identity
 when "upgrade"   then upgrade(dry_run: ARGV.include?("--dry-run"))
 when "claude"    then setup_claude
+when "check-claude" then check_claude
 when "signing"   then check_signing
 when "sol"       then setup_sol
 when "all", nil
@@ -468,6 +530,6 @@ when "all", nil
   setup_sol
   check_signing
 else
-  warn "Usage: dotfiles-setup <identity|claude|sol|signing|all|upgrade [--dry-run]>"
+  warn "Usage: dotfiles-setup <identity|claude|sol|signing|check-claude|all|upgrade [--dry-run]>"
   exit 1
 end
